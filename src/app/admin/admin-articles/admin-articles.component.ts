@@ -14,6 +14,7 @@ import { DataTableDirective } from 'angular-datatables';
 import * as DataTables from 'datatables.net';
 import 'datatables.net-bs4';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
+import { MainNavService } from '../services/main-nav.service';
 
 @Component({
   selector: 'app-admin-articles',
@@ -35,7 +36,8 @@ export class AdminArticlesComponent
     private postService: AllPostsService,
     private categoryService: CategoiesService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private navService: MainNavService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +48,7 @@ export class AdminArticlesComponent
     };
     this.getPosts();
     this.getCategories();
+    this.checkPermissions();
   }
 
   ngAfterViewInit(): void {
@@ -115,5 +118,37 @@ export class AdminArticlesComponent
 
   toEdit(id: any) {
     this.router.navigate([`/admin/edit-article/${id}`]);
+  }
+  addPermission: any;
+  editPermission: any;
+  isEdit: any;
+  isEditAfterPublish: any;
+  deletePermission: any;
+  checkPermissions() {
+    this.navService.getMenu().subscribe((res: any) => {
+      this.addPermission = res.data[0].role_accesses[2].status.includes('add');
+      //  --- FOR edit --
+      this.isEdit = res.data[0].role_accesses[2].status.includes('edit');
+      this.isEditAfterPublish =
+        res.data[0].role_accesses[2].status.includes('edit after publish');
+      //  -- FOR Delete
+      this.deletePermission =
+        res.data[0].role_accesses[2].status.includes('delete');
+
+      //  console check
+      console.log('add permission', this.addPermission);
+      console.log('delete permission', this.deletePermission);
+    });
+  }
+
+  isEditPermission(article: any) {
+    console.log(this.isEdit, this.isEditAfterPublish);
+    if (this.isEdit == true && this.isEditAfterPublish == true) {
+      return true;
+    } else if (this.isEdit && article.isPublished == 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

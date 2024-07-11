@@ -24,15 +24,16 @@ export class AdminEpisodesComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private navService: MainNavService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 10
+      pageLength: 10,
     };
     this.getPosts();
     this.getCategories();
+    this.checkPermissions();
   }
 
   open(content: any, id: any) {

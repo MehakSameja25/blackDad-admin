@@ -12,6 +12,7 @@
           <a
             class="btn btn-primary"
             routerLink="/admin/add-episode"
+            *ngIf="addPermission == true"
             >Add New Episodes</a
           >
         </div>
@@ -58,9 +59,7 @@
           <div class="card">
             <div class="card-body">
               <div class="table-responsive">
-                <table class="datatable table table-stripped" datatable
-                [dtOptions]="dtOptions"
-                [dtTrigger]="dtTrigger">
+                <table class="datatable table table-stripped">
                   <thead>
                     <tr>
                       <th>IMAGE</th>
@@ -136,6 +135,7 @@
                             class="btn-action-icon"
                             data-bs-toggle="modal"
                             data-bs-target="#delete"
+                            *ngIf="deletePermission == true"
                           >
                             <svg
                               xmlns=" http://www.w3.org/2000/svg"
@@ -169,6 +169,7 @@
                             <button
                               (click)="toEdit(episode.id)"
                               class="btn-action-icon"
+                              [disabled]="!isEditPermission(episode)"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
