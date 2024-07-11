@@ -48,12 +48,13 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 10
+      pageLength: 10,
     };
     this.categoriesService.getCategory().subscribe((res) => {
       this.allCategories = res;
       this.dtTrigger.next(this.dtOptions);
     });
+    this.checkPermissions();
   }
 
   ngOnDestroy() {
@@ -194,18 +195,15 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
   deletePermission: any;
   checkPermissions() {
     this.navService.getMenu().subscribe((res: any) => {
-      this.addPermission = console.log(
-        'add permission',
-        res.data[0].role_accesses[0].status.includes('add')
-      );
-      this.editPermission = console.log(
-        'edit permission',
-        res.data[0].role_accesses[0].status.includes('edit')
-      );
-      this.deletePermission = console.log(
-        'delete permission',
-        res.data[0].role_accesses[0].status.includes('delete')
-      );
+      this.addPermission = res.data[0].role_accesses[0].status.includes('add');
+      this.editPermission =
+        res.data[0].role_accesses[0].status.includes('edit');
+      this.deletePermission =
+        res.data[0].role_accesses[0].status.includes('delete');
+      //  console check
+      console.log('add permission', this.addPermission);
+      console.log('edit permission', this.editPermission);
+      console.log('delete permission', this.deletePermission);
     });
   }
 }
