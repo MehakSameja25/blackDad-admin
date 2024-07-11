@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class RoleService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getRoles() {
     return this.http.get(`${environment.apiUrl}/get-role`);
@@ -30,6 +30,13 @@ export class RoleService {
   delteMember(id: any) {
     return this.http.delete<any>(
       `${environment.apiUrl}/delete-user?userId=${id}`
+    );
+  }
+
+  addRole(data: any) {
+    return this.http.post<any>(
+      `${environment.apiUrl}/add-role`,
+      data
     );
   }
 }
