@@ -44,6 +44,7 @@ export class AdminCategoriesComponent implements OnInit {
     this.categoriesService.getCategory().subscribe((res) => {
       this.allCategories = res;
     });
+    this.checkPermissions();
   }
 
   openAdd(content: any) {
@@ -175,10 +176,23 @@ export class AdminCategoriesComponent implements OnInit {
       }
     });
   }
-
+  addPermission: any;
+  editPermission: any;
+  deletePermission: any;
   checkPermissions() {
     this.navService.getMenu().subscribe((res: any) => {
-      console.warn(res.data[0].role_accesses[0].includes('add'));
+      this.addPermission = console.log(
+        'add permission',
+        res.data[0].role_accesses[0].status.includes('add')
+      );
+      this.editPermission = console.log(
+        'edit permission',
+        res.data[0].role_accesses[0].status.includes('edit')
+      );
+      this.deletePermission = console.log(
+        'delete permission',
+        res.data[0].role_accesses[0].status.includes('delete')
+      );
     });
   }
 }
