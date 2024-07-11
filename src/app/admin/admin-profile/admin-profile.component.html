@@ -1,0 +1,125 @@
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>Profile</h5>
+        </div>
+      </div>
+      <div
+        class="alert alert-success"
+        role="alert"
+        class="{{ successalertClass }}"
+      >
+        {{ successMessage }}
+      </div>
+
+      <div
+        class="alert alert-danger"
+        role="alert"
+        style="text-align: center"
+        *ngIf="updateForm.get('confirmPassword')?.errors?.['passwordMismatch'] && updateForm.get('confirmPassword')?.touched"
+      >
+        <i class="fa-solid fa-triangle-exclamation" style="color: #f42a2a"></i>
+        <strong style="margin-left: 1rem">Passwords do not match</strong>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="form-group-item border-0 mb-0" *ngIf="userDetails && userDetails.user && userDetails.role">
+                <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+                  <div class="row align-item-center">
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="name"
+                          [(ngModel)]="userDetails.user.name"
+                          placeholder="Enter Name"
+                        />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            updateForm.get('name')?.invalid &&
+                            updateForm.get('name')?.touched
+                          "
+                          >Name is required</strong
+                        >
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          formControlName="email"
+                          placeholder="Enter Email"
+                          [readOnly]="userDetails.user.id != 1"
+                          [(ngModel)]="userDetails.user.email"
+                        />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            updateForm.get('email')?.invalid &&
+                            updateForm.get('email')?.touched
+                          "
+                          >Invalid email</strong
+                        >
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          formControlName="password"
+                          placeholder="Enter Password"
+                        />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            updateForm.get('password')?.invalid &&
+                            updateForm.get('password')?.touched
+                          "
+                          >Password is required</strong
+                        >
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Confirm Password</label>
+                        <input
+                          type="password"
+                          class="form-control"
+                          formControlName="confirmPassword"
+                          placeholder="Confirm Password"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-12">
+                      <button
+                        type="submit"
+                        class="btn btn-primary w-100 mt-4"
+                        [disabled]="updateForm.invalid"
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

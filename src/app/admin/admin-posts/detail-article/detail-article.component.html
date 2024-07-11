@@ -1,0 +1,172 @@
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>Article Detail</h5>
+        </div>
+      </div>
+
+      <div class="row gap-3 mb-3 justify-content-between m-0">
+        <div class="col-1 p-0">
+          <a class="btn btn-primary p-2 py-1" href="episode.html"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="14"
+              height="14"
+              x="0"
+              y="0"
+              viewBox="0 0 24 24"
+              style="enable-background: new 0 0 512 512"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M22 11H4.414l5.293-5.293a1 1 0 1 0-1.414-1.414l-7 7a1 1 0 0 0 0 1.414l7 7a1 1 0 0 0 1.414-1.414L4.414 13H22a1 1 0 0 0 0-2z"
+                  fill="currentColor"
+                  opacity="1"
+                  data-original="#000000"
+                ></path>
+              </g></svg
+          ></a>
+        </div>
+      </div>
+      <div
+        class="alert alert-success"
+        role="alert"
+        class="{{ successalertClass }}"
+      >
+        {{ successMessage }}
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row" *ngIf="articleDetails && articleDetails.data">
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                  <div class="ep-cover">
+                    <div class="card p-0 m-0">
+                      <img
+                        [src]="articleDetails.data.image"
+                        class="card-img-top"
+                        alt="..."
+                      />
+                      <div class="card-body">
+                        <p class="card-text">
+                          {{ articleDetails.data.name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-9 col-md-6 col-sm-12">
+                  <div class="row">
+                    <div class="col-lg-8 col-md-6 col-sm-12">
+                      <div
+                        class="input-block mb-3"
+                        *ngIf="articleDetails.data.isApproved === '0'"
+                      >
+                        <button
+                          class="btn btn-success"
+                          (click)="
+                            approved(articleDetails.data, 'article', '1')
+                          "
+                        >
+                          Accept
+                        </button>
+                        <button
+                          class="btn btn-danger"
+                          (click)="
+                            approved(articleDetails.data, 'article', '2')
+                          "
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <div
+                        class="input-block mb-3"
+                        *ngIf="
+                          articleDetails.data.isApproved === '1' &&
+                          articleDetails.data.isPublished === '0'
+                        "
+                      >
+                        <button
+                          class="btn btn-primary"
+                          (click)="publish(articleDetails.data, 'article')"
+                        >
+                          Publish Now
+                        </button>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Article Title</label>
+                        <p>{{ articleDetails.data.name }}</p>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-8 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Category</label>
+                        <ul *ngIf="articleDetails.data.categories">
+                          <li
+                            *ngFor="
+                              let category of articleDetails.data.categories
+                            "
+                          >
+                            {{ category.name }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label class="d-block">Status</label>
+                        <span
+                          class="badge rounded-pill text-bg-primary"
+                          *ngIf="articleDetails.data.isPublished === '1'"
+                          >Published</span
+                        >
+                        <span
+                          class="badge rounded-pill text-bg-warning"
+                          *ngIf="articleDetails.data.isApproved === '0'"
+                          >Pending</span
+                        >
+                        <span
+                          class="badge rounded-pill text-bg-success"
+                          *ngIf="
+                            articleDetails.data.isApproved === '1' &&
+                            articleDetails.data.isPublished === '0'
+                          "
+                          >Approved</span
+                        >
+                        <span
+                          class="badge rounded-pill text-bg-danger"
+                          *ngIf="articleDetails.data.isApproved === '2'"
+                          >Rejected</span
+                        >
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Description</label>
+                        <p [innerHTML]="sanitizedDescription"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

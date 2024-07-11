@@ -1,0 +1,245 @@
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>Episodes Details</h5>
+        </div>
+      </div>
+
+      <div class="row gap-3 mb-3 justify-content-between m-0">
+        <div class="col-1 p-0">
+          <a class="btn btn-primary p-2 py-1" href="episode.html"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="14"
+              height="14"
+              x="0"
+              y="0"
+              viewBox="0 0 24 24"
+              style="enable-background: new 0 0 512 512"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M22 11H4.414l5.293-5.293a1 1 0 1 0-1.414-1.414l-7 7a1 1 0 0 0 0 1.414l7 7a1 1 0 0 0 1.414-1.414L4.414 13H22a1 1 0 0 0 0-2z"
+                  fill="currentColor"
+                  opacity="1"
+                  data-original="#000000"
+                ></path>
+              </g></svg
+          ></a>
+        </div>
+      </div>
+      <div
+        class="alert alert-success"
+        role="alert"
+        class="{{ successalertClass }}"
+      >
+        {{ successMessage }}
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row" *ngIf="episodeDetails && episodeDetails.data">
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                  <div class="ep-cover">
+                    <div class="card p-0 m-0">
+                      <ngx-skeleton-loader
+                        *ngIf="isLoading"
+                        appearance="line"
+                      ></ngx-skeleton-loader>
+                      <img
+                        [src]="episodeDetails?.data.image"
+                        class="card-img-top"
+                        alt="..."
+                        (load)="onImageLoad()"
+                        [hidden]="isLoading"
+                      />
+                      <div class="card-body">
+                        <p class="card-text">
+                          {{ episodeDetails.data.name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-9 col-md-6 col-sm-12">
+                  <div class="row">
+                    <div class="col-lg-8 col-md-6 col-sm-12">
+                      <div
+                        class="input-block mb-3"
+                        *ngIf="episodeDetails.data.isApproved === '0'"
+                      >
+                        <button
+                          class="btn btn-outline-success"
+                          (click)="
+                            approved(episodeDetails.data, 'episode', '1')
+                          "
+                        >
+                          Accept
+                        </button>
+                        <button
+                          class="btn btn-danger"
+                          (click)="
+                            approved(episodeDetails.data, 'episode', '2')
+                          "
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <div
+                        class="input-block mb-3"
+                        *ngIf="
+                          episodeDetails.data.isApproved === '1' &&
+                          episodeDetails.data.isPublished === '0'
+                        "
+                      >
+                        <button
+                          class="btn btn-primary"
+                          (click)="publish(episodeDetails.data, 'episode')"
+                        >
+                          Publish Now
+                        </button>
+                      </div>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Episode Name</label>
+                        <p>{{ episodeDetails.data.name }}</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Type</label>
+                        <p>{{ episodeDetails.data.type }}</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Sub Type</label>
+                        <p>{{ episodeDetails.data.subtype }}</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>File Type</label>
+                        <p>{{ episodeDetails.data.filetype }}</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-8 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Category</label>
+                        <ul *ngIf="episodeDetails.data.categories">
+                          <li
+                            *ngFor="
+                              let category of episodeDetails.data.categories
+                            "
+                          >
+                            {{ category.name }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label class="d-block">Status</label>
+                        <span
+                          class="badge rounded-pill text-bg-primary"
+                          *ngIf="episodeDetails.data.isPublished === '1'"
+                          >Published</span
+                        >
+                        <span
+                          class="badge rounded-pill text-bg-warning"
+                          *ngIf="episodeDetails.data.isApproved === '0'"
+                          >Pending</span
+                        >
+                        <span
+                          class="badge rounded-pill text-bg-success"
+                          *ngIf="
+                            episodeDetails.data.isApproved === '1' &&
+                            episodeDetails.data.isPublished === '0'
+                          "
+                          >Approved</span
+                        >
+                        <span
+                          class="badge rounded-pill text-bg-danger"
+                          *ngIf="episodeDetails.data.isApproved === '2'"
+                          >Rejected</span
+                        >
+                      </div>
+                    </div>
+                    <div
+                      class="col-lg-4 col-md-6 col-sm-12"
+                      *ngIf="
+                        episodeDetails.data.filetype === 'audio' &&
+                        episodeDetails.data.subtype === 'podcast'
+                      "
+                    >
+                      <div class="input-block mb-3">
+                        <audio controls>
+                          <source
+                            src="{{ episodeDetails.data.url }}"
+                            type="audio/mpeg"
+                          />
+                          Your browser does not support the audio element.
+                        </audio>
+                      </div>
+                    </div>
+                    <div
+                      class="col-lg-4 col-md-6 col-sm-12"
+                      *ngIf="
+                        episodeDetails.data.filetype === 'video' &&
+                        episodeDetails.data.subtype === 'youtube'
+                      "
+                    >
+                      <div class="input-block mb-3">
+                        <a
+                          class="btn btn-primary"
+                          (click)="open(contentt, episodeDetails.data)"
+                          >Play Video</a
+                        >
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Description</label>
+                        <p [innerHTML]="sanitizedDescription"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #contentt let-modal>
+  <div class="modal-content" style="width: 600px">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Video</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        (click)="modal.close()"
+      ></button>
+    </div>
+    <div class="modal-body" id="puaseVideo">
+      <div class="podcastdetailbanner mb-3" [innerHTML]="sanitizedUrl"></div>
+    </div>
+  </div>
+</ng-template>

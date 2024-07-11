@@ -1,0 +1,307 @@
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+  <div class="loader-new" *ngIf="isLoading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>Edit Episode</h5>
+        </div>
+      </div>
+      <div class="row gap-3 mb-3 justify-content-between m-0">
+        <div class="col-1 p-0">
+          <a class="btn btn-primary p-2 py-1" href="episode.html"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="14"
+              height="14"
+              x="0"
+              y="0"
+              viewBox="0 0 24 24"
+              style="enable-background: new 0 0 512 512"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M22 11H4.414l5.293-5.293a1 1 0 1 0-1.414-1.414l-7 7a1 1 0 0 0 0 1.414l7 7a1 1 0 0 0 1.414-1.414L4.414 13H22a1 1 0 0 0 0-2z"
+                  fill="currentColor"
+                  opacity="1"
+                  data-original="#000000"
+                ></path>
+              </g></svg
+          ></a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <form [formGroup]="episodeForm" (ngSubmit)="onSubmit()">
+                <div class="form-group-item border-0 mb-0">
+                  <div class="row align-item-center">
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Episode Name</label>
+                        <input
+                          type="text"
+                          formControlName="episodeName"
+                          class="form-control"
+                          placeholder="Enter Episode Name"
+                          [(ngModel)]="episodeDetails?.data.name"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Date</label>
+                        <input
+                          type="date"
+                          formControlName="date"
+                          class="datetimepicker form-control"
+                          placeholder="Select Date"
+                          [(ngModel)]="episodeDetails?.data.date"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Episode Number</label>
+                        <input
+                          type="number"
+                          formControlName="episodeNumber"
+                          class="form-control"
+                          placeholder="Enter Episode Number"
+                          [(ngModel)]="episodeDetails?.data.episodeNo"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Season Number</label>
+                        <input
+                          type="number"
+                          formControlName="seasonNumber"
+                          class="form-control"
+                          placeholder="Enter Season Number"
+                          [(ngModel)]="episodeDetails?.data.seasonNo"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="col-lg-6 col-md-6 col-sm-12"
+                      *ngIf="allcategories && allcategories.data"
+                    >
+                      <div class="input-block mb-3">
+                        <label>Category</label>
+                        <div>
+                          <span *ngFor="let category of allcategories.data"
+                            ><input
+                              class="form-check-input custom-control-input-cat"
+                              type="checkbox"
+                              id="check{{ category.id }}"
+                              [checked]="isCategorySelected(category.id)"
+                              data-parsley-multiple="check1"
+                              [value]="category.id"
+                              (change)="toggleCategory(category.id)" />
+                            <label
+                              class="foesrm-check-label m-0"
+                              for="check{{ category.id }}"
+                            >
+                              {{ category.name | titlecase }}
+                            </label>
+                            <br
+                          /></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>File Type</label>
+                        <select
+                          formControlName="subType1"
+                          class="form-select"
+                          aria-label="Default select example"
+                          required
+                        >
+                          <option class="d-none">Type</option>
+                          <option
+                            value="1"
+                            [selected]="
+                              episodeDetails?.data.filetype === 'audio'
+                            "
+                          >
+                            audio
+                          </option>
+                          <option
+                            value="2"
+                            [selected]="
+                              episodeDetails?.data.filetype === 'video'
+                            "
+                          >
+                            video
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Sub Type</label>
+                        <select
+                          formControlName="fileType"
+                          class="form-select"
+                          aria-label="Default select example"
+                          required
+                        >
+                          <option class="d-none">Select File Type</option>
+                          <option
+                            value="1"
+                            [selected]="
+                              episodeDetails?.data.subtype === 'podcast'
+                            "
+                          >
+                            podcast
+                          </option>
+                          <option
+                            value="2"
+                            [selected]="
+                              episodeDetails?.data.subtype === 'youtube'
+                            "
+                          >
+                            youtube
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>SLug</label>
+                        <input
+                          type="text"
+                          formControlName="slug"
+                          class="form-control"
+                          placeholder="Enter Slug "
+                          [(ngModel)]="episodeDetails?.data.slug"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Url/I-Frame</label>
+                        <textarea
+                          formControlName="url"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                          [(ngModel)]="episodeDetails?.data.url"
+                          required
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Description</label>
+                        <textarea
+                          formControlName="description"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                          [(ngModel)]="episodeDetails?.data.description"
+                          required
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Metas</label>
+                        <textarea
+                          formControlName="meta"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                          [(ngModel)]="episodeDetails?.data.meta_description"
+                          required
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                      <div class="input-block">
+                        <label>Banner Image</label>
+                        <div class="input-block service-upload mb-0">
+                          <span
+                            ><img
+                              src="assets/img/drop-icon.svg"
+                              alt="upload"
+                              id="bannerPreview"
+                          /></span>
+                          <h6 class="drop-browse align-center">
+                            Drop your files here or
+                            <span class="text-primary ms-1">browse</span>
+                          </h6>
+                          <p class="text-muted">Maximum size: 50MB</p>
+                          <input
+                            type="file"
+                            multiple
+                            id="bannerImage"
+                            [value]="episodeDetails?.data.image"
+                            (change)="handleBannerImageInput($event)"
+                          />
+                          <div id="bannerFrames"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                      <div class="input-block">
+                        <label>Thumbnail Image</label>
+                        <div class="input-block service-upload mb-0">
+                          <span
+                            ><img
+                              src="assets/img/drop-icon.svg"
+                              id="thumbnailPreview"
+                              alt="upload"
+                          /></span>
+                          <h6 class="drop-browse align-center">
+                            Drop your files here or
+                            <span class="text-primary ms-1">browse</span>
+                          </h6>
+                          <p class="text-muted">Maximum size: 50MB</p>
+                          <input
+                            type="file"
+                            multiple
+                            id="thumbnailImage"
+                            [value]="episodeDetails?.data.thumbnail"
+                            (change)="handleThumbnailImageInput($event)"
+                          />
+                          <div id="thumbnailFrames"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-12">
+                      <button type="submit" class="btn btn-primary w-100 mt-4">
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

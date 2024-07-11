@@ -1,0 +1,276 @@
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>Update Article</h5>
+        </div>
+      </div>
+
+      <div class="row gap-3 mb-3 justify-content-between m-0">
+        <div class="col-1 p-0">
+          <a class="btn btn-primary p-2 py-1" href="article.html">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="14"
+              height="14"
+              x="0"
+              y="0"
+              viewBox="0 0 24 24"
+              style="enable-background: new 0 0 512 512"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M22 11H4.414l5.293-5.293a1 1 0 1 0-1.414-1.414l-7 7a1 1 0 0 0 0 1.414l7 7a1 1 0 0 0 1.414-1.414L4.414 13H22a1 1 0 0 0 0-2z"
+                  fill="currentColor"
+                  opacity="1"
+                  data-original="#000000"
+                ></path>
+              </g>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="singleArticle && singleArticle.data">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <form [formGroup]="articleForm">
+                <div class="form-group-item border-0 mb-0">
+                  <div class="row align-item-center">
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Article Name</label>
+                        <input
+                          type="text"
+                          formControlName="articleName"
+                          [(ngModel)]="singleArticle.data.name"
+                          class="form-control"
+                          placeholder="Enter Article Name"
+                        />
+                        <div
+                          *ngIf="
+                            articleForm.get('articleName')?.invalid &&
+                            (articleForm.get('articleName')?.dirty ||
+                              articleForm.get('articleName')?.touched)
+                          "
+                          class="text-danger"
+                        >
+                          <strong
+                            *ngIf="
+                              articleForm.get('articleName')?.errors?.['required']
+                            "
+                          >
+                            Article Name is required.
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Date</label>
+                        <input
+                          type="date"
+                          formControlName="date"
+                          class="datetimepicker form-control"
+                          placeholder="Select Date"
+                          [(ngModel)]="singleArticle.data.date"
+                        />
+                        <div
+                          *ngIf="
+                            articleForm.get('date')?.invalid &&
+                            (articleForm.get('date')?.dirty ||
+                              articleForm.get('date')?.touched)
+                          "
+                          class="text-danger"
+                        >
+                          <strong
+                            *ngIf="articleForm.get('date')?.errors?.['required']"
+                          >
+                            Date is required.
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="col-lg-6 col-md-6 col-sm-12"
+                      *ngIf="allcategories && allcategories.data"
+                    >
+                      <div class="input-block mb-3">
+                        <label>Category</label>
+                        <div>
+                          <span *ngFor="let category of allcategories.data"
+                            ><input
+                              class="form-check-input custom-control-input-cat"
+                              type="checkbox"
+                              id="check{{ category.id }}"
+                              [checked]="isCategorySelected(category.id)"
+                              data-parsley-multiple="check1"
+                              [value]="category.id"
+                              (change)="toggleCategory(category.id)" />
+                            <label
+                              class="form-check-label m-0"
+                              for="check{{ category.id }}"
+                            >
+                              {{ category.name | titlecase }}
+                            </label>
+                            <br
+                          /></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Slug</label>
+                        <input
+                          type="text"
+                          formControlName="slug"
+                          class="form-control"
+                          placeholder="Enter Slug "
+                          [(ngModel)]="singleArticle.data.slug"
+                        />
+                        <div
+                          *ngIf="
+                            articleForm.get('slug')?.invalid &&
+                            (articleForm.get('slug')?.dirty ||
+                              articleForm.get('slug')?.touched)
+                          "
+                          class="text-danger"
+                        >
+                          <strong
+                            *ngIf="articleForm.get('slug')?.errors?.['required']"
+                          >
+                            Slug is required.
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Description</label>
+                        <textarea
+                          formControlName="description"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                          [(ngModel)]="singleArticle.data.description"
+                        ></textarea>
+                        <div
+                          *ngIf="
+                            articleForm.get('description')?.invalid &&
+                            (articleForm.get('description')?.dirty ||
+                              articleForm.get('description')?.touched)
+                          "
+                          class="text-danger"
+                        >
+                          <strong
+                            *ngIf="articleForm.get('description')?.errors?.['required']"
+                          >
+                            Description is required.
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Metas</label>
+                        <textarea
+                          formControlName="meta"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                          [(ngModel)]="singleArticle.data.meta_description"
+                        ></textarea>
+                        <div
+                          *ngIf="
+                            articleForm.get('meta')?.invalid &&
+                            (articleForm.get('meta')?.dirty ||
+                              articleForm.get('meta')?.touched)
+                          "
+                          class="text-danger"
+                        >
+                          <strong
+                            *ngIf="articleForm.get('meta')?.errors?.['required']"
+                          >
+                            Metas are required.
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                      <div class="input-block">
+                        <label>Banner Image</label>
+                        <div class="input-block service-upload mb-0">
+                          <span
+                            ><img
+                              src="assets/img/drop-icon.svg"
+                              alt="upload"
+                              id="bannerPreview"
+                          /></span>
+                          <h6 class="drop-browse align-center">
+                            Drop your files here or
+                            <span class="text-primary ms-1">browse</span>
+                          </h6>
+                          <p class="text-muted">Maximum size: 50MB</p>
+                          <input
+                            type="file"
+                            multiple
+                            id="bannerImage"
+                            (change)="handleBannerImageInput($event)"
+                          />
+                          <div id="bannerFrames"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                      <div class="input-block">
+                        <label>Thumbnail Image</label>
+                        <div class="input-block service-upload mb-0">
+                          <span
+                            ><img
+                              src="assets/img/drop-icon.svg"
+                              id="thumbnailPreview"
+                              alt="upload"
+                          /></span>
+                          <h6 class="drop-browse align-center">
+                            Drop your files here or
+                            <span class="text-primary ms-1">browse</span>
+                          </h6>
+                          <p class="text-muted">Maximum size: 50MB</p>
+                          <input
+                            type="file"
+                            multiple
+                            id="thumbnailImage"
+                            (change)="handleThumbnailImageInput($event)"
+                          />
+                          <div id="thumbnailFrames"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-12">
+                      <button
+                        type="submit"
+                        class="btn btn-primary w-100 mt-4"
+                        (click)="onSubmit()"
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

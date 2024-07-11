@@ -1,0 +1,88 @@
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>Edit Metas</h5>
+        </div>
+      </div>
+
+      <div class="row gap-3 mb-3 justify-content-between m-0">
+        <div class="col-1 p-0">
+          <a class="btn btn-primary p-2 py-1" href="meta.html"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="14"
+              height="14"
+              x="0"
+              y="0"
+              viewBox="0 0 24 24"
+              style="enable-background: new 0 0 512 512"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M22 11H4.414l5.293-5.293a1 1 0 1 0-1.414-1.414l-7 7a1 1 0 0 0 0 1.414l7 7a1 1 0 0 0 1.414-1.414L4.414 13H22a1 1 0 0 0 0-2z"
+                  fill="currentColor"
+                  opacity="1"
+                  data-original="#000000"
+                ></path>
+              </g></svg
+          ></a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="form-group-item border-0 mb-0">
+                <div class="row align-item-center">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="input-block mb-3">
+                      <label>Meta For</label>
+                      <select
+                        class="form-select"
+                        aria-label="Default select example"
+                        disabled
+                      >
+                        <option selected>{{ this.meta_for }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <form [formGroup]="metaForm">
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Sub Type</label>
+                        <textarea
+                          class="form-control"
+                          formControlName="description"
+                          placeholder="Enter description"
+                          [(ngModel)]="allMetas?.data.meta_description"
+                          rows="5"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </form>
+
+                  <div class="col-lg-3 col-md-4 col-sm-12">
+                    <a
+                      class="btn btn-primary w-100 mt-4"
+                      type="submit"
+                      (click)="handleSubmit()"
+                      >Update</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

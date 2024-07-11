@@ -1,0 +1,51 @@
+<div class="login_wrapper">
+  <div class="main-wrapper login-body" style="visibility: visible">
+    <div class="login-wrapper">
+      <div class="container">
+        <div class="loginbox">
+          <div class="login-right">
+            <div class="login-right-wrap">
+              <h1>Login</h1>
+              <form [formGroup]="LoginForm">
+                <div class="input-block mb-3">
+                  <label class="form-control-label">Email Address</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    required
+                  />
+                </div>
+                <div class="input-block mb-3">
+                  <label class="form-control-label">Password</label>
+                  <div class="pass-group">
+                    <input
+                      type="password"
+                      class="form-control pass-input"
+                      formControlName="password"
+                      required
+                    />
+                    <span class="fas fa-eye toggle-password"></span>
+                  </div>
+                </div>
+                <strong
+                  id="sub_msg"
+                  class="text-danger"
+                  >{{ errormessage }}</strong
+                >
+                <button
+                  class="btn btn-lg btn-primary w-100"
+                  type="submit"
+                  [disabled]="LoginForm.invalid"
+                  (click)="AdminLogin()"
+                >
+                  Login
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
