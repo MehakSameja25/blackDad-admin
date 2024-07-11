@@ -7,7 +7,7 @@ import { MainNavService } from '../../services/main-nav.service';
   styleUrls: ['./add-new-role.component.css'],
 })
 export class AddNewRoleComponent {
-  menuData: any;
+  menuData: { id: number, name: string }[] = [];
   roleData: any = {
     name: '',
     role: [],
@@ -18,19 +18,15 @@ export class AddNewRoleComponent {
     edit: false,
     delete: false,
   };
-  constructor(private menuService: MainNavService) {}
+  constructor(private menuService: MainNavService) { }
 
   ngOnInit(): void {
-    this.getMenuBar();
+    this.menuData.push({ id: 1, name: 'Categories' });
+    this.menuData.push({ id: 2, name: 'Episode' });
+    this.menuData.push({ id: 3, name: 'Artical' });
   }
 
-  getMenuBar() {
-    this.menuService.getMenu().subscribe((response: any) => {
-      this.menuData = response.data[0].role_accesses;
-      console.log('Menu bar', this.menuData);
-    });
-  }
-  onSubmit(){
-    
+  onSubmit() {
+
   }
 }

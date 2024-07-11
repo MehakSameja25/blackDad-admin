@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CategoiesService } from '../services/categoies.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MainNavService } from '../services/main-nav.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-admin-episodes',
@@ -15,15 +16,21 @@ export class AdminEpisodesComponent implements OnInit {
   allcategories: any;
   selectedCategory: any;
   deleteId: any;
+  dtOptions: any = {};
+  dtTrigger: Subject<any> = new Subject<any>();
   constructor(
     private postService: AllPostsService,
     private categoryService: CategoiesService,
     private router: Router,
     private modalService: NgbModal,
     private navService: MainNavService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10
+    };
     this.getPosts();
     this.getCategories();
   }
@@ -39,6 +46,7 @@ export class AdminEpisodesComponent implements OnInit {
   getPosts() {
     this.postService.getEpisodes().subscribe((response) => {
       this.allEpisodes = response;
+      this.dtTrigger.next(this.dtOptions);
     });
   }
 

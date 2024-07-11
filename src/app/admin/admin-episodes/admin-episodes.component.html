@@ -58,7 +58,9 @@
           <div class="card">
             <div class="card-body">
               <div class="table-responsive">
-                <table class="datatable table table-stripped">
+                <table class="datatable table table-stripped" datatable
+                [dtOptions]="dtOptions"
+                [dtTrigger]="dtTrigger">
                   <thead>
                     <tr>
                       <th>IMAGE</th>
