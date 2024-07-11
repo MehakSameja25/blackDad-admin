@@ -3,6 +3,7 @@ import { AllPostsService } from '../services/all-posts.service';
 import { Router } from '@angular/router';
 import { CategoiesService } from '../services/categoies.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MainNavService } from '../services/main-nav.service';
 
 @Component({
   selector: 'app-admin-episodes',
@@ -18,7 +19,8 @@ export class AdminEpisodesComponent implements OnInit {
     private postService: AllPostsService,
     private categoryService: CategoiesService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private navService: MainNavService
   ) {}
 
   ngOnInit(): void {
@@ -74,5 +76,37 @@ export class AdminEpisodesComponent implements OnInit {
         this.ngOnInit();
       }
     });
+  }
+  addPermission: any;
+  editPermission: any;
+  isEdit: any;
+  isEditAfterPublish: any;
+  deletePermission: any;
+  checkPermissions() {
+    this.navService.getMenu().subscribe((res: any) => {
+      this.addPermission = res.data[0].role_accesses[1].status.includes('add');
+      //  --- FOR edit --
+      this.isEdit = res.data[0].role_accesses[1].status.includes('edit');
+      this.isEditAfterPublish =
+        res.data[0].role_accesses[1].status.includes('edit after publish');
+      //  -- FOR Delete
+      this.deletePermission =
+        res.data[0].role_accesses[1].status.includes('delete');
+
+      //  console check
+      console.log('add permission', this.addPermission);
+      console.log('delete permission', this.deletePermission);
+    });
+  }
+
+  isEditPermission(episode: any) {
+    console.log(episode);
+    if (this.isEdit == true && this.isEditAfterPublish == true) {
+      return true;
+    } else if (this.isEdit && episode.isPublished == 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

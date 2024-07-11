@@ -7,6 +7,7 @@
         <div class="content-page-header">
           <h5>Category</h5>
           <a
+            *ngIf="addPermission == true"
             class="btn btn-primary"
             href="javascript:void(0);"
             data-bs-toggle="modal"
@@ -54,7 +55,7 @@
                             : category.description
                         }}
                         <span
-                          class="badge bg-dark  w-fit"
+                          class="badge bg-dark w-fit"
                           style="cursor: pointer"
                           *ngIf="category.description.length > 25"
                           (click)="openEdit(descriptionn, category.id)"
@@ -67,6 +68,7 @@
                           <a
                             (click)="openEdit(edit, category.id)"
                             class="btn btn-warning"
+                            *ngIf="editPermission == true"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -128,6 +130,7 @@
                             class="btn btn-danger"
                             data-bs-toggle="modal"
                             data-bs-target="#delete"
+                            *ngIf="deletePermission == true"
                             (click)="openDelete(deletee, category.id)"
                           >
                             <svg
@@ -270,7 +273,7 @@
           <div class="col-lg-12 col-md-12">
             <div class="input-block mb-3">
               <label>Category Image</label>
-              <img src="{{singleCategoryData.image}}" alt="">
+              <img src="{{ singleCategoryData.image }}" alt="" />
             </div>
           </div>
           <div class="col-lg-12 col-md-12">
@@ -367,9 +370,7 @@
 </ng-template>
 <ng-template #descriptionn let-modal>
   <div class="modal-content">
-    <div
-      class="modal-body"
-    >
+    <div class="modal-body">
       <div class="form-header">
         <h3>Description</h3>
 

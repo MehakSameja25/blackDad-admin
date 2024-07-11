@@ -44,7 +44,6 @@ export class AdminCategoriesComponent implements OnInit {
     this.categoriesService.getCategory().subscribe((res) => {
       this.allCategories = res;
     });
-    this.checkPermissions();
   }
 
   openAdd(content: any) {
