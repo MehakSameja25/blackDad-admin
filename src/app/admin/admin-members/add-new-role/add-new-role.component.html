@@ -32,7 +32,7 @@
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="input-block mb-3">
                       <label>Role Name</label>
-                      <input type="text" class="form-control" placeholder="Enter Role" />
+                      <input type="text" class="form-control" placeholder="Enter Role" [(ngModel)]="roleData.name" />
                     </div>
                   </div>
 
@@ -43,9 +43,10 @@
                       <div class="row mb-1 mt-3" *ngFor="let data of menuData">
                         <div class="col-lg-2">
                           <div class="form-check custom-checkbox">
-                            <input class="form-check-input custom-control-input-cat" type="checkbox" id="check1"
-                              name="check1" data-parsley-multiple="check1" />
-                            <label class="form-check-label m-0" for="check1">
+                            <input class="form-check-input custom-control-input-cat" type="checkbox"
+                              id="check {{data.id}}" name="check1 {{data.id}}" data-parsley-multiple="check1"
+                              (change)="addMenu(data.id, $event.target)" />
+                            <label class="form-check-label m-0" for="check1 {{data.id}}">
                               {{data.name}}
                             </label>
                           </div>
@@ -54,7 +55,9 @@
                         <div class="col-lg-10">
                           <div class="form-check d-inline-block me-3 col-lg-1">
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="add1"
-                              name="select1[]" value="add" data-parsley-multiple="select1" />
+                              name="select1[]" value="add" data-parsley-multiple="select1"
+                              (change)="addMenuAccess(data.id, $event.target, 'add')"
+                              [disabled]="isMenuExist(data.id)" />
                             <label class="form-check-label m-0" for="add1">
                               Add
                             </label>
@@ -62,21 +65,27 @@
 
                           <div class="form-check d-inline-block col-lg-1">
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="edit1"
-                              name="select1[]" value="edit" data-parsley-multiple="select1" />
+                              name="select1[]" value="edit" data-parsley-multiple="select1"
+                              (change)="addMenuAccess(data.id, $event.target, 'edit')"
+                              [disabled]="isMenuExist(data.id)" />
                             <label class="form-check-label m-0" for="edit1">
                               Edit
                             </label>
                           </div>
                           <div class="form-check d-inline-block col-lg-2">
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="delete1"
-                              name="select1[]" value="delete" data-parsley-multiple="select1" />
+                              name="select1[]" value="delete" data-parsley-multiple="select1"
+                              (change)="addMenuAccess(data.id, $event.target, 'delete')"
+                              [disabled]="isMenuExist(data.id)" />
                             <label class="form-check-label m-0" for="delete1">
                               Delete
                             </label>
                           </div>
                           <div class="form-check d-inline-block col-lg-2" *ngIf="data.id !== 1">
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="publish1"
-                              name="select1[]" value="publish" data-parsley-multiple="select1" />
+                              name="select1[]" value="publish" data-parsley-multiple="select1"
+                              (change)="addMenuAccess(data.id, $event.target, 'publish')"
+                              [disabled]="isMenuExist(data.id)" />
                             <label class="form-check-label m-0" for="publish1">
                               Publish
                             </label>
@@ -84,14 +93,18 @@
                           <div class="form-check d-inline-block col-lg-3" *ngIf="data.id !== 1">
                             <input class="form-check-input custom-control-input radio1" type="checkbox"
                               id="editpublish1" name="select1[]" value="edit after publish"
-                              data-parsley-multiple="select1" />
+                              data-parsley-multiple="select1"
+                              (change)="addMenuAccess(data.id, $event.target, 'edit after publish')"
+                              [disabled]="isMenuExist(data.id)" />
                             <label class="form-check-label m-0" for="editpublish1">
                               Edit After Publish
                             </label>
                           </div>
                           <div class="form-check d-inline-block me-3 col-lg-2" *ngIf="data.id !== 1">
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="own1"
-                              name="select1[]" value="self record" data-parsley-multiple="select1" />
+                              name="select1[]" value="self record" data-parsley-multiple="select1"
+                              (change)="addMenuAccess(data.id, $event.target, 'self record')"
+                              [disabled]="isMenuExist(data.id)" />
                             <label class="form-check-label m-0" for="own1">
                               Self Record
                             </label>
@@ -102,7 +115,7 @@
                   </div>
 
                   <div class="col-lg-3 col-md-4 col-sm-12">
-                    <a class="btn btn-primary w-100 mt-4" href="#">Submit</a>
+                    <a class="btn btn-primary w-100 mt-4" (click)="addRole()">Submit</a>
                   </div>
 
                   <div class="col-lg-3 col-md-4 col-sm-12">
