@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CategoiesService } from '../services/categoies.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AllPostsService } from '../services/all-posts.service';
 import { MainNavService } from '../services/main-nav.service';
+import 'datatables.net';
+import 'datatables.net-dt';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-admin-categories',
   templateUrl: './admin-categories.component.html',
 })
-export class AdminCategoriesComponent implements OnInit {
+export class AdminCategoriesComponent implements OnInit, OnDestroy {
   allCategories: any;
   editId: any;
   successalertClass: any = 'd-none';
@@ -40,10 +43,21 @@ export class AdminCategoriesComponent implements OnInit {
       description: ['', [Validators.required]],
     });
   }
+  dtOptions: any = {};
+  dtTrigger: Subject<any> = new Subject<any>();
   ngOnInit(): void {
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10
+    };
     this.categoriesService.getCategory().subscribe((res) => {
       this.allCategories = res;
+      this.dtTrigger.next(this.dtOptions);
     });
+  }
+
+  ngOnDestroy() {
+    this.dtTrigger.unsubscribe();
   }
 
   openAdd(content: any) {
