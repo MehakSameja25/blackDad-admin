@@ -37,7 +37,7 @@
                           <div class="form-check custom-checkbox">
                             <input class="form-check-input custom-control-input-cat" type="checkbox"
                               id="check {{data.id}}" name="check1 {{data.id}}" data-parsley-multiple="check1"
-                              (change)="addMenu(data.id, $event.target)" />
+                              (change)="addMenu(data.id, $event.target)" [checked]="isRoleExit(data.id)"/>
                             <label class="form-check-label m-0" for="check1 {{data.id}}">
                               {{data.name}}
                             </label>
@@ -48,8 +48,8 @@
                           <div class="form-check d-inline-block me-3 col-lg-1">
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="add1"
                               name="select1[]" value="add" data-parsley-multiple="select1"
-                              (change)="addMenuAccess(data.id, $event.target, 'add')"
-                              [disabled]="isMenuExist(data.id)" />
+                              (change)="addMenuAccess(data.id, $event.target, 'add')" [disabled]="isMenuExist(data.id)"
+                              [checked]="isStatusExit(data.id, 'add')" />
                             <label class="form-check-label m-0" for="add1">
                               Add
                             </label>
@@ -58,8 +58,8 @@
                           <div class="form-check d-inline-block col-lg-1">
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="edit1"
                               name="select1[]" value="edit" data-parsley-multiple="select1"
-                              (change)="addMenuAccess(data.id, $event.target, 'edit')"
-                              [disabled]="isMenuExist(data.id)" />
+                              (change)="addMenuAccess(data.id, $event.target, 'edit')" [disabled]="isMenuExist(data.id)"
+                              [checked]="isStatusExit(data.id, 'edit')" />
                             <label class="form-check-label m-0" for="edit1">
                               Edit
                             </label>
@@ -68,7 +68,7 @@
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="delete1"
                               name="select1[]" value="delete" data-parsley-multiple="select1"
                               (change)="addMenuAccess(data.id, $event.target, 'delete')"
-                              [disabled]="isMenuExist(data.id)" />
+                              [disabled]="isMenuExist(data.id)" [checked]="isStatusExit(data.id, 'delete')" />
                             <label class="form-check-label m-0" for="delete1">
                               Delete
                             </label>
@@ -77,7 +77,7 @@
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="publish1"
                               name="select1[]" value="publish" data-parsley-multiple="select1"
                               (change)="addMenuAccess(data.id, $event.target, 'publish')"
-                              [disabled]="isMenuExist(data.id)" />
+                              [disabled]="isMenuExist(data.id)" [checked]="isStatusExit(data.id, 'publish')" />
                             <label class="form-check-label m-0" for="publish1">
                               Publish
                             </label>
@@ -87,7 +87,8 @@
                               id="editpublish1" name="select1[]" value="edit after publish"
                               data-parsley-multiple="select1"
                               (change)="addMenuAccess(data.id, $event.target, 'edit after publish')"
-                              [disabled]="isMenuExist(data.id)" />
+                              [disabled]="isMenuExist(data.id)"
+                              [checked]="isStatusExit(data.id, 'edit after publish')" />
                             <label class="form-check-label m-0" for="editpublish1">
                               Edit After Publish
                             </label>
@@ -96,7 +97,7 @@
                             <input class="form-check-input custom-control-input radio1" type="checkbox" id="own1"
                               name="select1[]" value="self record" data-parsley-multiple="select1"
                               (change)="addMenuAccess(data.id, $event.target, 'self record')"
-                              [disabled]="isMenuExist(data.id)" />
+                              [disabled]="isMenuExist(data.id)" [checked]="isStatusExit(data.id, 'self record')" />
                             <label class="form-check-label m-0" for="own1">
                               Self Record
                             </label>

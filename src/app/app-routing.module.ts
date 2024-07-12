@@ -74,6 +74,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'admin/edit-role/:id',
+    component: AddNewRoleComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'admin/assign-role',
     component: AssignRoleComponent,
     canActivate: [AuthGuard],

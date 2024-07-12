@@ -45,12 +45,24 @@ export class RoleService {
       data
     );
   }
-  
 
-  updateUser(type: any , body: any) {
+  editRole(data: any, roleId: number) {
+    return this.http.put<any>(
+      `${environment.apiUrl}/edit-role?roleId=${roleId}`,
+      data
+    );
+  }
+
+
+  updateUser(type: any, body: any) {
     return this.http.put<any>(`${environment.apiUrl}/update-user?type=${type}`, body);
   }
+
   getMemberById(id: any) {
     return this.http.get<any>(`${environment.apiUrl}/get-userById?userId=${id}`);
+  }
+
+  getRoleWithId(id: any) {
+    return this.http.get<any>(`${environment.apiUrl}/get-roleById?roleId=${id}`);
   }
 }

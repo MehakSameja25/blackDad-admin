@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MainNavService } from '../../services/main-nav.service';
 import { RoleService } from '../../services/role.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-new-role',
@@ -19,7 +20,48 @@ export class AddNewRoleComponent {
     edit: false,
     delete: false,
   };
-  constructor(private roleService: RoleService) { }
+  roleId!: string;
+  constructor(
+    private roleService: RoleService,
+    private route: ActivatedRoute
+  ) {
+    this.route.params
+      .subscribe(params => {
+        if (params['id']) {
+          this.roleId = params['id'];
+          this.roleService.getRoleWithId(this.roleId).subscribe(res => {
+            if (res && res.data) {
+              this.roleData.name = res.data.name;
+              res.data.role_accesses.map((data: any) => {
+                this.roleData.role.push({ id: data.id, menu_id: data.menu_id, status: JSON.parse(data.status) });
+              })
+            }
+          })
+        }
+      });
+  }
+
+  isStatusExit(id: number, status: string) {
+    const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
+    if (role) {
+      if (!role.status) {
+        role.status = [];
+      }
+      const roleStatus = role.status.find((data: string) => data == status);
+      if (roleStatus) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isRoleExit(id: number) {
+    const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
+    if (role) {
+      return true;
+    }
+    return false;
+  }
 
   ngOnInit(): void {
     this.menuData.push({ id: 1, name: 'Categories' });
@@ -33,18 +75,17 @@ export class AddNewRoleComponent {
 
   addMenu(id: number, event: any) {
     if (event.checked) {
-      this.roleData.role.push({ menuId: id });
+      this.roleData.role.push({ menu_id: id });
     } else {
-      const role = this.roleData.role.find((data: { menuId: number }) => data.menuId == id);
+      const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
       if (role) {
         this.roleData.role.splice(this.roleData.role.indexOf(role), 1);
       }
     }
-    console.log(this.roleData.role, "erty----------")
   }
 
   addMenuAccess(id: number, event: any, status: string) {
-    const role = this.roleData.role.find((data: { menuId: number }) => data.menuId == id);
+    const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
     if (event.checked) {
       if (role) {
         if (!role.status) {
@@ -63,7 +104,7 @@ export class AddNewRoleComponent {
   }
 
   isMenuExist(id: number) {
-    const role = this.roleData.role.find((data: { menuId: number }) => data.menuId == id);
+    const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
     if (role) {
       return false;
     }
@@ -71,7 +112,13 @@ export class AddNewRoleComponent {
   }
 
   addRole() {
-    this.roleService.addRole(this.roleData).subscribe(res => {
+    let role;
+    if (this.roleId) {
+      role = this.roleService.editRole(this.roleData, +this.roleId);
+    } else {
+      role = this.roleService.addRole(this.roleData)
+    }
+    role.subscribe(res => {
       console.log(res)
     })
   }
