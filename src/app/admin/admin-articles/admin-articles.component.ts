@@ -21,16 +21,14 @@ import { MainNavService } from '../services/main-nav.service';
   templateUrl: './admin-articles.component.html',
 })
 export class AdminArticlesComponent
-  implements OnInit, AfterViewInit, OnDestroy
+  implements OnInit
 {
   allArticles: any;
   allcategories: any;
   selectedCategory: any;
   deleteId: any;
-  dtOptions: DataTables.Config = {};
+  dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
-  @ViewChild(DataTableDirective, { static: false })
-  dtElement!: DataTableDirective;
 
   constructor(
     private postService: AllPostsService,
@@ -43,37 +41,20 @@ export class AdminArticlesComponent
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25,
-      destroy: true, // Ensure DataTables instance is destroyed on rerender
+      pageLength: 10,
     };
     this.getPosts();
     this.getCategories();
     this.checkPermissions();
   }
 
-  ngAfterViewInit(): void {
-    this.dtTrigger.next(this.dtOptions); // Trigger initial DataTable render
-  }
-
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe(); // Clean up subscription
-  }
-
   getPosts() {
     this.postService.getArticles().subscribe((response) => {
       this.allArticles = response;
-      this.rerender();
+      this.dtTrigger.next(this.dtOptions);
     });
   }
 
-  rerender(): void {
-    if (this.dtElement.dtInstance) {
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.destroy(); // Destroy existing DataTable instance
-        this.dtTrigger.next(this.dtOptions); // Emit signal to render DataTable
-      });
-    }
-  }
 
   getCategories() {
     this.categoryService.unblockedCategories().subscribe((response) => {
@@ -150,5 +131,9 @@ export class AdminArticlesComponent
     } else {
       return false;
     }
+  }
+
+  goBack(): void {
+    window.history.back();
   }
 }

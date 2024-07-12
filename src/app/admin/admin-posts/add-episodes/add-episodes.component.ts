@@ -110,6 +110,6 @@ export class AddEpisodesComponent implements OnInit {
     } else {
       this.selectedCategories.splice(index, 1);
     }
-    console.log(this.selectedCategories);
+    console.log(JSON.stringify(this.selectedCategories));
   }
 }

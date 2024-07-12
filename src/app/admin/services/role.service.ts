@@ -33,10 +33,24 @@ export class RoleService {
     );
   }
 
+  delteRole(id: any) {
+    return this.http.delete<any>(
+      `${environment.apiUrl}/delete-role?roleId=${id}`
+    );
+  }
+
   addRole(data: any) {
     return this.http.post<any>(
       `${environment.apiUrl}/add-role`,
       data
     );
+  }
+  
+
+  updateUser(type: any , body: any) {
+    return this.http.put<any>(`${environment.apiUrl}/update-user?type=${type}`, body);
+  }
+  getMemberById(id: any) {
+    return this.http.get<any>(`${environment.apiUrl}/get-userById?userId=${id}`);
   }
 }
