@@ -36,6 +36,8 @@ import { AdminArticleDraftComponent } from './admin/admin-article-draft/admin-ar
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import DataTables from 'datatables.net';
 import { DataTablesModule } from 'angular-datatables';
+import { EditMemberComponent } from './admin/admin-members/edit-member/edit-member.component';
+import { GoBackComponent } from './admin/go-back/go-back.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +66,9 @@ import { DataTablesModule } from 'angular-datatables';
     DetailAdvertisementsComponent,
     AdminEditMetasComponent,
     AdminEpisodeDraftComponent,
-    AdminArticleDraftComponent
+    AdminArticleDraftComponent,
+    EditMemberComponent,
+    GoBackComponent
   ],
   imports: [
     BrowserModule,

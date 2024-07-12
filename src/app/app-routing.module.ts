@@ -23,6 +23,7 @@ import { DetailEpisodeComponent } from './admin/admin-posts/detail-episode/detai
 import { DetailArticleComponent } from './admin/admin-posts/detail-article/detail-article.component';
 import { DetailAdvertisementsComponent } from './admin/admin-posts/detail-advertisements/detail-advertisements.component';
 import { AdminEditMetasComponent } from './admin/admin-edit-metas/admin-edit-metas.component';
+import { EditMemberComponent } from './admin/admin-members/edit-member/edit-member.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
@@ -130,6 +131,11 @@ const routes: Routes = [
   {
     path: 'admin/edit-metas/:type',
     component: AdminEditMetasComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin/edit-member/:id',
+    component: EditMemberComponent,
     canActivate: [AuthGuard],
   },
 ];
