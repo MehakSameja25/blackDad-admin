@@ -100,4 +100,19 @@ export class AdminProfileComponent {
       }
     });
   }
+  show: any = false;
+  hidden: any = true;
+  type: any = 'password';
+
+  showPassword() {
+    this.show = true;
+    this.hidden = false;
+    this.type = 'text';
+  }
+
+  hidePassword() {
+    this.hidden = true;
+    this.show = false;
+    this.type = 'password';
+  }
 }

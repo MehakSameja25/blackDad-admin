@@ -20,19 +20,30 @@
                   <label class="form-control-label">Password</label>
                   <div class="pass-group">
                     <input
-                      type="password"
+                      [type]="type"
                       class="form-control pass-input"
                       formControlName="password"
                       required
                     />
-                    <span class="fas fa-eye toggle-password"></span>
+                    <span *ngIf="hidden == true"
+                      ><i
+                        class="fa-solid fa-eye toggle-password" 
+                        title="Show"
+                        (click)="showPassword()"
+                      ></i
+                    ></span>
+                    <span *ngIf="show == true"
+                      ><i
+                        class="fa-regular fa-eye-slash toggle-password"
+                        title="Hide"
+                        (click)="hidePassword()"
+                      ></i
+                    ></span>
                   </div>
                 </div>
-                <strong
-                  id="sub_msg"
-                  class="text-danger"
-                  >{{ errormessage }}</strong
-                >
+                <strong id="sub_msg" class="text-danger">{{
+                  errormessage
+                }}</strong>
                 <button
                   class="btn btn-lg btn-primary w-100"
                   type="submit"
