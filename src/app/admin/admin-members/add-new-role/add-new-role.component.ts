@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MainNavService } from '../../services/main-nav.service';
 import { RoleService } from '../../services/role.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-new-role',
@@ -23,7 +23,8 @@ export class AddNewRoleComponent {
   roleId!: string;
   constructor(
     private roleService: RoleService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.route.params
       .subscribe(params => {
@@ -119,7 +120,7 @@ export class AddNewRoleComponent {
       role = this.roleService.addRole(this.roleData)
     }
     role.subscribe(res => {
-      console.log(res)
+      this.router.navigate(['/admin/role-type']);
     })
   }
 }
