@@ -27,6 +27,7 @@ export class RolesComponent implements OnInit {
   }
 
   open(content: any, id: any) {
+    this.allChangeRoles = [];
     this.deleteId = id;
     this.filterRole = [...this.allRoles.role];
     const indexToRemove = this.filterRole.findIndex((role: { id: number }) => role.id === this.deleteId);

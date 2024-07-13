@@ -38,6 +38,7 @@ import DataTables from 'datatables.net';
 import { DataTablesModule } from 'angular-datatables';
 import { EditMemberComponent } from './admin/admin-members/edit-member/edit-member.component';
 import { GoBackComponent } from './admin/go-back/go-back.component';
+import { ChangePasswordComponent } from './admin/admin-members/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { GoBackComponent } from './admin/go-back/go-back.component';
     AdminEpisodeDraftComponent,
     AdminArticleDraftComponent,
     EditMemberComponent,
-    GoBackComponent
+    GoBackComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

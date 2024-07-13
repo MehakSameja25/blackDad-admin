@@ -36,7 +36,7 @@ export class AssignRoleComponent implements OnInit {
   }
 
   onsubmit() {
-    this.roleService.assignRole(this.myForm.value).subscribe(
+    this.roleService.assignRole([this.myForm.value]).subscribe(
       (response) => {
         if (response) {
           setTimeout(() => {

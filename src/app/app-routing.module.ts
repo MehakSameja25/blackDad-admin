@@ -24,6 +24,7 @@ import { DetailArticleComponent } from './admin/admin-posts/detail-article/detai
 import { DetailAdvertisementsComponent } from './admin/admin-posts/detail-advertisements/detail-advertisements.component';
 import { AdminEditMetasComponent } from './admin/admin-edit-metas/admin-edit-metas.component';
 import { EditMemberComponent } from './admin/admin-members/edit-member/edit-member.component';
+import { ChangePasswordComponent } from './admin/admin-members/change-password/change-password.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
@@ -142,6 +143,10 @@ const routes: Routes = [
     path: 'admin/edit-member/:id',
     component: EditMemberComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'changePassword',
+    component: ChangePasswordComponent
   },
 ];
 
