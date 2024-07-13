@@ -95,10 +95,12 @@ export class AllMembersComponent implements OnInit {
     };
     if (this.passwordForm.valid) {
       console.log('Form submitted with values:', body);
-      this.roleService.updateUser('password', body).subscribe((res) => {
-        console.log(res);
-        this.checkClose();
-      });
+      this.roleService
+        .updateUser('editPasswordByAdmin', this.deleteId, body)
+        .subscribe((res) => {
+          console.log(res);
+          this.checkClose();
+        });
     } else {
       console.log('Form is invalid. Please fix errors.');
       this.formInvalid = true;

@@ -13,6 +13,7 @@ export class EditMemberComponent implements OnInit {
   myForm: FormGroup;
   errormessage: string = '';
   memberData: any;
+  memberId!: string | null;
 
   constructor(
     private fb: FormBuilder,
@@ -32,8 +33,8 @@ export class EditMemberComponent implements OnInit {
       this.allRoles = res.data;
     });
 
-    const memberId = this.route.snapshot.paramMap.get('id');
-    this.roleService.getMemberById(memberId).subscribe((res: any) => {
+     this.memberId = this.route.snapshot.paramMap.get('id');
+    this.roleService.getMemberById(this.memberId).subscribe((res: any) => {
       this.memberData = res.data.user;
       console.log(this.memberData);
     });
@@ -41,7 +42,7 @@ export class EditMemberComponent implements OnInit {
 
   onSubmit() {
     const body = this.myForm.value;
-    this.roleService.updateUser('editUser', body).subscribe(
+    this.roleService.updateUser('editUserByAdmin', this.memberId, body).subscribe(
       (res) => {
         console.log(res);
         if (res) {

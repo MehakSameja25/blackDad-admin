@@ -21,7 +21,7 @@ export class AuthanticationService {
   }
 
   updateProfile(body: any) {
-    return this.http.put<any>(`${environment.apiUrl}/update-user`, body);
+    return this.http.put<any>(`${environment.apiUrl}/update-user?type=editUser`, body);
   }
   getUserById(id: any) {
     return this.http.get<any>(`${environment.apiUrl}/get-userById?userId=${id}`);

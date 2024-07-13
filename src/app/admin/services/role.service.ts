@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class RoleService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getRoles() {
     return this.http.get(`${environment.apiUrl}/get-role`);
@@ -40,10 +40,7 @@ export class RoleService {
   }
 
   addRole(data: any) {
-    return this.http.post<any>(
-      `${environment.apiUrl}/add-role`,
-      data
-    );
+    return this.http.post<any>(`${environment.apiUrl}/add-role`, data);
   }
 
   editRole(data: any, roleId: number) {
@@ -53,16 +50,22 @@ export class RoleService {
     );
   }
 
-
-  updateUser(type: any, body: any) {
-    return this.http.put<any>(`${environment.apiUrl}/update-user?type=${type}`, body);
+  updateUser(type: any, id: any, body: any) {
+    return this.http.put<any>(
+      `${environment.apiUrl}/update-user?type=${type}&userId=${id}`,
+      body
+    );
   }
 
   getMemberById(id: any) {
-    return this.http.get<any>(`${environment.apiUrl}/get-userById?userId=${id}`);
+    return this.http.get<any>(
+      `${environment.apiUrl}/get-userById?userId=${id}`
+    );
   }
 
   getRoleWithId(id: any) {
-    return this.http.get<any>(`${environment.apiUrl}/get-roleById?roleId=${id}`);
+    return this.http.get<any>(
+      `${environment.apiUrl}/get-roleById?roleId=${id}`
+    );
   }
 }
