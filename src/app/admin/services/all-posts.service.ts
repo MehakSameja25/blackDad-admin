@@ -10,9 +10,7 @@ export class AllPostsService {
 
   constructor(private http: HttpClient) {}
   getEpisodes() {
-    return this.http.get<any>(
-      `${environment.apiUrl}/get-song?pageSize=100&pageNumber=1`
-    );
+    return this.http.get<any>(`${environment.apiUrl}/get-song`);
   }
   getArticles() {
     return this.http.get<any>(
@@ -81,5 +79,16 @@ export class AllPostsService {
 
   addAdvertisement(body: any) {
     return this.http.post<any>(`${environment.apiUrl}/add-advertisement`, body);
+  }
+
+  filterPostByFileType(type: any) {
+    return this.http.get<any>(
+      `${environment.apiUrl}/get-song?fileType=${type}`
+    );
+  }
+  filterPostByCategory(id: any) {
+    return this.http.get<any>(
+      `https://c8xqrpj6-4100.inc1.devtunnels.ms/api/v1/get-song?categoryId=${id}`
+    );
   }
 }

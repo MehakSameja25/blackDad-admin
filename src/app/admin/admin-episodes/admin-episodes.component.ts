@@ -58,8 +58,15 @@ export class AdminEpisodesComponent implements OnInit {
     });
   }
 
-  getValue() {
-    console.log('Selected Category =>', this.selectedCategory);
+  getValue(category: any) {
+    if (category == 'All Categories') {
+      this.getPosts();
+    } else {
+      this.postService.filterPostByCategory(category).subscribe((res) => {
+        this.allEpisodes = res;
+      });
+    }
+    console.log('Selected Category =>', category);
   }
 
   toDetails(id: any) {
@@ -109,7 +116,7 @@ export class AdminEpisodesComponent implements OnInit {
   }
 
   isEditPermission(episode: any) {
-    console.log(episode);
+    // console.log(episode);
     if (this.isEdit == true && this.isEditAfterPublish == true) {
       return true;
     } else if (this.isEdit && episode.isPublished == 0) {
@@ -117,5 +124,16 @@ export class AdminEpisodesComponent implements OnInit {
     } else {
       return false;
     }
+  }
+  getPostByFileType(type: any) {
+    if (type === 'all') {
+      this.getPosts();
+    } else {
+      this.postService.filterPostByFileType(type).subscribe((response) => {
+        this.allEpisodes = response;
+        this.dtTrigger.next(this.dtOptions);
+      });
+    }
+    console.log(type);
   }
 }

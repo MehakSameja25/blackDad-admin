@@ -31,13 +31,13 @@
               <select
                 class="form-select border-0"
                 aria-label="Default select example"
-                (click)="getValue()"
-                [(ngModel)]="selectedCategory"
+                (click)="getValue(cat.value)"
+                #cat
               >
-                <option selected class="d-none">Cateogries</option>
+                <option selected>All Categories</option>
                 <option
                   *ngFor="let category of allcategories.data"
-                  [ngValue]="category.id"
+                  [value]="category.id"
                 >
                   {{ category.name }}
                 </option>
@@ -47,10 +47,12 @@
               <select
                 class="form-select border-0"
                 aria-label="Default select example"
+                #val
+                (click)="getPostByFileType(val.value)"
               >
-                <option selected>Type</option>
-                <option value="Audio">Audio</option>
-                <option value="Video">Video</option>
+                <option selected value="all">Type</option>
+                <option value="audio">Audio</option>
+                <option value="video">Video</option>
               </select>
             </div>
           </div>
