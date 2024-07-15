@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CategoiesService } from '../services/categoies.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +8,9 @@ import { MainNavService } from '../services/main-nav.service';
 import 'datatables.net';
 import 'datatables.net-dt';
 import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
+import DataTable from 'datatables.net-dt';
+import DataTables from 'datatables.net';
 
 @Component({
   selector: 'app-admin-categories',
@@ -25,6 +28,10 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
   errormessage: string = '';
   singleCategoryData: any;
   deleteId: any;
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement!: DataTableDirective;
+  dtOptions: any = {};
+  dtTrigger: Subject<any> = new Subject<any>();
   constructor(
     private categoriesService: CategoiesService,
     private modalService: NgbModal,
@@ -43,8 +50,8 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
       description: ['', [Validators.required]],
     });
   }
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+  // dtOptions: any = {};
+  // dtTrigger: Subject<any> = new Subject<any>();
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -67,7 +74,11 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
       windowClass: 'share-modal',
     });
   }
-
+  //  renderer(): void {
+  //     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+  //       // Access DataTables API here
+  //     });
+  //   }
   categoryId: any;
   openEdit(content: any, id: any) {
     this.categoryId = id;
@@ -195,15 +206,17 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
   deletePermission: any;
   checkPermissions() {
     this.navService.getMenu().subscribe((res: any) => {
-      this.addPermission = res.data[0].role_accesses[0].status.includes('add');
-      this.editPermission =
-        res.data[0].role_accesses[0].status.includes('edit');
-      this.deletePermission =
-        res.data[0].role_accesses[0].status.includes('delete');
-      //  console check
-      console.log('add permission', this.addPermission);
-      console.log('edit permission', this.editPermission);
-      console.log('delete permission', this.deletePermission);
+      for (let permission of res.data[0].role_accesses) {
+        if ((permission.menu_bar.title == 'Categories') === true) {
+          this.addPermission = permission.status.includes('add');
+          this.editPermission = permission.status.includes('edit');
+          this.deletePermission = permission.status.includes('delete');
+          //  console check
+          console.log('add permission', this.addPermission);
+          console.log('edit permission', this.editPermission);
+          console.log('delete permission', this.deletePermission);
+        }
+      }
     });
   }
 }

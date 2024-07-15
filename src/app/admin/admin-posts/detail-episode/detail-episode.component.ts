@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { AllPostsService } from '../../services/all-posts.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthanticationService } from '../../services/authantication.service';
+import { MainNavService } from '../../services/main-nav.service';
 
 @Component({
   selector: 'app-detail-episode',
@@ -15,12 +17,16 @@ export class DetailEpisodeComponent implements OnInit {
   sanitizedUrl: SafeHtml | undefined;
   successalertClass: any = 'd-none';
   successMessage: any = '';
+  type: any;
+  publishPermission: any = false;
 
   constructor(
     private route: ActivatedRoute,
     private postsService: AllPostsService,
     private sanitizer: DomSanitizer,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthanticationService,
+    private navService: MainNavService
   ) {}
 
   ngOnInit(): void {
@@ -102,5 +108,23 @@ export class DetailEpisodeComponent implements OnInit {
           }, 5000);
         }
       });
+  }
+
+  checkPermission() {
+    const userId = localStorage.getItem('userId');
+    this.authService.getUserById(userId).subscribe((res) => {
+      this.type = res.data.role.name;
+    });
+    this.navService.getMenu().subscribe((res: any) => {
+      for (let permission of res.data[0].role_accesses) {
+        if ((permission.menu_bar.title == 'Episodes') === true) {
+          this.publishPermission = permission.status.includes('publish');
+
+          //  console check
+          console.log('publish permission', this.publishPermission);
+
+        }
+      }
+    });
   }
 }

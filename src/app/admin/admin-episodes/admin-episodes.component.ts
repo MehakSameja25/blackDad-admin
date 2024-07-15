@@ -100,18 +100,20 @@ export class AdminEpisodesComponent implements OnInit {
   deletePermission: any;
   checkPermissions() {
     this.navService.getMenu().subscribe((res: any) => {
-      this.addPermission = res.data[0].role_accesses[1].status.includes('add');
-      //  --- FOR edit --
-      this.isEdit = res.data[0].role_accesses[1].status.includes('edit');
-      this.isEditAfterPublish =
-        res.data[0].role_accesses[1].status.includes('edit after publish');
-      //  -- FOR Delete
-      this.deletePermission =
-        res.data[0].role_accesses[1].status.includes('delete');
-
-      //  console check
-      console.log('add permission', this.addPermission);
-      console.log('delete permission', this.deletePermission);
+      for (let permission of res.data[0].role_accesses) {
+        if ((permission.menu_bar.title == 'Episodes') === true) {
+          this.addPermission = permission.status.includes('add');
+          this.isEdit = permission.status.includes('edit');
+          this.isEditAfterPublish =
+            permission.status.includes('edit after publish');
+          this.deletePermission = permission.status.includes('delete');
+          //  console check
+          console.log('add permission', this.addPermission);
+          console.log('delete permission', this.deletePermission);
+          console.log('edit permission', this.isEdit);
+          console.log('edit after publish permission', this.isEditAfterPublish);
+        }
+      }
     });
   }
 

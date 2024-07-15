@@ -53,7 +53,10 @@
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div
                         class="input-block mb-3"
-                        *ngIf="episodeDetails.data.isApproved === '0'"
+                        *ngIf="
+                          episodeDetails.data.isApproved === '0' &&
+                          type == 'Super Admin'
+                        "
                       >
                         <button
                           class="btn btn-outline-success"
@@ -61,7 +64,7 @@
                             approved(episodeDetails.data, 'episode', '1')
                           "
                         >
-                          Accept
+                          Approve
                         </button>
                         <button
                           class="btn btn-danger"
@@ -78,7 +81,8 @@
                         class="input-block mb-3"
                         *ngIf="
                           episodeDetails.data.isApproved === '1' &&
-                          episodeDetails.data.isPublished === '0'
+                          episodeDetails.data.isPublished === '0' &&
+                          publishPermission === true
                         "
                       >
                         <button

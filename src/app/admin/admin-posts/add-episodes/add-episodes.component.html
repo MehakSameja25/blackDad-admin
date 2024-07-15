@@ -30,6 +30,8 @@
                           class="form-control"
                           placeholder="Enter Episode Name"
                           required
+                          [(ngModel)]="inputText"
+                          (ngModelChange)="onInputChange($event)"
                         />
                       </div>
                     </div>

@@ -24,20 +24,19 @@
           <div class="row gap-3 justify-content-end">
             <div class="col-5 p-0">
               <select
-                class="form-select border-0"
-                aria-label="Default select example"
-                (click)="getValue()"
-                [(ngModel)]="selectedCategory"
-                *ngIf="allcategories && allcategories.data"
+              class="form-select border-0"
+              aria-label="Default select example"
+              (click)="getValue(cat.value)"
+              #cat
+            >
+              <option selected>All Categories</option>
+              <option
+                *ngFor="let category of allcategories.data"
+                [value]="category.id"
               >
-                <option selected class="d-none">Cateogries</option>
-                <option
-                  *ngFor="let category of allcategories.data"
-                  [ngValue]="category.id"
-                >
-                  {{ category.name }}
-                </option>
-              </select>
+                {{ category.name }}
+              </option>
+            </select>
             </div>
           </div>
         </div>

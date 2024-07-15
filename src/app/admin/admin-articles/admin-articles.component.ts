@@ -20,9 +20,7 @@ import { MainNavService } from '../services/main-nav.service';
   selector: 'app-admin-articles',
   templateUrl: './admin-articles.component.html',
 })
-export class AdminArticlesComponent
-  implements OnInit
-{
+export class AdminArticlesComponent implements OnInit {
   allArticles: any;
   allcategories: any;
   selectedCategory: any;
@@ -55,15 +53,21 @@ export class AdminArticlesComponent
     });
   }
 
-
   getCategories() {
     this.categoryService.unblockedCategories().subscribe((response) => {
       this.allcategories = response;
     });
   }
 
-  getValue() {
-    console.log('Selected Category =>', this.selectedCategory);
+  getValue(category: any) {
+    if (category == 'All Categories') {
+      this.getPosts();
+    } else {
+      this.postService.filterArticleByCategory(category).subscribe((res) => {
+        this.allArticles = res;
+      });
+    }
+    console.log('Selected Category =>', category);
   }
 
   toDetails(id: any) {
@@ -107,18 +111,20 @@ export class AdminArticlesComponent
   deletePermission: any;
   checkPermissions() {
     this.navService.getMenu().subscribe((res: any) => {
-      this.addPermission = res.data[0].role_accesses[2].status.includes('add');
-      //  --- FOR edit --
-      this.isEdit = res.data[0].role_accesses[2].status.includes('edit');
-      this.isEditAfterPublish =
-        res.data[0].role_accesses[2].status.includes('edit after publish');
-      //  -- FOR Delete
-      this.deletePermission =
-        res.data[0].role_accesses[2].status.includes('delete');
-
-      //  console check
-      console.log('add permission', this.addPermission);
-      console.log('delete permission', this.deletePermission);
+      for (let permission of res.data[0].role_accesses) {
+        if ((permission.menu_bar.title == 'Articles') === true) {
+          this.addPermission = permission.status.includes('add');
+          this.isEdit = permission.status.includes('edit');
+          this.isEditAfterPublish =
+            permission.status.includes('edit after publish');
+          this.deletePermission = permission.status.includes('delete');
+          //  console check
+          console.log('add permission', this.addPermission);
+          console.log('delete permission', this.deletePermission);
+          console.log('edit permission', this.isEdit);
+          console.log('edit after publish permission', this.isEditAfterPublish);
+        }
+      }
     });
   }
 

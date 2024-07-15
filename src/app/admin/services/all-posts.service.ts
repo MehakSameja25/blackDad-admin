@@ -91,4 +91,9 @@ export class AllPostsService {
       `https://c8xqrpj6-4100.inc1.devtunnels.ms/api/v1/get-song?categoryId=${id}`
     );
   }
+  filterArticleByCategory(id: any) {
+    return this.http.get<any>(
+      `https://c8xqrpj6-4100.inc1.devtunnels.ms/api/v1/get-article?categoryId=${id}`
+    );
+  }
 }
