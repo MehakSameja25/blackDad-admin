@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AllPostsService } from '../../services/all-posts.service';
+import { AuthanticationService } from '../../services/authantication.service';
+import { MainNavService } from '../../services/main-nav.service';
 
 @Component({
   selector: 'app-detail-article',
@@ -12,10 +14,14 @@ export class DetailArticleComponent {
   sanitizedDescription: SafeHtml | undefined;
   successalertClass: any = 'd-none';
   successMessage: any = '';
+  publishPermission: any;
+  type: any;
   constructor(
     private route: ActivatedRoute,
     private postsService: AllPostsService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private authService: AuthanticationService,
+    private navService: MainNavService
   ) {}
 
   ngOnInit(): void {
@@ -29,6 +35,8 @@ export class DetailArticleComponent {
         console.log('CALLLED');
       }
     });
+
+    this.checkPermission();
   }
 
   sanitizeDescription(description: string): SafeHtml {
@@ -80,5 +88,22 @@ export class DetailArticleComponent {
           }, 5000);
         }
       });
+  }
+
+  checkPermission() {
+    const userId = localStorage.getItem('userId');
+    this.authService.getUserById(userId).subscribe((res) => {
+      this.type = res.data.role.name;
+    });
+    this.navService.getMenu().subscribe((res: any) => {
+      for (let permission of res.data[0].role_accesses) {
+        if ((permission.menu_bar.title == 'Articles') === true) {
+          this.publishPermission = permission.status.includes('publish');
+
+          //  console check
+          console.log('publish permission', this.publishPermission);
+        }
+      }
+    });
   }
 }

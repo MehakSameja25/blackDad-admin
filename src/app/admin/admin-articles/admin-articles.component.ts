@@ -111,18 +111,23 @@ export class AdminArticlesComponent implements OnInit {
   deletePermission: any;
   checkPermissions() {
     this.navService.getMenu().subscribe((res: any) => {
-      for (let permission of res.data[0].role_accesses) {
-        if ((permission.menu_bar.title == 'Articles') === true) {
-          this.addPermission = permission.status.includes('add');
-          this.isEdit = permission.status.includes('edit');
-          this.isEditAfterPublish =
-            permission.status.includes('edit after publish');
-          this.deletePermission = permission.status.includes('delete');
-          //  console check
-          console.log('add permission', this.addPermission);
-          console.log('delete permission', this.deletePermission);
-          console.log('edit permission', this.isEdit);
-          console.log('edit after publish permission', this.isEditAfterPublish);
+      if (res && res.data) {
+        for (let permission of res.data[0].role_accesses) {
+          if ((permission.menu_bar.title == 'Articles') === true) {
+            this.addPermission = permission.status.includes('add');
+            this.isEdit = permission.status.includes('edit');
+            this.isEditAfterPublish =
+              permission.status.includes('edit after publish');
+            this.deletePermission = permission.status.includes('delete');
+            //  console check
+            console.log('add permission', this.addPermission);
+            console.log('delete permission', this.deletePermission);
+            console.log('edit permission', this.isEdit);
+            console.log(
+              'edit after publish permission',
+              this.isEditAfterPublish
+            );
+          }
         }
       }
     });

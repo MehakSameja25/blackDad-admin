@@ -206,15 +206,17 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
   deletePermission: any;
   checkPermissions() {
     this.navService.getMenu().subscribe((res: any) => {
-      for (let permission of res.data[0].role_accesses) {
-        if ((permission.menu_bar.title == 'Categories') === true) {
-          this.addPermission = permission.status.includes('add');
-          this.editPermission = permission.status.includes('edit');
-          this.deletePermission = permission.status.includes('delete');
-          //  console check
-          console.log('add permission', this.addPermission);
-          console.log('edit permission', this.editPermission);
-          console.log('delete permission', this.deletePermission);
+      if (res && res.data) {
+        for (let permission of res.data[0].role_accesses) {
+          if ((permission.menu_bar.title == 'Categories') === true) {
+            this.addPermission = permission.status.includes('add');
+            this.editPermission = permission.status.includes('edit');
+            this.deletePermission = permission.status.includes('delete');
+            //  console check
+            console.log('add permission', this.addPermission);
+            console.log('edit permission', this.editPermission);
+            console.log('delete permission', this.deletePermission);
+          }
         }
       }
     });
