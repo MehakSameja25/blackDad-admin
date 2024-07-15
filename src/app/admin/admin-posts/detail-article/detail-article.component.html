@@ -47,7 +47,7 @@
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div
                         class="input-block mb-3"
-                        *ngIf="articleDetails.data.isApproved === '0'"
+                        *ngIf="articleDetails.data.isApproved === '0' && type == 'Super Admin'"
                       >
                         <button
                           class="btn btn-success"
@@ -55,7 +55,7 @@
                             approved(articleDetails.data, 'article', '1')
                           "
                         >
-                          Accept
+                          Approve
                         </button>
                         <button
                           class="btn btn-danger"
@@ -72,7 +72,7 @@
                         class="input-block mb-3"
                         *ngIf="
                           articleDetails.data.isApproved === '1' &&
-                          articleDetails.data.isPublished === '0'
+                          articleDetails.data.isPublished === '0' && publishPermission == true
                         "
                       >
                         <button

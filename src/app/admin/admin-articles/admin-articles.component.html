@@ -21,7 +21,7 @@
         </div>
 
         <div class="col-7">
-          <div class="row gap-3 justify-content-end">
+          <div class="row gap-3 justify-content-end" *ngIf="allcategories && allcategories.data">
             <div class="col-5 p-0">
               <select
               class="form-select border-0"

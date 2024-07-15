@@ -40,6 +40,7 @@ export class DetailEpisodeComponent implements OnInit {
         console.log('CALLLED');
       }
     });
+    this.checkPermission();
   }
   isLoading = true;
 
@@ -122,7 +123,6 @@ export class DetailEpisodeComponent implements OnInit {
 
           //  console check
           console.log('publish permission', this.publishPermission);
-
         }
       }
     });
