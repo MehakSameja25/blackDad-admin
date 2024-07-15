@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class RoleService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getRoles() {
     return this.http.get(`${environment.apiUrl}/get-role`);
@@ -66,6 +66,13 @@ export class RoleService {
   getRoleWithId(id: any) {
     return this.http.get<any>(
       `${environment.apiUrl}/get-roleById?roleId=${id}`
+    );
+  }
+
+  updatePassword(proof: string, body: { password: string }) {
+    return this.http.put<any>(
+      `${environment.apiUrl}/update-user?proof=${proof}`,
+      body
     );
   }
 }
