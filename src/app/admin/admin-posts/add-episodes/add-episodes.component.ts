@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CategoiesService } from '../../services/categoies.service';
-import { AllPostsService } from '../../services/all-posts.service';
 import { Router } from '@angular/router';
 import { Subject, debounceTime } from 'rxjs';
+import { CategoiesService } from '../../services/categoies.service';
+import { AllPostsService } from '../../services/all-posts.service';
 
 @Component({
   selector: 'app-add-episodes',
@@ -15,23 +15,18 @@ export class AddEpisodesComponent implements OnInit {
   selectedCategories: any[] = [];
   inputText: string = '';
   inputChanged: Subject<string> = new Subject<string>();
+  draftId: any;
+  fileType: any;
+
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoiesService,
-    private posts: AllPostsService,
+    private postsService: AllPostsService,
     private router: Router
   ) {
-    this.inputChanged
-      .pipe(
-        debounceTime(3000)
-      )
-      .subscribe((value) => {
-        console.log(value);
-      });
-  }
-
-  onInputChange(value: string): void {
-    this.inputChanged.next(value);
+    this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
+      this.updateDraft();
+    });
   }
 
   ngOnInit(): void {
@@ -44,31 +39,73 @@ export class AddEpisodesComponent implements OnInit {
       seasonNumber: ['', [Validators.required]],
       category: ['', [Validators.required]],
       subType1: ['', [Validators.required]],
-      fileType: ['', [Validators.required]],
+      // fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       url: ['', [Validators.required]],
       bannerImage: ['', [Validators.required]],
       thumbnailImage: ['', [Validators.required]],
     });
-    this.getCategories();
+    this.getCategories(); // Fetch categories
+    this.addEpisodeDraft(); // Initial draft save
   }
 
   getCategories() {
     this.categoryService.unblockedCategories().subscribe((response) => {
       this.allcategories = response;
-      console.log(this.allcategories);
+    });
+  }
+
+  addEpisodeDraft() {
+    const formData = this.createEpisodeFormData();
+    formData.append('isDraft', '1');
+    this.postsService.addEpisode(formData).subscribe((res: any) => {
+      if (res) {
+        this.draftId = res.data.id;
+        console.log('Draft added:', res);
+      }
     });
   }
 
   onSubmit() {
+    const formData = this.createEpisodeFormData();
+    formData.append('isDraft', '0');
+    this.postsService.addEpisode(formData).subscribe((res) => {
+      if (res) {
+        console.log('Episode added:', res);
+        this.deleteDraft();
+        this.router.navigate(['/admin/episodes']);
+      }
+    });
+  }
+
+  updateDraft() {
+    if (this.draftId) {
+      const formData = this.createEpisodeFormData();
+      formData.append('isDraft', '1');
+      this.postsService.updateDraft(this.draftId, formData).subscribe((res) => {
+        console.log('Draft updated:', res);
+      });
+    }
+  }
+
+  getType(type: any) {
+    if (type === 'youtube') {
+      this.fileType = 'video';
+    }
+    if (type === 'podcast') {
+      this.fileType = 'audio';
+    }
+  }
+
+  private createEpisodeFormData(): FormData {
     const formData = new FormData();
     formData.append('name', this.episodeForm.value.episodeName);
     formData.append('type', 'episodes');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.episodeForm.value.description);
-    formData.append('thumbnail', this.episodeForm.value.bannerImage); // by mistake name replaced
-    formData.append('image', this.episodeForm.value.thumbnailImage); // by mistake name replaced
-    formData.append('filetype', this.episodeForm.value.fileType);
+    formData.append('thumbnail', this.episodeForm.value.bannerImage); // Replaced
+    formData.append('image', this.episodeForm.value.thumbnailImage); // Replaced
+    formData.append('filetype', this.fileType);
     formData.append('meta_description', this.episodeForm.value.meta);
     formData.append('subtype', this.episodeForm.value.subType1);
     formData.append('episodeNo', this.episodeForm.value.episodeNumber);
@@ -80,14 +117,7 @@ export class AddEpisodesComponent implements OnInit {
     formData.append('isBlock', '0');
     formData.append('isApproved', '0');
     formData.append('isPublished', '0');
-
-    console.log(formData);
-    this.posts.addEpisode(formData).subscribe((res) => {
-      if (res) {
-        this.router.navigate(['/admin/episodes']);
-      }
-      console.log(res);
-    });
+    return formData;
   }
 
   handleBannerImageInput(event: any): void {
@@ -101,6 +131,7 @@ export class AddEpisodesComponent implements OnInit {
       };
       reader.readAsDataURL(file);
       this.episodeForm.patchValue({ bannerImage: file });
+      this.inputChanged.next('');
     }
   }
 
@@ -115,8 +146,10 @@ export class AddEpisodesComponent implements OnInit {
       };
       reader.readAsDataURL(file);
       this.episodeForm.patchValue({ thumbnailImage: file });
+      this.inputChanged.next('');
     }
   }
+
   getCategoryId(id: any) {
     const index = this.selectedCategories.indexOf(id);
     if (index === -1) {
@@ -124,11 +157,9 @@ export class AddEpisodesComponent implements OnInit {
     } else {
       this.selectedCategories.splice(index, 1);
     }
-    console.log(JSON.stringify(this.selectedCategories));
+    this.inputChanged.next('');
   }
-
-  getData(data: any) {
-    console.log(data);
+  deleteDraft() {
+    this.postsService.deleteDraft(this.draftId).subscribe();
   }
-
 }

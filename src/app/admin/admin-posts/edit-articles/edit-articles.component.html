@@ -214,7 +214,10 @@
                         <div class="input-block service-upload mb-0">
                           <span
                             ><img
-                              src="assets/img/drop-icon.svg"
+                              src="{{
+                                singleArticle.data.thumbnail ??
+                                  'assets/img/drop-icon.svg'
+                              }}"
                               id="thumbnailPreview"
                               alt="upload"
                           /></span>

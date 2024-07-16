@@ -1,28 +1,31 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CategoiesService } from '../../services/categoies.service';
-import { Router } from '@angular/router';
-import { AllPostsService } from '../../services/all-posts.service';
 import { Subject, debounceTime } from 'rxjs';
+import { CategoiesService } from '../../services/categoies.service';
+import { AllPostsService } from '../../services/all-posts.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-add-articles',
-  templateUrl: './add-articles.component.html',
-  styleUrls: ['./add-articles.component.css'],
+  selector: 'app-edit-article-draft',
+  templateUrl: './edit-article-draft.component.html',
+  styleUrls: ['./edit-article-draft.component.css'],
 })
-export class AddArticlesComponent {
+export class EditArticleDraftComponent {
   articleForm!: FormGroup;
   allcategories: any;
   selectedCategories: any[] = [];
   draftId: any;
   inputText: string = '';
   inputChanged: Subject<string> = new Subject<string>();
+  singleDraft: any;
+  draftData: any;
 
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoiesService,
     private postsService: AllPostsService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
       this.updateDraft();
@@ -41,7 +44,7 @@ export class AddArticlesComponent {
       thumbnailImage: ['', [Validators.required]],
     });
     this.getCategories();
-    this.addArticleDraft();
+    this.getSingleArticle();
   }
 
   getCategories() {
@@ -50,14 +53,12 @@ export class AddArticlesComponent {
       console.log(this.allcategories);
     });
   }
-  addArticleDraft() {
-    const formData = this.createArticleFormData();
-    formData.append('isDraft', '1');
-    this.postsService.addArticle(formData).subscribe((res: any) => {
-      if (res) {
-        this.draftId = res.data.id;
-        console.log('Draft added:', res);
-      }
+  getSingleArticle() {
+    this.draftId = this.route.snapshot.paramMap.get('id');
+    this.postsService.getSingleDraft(this.draftId).subscribe((res: any) => {
+      this.singleDraft = res;
+      this.draftData = JSON.parse(res.data.draft);
+      console.log('DATA', this.draftData);
     });
   }
   onSubmit() {

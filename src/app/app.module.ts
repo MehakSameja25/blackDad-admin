@@ -31,14 +31,16 @@ import { DetailEpisodeComponent } from './admin/admin-posts/detail-episode/detai
 import { DetailArticleComponent } from './admin/admin-posts/detail-article/detail-article.component';
 import { DetailAdvertisementsComponent } from './admin/admin-posts/detail-advertisements/detail-advertisements.component';
 import { AdminEditMetasComponent } from './admin/admin-edit-metas/admin-edit-metas.component';
-import { AdminEpisodeDraftComponent } from './admin/admin-episode-draft/admin-episode-draft.component';
-import { AdminArticleDraftComponent } from './admin/admin-article-draft/admin-article-draft.component';
+import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/admin-episode-draft.component';
+import { AdminArticleDraftComponent } from './admin/draft/admin-article-draft/admin-article-draft.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import DataTables from 'datatables.net';
 import { DataTablesModule } from 'angular-datatables';
 import { EditMemberComponent } from './admin/admin-members/edit-member/edit-member.component';
 import { GoBackComponent } from './admin/go-back/go-back.component';
 import { ChangePasswordComponent } from './admin/admin-members/change-password/change-password.component';
+import { EditDraftComponent } from './admin/draft/edit-draft/edit-draft.component';
+import { EditArticleDraftComponent } from './admin/draft/edit-article-draft/edit-article-draft.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +72,9 @@ import { ChangePasswordComponent } from './admin/admin-members/change-password/c
     AdminArticleDraftComponent,
     EditMemberComponent,
     GoBackComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    EditDraftComponent,
+    EditArticleDraftComponent
   ],
   imports: [
     BrowserModule,

@@ -31,7 +31,7 @@
                           placeholder="Enter Episode Name"
                           required
                           [(ngModel)]="inputText"
-                          (ngModelChange)="onInputChange($event)"
+                          (change)="this.inputChanged.next('episodeName')"
                         />
                       </div>
                     </div>
@@ -45,6 +45,7 @@
                           class="datetimepicker form-control"
                           placeholder="Select Date"
                           required
+                          (change)="this.inputChanged.next('date')"
                         />
                       </div>
                     </div>
@@ -57,6 +58,7 @@
                           class="form-control"
                           placeholder="Enter Episode Number"
                           required
+                          (change)="this.inputChanged.next('episodeNumber')"
                         />
                       </div>
                     </div>
@@ -69,6 +71,7 @@
                           class="form-control"
                           placeholder="Enter Season Number"
                           required
+                          (change)="this.inputChanged.next('seasonNumber')"
                         />
                       </div>
                     </div>
@@ -88,6 +91,7 @@
                               value="{{ category.id }}"
                               #checkBox
                               (change)="getCategoryId(checkBox.value)" />
+
                             <label
                               class="foesrm-check-label m-0"
                               for="check{{ category.id }}"
@@ -107,10 +111,13 @@
                           class="form-select"
                           aria-label="Default select example"
                           required
+                          #subtypee
+                          (change)="getType(subtypee.value)"
+                          (change)="this.inputChanged.next('subType1')"
                         >
                           <option selected>Type</option>
-                          <option value="1">audio</option>
-                          <option value="2">video</option>
+                          <option value="podcast">podcast</option>
+                          <option value="youtube">youtube</option>
                         </select>
                       </div>
                     </div>
@@ -118,14 +125,24 @@
                       <div class="input-block mb-3">
                         <label>File Type</label>
                         <select
-                          formControlName="fileType"
                           class="form-select"
                           aria-label="Default select example"
-                          required
+                          [disabled]="true"
+                          (change)="this.inputChanged.next('fileType')"
                         >
                           <option selected>Select File Type</option>
-                          <option value="1">podcast</option>
-                          <option value="2">youtube</option>
+                          <option
+                            value="audio"
+                            [selected]="subtypee.value === 'podcast'"
+                          >
+                            audio
+                          </option>
+                          <option
+                            value="video"
+                            [selected]="subtypee.value === 'youtube'"
+                          >
+                            video
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -139,6 +156,7 @@
                           class="form-control"
                           placeholder="Enter Slug "
                           required
+                          (change)="this.inputChanged.next('slug')"
                         />
                       </div>
                     </div>
@@ -152,6 +170,7 @@
                           placeholder="Enter Notes"
                           rows="5"
                           required
+                          (change)="this.inputChanged.next('url')"
                         ></textarea>
                       </div>
                     </div>
@@ -164,6 +183,7 @@
                           placeholder="Enter Notes"
                           rows="5"
                           required
+                          (change)="this.inputChanged.next('description')"
                         ></textarea>
                       </div>
                     </div>
@@ -176,6 +196,7 @@
                           placeholder="Enter Notes"
                           rows="5"
                           required
+                          (change)="this.inputChanged.next('meta')"
                         ></textarea>
                       </div>
                     </div>

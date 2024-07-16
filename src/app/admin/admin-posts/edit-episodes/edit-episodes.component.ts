@@ -15,6 +15,7 @@ export class EditEpisodesComponent {
   episodeDetails: any;
   selectedCategories: any[] = [];
   isLoading: any = true;
+  fileType!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -58,19 +59,23 @@ export class EditEpisodesComponent {
       console.log(this.allcategories);
     });
   }
-
+  getType(type: any) {
+    if (type === 'youtube') {
+      this.fileType = 'video';
+    }
+    if (type === 'podcast') {
+      this.fileType = 'audio';
+    }
+  }
   onSubmit() {
     const formData = new FormData();
     formData.append('name', this.episodeForm.value.episodeName);
     formData.append('type', 'episodes');
-    formData.append(
-      'categoryId',
-      JSON.stringify(this.episodeDetails.data.categoryId)
-    );
+    formData.append('categoryId', this.episodeDetails.data.categoryId);
     formData.append('description', this.episodeForm.value.description);
     formData.append('thumbnail', this.episodeForm.value.bannerImage); // by mistake name replaced
     formData.append('image', this.episodeForm.value.thumbnailImage); // by mistake name replaced
-    formData.append('filetype', this.episodeForm.value.fileType);
+    formData.append('filetype', this.fileType);
     formData.append('meta_description', this.episodeForm.value.meta);
     formData.append('subtype', this.episodeForm.value.subType1);
     formData.append('episodeNo', this.episodeForm.value.episodeNumber);

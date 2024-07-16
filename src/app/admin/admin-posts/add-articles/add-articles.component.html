@@ -30,6 +30,7 @@
                           formControlName="articleName"
                           class="form-control"
                           placeholder="Enter Article Name"
+                          (change)="this.inputChanged.next('articleName')"
                         />
                         <div
                           *ngIf="
@@ -58,6 +59,7 @@
                           formControlName="date"
                           class="datetimepicker form-control"
                           placeholder="Select Date"
+                          (change)="this.inputChanged.next('date')"
                         />
                         <div
                           *ngIf="
@@ -91,6 +93,7 @@
                               value="{{ category.id }}"
                               #checkBox
                               (change)="getCategoryId(checkBox.value)" />
+
                             <label
                               class="form-check-label m-0"
                               for="check{{ category.id }}"
@@ -110,6 +113,7 @@
                           formControlName="slug"
                           class="form-control"
                           placeholder="Enter Slug "
+                          (change)="this.inputChanged.next('slug')"
                         />
                         <div
                           *ngIf="
@@ -136,6 +140,7 @@
                           class="form-control"
                           placeholder="Enter Notes"
                           rows="5"
+                          (change)="this.inputChanged.next('description')"
                         ></textarea>
                         <div
                           *ngIf="
@@ -161,6 +166,7 @@
                           class="form-control"
                           placeholder="Enter Notes"
                           rows="5"
+                          (change)="this.inputChanged.next('meta')"
                         ></textarea>
                         <div
                           *ngIf="

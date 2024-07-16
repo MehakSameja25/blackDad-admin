@@ -59,10 +59,7 @@ export class EditArticlesComponent {
     const formData = new FormData();
     formData.append('name', this.articleForm.value.articleName);
     formData.append('type', 'articles');
-    formData.append(
-      'categoryId',
-      JSON.stringify(this.singleArticle.data.categoryId)
-    );
+    formData.append('categoryId', this.singleArticle.data.categoryId);
     formData.append('description', this.articleForm.value.description);
     formData.append('thumbnail', this.articleForm.value.bannerImage);
     formData.append('image', this.articleForm.value.thumbnailImage);
