@@ -1,1 +1,277 @@
-<p>edit-draft works!</p>
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>Add Episodes</h5>
+        </div>
+      </div>
+      <div class="row gap-3 mb-3 justify-content-between m-0">
+        <div class="col-1 p-0">
+          <app-go-back></app-go-back>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <form [formGroup]="episodeForm" (ngSubmit)="onSubmit()">
+                <div class="form-group-item border-0 mb-0">
+                  <div class="row align-item-center">
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Episode Name</label>
+                        <input
+                          type="text"
+                          formControlName="episodeName"
+                          [value]="draftData?.name"
+                          value=""
+                          class="form-control"
+                          placeholder="Enter Episode Name"
+                          required
+                          (change)="this.inputChanged.next('episodeName')"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Date</label>
+                        <input
+                          type="date"
+                          formControlName="date"
+                          [value]="draftData?.date"
+                          class="datetimepicker form-control"
+                          placeholder="Select Date"
+                          required
+                          (change)="this.inputChanged.next('date')"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Episode Number</label>
+                        <input
+                          type="number"
+                          formControlName="episodeNumber"
+                          [value]="draftData?.episodeNo"
+                          class="form-control"
+                          placeholder="Enter Episode Number"
+                          required
+                          (change)="this.inputChanged.next('episodeNumber')"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Season Number</label>
+                        <input
+                          type="number"
+                          formControlName="seasonNumber"
+                          [value]="draftData?.seasonNo"
+                          class="form-control"
+                          placeholder="Enter Season Number"
+                          required
+                          (change)="this.inputChanged.next('seasonNumber')"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="col-lg-6 col-md-6 col-sm-12"
+                      *ngIf="allcategories && allcategories.data"
+                    >
+                      <div class="input-block mb-3">
+                        <label>Category</label>
+                        <div>
+                          <span *ngFor="let category of allcategories.data"
+                            ><input
+                              class="form-check-input custom-control-input-cat"
+                              type="checkbox"
+                              id="check{{ category.id }}"
+                              data-parsley-multiple="check1"
+                              value="{{ category.id }}"
+                              #checkBox
+                              (change)="getCategoryId(checkBox.value)" />
+
+                            <label
+                              class="foesrm-check-label m-0"
+                              for="check{{ category.id }}"
+                            >
+                              {{ category.name | titlecase }}
+                            </label>
+                            <br
+                          /></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Sub Type</label>
+                        <select
+                          formControlName="subType1"
+                          [value]="draftData?.subtype"
+                          class="form-select"
+                          aria-label="Default select example"
+                          required
+                          #subtypee
+                          (change)="getType(subtypee.value)"
+                          (change)="this.inputChanged.next('subType1')"
+                        >
+                          <option selected>Type</option>
+                          <option value="podcast">podcast</option>
+                          <option value="youtube">youtube</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>File Type</label>
+                        <select
+                          class="form-select"
+                          aria-label="Default select example"
+                          [disabled]="true"
+                          (change)="this.inputChanged.next('fileType')"
+                        >
+                          <option selected>Select File Type</option>
+                          <option
+                            value="audio"
+                            [selected]="subtypee.value === 'podcast'"
+                          >
+                            audio
+                          </option>
+                          <option
+                            value="video"
+                            [selected]="subtypee.value === 'youtube'"
+                          >
+                            video
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Episode Name</label>
+                        <input
+                          type="text"
+                          formControlName="slug"
+                          [value]="draftData?.slug"
+                          class="form-control"
+                          placeholder="Enter Slug "
+                          required
+                          (change)="this.inputChanged.next('slug')"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Url/I-Frame</label>
+                        <textarea
+                          formControlName="url"
+                          [value]="draftData?.url"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                          required
+                          (change)="this.inputChanged.next('url')"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Description</label>
+                        <textarea
+                          formControlName="description"
+                          [value]="draftData?.description"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                          required
+                          (change)="this.inputChanged.next('description')"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Metas</label>
+                        <textarea
+                          formControlName="meta"
+                          [value]="draftData?.meta_description"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                          required
+                          (change)="this.inputChanged.next('meta')"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                      <div class="input-block">
+                        <label>Banner Image</label>
+                        <div class="input-block service-upload mb-0">
+                          <span
+                            ><img
+                              src="assets/img/drop-icon.svg"
+                              alt="upload"
+                              id="bannerPreview"
+                          /></span>
+                          <h6 class="drop-browse align-center">
+                            Drop your files here or
+                            <span class="text-primary ms-1">browse</span>
+                          </h6>
+                          <p class="text-muted">Maximum size: 50MB</p>
+                          <input
+                            type="file"
+                            multiple
+                            multiple
+                            id="bannerImage"
+                            (change)="handleBannerImageInput($event)"
+                          />
+                          <div id="bannerFrames"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                      <div class="input-block">
+                        <label>Thumbnail Image</label>
+                        <div class="input-block service-upload mb-0">
+                          <span
+                            ><img
+                              src="assets/img/drop-icon.svg"
+                              id="thumbnailPreview"
+                              alt="upload"
+                          /></span>
+                          <h6 class="drop-browse align-center">
+                            Drop your files here or
+                            <span class="text-primary ms-1">browse</span>
+                          </h6>
+                          <p class="text-muted">Maximum size: 50MB</p>
+                          <input
+                            type="file"
+                            multiple
+                            id="thumbnailImage"
+                            (change)="handleThumbnailImageInput($event)"
+                          />
+                          <div id="thumbnailFrames"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-12">
+                      <button type="submit" class="btn btn-primary w-100 mt-4">
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
