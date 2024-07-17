@@ -135,7 +135,7 @@
           >
         </li> -->
 
-        <li *ngIf="userId == 1">
+        <li *ngIf="userType === 'Super Admin'">
           <a [routerLink]="['/admin/advertisements']" routerLinkActive="active">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +189,7 @@
           >
         </li>
 
-        <li *ngIf="userId == 1">
+        <li *ngIf="userType === 'Super Admin'">
           <a [routerLink]="['/admin/metas']" routerLinkActive="active"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -329,7 +329,7 @@
           >
         </li>
 
-        <li class="submenu" *ngIf="userId == 1">
+        <li class="submenu" *ngIf="userType === 'Super Admin'">
           <a
             href="javascript:void(0)"
             class="{{ anchorClass }}"
@@ -388,7 +388,7 @@
             </li>
             <li>
               <a routerLink="/admin/assign-role" routerLinkActive="active"
-                >Update Assigned Role</a
+                >Assign Role</a
               >
             </li>
           </ul>

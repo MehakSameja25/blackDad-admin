@@ -1,15 +1,11 @@
 <div class="main-wrapper">
   <app-admin-navbar></app-admin-navbar>
-  <div class="loader-new" *ngIf="isLoading">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-  </div>
+
   <div class="page-wrapper">
     <div class="content container-fluid">
       <div class="page-header">
         <div class="content-page-header">
-          <h5>Edit Episode</h5>
+          <h5>Add Episodes</h5>
         </div>
       </div>
       <div class="row gap-3 mb-3 justify-content-between m-0">
@@ -21,10 +17,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="card">
-            <div
-              class="card-body"
-              *ngIf="episodeDetails && episodeDetails.data"
-            >
+            <div class="card-body">
               <form [formGroup]="episodeForm" (ngSubmit)="onSubmit()">
                 <div class="form-group-item border-0 mb-0">
                   <div class="row align-item-center">
@@ -34,10 +27,12 @@
                         <input
                           type="text"
                           formControlName="episodeName"
+                          [value]="draftData?.name"
+                          value=""
                           class="form-control"
                           placeholder="Enter Episode Name"
-                          [(ngModel)]="episodeDetails?.data.name"
                           required
+                          (change)="this.inputChanged.next('episodeName')"
                         />
                       </div>
                     </div>
@@ -48,10 +43,11 @@
                         <input
                           type="date"
                           formControlName="date"
+                          [value]="draftData?.date"
                           class="datetimepicker form-control"
                           placeholder="Select Date"
-                          [(ngModel)]="episodeDetails?.data.date"
                           required
+                          (change)="this.inputChanged.next('date')"
                         />
                       </div>
                     </div>
@@ -61,10 +57,11 @@
                         <input
                           type="number"
                           formControlName="episodeNumber"
+                          [value]="draftData?.episodeNo"
                           class="form-control"
                           placeholder="Enter Episode Number"
-                          [(ngModel)]="episodeDetails?.data.episodeNo"
                           required
+                          (change)="this.inputChanged.next('episodeNumber')"
                         />
                       </div>
                     </div>
@@ -74,10 +71,11 @@
                         <input
                           type="number"
                           formControlName="seasonNumber"
+                          [value]="draftData?.seasonNo"
                           class="form-control"
                           placeholder="Enter Season Number"
-                          [(ngModel)]="episodeDetails?.data.seasonNo"
                           required
+                          (change)="this.inputChanged.next('seasonNumber')"
                         />
                       </div>
                     </div>
@@ -93,10 +91,11 @@
                               class="form-check-input custom-control-input-cat"
                               type="checkbox"
                               id="check{{ category.id }}"
-                              [checked]="isCategorySelected(category.id)"
                               data-parsley-multiple="check1"
-                              [value]="category.id"
-                              (change)="toggleCategory(category.id)" />
+                              value="{{ category.id }}"
+                              #checkBox
+                              (change)="getCategoryId(checkBox.value)" />
+
                             <label
                               class="foesrm-check-label m-0"
                               for="check{{ category.id }}"
@@ -108,35 +107,22 @@
                         </div>
                       </div>
                     </div>
-
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Sub Type</label>
                         <select
                           formControlName="subType1"
+                          [value]="draftData?.subtype"
                           class="form-select"
                           aria-label="Default select example"
                           required
                           #subtypee
-                          (click)="getType(subtypee.value)"
+                          (change)="getType(subtypee.value)"
+                          (change)="this.inputChanged.next('subType1')"
                         >
-                          <option class="d-none">Select File Type</option>
-                          <option
-                            value="podcast"
-                            [selected]="
-                              episodeDetails?.data.subtype === 'podcast'
-                            "
-                          >
-                            podcast
-                          </option>
-                          <option
-                            value="youtube"
-                            [selected]="
-                              episodeDetails?.data.subtype === 'youtube'
-                            "
-                          >
-                            youtube
-                          </option>
+                          <option selected>Type</option>
+                          <option value="podcast">podcast</option>
+                          <option value="youtube">youtube</option>
                         </select>
                       </div>
                     </div>
@@ -144,12 +130,12 @@
                       <div class="input-block mb-3">
                         <label>File Type</label>
                         <select
-                          disabled
                           class="form-select"
                           aria-label="Default select example"
-                          required
+                          [disabled]="true"
+                          (change)="this.inputChanged.next('fileType')"
                         >
-                          <option class="d-none">Type</option>
+                          <option selected>Select File Type</option>
                           <option
                             value="audio"
                             [selected]="subtypee.value === 'podcast'"
@@ -165,16 +151,18 @@
                         </select>
                       </div>
                     </div>
+
                     <div class="col-12">
                       <div class="input-block mb-3">
-                        <label>SLug</label>
+                        <label>Episode Name</label>
                         <input
                           type="text"
                           formControlName="slug"
+                          [value]="draftData?.slug"
                           class="form-control"
                           placeholder="Enter Slug "
-                          [(ngModel)]="episodeDetails?.data.slug"
                           required
+                          (change)="this.inputChanged.next('slug')"
                         />
                       </div>
                     </div>
@@ -184,11 +172,12 @@
                         <label>Url/I-Frame</label>
                         <textarea
                           formControlName="url"
+                          [value]="draftData?.url"
                           class="form-control"
                           placeholder="Enter Notes"
                           rows="5"
-                          [(ngModel)]="episodeDetails?.data.url"
                           required
+                          (change)="this.inputChanged.next('url')"
                         ></textarea>
                       </div>
                     </div>
@@ -197,11 +186,12 @@
                         <label>Description</label>
                         <textarea
                           formControlName="description"
+                          [value]="draftData?.description"
                           class="form-control"
                           placeholder="Enter Notes"
                           rows="5"
-                          [(ngModel)]="episodeDetails?.data.description"
                           required
+                          (change)="this.inputChanged.next('description')"
                         ></textarea>
                       </div>
                     </div>
@@ -210,11 +200,12 @@
                         <label>Metas</label>
                         <textarea
                           formControlName="meta"
+                          [value]="draftData?.meta_description"
                           class="form-control"
                           placeholder="Enter Notes"
                           rows="5"
-                          [(ngModel)]="episodeDetails?.data.meta_description"
                           required
+                          (change)="this.inputChanged.next('meta')"
                         ></textarea>
                       </div>
                     </div>
@@ -224,10 +215,7 @@
                         <div class="input-block service-upload mb-0">
                           <span
                             ><img
-                              src="{{
-                                episodeDetails?.data.image ??
-                                  'assets/img/drop-icon.svg'
-                              }}"
+                              src="assets/img/drop-icon.svg"
                               alt="upload"
                               id="bannerPreview"
                           /></span>
@@ -238,6 +226,7 @@
                           <p class="text-muted">Maximum size: 50MB</p>
                           <input
                             type="file"
+                            multiple
                             multiple
                             id="bannerImage"
                             (change)="handleBannerImageInput($event)"
@@ -252,10 +241,7 @@
                         <div class="input-block service-upload mb-0">
                           <span
                             ><img
-                            src="{{
-                              episodeDetails?.data.thumbnail ??
-                                'assets/img/drop-icon.svg'
-                            }}"
+                              src="assets/img/drop-icon.svg"
                               id="thumbnailPreview"
                               alt="upload"
                           /></span>
@@ -268,7 +254,6 @@
                             type="file"
                             multiple
                             id="thumbnailImage"
-                            [value]="episodeDetails?.data.thumbnail"
                             (change)="handleThumbnailImageInput($event)"
                           />
                           <div id="thumbnailFrames"></div>
@@ -277,7 +262,7 @@
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-12">
                       <button type="submit" class="btn btn-primary w-100 mt-4">
-                        Update
+                        Add
                       </button>
                     </div>
                   </div>

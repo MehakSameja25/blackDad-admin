@@ -35,7 +35,7 @@
                             *ngFor="let member of allMembers.data"
                             [value]="member.id"
                           >
-                            {{ member.name }}
+                            {{ member.name | titlecase }} - ( {{member.email}} )
                           </option>
                         </select>
                       </div>

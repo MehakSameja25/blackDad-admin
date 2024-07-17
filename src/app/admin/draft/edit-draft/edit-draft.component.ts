@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Subject, debounceTime } from 'rxjs';
-import { CategoiesService } from '../../services/categoies.service';
 import { AllPostsService } from '../../services/all-posts.service';
+import { CategoiesService } from '../../services/categoies.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-add-episodes',
-  templateUrl: './add-episodes.component.html',
+  selector: 'app-edit-draft',
+  templateUrl: './edit-draft.component.html',
+  styleUrls: ['./edit-draft.component.css'],
 })
-export class AddEpisodesComponent implements OnInit {
+export class EditDraftComponent {
   episodeForm!: FormGroup;
   allcategories: any;
   selectedCategories: any[] = [];
@@ -17,12 +18,15 @@ export class AddEpisodesComponent implements OnInit {
   inputChanged: Subject<string> = new Subject<string>();
   draftId: any;
   fileType: any;
+  singleDraft: any;
+  draftData: any;
 
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoiesService,
     private postsService: AllPostsService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
       this.updateDraft();
@@ -46,7 +50,7 @@ export class AddEpisodesComponent implements OnInit {
       thumbnailImage: ['', [Validators.required]],
     });
     this.getCategories(); // Fetch categories
-    this.addEpisodeDraft(); // Initial draft save
+    this.getSingleArticle(); // Initial draft save
   }
 
   getCategories() {
@@ -54,15 +58,12 @@ export class AddEpisodesComponent implements OnInit {
       this.allcategories = response;
     });
   }
-
-  addEpisodeDraft() {
-    const formData = this.createEpisodeFormData();
-    formData.append('isDraft', '1');
-    this.postsService.addEpisode(formData).subscribe((res: any) => {
-      if (res) {
-        this.draftId = res.data.id;
-        console.log('Draft added:', res);
-      }
+  getSingleArticle() {
+    this.draftId = this.route.snapshot.paramMap.get('id');
+    this.postsService.getSingleDraft(this.draftId).subscribe((res: any) => {
+      this.singleDraft = res;
+      this.draftData = JSON.parse(res.data.draft);
+      console.log('DATA', this.draftData);
     });
   }
 

@@ -15,6 +15,7 @@ export class AdminNavbarComponent implements OnInit {
   menuData: any;
   userId: any;
   userDetails: any;
+  userType = '';
   constructor(
     private route: Router,
     private menuService: MainNavService,
@@ -29,6 +30,8 @@ export class AdminNavbarComponent implements OnInit {
     this.authService.getUserById(this.userId).subscribe((res: any) => {
       if (res) {
         this.userDetails = res.data;
+        this.userType = res.data.role.name;
+        console.log(this.userType);
       }
     });
   }
