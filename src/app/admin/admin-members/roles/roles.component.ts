@@ -66,21 +66,29 @@ export class RolesComponent implements OnInit {
 
 
   deleteRole(id: any) {
-    this.roleService.assignRole(this.allChangeRoles).subscribe(res => {
-      this.roleService.delteRole(id).subscribe((res) => {
-        if (res) {
-          setTimeout(() => {
-            this.successMessage = 'Role Deleted!';
-            this.successalertClass = '';
-            this.ngOnInit();
-            this.modalService.dismissAll();
-          }, 1000);
-          setTimeout(() => {
-            this.successMessage = '';
-            this.successalertClass = 'd-none';
-          }, 5000);
-        }
-      });
-    })
+    if (this.allMembers.length) {
+      this.roleService.assignRole(this.allChangeRoles).subscribe(res => {
+        this.deleteRoleApi(id);
+      })
+    } else {
+      this.deleteRoleApi(id);
+    }
+  }
+
+  deleteRoleApi(id: number) {
+    this.roleService.delteRole(id).subscribe((res) => {
+      if (res) {
+        setTimeout(() => {
+          this.successMessage = 'Role Deleted!';
+          this.successalertClass = '';
+          this.ngOnInit();
+          this.modalService.dismissAll();
+        }, 1000);
+        setTimeout(() => {
+          this.successMessage = '';
+          this.successalertClass = 'd-none';
+        }, 5000);
+      }
+    });
   }
 }
