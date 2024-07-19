@@ -11,8 +11,11 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
+import * as DataTables from 'datatables.net';
+import 'datatables.net-bs4';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
 import { MainNavService } from '../services/main-nav.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin-articles',
@@ -25,6 +28,8 @@ export class AdminArticlesComponent implements OnInit {
   deleteId: any;
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  sharePost: any;
+  urlToCopy!: string;
 
   constructor(
     private postService: AllPostsService,
@@ -142,7 +147,48 @@ export class AdminArticlesComponent implements OnInit {
     }
   }
 
-  goBack(): void {
-    window.history.back();
+  openShare(content: any, post: any) {
+    console.log(post);
+    this.sharePost = post;
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'share-modal',
+    });
+
+    const title = post.name.trim().replace(/\s+/g, '_');
+    const url = `${environment.shareUrl}/${post.type ?? 'articles'}/${
+      post.id
+    }/${title}`;
+    this.urlToCopy = url;
+  }
+
+  copyMessage: string = 'Copy';
+  copyClass: string = '';
+  tickClass: string = 'd-none';
+  share() {
+    this.copyTextToClipboard(this.urlToCopy);
+    this.copyMessage = 'Link Copied!';
+    this.copyClass = 'd-none';
+    this.tickClass = '';
+    setTimeout(() => {
+      this.copyMessage = 'Copy Link';
+      this.copyClass = '';
+      this.tickClass = 'd-none';
+      this.modalService.dismissAll();
+    }, 2000);
+  }
+
+  copyTextToClipboard(text: string) {
+    const tempElement = document.createElement('textarea');
+    tempElement.value = text;
+    tempElement.setAttribute('readonly', '');
+    tempElement.style.position = 'absolute';
+    tempElement.style.left = '-9999px';
+
+    document.body.appendChild(tempElement);
+
+    tempElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempElement);
   }
 }

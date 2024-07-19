@@ -252,6 +252,30 @@
                                 />
                               </svg>
                             </a>
+                            <a
+                            type="button"
+                            data-bs-toggle="tooltip"
+                            appCustomTooltip="Share"
+                            placement="top"
+                            (click)="openShare(sharee, article)"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 576 512"
+                              width="17"
+                              height="17"
+                            >
+                              <g>
+                                <path
+                                  d="M271.176 121.396C120.971 129.218.176 253.891.176 406v106l37.925-88.29c44.854-89.692 133.847-147.041 233.075-152.314v121.318L511.824 196 271.176 0z"
+                                  fill="#000000"
+                                  opacity="1"
+                                  data-original="#000000"
+                                  class=""
+                                ></path>
+                              </g>
+                            </svg>
+                          </a>
                           </div>
                         </td>
                       </tr>
@@ -328,4 +352,84 @@
   <!-- ======== -->
   <!-- delete modal -->
   <!-- ======== -->
+</ng-template>
+<ng-template #sharee let-modal>
+  <div class="modal-header bg-primary rounded-0">
+    <h1 class="modal-title fs-5 text-white">
+      Share the url
+      <i class="bi bi-share shareIcons"></i>
+    </h1>
+  </div>
+  <div class="modal-body">
+    <div class="form-group mb-3 d-flex border align-items-stretch">
+      <input
+        type="text"
+        class="form-control border-0 rounded-0"
+        [(ngModel)]="urlToCopy"
+        disabled
+        aria-label="..."
+      />
+      <button
+        class="btn btn-primary rounded-0"
+        (click)="share()"
+        style="width: 77px"
+      >
+        <strong>{{ copyMessage }}</strong>
+      </button>
+    </div>
+    <!-- <div class="keepintouch mt-3">
+      <ul
+        class="social-links d-flex align-items-center justify-content-center list-unstyled"
+      >
+        <li>
+          <a
+            class="btn d-flex align-items-center justify-content-center"
+            role="button"
+            target="_blank"
+            appCustomTooltip="Mail"
+            placement="top"
+            delay="{{ 0 }}"
+            aria-label="button-label"
+            (click)="shareByEmail(sharePost)"
+            ><i class="bi bi-envelope"></i
+          ></a>
+        </li>
+        <li>
+          <a
+            class="btn d-flex align-items-center justify-content-center"
+            role="button"
+            target="_blank"
+            appCustomTooltip="Twitter"
+            placement="top"
+            delay="{{ 0 }}"
+            aria-label="button-label"
+            (click)="shareOnTwitter(sharePost)"
+            ><i class="bi bi-twitter-x"></i
+          ></a>
+        </li>
+        <li>
+          <a
+            class="btn d-flex align-items-center justify-content-center"
+            role="button"
+            target="_blank"
+            appCustomTooltip="Facebbok"
+            (click)="shareOnFaceBook(sharePost)"
+            placement="top"
+            delay="{{ 0 }}"
+            aria-label="button-label"
+            ><i class="bi bi-facebook"></i
+          ></a>
+        </li>
+      </ul>
+    </div> -->
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-primary rounded-0"
+      (click)="modal.close()"
+    >
+      Close
+    </button>
+  </div>
 </ng-template>

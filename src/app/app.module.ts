@@ -41,6 +41,7 @@ import { EditDraftComponent } from './admin/draft/edit-draft/edit-draft.componen
 import { EditArticleDraftComponent } from './admin/draft/edit-article-draft/edit-article-draft.component';
 import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/admin-episode-draft.component';
 import { AdminArticleDraftComponent } from './admin/draft/admin-article-draft/admin-article-draft.component';
+import { DataTableDirective } from './Directives/dataTable.directive';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { AdminArticleDraftComponent } from './admin/draft/admin-article-draft/ad
     GoBackComponent,
     ChangePasswordComponent,
     EditDraftComponent,
-    EditArticleDraftComponent
+    EditArticleDraftComponent,
+    DataTableDirective
   ],
   imports: [
     BrowserModule,
