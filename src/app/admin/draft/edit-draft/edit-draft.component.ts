@@ -41,7 +41,7 @@ export class EditDraftComponent {
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
       seasonNumber: ['', [Validators.required]],
-      category: ['', [Validators.required]],
+      // category: ['', [Validators.required]],
       subType1: ['', [Validators.required]],
       // fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
@@ -109,6 +109,7 @@ export class EditDraftComponent {
     const formData = new FormData();
     formData.append('name', this.episodeForm.value.episodeName);
     formData.append('type', 'episodes');
+    formData.append('date', this.episodeForm.value.date);
     formData.append('categoryId', this.draftData.categoryId);
     formData.append('description', this.episodeForm.value.description);
     formData.append('thumbnail', this.episodeForm.value.bannerImage); // Replaced
