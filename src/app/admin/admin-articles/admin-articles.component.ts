@@ -11,8 +11,6 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-import * as DataTables from 'datatables.net';
-import 'datatables.net-bs4';
 import { ADTSettings } from 'angular-datatables/src/models/settings';
 import { MainNavService } from '../services/main-nav.service';
 
