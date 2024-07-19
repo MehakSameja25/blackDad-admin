@@ -25,7 +25,6 @@ export class DetailEpisodeComponent implements OnInit {
   countries: any = COUNTRIES;
   timezones: any[] = [];
   postId!: string | null;
-
   constructor(
     private route: ActivatedRoute,
     private postsService: AllPostsService,
