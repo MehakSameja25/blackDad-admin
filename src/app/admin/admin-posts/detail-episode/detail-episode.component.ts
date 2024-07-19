@@ -5,6 +5,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthanticationService } from '../../services/authantication.service';
 import { MainNavService } from '../../services/main-nav.service';
+import { COUNTRIES } from '../../countries';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-detail-episode',
@@ -19,6 +21,10 @@ export class DetailEpisodeComponent implements OnInit {
   successMessage: any = '';
   type: any;
   publishPermission: any = false;
+  scheduleForm!: FormGroup;
+  countries: any = COUNTRIES;
+  timezones: any[] = [];
+  postId!: string | null;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,28 +32,37 @@ export class DetailEpisodeComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private authService: AuthanticationService,
-    private navService: MainNavService
-  ) {}
+    private navService: MainNavService,
+    private fb: FormBuilder
+  ) {
+    this.scheduleForm = this.fb.group({
+      country: ['', Validators.required],
+      timezone: ['', Validators.required],
+      scheduled_at: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.postsService.getEpisodeDetails(id).subscribe((response) => {
+    this.postId = this.route.snapshot.paramMap.get('id');
+    this.postsService.getEpisodeDetails(this.postId).subscribe((response) => {
       this.episodeDetails = response;
       if (this.episodeDetails?.data?.description) {
         this.sanitizedDescription = this.sanitizeDescription(
           this.episodeDetails.data.description
         );
-        console.log('CALLLED');
       }
     });
     this.checkPermission();
   }
+
   isLoading = true;
 
   onImageLoad() {
     this.isLoading = false;
   }
+
   open(content: any, post: any) {
+    this.scheduleForm.reset();
     if (post) {
       this.sanitizedUrl = this.sanitizeUrl(post.url);
     }
@@ -56,9 +71,11 @@ export class DetailEpisodeComponent implements OnInit {
       windowClass: 'share-modal',
     });
   }
+
   sanitizeDescription(description: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(description);
   }
+
   sanitizeUrl(url: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(url);
   }
@@ -69,25 +86,9 @@ export class DetailEpisodeComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           if (approve == 1) {
-            setTimeout(() => {
-              this.successMessage = 'Episode Approved';
-              this.successalertClass = '';
-              this.ngOnInit();
-            }, 1000);
-            setTimeout(() => {
-              this.successMessage = '';
-              this.successalertClass = 'd-none';
-            }, 5000);
+            this.showSuccessMessage('Episode Approved');
           } else if (approve == 2) {
-            setTimeout(() => {
-              this.successMessage = 'Episode Rejected';
-              this.successalertClass = '';
-              this.ngOnInit();
-            }, 1000);
-            setTimeout(() => {
-              this.successMessage = '';
-              this.successalertClass = 'd-none';
-            }, 5000);
+            this.showSuccessMessage('Episode Rejected');
           }
         }
       });
@@ -98,17 +99,15 @@ export class DetailEpisodeComponent implements OnInit {
       .updateIsPublished(episodeData.id, type)
       .subscribe((res) => {
         if (res) {
-          setTimeout(() => {
-            this.successMessage = 'Episode Published';
-            this.successalertClass = '';
-            this.ngOnInit();
-          }, 1000);
-          setTimeout(() => {
-            this.successMessage = '';
-            this.successalertClass = 'd-none';
-          }, 5000);
+          this.showSuccessMessage('Episode Published');
         }
       });
+  }
+
+  openScheduleModal(content: any) {
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+    });
   }
 
   checkPermission() {
@@ -118,13 +117,78 @@ export class DetailEpisodeComponent implements OnInit {
     });
     this.navService.getMenu().subscribe((res: any) => {
       for (let permission of res.data[0].role_accesses) {
-        if ((permission.menu_bar.title == 'Episodes') === true) {
+        if (permission.menu_bar.title === 'Episodes') {
           this.publishPermission = permission.status.includes('publish');
-
-          //  console check
           console.log('publish permission', this.publishPermission);
         }
       }
     });
+  }
+
+  schedule() {
+    if (this.scheduleForm.valid) {
+      const formData = this.createEpisodeFormData();
+      formData.append('country', this.scheduleForm.value.country);
+      formData.append('timezone', this.scheduleForm.value.timezone);
+      formData.append('publish_date', this.scheduleForm.value.scheduled_at);
+      formData.append('is_scheduled', 'scheduled');
+      this.postsService
+        .updateEpisode(this.postId, formData)
+        .subscribe((res) => {
+          if (res) {
+            this.modalService.dismissAll();
+          }
+        });
+    } else {
+      console.log('Form Invalid');
+    }
+  }
+
+  onCountryChange() {
+    const selectedCountry = this.scheduleForm.get('country')?.value;
+    console.log('selectedCountry => ', selectedCountry);
+    const country = this.countries.find((c: any) => c.name === selectedCountry);
+
+    this.timezones = country ? country.timezones : [];
+    console.log('timezones => ', this.timezones);
+
+    this.scheduleForm.patchValue({
+      timezone: '',
+    });
+  }
+
+  private showSuccessMessage(message: string) {
+    this.successMessage = message;
+    this.successalertClass = '';
+    setTimeout(() => {
+      this.successMessage = '';
+      this.successalertClass = 'd-none';
+      this.ngOnInit();
+    }, 5000);
+  }
+  private createEpisodeFormData(): FormData {
+    const formData = new FormData();
+    formData.append('name', this.episodeDetails.data.name);
+    formData.append('type', this.episodeDetails.data.type);
+    formData.append('categoryId', this.episodeDetails.data.categoryId);
+    formData.append('description', this.episodeDetails.data.description);
+    //     formData.append('thumbnail', this.episodeForm.value.thumbnailImage);
+    // formData.append('image', this.episodeForm.value.bannerImage);
+    formData.append('filetype', this.episodeDetails.data.filetype);
+    formData.append(
+      'meta_description',
+      this.episodeDetails.data.meta_description
+    );
+    formData.append('subtype', this.episodeDetails.data.subtype);
+    formData.append('episodeNo', this.episodeDetails.data.episodeNo);
+    formData.append('seasonNo', this.episodeDetails.data.seasonNo);
+    formData.append('slug', this.episodeDetails.data.description);
+    formData.append('file', this.episodeDetails.data.file);
+    formData.append('reason', '');
+    formData.append('url', this.episodeDetails.data.url);
+    formData.append('isBlock', this.episodeDetails.data.isBlock);
+    formData.append('isApproved', this.episodeDetails.data.isApproved);
+    formData.append('isPublished', this.episodeDetails.data.isPublished);
+    return formData;
   }
 }

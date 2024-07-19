@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { AllPostsService } from '../services/all-posts.service';
 import { Router } from '@angular/router';
 import { CategoiesService } from '../services/categoies.service';
@@ -17,16 +23,16 @@ export class AdminEpisodesComponent implements OnInit {
   allcategories: any;
   selectedCategory: any;
   deleteId: any;
-  tableData = []
+  tableData = [];
 
   tableColumns = [
-    { title: "thumbnail" },
-    { title: "name" },
-    { title: "categoryId" },
-    { title: "type" },
-    { title: "date" },
-    { title: "is_scheduled" },
-    { title: 'action' }
+    { title: 'thumbnail' },
+    { title: 'name' },
+    { title: 'categoryId' },
+    { title: 'type' },
+    { title: 'date' },
+    { title: 'is_scheduled' },
+    { title: 'action' },
   ];
 
   constructor(
@@ -36,7 +42,7 @@ export class AdminEpisodesComponent implements OnInit {
     private modalService: NgbModal,
     private navService: MainNavService,
     private renderer: Renderer2
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getPosts();
@@ -93,7 +99,9 @@ export class AdminEpisodesComponent implements OnInit {
                               </g>
                             </svg>
           </a>
-           ${this.isEditPermission(item) == true ? `<a class="btn-action-icon" data-id="${item.id}" data-action="edit">
+           ${
+             this.isEditPermission(item) == true
+               ? `<a class="btn-action-icon" data-id="${item.id}" data-action="edit">
             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
@@ -125,7 +133,9 @@ export class AdminEpisodesComponent implements OnInit {
                               </g>
                             </svg>
           </a>
-          ` : ``}
+          `
+               : ``
+           }
           <a class="btn-action-icon" data-id="${item.id}" data-action="details">
              <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -158,11 +168,15 @@ export class AdminEpisodesComponent implements OnInit {
           </a>
           <a class="btn btn-danger" data-id="${item.id}" data-action="block">
              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="17" height="17">
-        ${item.isBlock == 0 ? `
+        ${
+          item.isBlock == 0
+            ? `
         <path fill="#fff" opacity="1" d="M352 144c0-44.2 35.8-80 80-80s80 35.8 80 80v48c0 17.7 14.3 32 32 32s32-14.3 32-32V144C576 64.5 511.5 0 432 0S288 64.5 288 144v48H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V256c0-35.3-28.7-64-64-64H352V144z"/>
-        ` : `
+        `
+            : `
         <path fill="#fff" opacity="1" d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/>
-        `}
+        `
+        }
       </svg>
           </a>
           <a
@@ -184,7 +198,7 @@ export class AdminEpisodesComponent implements OnInit {
             </g>
           </svg>
         </a>
-        </div>`
+        </div>`,
       ]);
 
       setTimeout(() => this.bindEvents(), 0);
@@ -199,14 +213,18 @@ export class AdminEpisodesComponent implements OnInit {
 
   bindEvents(): void {
     const tableElement = this.table.nativeElement;
-    const actionButtons = tableElement.querySelectorAll('.btn-action-icon, .btn-danger');
+    const actionButtons = tableElement.querySelectorAll(
+      '.btn-action-icon, .btn-danger'
+    );
 
     actionButtons.forEach((button: HTMLElement) => {
       const action = button.getAttribute('data-action');
       const id = button.getAttribute('data-id');
       switch (action) {
         case 'open':
-          this.renderer.listen(button, 'click', () => this.open(this.deleteModel, id));
+          this.renderer.listen(button, 'click', () =>
+            this.open(this.deleteModel, id)
+          );
           break;
         case 'edit':
           this.renderer.listen(button, 'click', () => this.toEdit(id));
@@ -218,14 +236,15 @@ export class AdminEpisodesComponent implements OnInit {
           this.renderer.listen(button, 'click', () => this.checkIsBlock(id));
           break;
         case 'shareing':
-          this.renderer.listen(button, 'click', () => this.openShare(this.shareModel, id));
+          this.renderer.listen(button, 'click', () =>
+            this.openShare(this.shareModel, id)
+          );
           break;
         default:
           break;
       }
     });
   }
-
 
   getCategories() {
     this.categoryService.unblockedCategories().subscribe((response) => {
@@ -263,12 +282,14 @@ export class AdminEpisodesComponent implements OnInit {
 
   checkIsBlock(episodeData: string | null) {
     if (episodeData) {
-      this.postService.updateIsblock(episodeData, 'episode').subscribe((res) => {
-        if (res) {
-          console.log(res);
-          this.getPosts();
-        }
-      });
+      this.postService
+        .updateIsblock(episodeData, 'episode')
+        .subscribe((res) => {
+          if (res) {
+            console.log(res);
+            this.getPosts();
+          }
+        });
     }
   }
   addPermission: any;
@@ -323,7 +344,9 @@ export class AdminEpisodesComponent implements OnInit {
 
   sharePost: any;
   openShare(content: any, post: any) {
-    this.sharePost = this.allEpisodes.data.allSong.find((data: any) => data.id == post);
+    this.sharePost = this.allEpisodes.data.allSong.find(
+      (data: any) => data.id == post
+    );
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',

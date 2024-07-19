@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { AllPostsService } from '../../services/all-posts.service';
 import { AuthanticationService } from '../../services/authantication.service';
 import { MainNavService } from '../../services/main-nav.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { COUNTRIES } from '../../countries';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-detail-article',
@@ -21,9 +24,16 @@ export class DetailArticleComponent {
     private postsService: AllPostsService,
     private sanitizer: DomSanitizer,
     private authService: AuthanticationService,
-    private navService: MainNavService
-  ) {}
-
+    private navService: MainNavService,
+    private modalService: NgbModal,
+    private fb: FormBuilder
+  ) {
+    this.scheduleForm = this.fb.group({
+      country: ['', Validators.required],
+      timezone: ['', Validators.required],
+      scheduled_at: ['', Validators.required],
+    });
+  }
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.postsService.getArticlesDetails(id).subscribe((response) => {
@@ -104,6 +114,44 @@ export class DetailArticleComponent {
           console.log('publish permission', this.publishPermission);
         }
       }
+    });
+  }
+  scheduleForm!: FormGroup;
+  countries: any = COUNTRIES;
+
+  timezones: any[] = [];
+  openScheduleModal(content: any) {
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+    });
+  }
+
+  schedule() {
+    if (this.scheduleForm.valid) {
+      const body = {
+        country: this.scheduleForm.value.country,
+
+        timezone: this.scheduleForm.value.timezone,
+        publish_date: this.scheduleForm.value.scheduled_at,
+        is_scheduled: 'scheduled',
+      };
+      console.log('Scheduled At:', body);
+      this.modalService.dismissAll();
+    } else {
+      console.log('Form Invalid');
+    }
+  }
+
+  onCountryChange() {
+    const selectedCountry = this.scheduleForm.get('country')?.value;
+    console.log('selectedCountry => ', selectedCountry);
+    const country = this.countries.find((c: any) => c.name === selectedCountry);
+
+    this.timezones = country ? country.timezones : [];
+    console.log('timezones => ', this.timezones);
+
+    this.scheduleForm.patchValue({
+      timezone: '',
     });
   }
 }
