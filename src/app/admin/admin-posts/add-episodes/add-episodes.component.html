@@ -24,24 +24,14 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Episode Name</label>
-                        <input
-                          type="text"
-                          formControlName="episodeName"
-                          class="form-control"
-                          placeholder="Enter Episode Name"
-                          (change)="this.inputChanged.next('episodeName')"
-                        />
-                        <div
-                          *ngIf="
+                        <input type="text" formControlName="episodeName" class="form-control"
+                          placeholder="Enter Episode Name" (change)="this.inputChanged.next('episodeName')" />
+                        <div *ngIf="
                             episodeForm.get('episodeName')?.invalid &&
                             (episodeForm.get('episodeName')?.dirty ||
                               episodeForm.get('episodeName')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('episodeName')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('episodeName')?.errors?.['required']">
                             Episode Name is required.
                           </div>
                         </div>
@@ -51,24 +41,14 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Date</label>
-                        <input
-                          type="date"
-                          formControlName="date"
-                          class="datetimepicker form-control"
-                          placeholder="Select Date"
-                          (change)="this.inputChanged.next('date')"
-                        />
-                        <div
-                          *ngIf="
+                        <input type="date" formControlName="date" class="datetimepicker form-control"
+                          placeholder="Select Date" (change)="this.inputChanged.next('date')" />
+                        <div *ngIf="
                             episodeForm.get('date')?.invalid &&
                             (episodeForm.get('date')?.dirty ||
                               episodeForm.get('date')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('date')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('date')?.errors?.['required']">
                             Date is required.
                           </div>
                         </div>
@@ -77,24 +57,14 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Episode Number</label>
-                        <input
-                          type="number"
-                          formControlName="episodeNumber"
-                          class="form-control"
-                          placeholder="Enter Episode Number"
-                          (change)="this.inputChanged.next('episodeNumber')"
-                        />
-                        <div
-                          *ngIf="
+                        <input type="number" formControlName="episodeNumber" class="form-control"
+                          placeholder="Enter Episode Number" (change)="this.inputChanged.next('episodeNumber')" />
+                        <div *ngIf="
                             episodeForm.get('episodeNumber')?.invalid &&
                             (episodeForm.get('episodeNumber')?.dirty ||
                               episodeForm.get('episodeNumber')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('episodeNumber')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('episodeNumber')?.errors?.['required']">
                             Episode Number is required.
                           </div>
                         </div>
@@ -103,50 +73,28 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Season Number</label>
-                        <input
-                          type="number"
-                          formControlName="seasonNumber"
-                          class="form-control"
-                          placeholder="Enter Season Number"
-                          (change)="this.inputChanged.next('seasonNumber')"
-                        />
-                        <div
-                          *ngIf="
+                        <input type="number" formControlName="seasonNumber" class="form-control"
+                          placeholder="Enter Season Number" (change)="this.inputChanged.next('seasonNumber')" />
+                        <div *ngIf="
                             episodeForm.get('seasonNumber')?.invalid &&
                             (episodeForm.get('seasonNumber')?.dirty ||
                               episodeForm.get('seasonNumber')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('seasonNumber')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('seasonNumber')?.errors?.['required']">
                             Season Number is required.
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div
-                      class="col-lg-6 col-md-6 col-sm-12"
-                      *ngIf="allcategories && allcategories.data"
-                    >
+                    <div class="col-lg-6 col-md-6 col-sm-12" *ngIf="allcategories && allcategories.data">
                       <div class="input-block mb-3">
                         <label>Category</label>
                         <div>
                           <span *ngFor="let category of allcategories.data">
-                            <input
-                              type="checkbox"
-                              class="form-check-input custom-control-input-cat"
-                              id="check{{ category.id }}"
-                              data-parsley-multiple="check1"
-                              value="{{ category.id }}"
-                              #checkBox
-                              (change)="getCategoryId(checkBox.value)"
-                            />
-                            <label
-                              class="form-check-label m-0"
-                              for="check{{ category.id }}"
-                            >
+                            <input type="checkbox" class="form-check-input custom-control-input-cat"
+                              id="check{{ category.id }}" data-parsley-multiple="check1" value="{{ category.id }}"
+                              #checkBox (change)="getCategoryId(checkBox.value)" />
+                            <label class="form-check-label m-0 ms-1" for="check{{ category.id }}">
                               {{ category.name | titlecase }}
                             </label>
                             <br />
@@ -157,29 +105,18 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Sub Type</label>
-                        <select
-                          formControlName="subType1"
-                          class="form-select"
-                          aria-label="Default select example"
-                          #subtypee
-                          (change)="getType(subtypee.value)"
-                          (change)="this.inputChanged.next('subType1')"
-                        >
+                        <select formControlName="subType1" class="form-select" aria-label="Default select example"
+                          #subtypee (change)="getType(subtypee.value)" (change)="this.inputChanged.next('subType1')">
                           <option value="" class="d-none">Type</option>
                           <option value="podcast">podcast</option>
                           <option value="youtube">youtube</option>
                         </select>
-                        <div
-                          *ngIf="
+                        <div *ngIf="
                             episodeForm.get('subType1')?.invalid &&
                             (episodeForm.get('subType1')?.dirty ||
                               episodeForm.get('subType1')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('subType1')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('subType1')?.errors?.['required']">
                             Sub Type is required.
                           </div>
                         </div>
@@ -188,22 +125,12 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>File Type</label>
-                        <select
-                          class="form-select"
-                          aria-label="Default select example"
-                          [disabled]="true"
-                        >
+                        <select class="form-select" aria-label="Default select example" [disabled]="true">
                           <option>Select File Type</option>
-                          <option
-                            value="audio"
-                            [selected]="fileType === 'audio'"
-                          >
+                          <option value="audio" [selected]="fileType === 'audio'">
                             audio
                           </option>
-                          <option
-                            value="video"
-                            [selected]="fileType === 'video'"
-                          >
+                          <option value="video" [selected]="fileType === 'video'">
                             video
                           </option>
                         </select>
@@ -213,24 +140,14 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Slug</label>
-                        <input
-                          type="text"
-                          formControlName="slug"
-                          class="form-control"
-                          placeholder="Enter Slug"
-                          (change)="this.inputChanged.next('slug')"
-                        />
-                        <div
-                          *ngIf="
+                        <input type="text" formControlName="slug" class="form-control" placeholder="Enter Slug"
+                          (change)="this.inputChanged.next('slug')" />
+                        <div *ngIf="
                             episodeForm.get('slug')?.invalid &&
                             (episodeForm.get('slug')?.dirty ||
                               episodeForm.get('slug')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('slug')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('slug')?.errors?.['required']">
                             Slug is required.
                           </div>
                         </div>
@@ -240,24 +157,14 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Url/I-Frame</label>
-                        <textarea
-                          formControlName="url"
-                          class="form-control"
-                          placeholder="Enter Notes"
-                          rows="5"
-                          (change)="this.inputChanged.next('url')"
-                        ></textarea>
-                        <div
-                          *ngIf="
+                        <textarea formControlName="url" class="form-control" placeholder="Enter Notes" rows="5"
+                          (change)="this.inputChanged.next('url')"></textarea>
+                        <div *ngIf="
                             episodeForm.get('url')?.invalid &&
                             (episodeForm.get('url')?.dirty ||
                               episodeForm.get('url')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('url')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('url')?.errors?.['required']">
                             Url is required.
                           </div>
                         </div>
@@ -266,24 +173,14 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Description</label>
-                        <textarea
-                          formControlName="description"
-                          class="form-control"
-                          placeholder="Enter Notes"
-                          rows="5"
-                          (change)="this.inputChanged.next('description')"
-                        ></textarea>
-                        <div
-                          *ngIf="
+                        <textarea formControlName="description" class="form-control" placeholder="Enter Notes" rows="5"
+                          (change)="this.inputChanged.next('description')"></textarea>
+                        <div *ngIf="
                             episodeForm.get('description')?.invalid &&
                             (episodeForm.get('description')?.dirty ||
                               episodeForm.get('description')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('description')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('description')?.errors?.['required']">
                             Description is required.
                           </div>
                         </div>
@@ -292,24 +189,14 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Metas</label>
-                        <textarea
-                          formControlName="meta"
-                          class="form-control"
-                          placeholder="Enter Notes"
-                          rows="5"
-                          (change)="this.inputChanged.next('meta')"
-                        ></textarea>
-                        <div
-                          *ngIf="
+                        <textarea formControlName="meta" class="form-control" placeholder="Enter Notes" rows="5"
+                          (change)="this.inputChanged.next('meta')"></textarea>
+                        <div *ngIf="
                             episodeForm.get('meta')?.invalid &&
                             (episodeForm.get('meta')?.dirty ||
                               episodeForm.get('meta')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('meta')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('meta')?.errors?.['required']">
                             Metas is required.
                           </div>
                         </div>
@@ -319,38 +206,23 @@
                       <div class="input-block">
                         <label>Banner Image</label>
                         <div class="input-block service-upload mb-0">
-                          <span
-                            ><img
-                              src="assets/img/drop-icon.svg"
-                              alt="upload"
-                              id="bannerPreview"
-                          /></span>
+                          <span><img src="assets/img/drop-icon.svg" alt="upload" id="bannerPreview" /></span>
                           <h6 class="drop-browse align-center">
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
                           </h6>
                           <p class="text-muted">Maximum size: 50MB</p>
-                          <input
-                            type="file"
-                            multiple
-                            multiple
-                            id="bannerImage"
-                            (change)="handleBannerImageInput($event)"
-                          />
+                          <input type="file" multiple multiple id="bannerImage"
+                            (change)="handleBannerImageInput($event)" />
                           <div id="bannerFrames"></div>
                         </div>
                       </div>
-                      <div
-                        *ngIf="
+                      <div *ngIf="
                           episodeForm.get('bannerImage')?.invalid &&
                           (episodeForm.get('bannerImage')?.dirty ||
                             episodeForm.get('bannerImage')?.touched)
-                        "
-                        class="text-danger"
-                      >
-                        <div
-                          *ngIf="episodeForm.get('bannerImage')?.errors?.['required']"
-                        >
+                        " class="text-danger">
+                        <div *ngIf="episodeForm.get('bannerImage')?.errors?.['required']">
                           Banner Image is required.
                         </div>
                       </div>
@@ -359,37 +231,23 @@
                       <div class="input-block">
                         <label>Thumbnail Image</label>
                         <div class="input-block service-upload mb-0">
-                          <span
-                            ><img
-                              src="assets/img/drop-icon.svg"
-                              id="thumbnailPreview"
-                              alt="upload"
-                          /></span>
+                          <span><img src="assets/img/drop-icon.svg" id="thumbnailPreview" alt="upload" /></span>
                           <h6 class="drop-browse align-center">
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
                           </h6>
                           <p class="text-muted">Maximum size: 50MB</p>
-                          <input
-                            type="file"
-                            multiple
-                            id="thumbnailImage"
-                            (change)="handleThumbnailImageInput($event)"
-                          />
+                          <input type="file" multiple id="thumbnailImage"
+                            (change)="handleThumbnailImageInput($event)" />
                           <div id="thumbnailFrames"></div>
                         </div>
                       </div>
-                      <div
-                        *ngIf="
+                      <div *ngIf="
                           episodeForm.get('thumbnailImage')?.invalid &&
                           (episodeForm.get('thumbnailImage')?.dirty ||
                             episodeForm.get('thumbnailImage')?.touched)
-                        "
-                        class="text-danger"
-                      >
-                        <div
-                          *ngIf="episodeForm.get('thumbnailImage')?.errors?.['required']"
-                        >
+                        " class="text-danger">
+                        <div *ngIf="episodeForm.get('thumbnailImage')?.errors?.['required']">
                           Thumbnail Image is required.
                         </div>
                       </div>
