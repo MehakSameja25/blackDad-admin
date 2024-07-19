@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AllPostsService } from '../services/all-posts.service';
 import { MainNavService } from '../services/main-nav.service';
 import { Subject } from 'rxjs';
-import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-admin-categories',
@@ -23,10 +22,6 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
   errormessage: string = '';
   singleCategoryData: any;
   deleteId: any;
-  @ViewChild(DataTableDirective, { static: false })
-  dtElement!: DataTableDirective;
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
 
   addPermission: any;
   editPermission: any;
@@ -54,21 +49,15 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-    };
 
     this.categoriesService.getCategory().subscribe((res) => {
       this.allCategories = res;
-      this.dtTrigger.next(this.dtOptions);
     });
 
     this.checkPermissions();
   }
 
   ngOnDestroy() {
-    this.dtTrigger.unsubscribe();
   }
 
   openAdd(content: any) {

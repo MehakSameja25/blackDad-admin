@@ -32,8 +32,6 @@ import { DetailArticleComponent } from './admin/admin-posts/detail-article/detai
 import { DetailAdvertisementsComponent } from './admin/admin-posts/detail-advertisements/detail-advertisements.component';
 import { AdminEditMetasComponent } from './admin/admin-edit-metas/admin-edit-metas.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
-import DataTables from 'datatables.net';
-import { DataTablesModule } from 'angular-datatables';
 import { EditMemberComponent } from './admin/admin-members/edit-member/edit-member.component';
 import { GoBackComponent } from './admin/go-back/go-back.component';
 import { ChangePasswordComponent } from './admin/admin-members/change-password/change-password.component';
@@ -86,7 +84,6 @@ import { DataTableDirective } from './Directives/dataTable.directive';
     ReactiveFormsModule,
     HttpClientModule,
     NgxSkeletonLoaderModule,
-    DataTablesModule
   ],
   providers: [
     {
