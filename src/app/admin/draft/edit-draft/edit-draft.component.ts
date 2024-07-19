@@ -51,6 +51,9 @@ export class EditDraftComponent {
     });
     this.getCategories(); // Fetch categories
     this.getSingleArticle(); // Initial draft save
+    setTimeout(() => {
+      this.setFormValues();
+    }, 2000);
   }
 
   getCategories() {
@@ -68,15 +71,19 @@ export class EditDraftComponent {
   }
 
   onSubmit() {
-    const formData = this.createEpisodeFormData();
-    formData.append('isDraft', '0');
-    this.postsService.addEpisode(formData).subscribe((res) => {
-      if (res) {
-        console.log('Episode added:', res);
-        this.deleteDraft();
-        this.router.navigate(['/admin/episodes']);
-      }
-    });
+    if (this.episodeForm.valid) {
+      const formData = this.createEpisodeFormData();
+      formData.append('isDraft', '0');
+      this.postsService.addEpisode(formData).subscribe((res) => {
+        if (res) {
+          console.log('Episode added:', res);
+          this.deleteDraft();
+          this.router.navigate(['/admin/episodes']);
+        }
+      });
+    } else {
+      this.validateAllFormFields(this.episodeForm);
+    }
   }
 
   updateDraft() {
@@ -102,7 +109,7 @@ export class EditDraftComponent {
     const formData = new FormData();
     formData.append('name', this.episodeForm.value.episodeName);
     formData.append('type', 'episodes');
-    formData.append('categoryId', JSON.stringify(this.selectedCategories));
+    formData.append('categoryId', this.draftData.categoryId);
     formData.append('description', this.episodeForm.value.description);
     formData.append('thumbnail', this.episodeForm.value.bannerImage); // Replaced
     formData.append('image', this.episodeForm.value.thumbnailImage); // Replaced
@@ -151,16 +158,70 @@ export class EditDraftComponent {
     }
   }
 
-  getCategoryId(id: any) {
-    const index = this.selectedCategories.indexOf(id);
-    if (index === -1) {
-      this.selectedCategories.push(id);
-    } else {
-      this.selectedCategories.splice(index, 1);
-    }
-    this.inputChanged.next('');
-  }
+  // getCategoryId(id: any) {
+  //   const index = this.selectedCategories.indexOf(id);
+  //   if (index === -1) {
+  //     this.selectedCategories.push(id);
+  //   } else {
+  //     this.selectedCategories.splice(index, 1);
+  //   }
+  //   this.inputChanged.next('');
+  // }
   deleteDraft() {
     this.postsService.deleteDraft(this.draftId).subscribe();
+  }
+  isCategorySelected(categoryId: number): boolean {
+    if (!this.singleDraft || !this.singleDraft.data.category) {
+      return false;
+    }
+
+    return this.singleDraft.data.category.some(
+      (category: any) => category.id === categoryId
+    );
+  }
+
+  toggleCategory(categoryId: number): void {
+    // if (!this.draftData.categoryId) {
+    //   this.draftData.categoryId = [];
+    // }
+
+    // const categoryIdString = categoryId.toString();
+
+    // const index = this.draftData.categoryId.findIndex(
+    //   (id: string) => id === categoryIdString
+    // );
+
+    // if (index === -1) {
+    //   this.draftData.categoryId.push(categoryIdString);
+    // } else {
+    //   this.draftData.categoryId.splice(index, 1);
+    // }
+
+    console.log(typeof this.draftData.categoryId);
+  }
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach((field) => {
+      const control = formGroup.get(field);
+      if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      } else {
+        control!.markAsTouched({ onlySelf: true });
+      }
+    });
+  }
+
+  setFormValues(): void {
+    this.episodeForm.patchValue({
+      episodeName: this.draftData.name,
+      date: this.draftData.date,
+      description: this.draftData.description,
+      meta: this.draftData.meta_description,
+      episodeNumber: this.draftData.episodeNo,
+      seasonNumber: this.draftData.seasonNo,
+      slug: this.draftData.slug,
+      url: this.draftData.url,
+      bannerImage: '',
+      thumbnailImage: '',
+    });
   }
 }

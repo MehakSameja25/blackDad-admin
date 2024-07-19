@@ -37,7 +37,7 @@ export class AddEpisodesComponent implements OnInit {
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
       seasonNumber: ['', [Validators.required]],
-      category: ['', [Validators.required]],
+      // category: ['', [Validators.required]],
       subType1: ['', [Validators.required]],
       // fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
@@ -67,15 +67,19 @@ export class AddEpisodesComponent implements OnInit {
   }
 
   onSubmit() {
-    const formData = this.createEpisodeFormData();
-    formData.append('isDraft', '0');
-    this.postsService.addEpisode(formData).subscribe((res) => {
-      if (res) {
-        console.log('Episode added:', res);
-        this.deleteDraft();
-        this.router.navigate(['/admin/episodes']);
-      }
-    });
+    if (this.episodeForm.valid) {
+      const formData = this.createEpisodeFormData();
+      formData.append('isDraft', '0');
+      this.postsService.addEpisode(formData).subscribe((res) => {
+        if (res) {
+          console.log('Episode added:', res);
+          this.deleteDraft();
+          this.router.navigate(['/admin/episodes']);
+        }
+      });
+    } else {
+      this.validateAllFormFields(this.episodeForm);
+    }
   }
 
   updateDraft() {
@@ -103,8 +107,8 @@ export class AddEpisodesComponent implements OnInit {
     formData.append('type', 'episodes');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.episodeForm.value.description);
-    formData.append('thumbnail', this.episodeForm.value.bannerImage); // Replaced
-    formData.append('image', this.episodeForm.value.thumbnailImage); // Replaced
+    formData.append('thumbnail', this.episodeForm.value.thumbnailImage);
+    formData.append('image', this.episodeForm.value.bannerImage);
     formData.append('filetype', this.fileType);
     formData.append('meta_description', this.episodeForm.value.meta);
     formData.append('subtype', this.episodeForm.value.subType1);
@@ -161,5 +165,16 @@ export class AddEpisodesComponent implements OnInit {
   }
   deleteDraft() {
     this.postsService.deleteDraft(this.draftId).subscribe();
+  }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach((field) => {
+      const control = formGroup.get(field);
+      if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      } else {
+        control!.markAsTouched({ onlySelf: true });
+      }
+    });
   }
 }

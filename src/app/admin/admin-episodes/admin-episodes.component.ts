@@ -5,6 +5,7 @@ import { CategoiesService } from '../services/categoies.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MainNavService } from '../services/main-nav.service';
 import { Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin-episodes',
@@ -89,7 +90,7 @@ export class AdminEpisodesComponent implements OnInit {
     this.postService.updateIsblock(episodeData.id, type).subscribe((res) => {
       if (res) {
         console.log(res);
-        this.ngOnInit();
+        this.getPosts();
       }
     });
   }
@@ -142,5 +143,56 @@ export class AdminEpisodesComponent implements OnInit {
       });
     }
     console.log(type);
+  }
+
+  sharePost: any;
+  openShare(content: any, post: any) {
+    this.sharePost = post;
+    console.log(post);
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'share-modal',
+    });
+    if (post.name.includes('?')) {
+      const titleWq = post.name.split('?').join('%3F');
+      const title = titleWq.trim().replace(/\s+/g, '_');
+      const url = `${environment.shareUrl}/${post.type}/${post.id}/${title}?subType=${post.subtype}`;
+      this.urlToCopy = url;
+    } else {
+      const title = post.name.trim().replace(/\s+/g, '_');
+      const url = `${environment.shareUrl}/${post.type}/${post.id}/${title}?subType=${post.subtype}`;
+      this.urlToCopy = url;
+    }
+  }
+
+  urlToCopy: string = '';
+  copyMessage: string = 'Copy';
+  copyClass: string = '';
+  tickClass: string = 'd-none';
+  share() {
+    this.copyTextToClipboard(this.urlToCopy);
+    this.copyMessage = 'Copied';
+    this.copyClass = 'd-none';
+    this.tickClass = '';
+    setTimeout(() => {
+      this.copyMessage = 'Copy';
+      this.copyClass = '';
+      this.tickClass = 'd-none';
+      this.modalService.dismissAll();
+    }, 2000);
+  }
+
+  copyTextToClipboard(text: string) {
+    const tempElement = document.createElement('textarea');
+    tempElement.value = text;
+    tempElement.setAttribute('readonly', '');
+    tempElement.style.position = 'absolute';
+    tempElement.style.left = '-9999px';
+
+    document.body.appendChild(tempElement);
+
+    tempElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempElement);
   }
 }

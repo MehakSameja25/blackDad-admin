@@ -34,9 +34,6 @@
               <div class="table-responsive">
                 <table
                   class="datatable table table-stripped"
-                  datatable
-                  [dtOptions]="dtOptions"
-                  [dtTrigger]="dtTrigger"
                 >
                   <thead>
                     <tr>
@@ -111,7 +108,7 @@
                           </a>
                           <a
                             class="btn btn-secondary"
-                            (click)="checkIsBlock(category, 'categories')"
+                            (click)="isCheckBlock(category, 'categories')"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -197,6 +194,15 @@
             <div class="input-block mb-3">
               <label>Category Name</label>
               <input type="text" class="form-control" formControlName="name" />
+              <div
+                *ngIf="
+                  addCategoryForm.get('name')?.errors?.['required'] &&
+                  addCategoryForm.get('name')?.touched
+                "
+                class="text-danger"
+              >
+                Category Name is required.
+              </div>
             </div>
           </div>
           <div class="col-lg-12 col-md-12">
@@ -207,10 +213,25 @@
                 class="form-control"
                 formControlName="description"
               ></textarea>
+              <div
+                *ngIf="
+                  addCategoryForm.get('description')?.errors?.['required'] &&
+                  addCategoryForm.get('description')?.touched
+                "
+                class="text-danger"
+              >
+                Category Description is required.
+              </div>
             </div>
           </div>
           <div class="col-lg-12 col-md-12">
             <div class="input-block mb-3">
+              <span
+                ><img
+                  src="assets/img/drop-icon.svg"
+                  id="thumbnailPreview"
+                  alt="upload"
+              /></span>
               <label>Image</label>
               <input
                 type="file"
@@ -218,6 +239,15 @@
                 formControlName="image"
                 (change)="onFileSelected($event)"
               />
+              <div
+                *ngIf="
+                  addCategoryForm.get('image')?.errors?.['required'] &&
+                  addCategoryForm.get('image')?.touched
+                "
+                class="text-danger"
+              >
+                Image is required.
+              </div>
             </div>
           </div>
         </div>
@@ -253,7 +283,7 @@
         <h4 class="mb-0">Edit Category</h4>
       </div>
     </div>
-    <form [formGroup]="editCategoryForm">
+    <form [formGroup]="editCategoryForm" (ngSubmit)="editCategory()">
       <div class="modal-body">
         <div class="row">
           <div class="col-lg-12 col-md-12">
@@ -265,6 +295,15 @@
                 formControlName="name"
                 [(ngModel)]="singleCategoryData.name"
               />
+              <div
+                *ngIf="
+                  editCategoryForm.get('name')?.invalid &&
+                  editCategoryForm.get('name')?.touched
+                "
+                class="text-danger"
+              >
+                Category Name is required.
+              </div>
             </div>
           </div>
           <div class="col-lg-12 col-md-12">
@@ -276,18 +315,49 @@
                 formControlName="description"
                 [(ngModel)]="singleCategoryData.description"
               ></textarea>
+              <div
+                *ngIf="
+                  editCategoryForm.get('description')?.invalid &&
+                  editCategoryForm.get('description')?.touched
+                "
+                class="text-danger"
+              >
+                Category Description is required.
+              </div>
             </div>
           </div>
           <div class="col-lg-12 col-md-12">
             <div class="input-block mb-3">
               <label>Category Image</label>
-              <img src="{{ singleCategoryData.image }}" alt="" />
+              <img
+                src="{{
+                  singleCategoryData.image ??
+                    '../../../../../assets/img/drop-icon.svg'
+                }}"
+                alt=""
+                id="thumbnailPreview"
+              />
+              <!-- <img *ngIf="fileName" src="{{ fileName }}" alt="" /> -->
             </div>
           </div>
           <div class="col-lg-12 col-md-12">
             <div class="input-block mb-3">
               <label>Image</label>
-              <input type="file" class="form-control" formControlName="image" />
+              <input
+                type="file"
+                class="form-control"
+                formControlName="image"
+                (change)="onFileSelected($event)"
+              />
+              <!-- <div
+                *ngIf="
+                  editCategoryForm.get('image')?.invalid &&
+                  editCategoryForm.get('image')?.touched
+                "
+                class="text-danger"
+              >
+                Image is required.
+              </div> -->
             </div>
           </div>
         </div>
@@ -305,7 +375,6 @@
           type="submit"
           data-bs-dismiss="modal"
           class="btn btn-primary paid-continue-btn"
-          (click)="editCategory()"
         >
           Update
         </button>
@@ -313,6 +382,7 @@
     </form>
   </div>
 </ng-template>
+
 <ng-template #deletee let-modal>
   <!-- ======== -->
   <!-- delete modal -->
