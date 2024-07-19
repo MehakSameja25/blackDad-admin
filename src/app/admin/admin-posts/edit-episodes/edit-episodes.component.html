@@ -36,9 +36,16 @@
                           formControlName="episodeName"
                           class="form-control"
                           placeholder="Enter Episode Name"
-                          [(ngModel)]="episodeDetails?.data.name"
-                          required
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('episodeName')?.invalid &&
+                            episodeForm.get('episodeName')?.touched
+                          "
+                        >
+                          Episode Name is required.
+                        </strong>
                       </div>
                     </div>
 
@@ -50,9 +57,16 @@
                           formControlName="date"
                           class="datetimepicker form-control"
                           placeholder="Select Date"
-                          [(ngModel)]="episodeDetails?.data.date"
-                          required
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('date')?.invalid &&
+                            episodeForm.get('date')?.touched
+                          "
+                        >
+                          Date is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -63,9 +77,16 @@
                           formControlName="episodeNumber"
                           class="form-control"
                           placeholder="Enter Episode Number"
-                          [(ngModel)]="episodeDetails?.data.episodeNo"
-                          required
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('episodeNumber')?.invalid &&
+                            episodeForm.get('episodeNumber')?.touched
+                          "
+                        >
+                          Episode Number is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -76,12 +97,19 @@
                           formControlName="seasonNumber"
                           class="form-control"
                           placeholder="Enter Season Number"
-                          [(ngModel)]="episodeDetails?.data.seasonNo"
-                          required
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('seasonNumber')?.invalid &&
+                            episodeForm.get('seasonNumber')?.touched
+                          "
+                        >
+                          Season Number is required.
+                        </strong>
                       </div>
                     </div>
-                    <div
+                   <div
                       class="col-lg-6 col-md-6 col-sm-12"
                       *ngIf="allcategories && allcategories.data"
                     >
@@ -116,7 +144,6 @@
                           formControlName="subType1"
                           class="form-select"
                           aria-label="Default select example"
-                          required
                           #subtypee
                           (click)="getType(subtypee.value)"
                         >
@@ -172,10 +199,17 @@
                           type="text"
                           formControlName="slug"
                           class="form-control"
-                          placeholder="Enter Slug "
-                          [(ngModel)]="episodeDetails?.data.slug"
-                          required
+                          placeholder="Enter Slug"
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('slug')?.invalid &&
+                            episodeForm.get('slug')?.touched
+                          "
+                        >
+                          Slug is required.
+                        </strong>
                       </div>
                     </div>
 
@@ -185,11 +219,18 @@
                         <textarea
                           formControlName="url"
                           class="form-control"
-                          placeholder="Enter Notes"
+                          placeholder="Enter URL or I-Frame"
                           rows="5"
-                          [(ngModel)]="episodeDetails?.data.url"
-                          required
                         ></textarea>
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('url')?.invalid &&
+                            episodeForm.get('url')?.touched
+                          "
+                        >
+                          URL or I-Frame is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-12">
@@ -198,39 +239,55 @@
                         <textarea
                           formControlName="description"
                           class="form-control"
-                          placeholder="Enter Notes"
+                          placeholder="Enter Description"
                           rows="5"
-                          [(ngModel)]="episodeDetails?.data.description"
-                          required
                         ></textarea>
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('description')?.invalid &&
+                            episodeForm.get('description')?.touched
+                          "
+                        >
+                          Description is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-12">
                       <div class="input-block mb-3">
-                        <label>Metas</label>
+                        <label>Meta Description</label>
                         <textarea
                           formControlName="meta"
                           class="form-control"
-                          placeholder="Enter Notes"
+                          placeholder="Enter Meta Description"
                           rows="5"
-                          [(ngModel)]="episodeDetails?.data.meta_description"
-                          required
                         ></textarea>
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('meta')?.invalid &&
+                            episodeForm.get('meta')?.touched
+                          "
+                        >
+                          Meta Description is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-lg-5 col-md-6 col-sm-12">
                       <div class="input-block">
                         <label>Banner Image</label>
                         <div class="input-block service-upload mb-0">
-                          <span
-                            ><img
+                          <span>
+                            <img
                               src="{{
-                                episodeDetails?.data.image ??
-                                  'assets/img/drop-icon.svg'
+                                episodeDetails?.data.image
+                                  ? episodeDetails?.data.image
+                                  : 'assets/img/drop-icon.svg'
                               }}"
                               alt="upload"
                               id="bannerPreview"
-                          /></span>
+                            />
+                          </span>
                           <h6 class="drop-browse align-center">
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
@@ -243,6 +300,15 @@
                             (change)="handleBannerImageInput($event)"
                           />
                           <div id="bannerFrames"></div>
+                          <strong
+                            class="text-danger"
+                            *ngIf="
+                              episodeForm.get('bannerImage')?.invalid &&
+                              episodeForm.get('bannerImage')?.touched
+                            "
+                          >
+                            Banner Image is required.
+                          </strong>
                         </div>
                       </div>
                     </div>
@@ -250,15 +316,17 @@
                       <div class="input-block">
                         <label>Thumbnail Image</label>
                         <div class="input-block service-upload mb-0">
-                          <span
-                            ><img
-                            src="{{
-                              episodeDetails?.data.thumbnail ??
-                                'assets/img/drop-icon.svg'
-                            }}"
-                              id="thumbnailPreview"
+                          <span>
+                            <img
+                              src="{{
+                                episodeDetails?.data.thumbnail
+                                  ? episodeDetails?.data.thumbnail
+                                  : 'assets/img/drop-icon.svg'
+                              }}"
                               alt="upload"
-                          /></span>
+                              id="thumbnailPreview"
+                            />
+                          </span>
                           <h6 class="drop-browse align-center">
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
@@ -268,20 +336,24 @@
                             type="file"
                             multiple
                             id="thumbnailImage"
-                            [value]="episodeDetails?.data.thumbnail"
                             (change)="handleThumbnailImageInput($event)"
                           />
                           <div id="thumbnailFrames"></div>
+                          <strong
+                            class="text-danger"
+                            *ngIf="
+                              episodeForm.get('thumbnailImage')?.invalid &&
+                              episodeForm.get('thumbnailImage')?.touched
+                            "
+                          >
+                            Thumbnail Image is required.
+                          </strong>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12">
-                      <button type="submit" class="btn btn-primary w-100 mt-4">
-                        Update
-                      </button>
-                    </div>
                   </div>
                 </div>
+                <button type="submit" class="btn btn-primary">Update</button>
               </form>
             </div>
           </div>

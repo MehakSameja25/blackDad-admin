@@ -25,10 +25,10 @@ import { DetailAdvertisementsComponent } from './admin/admin-posts/detail-advert
 import { AdminEditMetasComponent } from './admin/admin-edit-metas/admin-edit-metas.component';
 import { EditMemberComponent } from './admin/admin-members/edit-member/edit-member.component';
 import { ChangePasswordComponent } from './admin/admin-members/change-password/change-password.component';
-import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/admin-episode-draft.component';
-import { AdminArticleDraftComponent } from './admin/draft/admin-article-draft/admin-article-draft.component';
 import { EditArticleDraftComponent } from './admin/draft/edit-article-draft/edit-article-draft.component';
 import { EditDraftComponent } from './admin/draft/edit-draft/edit-draft.component';
+import { AdminArticleDraftComponent } from './admin/draft/admin-article-draft/admin-article-draft.component';
+import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/admin-episode-draft.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },

@@ -16,6 +16,7 @@ export class EditEpisodesComponent {
   selectedCategories: any[] = [];
   isLoading: any = true;
   fileType!: string;
+  subType: any;
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +34,7 @@ export class EditEpisodesComponent {
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
       seasonNumber: ['', [Validators.required]],
-      category: ['', [Validators.required]],
+      // category: ['', [Validators.required]],
       subType1: ['', [Validators.required]],
       fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
@@ -46,13 +47,34 @@ export class EditEpisodesComponent {
     this.postsService.getEpisodeDetails(id).subscribe((response) => {
       if (response) {
         this.episodeDetails = response;
+        this.subType = this.episodeDetails?.data?.subtype;
+        console.log(this.subType);
+        if (this.subType === 'youtube') {
+          this.fileType = 'video';
+        } else if (this.subType === 'podcast') {
+          this.fileType = 'audio';
+        }
         this.isLoading = false;
       }
 
       console.log('CALLLED');
+      this.setFormValues();
     });
   }
-
+  setFormValues(): void {
+    this.episodeForm.patchValue({
+      episodeName: this.episodeDetails.data.name,
+      date: this.episodeDetails.data.date,
+      description: this.episodeDetails.data.description,
+      meta: this.episodeDetails.data.meta_description,
+      episodeNumber: this.episodeDetails.data.episodeNo,
+      seasonNumber: this.episodeDetails.data.seasonNo,
+      slug: this.episodeDetails.data.slug,
+      url: this.episodeDetails.data.url,
+      bannerImage: '',
+      thumbnailImage: '',
+    });
+  }
   getCategories() {
     this.categoryService.unblockedCategories().subscribe((response) => {
       this.allcategories = response;
@@ -62,22 +84,54 @@ export class EditEpisodesComponent {
   getType(type: any) {
     if (type === 'youtube') {
       this.fileType = 'video';
+      this.subType = 'youtube';
     }
     if (type === 'podcast') {
       this.fileType = 'audio';
+      this.subType = 'podcast';
     }
   }
   onSubmit() {
+    if (this.episodeForm.valid) {
+      if (this.fileType !== undefined) {
+        const formData = this.buildFormData();
+
+        //  Selecting the images if selected
+        if (this.episodeForm.value.bannerImage instanceof File) {
+          formData.append('image', this.episodeForm.value.bannerImage);
+        } else {
+          formData.delete('image');
+        }
+
+        if (this.episodeForm.value.thumbnailImage instanceof File) {
+          formData.append('thumbnail', this.episodeForm.value.thumbnailImage);
+        } else {
+          formData.delete('thumbnail');
+        }
+        console.log(formData);
+        this.postsService
+          .updateEpisode(this.episodeDetails.data.id, formData)
+          .subscribe((res) => {
+            if (res) {
+              this.router.navigate(['/admin/episodes']);
+            }
+            console.log(res);
+          });
+      }
+    } else {
+      this.validateAllFormFields(this.episodeForm);
+    }
+  }
+
+  private buildFormData(): FormData {
     const formData = new FormData();
     formData.append('name', this.episodeForm.value.episodeName);
     formData.append('type', 'episodes');
     formData.append('categoryId', this.episodeDetails.data.categoryId);
     formData.append('description', this.episodeForm.value.description);
-    formData.append('thumbnail', this.episodeForm.value.bannerImage); // by mistake name replaced
-    formData.append('image', this.episodeForm.value.thumbnailImage); // by mistake name replaced
     formData.append('filetype', this.fileType);
     formData.append('meta_description', this.episodeForm.value.meta);
-    formData.append('subtype', this.episodeForm.value.subType1);
+    formData.append('subtype', this.subType);
     formData.append('episodeNo', this.episodeForm.value.episodeNumber);
     formData.append('seasonNo', this.episodeForm.value.seasonNumber);
     formData.append('slug', this.episodeForm.value.slug);
@@ -87,16 +141,7 @@ export class EditEpisodesComponent {
     formData.append('isBlock', this.episodeDetails.data.isBlock);
     formData.append('isApproved', this.episodeDetails.data.isApproved);
     formData.append('isPublished', this.episodeDetails.data.isPublished);
-
-    console.log(formData);
-    this.postsService
-      .updateEpisode(this.episodeDetails.data.id, formData)
-      .subscribe((res) => {
-        if (res) {
-          this.router.navigate(['/admin/episodes']);
-        }
-        console.log(res);
-      });
+    return formData;
   }
 
   handleBannerImageInput(event: any): void {
@@ -154,5 +199,15 @@ export class EditEpisodesComponent {
     }
 
     console.log(this.episodeDetails.data.categoryId);
+  }
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach((field) => {
+      const control = formGroup.get(field);
+      if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      } else {
+        control!.markAsTouched({ onlySelf: true });
+      }
+    });
   }
 }

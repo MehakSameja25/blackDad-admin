@@ -53,7 +53,7 @@ export class AllMembersComponent implements OnInit {
         setTimeout(() => {
           this.successMessage = 'Member Deleted!';
           this.successalertClass = '';
-          this.ngOnInit();
+          this.getMembers();
           this.modalService.dismissAll();
         }, 1000);
         setTimeout(() => {
@@ -109,12 +109,12 @@ export class AllMembersComponent implements OnInit {
   }
 
   validateAllFormFields(formGroup: FormGroup) {
-    Object.keys(formGroup.controls).forEach((field) => {
-      const control: any = formGroup.get(field);
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
       if (control instanceof FormGroup) {
         this.validateAllFormFields(control);
       } else {
-        control.markAsTouched({ onlySelf: true });
+        control?.markAsTouched({ onlySelf: true });
       }
     });
   }

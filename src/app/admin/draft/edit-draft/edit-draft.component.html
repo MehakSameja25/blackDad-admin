@@ -1,11 +1,10 @@
 <div class="main-wrapper">
   <app-admin-navbar></app-admin-navbar>
-
   <div class="page-wrapper">
     <div class="content container-fluid">
       <div class="page-header">
         <div class="content-page-header">
-          <h5>Add Episodes</h5>
+          <h5>Edit Episode</h5>
         </div>
       </div>
       <div class="row gap-3 mb-3 justify-content-between m-0">
@@ -17,7 +16,10 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="card">
-            <div class="card-body">
+            <div
+              class="card-body"
+              *ngIf="singleDraft && singleDraft.data && draftData"
+            >
               <form [formGroup]="episodeForm" (ngSubmit)="onSubmit()">
                 <div class="form-group-item border-0 mb-0">
                   <div class="row align-item-center">
@@ -27,13 +29,18 @@
                         <input
                           type="text"
                           formControlName="episodeName"
-                          [value]="draftData?.name"
-                          value=""
                           class="form-control"
                           placeholder="Enter Episode Name"
-                          required
-                          (change)="this.inputChanged.next('episodeName')"
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('episodeName')?.invalid &&
+                            episodeForm.get('episodeName')?.touched
+                          "
+                        >
+                          Episode Name is required.
+                        </strong>
                       </div>
                     </div>
 
@@ -43,12 +50,18 @@
                         <input
                           type="date"
                           formControlName="date"
-                          [value]="draftData?.date"
                           class="datetimepicker form-control"
                           placeholder="Select Date"
-                          required
-                          (change)="this.inputChanged.next('date')"
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('date')?.invalid &&
+                            episodeForm.get('date')?.touched
+                          "
+                        >
+                          Date is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -57,12 +70,18 @@
                         <input
                           type="number"
                           formControlName="episodeNumber"
-                          [value]="draftData?.episodeNo"
                           class="form-control"
                           placeholder="Enter Episode Number"
-                          required
-                          (change)="this.inputChanged.next('episodeNumber')"
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('episodeNumber')?.invalid &&
+                            episodeForm.get('episodeNumber')?.touched
+                          "
+                        >
+                          Episode Number is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -71,15 +90,21 @@
                         <input
                           type="number"
                           formControlName="seasonNumber"
-                          [value]="draftData?.seasonNo"
                           class="form-control"
                           placeholder="Enter Season Number"
-                          required
-                          (change)="this.inputChanged.next('seasonNumber')"
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('seasonNumber')?.invalid &&
+                            episodeForm.get('seasonNumber')?.touched
+                          "
+                        >
+                          Season Number is required.
+                        </strong>
                       </div>
                     </div>
-                    <div
+                   <div
                       class="col-lg-6 col-md-6 col-sm-12"
                       *ngIf="allcategories && allcategories.data"
                     >
@@ -91,11 +116,10 @@
                               class="form-check-input custom-control-input-cat"
                               type="checkbox"
                               id="check{{ category.id }}"
+                              [checked]="isCategorySelected(category.id)"
                               data-parsley-multiple="check1"
-                              value="{{ category.id }}"
-                              #checkBox
-                              (change)="getCategoryId(checkBox.value)" />
-
+                              [value]="category.id"
+                              (change)="toggleCategory(category.id)" />
                             <label
                               class="foesrm-check-label m-0"
                               for="check{{ category.id }}"
@@ -107,22 +131,34 @@
                         </div>
                       </div>
                     </div>
+
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Sub Type</label>
                         <select
                           formControlName="subType1"
-                          [value]="draftData?.subtype"
                           class="form-select"
                           aria-label="Default select example"
-                          required
                           #subtypee
-                          (change)="getType(subtypee.value)"
-                          (change)="this.inputChanged.next('subType1')"
+                          (click)="getType(subtypee.value)"
                         >
-                          <option selected>Type</option>
-                          <option value="podcast">podcast</option>
-                          <option value="youtube">youtube</option>
+                          <option class="d-none">Select File Type</option>
+                          <option
+                            value="podcast"
+                            [selected]="
+                              draftData.subtype === 'podcast'
+                            "
+                          >
+                            podcast
+                          </option>
+                          <option
+                            value="youtube"
+                            [selected]="
+                              draftData.subtype === 'youtube'
+                            "
+                          >
+                            youtube
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -130,12 +166,12 @@
                       <div class="input-block mb-3">
                         <label>File Type</label>
                         <select
+                          disabled
                           class="form-select"
                           aria-label="Default select example"
-                          [disabled]="true"
-                          (change)="this.inputChanged.next('fileType')"
+                          required
                         >
-                          <option selected>Select File Type</option>
+                          <option class="d-none">Type</option>
                           <option
                             value="audio"
                             [selected]="subtypee.value === 'podcast'"
@@ -151,19 +187,24 @@
                         </select>
                       </div>
                     </div>
-
                     <div class="col-12">
                       <div class="input-block mb-3">
-                        <label>Episode Name</label>
+                        <label>SLug</label>
                         <input
                           type="text"
                           formControlName="slug"
-                          [value]="draftData?.slug"
                           class="form-control"
-                          placeholder="Enter Slug "
-                          required
-                          (change)="this.inputChanged.next('slug')"
+                          placeholder="Enter Slug"
                         />
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('slug')?.invalid &&
+                            episodeForm.get('slug')?.touched
+                          "
+                        >
+                          Slug is required.
+                        </strong>
                       </div>
                     </div>
 
@@ -172,13 +213,19 @@
                         <label>Url/I-Frame</label>
                         <textarea
                           formControlName="url"
-                          [value]="draftData?.url"
                           class="form-control"
-                          placeholder="Enter Notes"
+                          placeholder="Enter URL or I-Frame"
                           rows="5"
-                          required
-                          (change)="this.inputChanged.next('url')"
                         ></textarea>
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('url')?.invalid &&
+                            episodeForm.get('url')?.touched
+                          "
+                        >
+                          URL or I-Frame is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-12">
@@ -186,39 +233,56 @@
                         <label>Description</label>
                         <textarea
                           formControlName="description"
-                          [value]="draftData?.description"
                           class="form-control"
-                          placeholder="Enter Notes"
+                          placeholder="Enter Description"
                           rows="5"
-                          required
-                          (change)="this.inputChanged.next('description')"
                         ></textarea>
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('description')?.invalid &&
+                            episodeForm.get('description')?.touched
+                          "
+                        >
+                          Description is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-12">
                       <div class="input-block mb-3">
-                        <label>Metas</label>
+                        <label>Meta Description</label>
                         <textarea
                           formControlName="meta"
-                          [value]="draftData?.meta_description"
                           class="form-control"
-                          placeholder="Enter Notes"
+                          placeholder="Enter Meta Description"
                           rows="5"
-                          required
-                          (change)="this.inputChanged.next('meta')"
                         ></textarea>
+                        <strong
+                          class="text-danger"
+                          *ngIf="
+                            episodeForm.get('meta')?.invalid &&
+                            episodeForm.get('meta')?.touched
+                          "
+                        >
+                          Meta Description is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-lg-5 col-md-6 col-sm-12">
                       <div class="input-block">
                         <label>Banner Image</label>
                         <div class="input-block service-upload mb-0">
-                          <span
-                            ><img
-                              src="assets/img/drop-icon.svg"
+                          <span>
+                            <img
+                              src="{{
+                                singleDraft?.data.image
+                                  ? singleDraft?.data.image
+                                  : 'assets/img/drop-icon.svg'
+                              }}"
                               alt="upload"
                               id="bannerPreview"
-                          /></span>
+                            />
+                          </span>
                           <h6 class="drop-browse align-center">
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
@@ -227,11 +291,19 @@
                           <input
                             type="file"
                             multiple
-                            multiple
                             id="bannerImage"
                             (change)="handleBannerImageInput($event)"
                           />
                           <div id="bannerFrames"></div>
+                          <strong
+                            class="text-danger"
+                            *ngIf="
+                              episodeForm.get('bannerImage')?.invalid &&
+                              episodeForm.get('bannerImage')?.touched
+                            "
+                          >
+                            Banner Image is required.
+                          </strong>
                         </div>
                       </div>
                     </div>
@@ -239,12 +311,17 @@
                       <div class="input-block">
                         <label>Thumbnail Image</label>
                         <div class="input-block service-upload mb-0">
-                          <span
-                            ><img
-                              src="assets/img/drop-icon.svg"
-                              id="thumbnailPreview"
+                          <span>
+                            <img
+                              src="{{
+                                singleDraft?.data.thumbnail
+                                  ? singleDraft?.data.thumbnail
+                                  : 'assets/img/drop-icon.svg'
+                              }}"
                               alt="upload"
-                          /></span>
+                              id="thumbnailPreview"
+                            />
+                          </span>
                           <h6 class="drop-browse align-center">
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
@@ -257,16 +334,21 @@
                             (change)="handleThumbnailImageInput($event)"
                           />
                           <div id="thumbnailFrames"></div>
+                          <strong
+                            class="text-danger"
+                            *ngIf="
+                              episodeForm.get('thumbnailImage')?.invalid &&
+                              episodeForm.get('thumbnailImage')?.touched
+                            "
+                          >
+                            Thumbnail Image is required.
+                          </strong>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12">
-                      <button type="submit" class="btn btn-primary w-100 mt-4">
-                        Add
-                      </button>
-                    </div>
                   </div>
                 </div>
+                <button type="submit" class="btn btn-primary">Update</button>
               </form>
             </div>
           </div>
