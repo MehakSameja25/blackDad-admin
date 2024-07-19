@@ -4737,6 +4737,7 @@ span.select2-container.select2-container--default.select2-container--open {
   padding: 8px 25px;
   position: relative;
   color: #fff;
+  align-items: center;
 }
 
 @media (max-width: 1199.98px) {
@@ -5813,11 +5814,50 @@ span.select2-container.select2-container--default.select2-container--open {
   transform: translate(calc(0% - 5px), 0%);
 }
 
+/* pjcss start*/
 .bckbtn {
   height: 32px;
   width: 32px;
 }
 
+.epitopsc {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.epitopsc .sectioncon {
+  display: flex;
+  grid-gap: 20px;
+}
+
+.epitopsc .sectioncon select {
+  min-width: 290px;
+}
+
+.epitopsc .sectioncon select:focus {
+  box-shadow: none;
+}
+
+div.dt-container .dt-length label {
+  margin-left: 5px;
+}
+
+.page-wrapper .content select:focus {
+  box-shadow: none;
+  border-color: #dee2e6;
+}
+
+.page-wrapper .content .form-check-input[type=checkbox]:focus {
+  box-shadow: none;
+}
+
+.text-danger {
+  font-size: 13px;
+  margin: 5px 0 0 0;
+}
+
+/* pjcss end */
 .modal-dialog .modal-md {
   max-width: 600px;
 }
