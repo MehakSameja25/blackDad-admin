@@ -31,6 +31,7 @@
                           formControlName="episodeName"
                           class="form-control"
                           placeholder="Enter Episode Name"
+                          (change)="this.inputChanged.next('episodeName')"
                         />
                         <strong
                           class="text-danger"
@@ -52,6 +53,7 @@
                           formControlName="date"
                           class="datetimepicker form-control"
                           placeholder="Select Date"
+                          (change)="this.inputChanged.next('date')"
                         />
                         <strong
                           class="text-danger"
@@ -72,6 +74,7 @@
                           formControlName="episodeNumber"
                           class="form-control"
                           placeholder="Enter Episode Number"
+                          (change)="this.inputChanged.next('episodeNumber')"
                         />
                         <strong
                           class="text-danger"
@@ -92,6 +95,7 @@
                           formControlName="seasonNumber"
                           class="form-control"
                           placeholder="Enter Season Number"
+                          (change)="this.inputChanged.next('seasonNumber')"
                         />
                         <strong
                           class="text-danger"
@@ -104,7 +108,7 @@
                         </strong>
                       </div>
                     </div>
-                   <div
+                    <div
                       class="col-lg-6 col-md-6 col-sm-12"
                       *ngIf="allcategories && allcategories.data"
                     >
@@ -141,21 +145,18 @@
                           aria-label="Default select example"
                           #subtypee
                           (click)="getType(subtypee.value)"
+                          (change)="this.inputChanged.next('subType1')"
                         >
                           <option class="d-none">Select File Type</option>
                           <option
                             value="podcast"
-                            [selected]="
-                              draftData.subtype === 'podcast'
-                            "
+                            [selected]="draftData.subtype === 'podcast'"
                           >
                             podcast
                           </option>
                           <option
                             value="youtube"
-                            [selected]="
-                              draftData.subtype === 'youtube'
-                            "
+                            [selected]="draftData.subtype === 'youtube'"
                           >
                             youtube
                           </option>
@@ -195,6 +196,7 @@
                           formControlName="slug"
                           class="form-control"
                           placeholder="Enter Slug"
+                          (change)="this.inputChanged.next('slug')"
                         />
                         <strong
                           class="text-danger"
@@ -216,6 +218,7 @@
                           class="form-control"
                           placeholder="Enter URL or I-Frame"
                           rows="5"
+                          (change)="this.inputChanged.next('url')"
                         ></textarea>
                         <strong
                           class="text-danger"
@@ -236,6 +239,7 @@
                           class="form-control"
                           placeholder="Enter Description"
                           rows="5"
+                          (change)="this.inputChanged.next('description')"
                         ></textarea>
                         <strong
                           class="text-danger"
@@ -256,6 +260,7 @@
                           class="form-control"
                           placeholder="Enter Meta Description"
                           rows="5"
+                          (change)="this.inputChanged.next('meta')"
                         ></textarea>
                         <strong
                           class="text-danger"
