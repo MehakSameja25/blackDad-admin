@@ -70,7 +70,7 @@ export class AllPostsService {
    * --------------------------------FOR STATUS AND FILTER----------------------------------------
    ---------------------------------------------------------------------------------------------*/
 
-  updateIsblock(id: any, type: any) {
+  updateIsblock(id: string, type: string) {
     return this.http.get<any>(
       `${environment.apiUrl}/update-status?id=${id}&menu=${type}`
     );
