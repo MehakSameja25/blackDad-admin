@@ -136,6 +136,7 @@ export class DetailEpisodeComponent implements OnInit {
         .subscribe((res) => {
           if (res) {
             this.modalService.dismissAll();
+            this.showSuccessMessage("Episode Added in Scheduling")
           }
         });
     } else {
@@ -159,10 +160,10 @@ export class DetailEpisodeComponent implements OnInit {
   private showSuccessMessage(message: string) {
     this.successMessage = message;
     this.successalertClass = '';
+    this.ngOnInit();
     setTimeout(() => {
       this.successMessage = '';
       this.successalertClass = 'd-none';
-      this.ngOnInit();
     }, 5000);
   }
   private createEpisodeFormData(): FormData {

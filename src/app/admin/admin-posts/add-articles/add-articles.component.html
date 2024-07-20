@@ -135,13 +135,15 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Description</label>
-                        <textarea
+                        <ckeditor
+                          [editor]="editor"
                           formControlName="description"
                           class="form-control"
                           placeholder="Enter Notes"
                           rows="5"
                           (change)="this.inputChanged.next('description')"
-                        ></textarea>
+                        ></ckeditor>
+
                         <div
                           *ngIf="
                             articleForm.get('description')?.invalid &&

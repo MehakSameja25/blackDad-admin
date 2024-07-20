@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoiesService } from '../../services/categoies.service';
 import { AllPostsService } from '../../services/all-posts.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-edit-episodes',
@@ -17,7 +18,7 @@ export class EditEpisodesComponent {
   isLoading: any = true;
   fileType!: string;
   subType: any;
-
+  editor = ClassicEditor;
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoiesService,

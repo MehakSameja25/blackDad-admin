@@ -13,8 +13,8 @@ export class AllPostsService {
   /** -------------------------------------------------------------------------------------------------
    * ------------------------------------FOR EPISODES -------------------------------------------------
    ---------------------------------------------------------------------------------------------------*/
-  getEpisodes() {
-    return this.http.get<any>(`${environment.apiUrl}/get-song`);
+  getEpisodes(body: any) {
+    return this.http.post<any>(`${environment.apiUrl}/get-song`, body);
   }
 
   getEpisodeDetails(id: any) {
@@ -40,10 +40,8 @@ export class AllPostsService {
   /** -------------------------------------------------------------------------------------------
    * ------------------------------------FOR ARTICLE --------------------------------------------
    ---------------------------------------------------------------------------------------------*/
-  getArticles() {
-    return this.http.get<any>(
-      `${environment.apiUrl}/get-article?pageSize=100&pageNumber=1`
-    );
+  getArticles(body: any) {
+    return this.http.post<any>(`${environment.apiUrl}/get-article`, body);
   }
 
   getArticlesDetails(id: any) {
@@ -133,5 +131,9 @@ export class AllPostsService {
     return this.http.get<any>(
       `${environment.apiUrl}/get-draftById?draftId=${id}`
     );
+  }
+
+  getSeasons(){
+    return this.http.get<any>(`${environment.apiUrl}/get-season`);
   }
 }

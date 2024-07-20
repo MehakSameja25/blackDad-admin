@@ -4,6 +4,7 @@ import { CategoiesService } from '../../services/categoies.service';
 import { Router } from '@angular/router';
 import { AllPostsService } from '../../services/all-posts.service';
 import { Subject, debounceTime } from 'rxjs';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-add-articles',
@@ -17,6 +18,7 @@ export class AddArticlesComponent {
   draftId: any;
   inputText: string = '';
   inputChanged: Subject<string> = new Subject<string>();
+  editor = ClassicEditor;
 
   constructor(
     private fb: FormBuilder,

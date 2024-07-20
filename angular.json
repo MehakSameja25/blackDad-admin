@@ -26,15 +26,13 @@
             ],
             "styles": [
               "src/assets/css/bootstrap.min.css",
-              "node_modules/datatables.net-dt/css/dataTables.dataTables.min.css",
               "src/assets/plugins/fontawesome/css/fontawesome.min.css",
               "src/assets/plugins/fontawesome/css/all.min.css",
               "src/assets/plugins/icons/feather/feather.css",
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.js",
-              "node_modules/datatables.net/js/dataTables.min.js"
+              "node_modules/jquery/dist/jquery.js"
             ]
           },
           "configurations": {

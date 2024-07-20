@@ -46,8 +46,8 @@ export class EditDraftComponent {
       // fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       url: ['', [Validators.required]],
-      bannerImage: ['', [Validators.required]],
-      thumbnailImage: ['', [Validators.required]],
+      bannerImage: ['', []],
+      thumbnailImage: ['', []],
     });
     this.getCategories(); // Fetch categories
     this.getSingleArticle(); // Initial draft save
@@ -73,7 +73,7 @@ export class EditDraftComponent {
   onSubmit() {
     if (this.episodeForm.valid) {
       const formData = this.createEpisodeFormData();
-      formData.append('isDraft', '0');
+
       this.postsService.addEpisode(formData).subscribe((res) => {
         if (res) {
           console.log('Episode added:', res);
@@ -112,8 +112,8 @@ export class EditDraftComponent {
     formData.append('date', this.episodeForm.value.date);
     formData.append('categoryId', this.draftData.categoryId);
     formData.append('description', this.episodeForm.value.description);
-    formData.append('thumbnail', this.episodeForm.value.bannerImage); // Replaced
-    formData.append('image', this.episodeForm.value.thumbnailImage); // Replaced
+    // formData.append('thumbnail', this.episodeForm.value.bannerImage); // Replaced
+    //     formData.append('image', this.episodeForm.value.thumbnailImage); // Replaced
     formData.append('filetype', this.fileType);
     formData.append('meta_description', this.episodeForm.value.meta);
     formData.append('subtype', this.episodeForm.value.subType1);
@@ -126,6 +126,17 @@ export class EditDraftComponent {
     formData.append('isBlock', '0');
     formData.append('isApproved', '0');
     formData.append('isPublished', '0');
+    if (this.episodeForm.value.bannerImage instanceof File) {
+      formData.append('image', this.episodeForm.value.bannerImage);
+    } else {
+      formData.delete('image');
+    }
+
+    if (this.episodeForm.value.thumbnailImage instanceof File) {
+      formData.append('thumbnail', this.episodeForm.value.thumbnailImage);
+    } else {
+      formData.delete('thumbnail');
+    }
     return formData;
   }
 

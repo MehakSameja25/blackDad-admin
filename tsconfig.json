@@ -2,11 +2,13 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "types": ["jquery", "datatables.net"],
+    "types": ["jquery", "ckeditor5"],
+    "typeRoots": ["node_modules/@types", "node_modules"],
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "noImplicitAny": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
