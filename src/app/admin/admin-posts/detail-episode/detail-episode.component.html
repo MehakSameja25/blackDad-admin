@@ -82,7 +82,8 @@
                         *ngIf="
                           episodeDetails.data.isApproved === '1' &&
                           episodeDetails.data.isPublished === '0' &&
-                          publishPermission === true
+                          publishPermission === true &&
+                          episodeDetails.data.is_scheduled === 'not_scheduled'
                         "
                       >
                         <button
@@ -98,7 +99,28 @@
                           Schedule
                         </button>
                       </div>
+                      <div
+                        class="input-block mb-3"
+                        *ngIf="
+                          episodeDetails.data.isApproved === '1' &&
+                          episodeDetails.data.isPublished === '0' &&
+                          publishPermission === true &&
+                          episodeDetails.data.is_scheduled === 'scheduled'
+                        "
+                      >
+                        <span class="badge bg-success d-block w-fit"
+                          >{{ countryName }} {{ timezonne }}
+                          {{ scheduledTime }}</span
+                        >
+                        <button
+                          class="btn btn-outline-dark"
+                          (click)="openScheduleModal(scheduleModal)"
+                        >
+                          Re-Schedule
+                        </button>
+                      </div>
                     </div>
+
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Episode Name</label>

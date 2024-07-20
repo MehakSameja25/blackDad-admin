@@ -25,6 +25,9 @@ export class DetailEpisodeComponent implements OnInit {
   countries: any = COUNTRIES;
   timezones: any[] = [];
   postId!: string | null;
+  countryName: any;
+  timezonne: any;
+  scheduledTime: any;
   constructor(
     private route: ActivatedRoute,
     private postsService: AllPostsService,
@@ -44,11 +47,14 @@ export class DetailEpisodeComponent implements OnInit {
   ngOnInit(): void {
     this.postId = this.route.snapshot.paramMap.get('id');
     this.postsService.getEpisodeDetails(this.postId).subscribe((response) => {
-      this.episodeDetails = response;
-      if (this.episodeDetails?.data?.description) {
-        this.sanitizedDescription = this.sanitizeDescription(
-          this.episodeDetails.data.description
-        );
+      if (response) {
+        this.episodeDetails = response;
+        this.getSchedulingDetails();
+        if (this.episodeDetails?.data?.description) {
+          this.sanitizedDescription = this.sanitizeDescription(
+            this.episodeDetails.data.description
+          );
+        }
       }
     });
     this.checkPermission();
@@ -60,6 +66,11 @@ export class DetailEpisodeComponent implements OnInit {
     this.isLoading = false;
   }
 
+  getSchedulingDetails() {
+    this.countryName = this.episodeDetails.data.country;
+    this.timezonne = this.episodeDetails.data.timezone;
+    this.scheduledTime = this.episodeDetails.data.publish_date;
+  }
   open(content: any, post: any) {
     this.scheduleForm.reset();
     if (post) {
@@ -98,6 +109,7 @@ export class DetailEpisodeComponent implements OnInit {
       .updateIsPublished(episodeData.id, type)
       .subscribe((res) => {
         if (res) {
+          this.getSchedulingDetails();
           this.showSuccessMessage('Episode Published');
         }
       });
@@ -136,7 +148,7 @@ export class DetailEpisodeComponent implements OnInit {
         .subscribe((res) => {
           if (res) {
             this.modalService.dismissAll();
-            this.showSuccessMessage("Episode Added in Scheduling")
+            this.showSuccessMessage('Episode Added in Scheduling');
           }
         });
     } else {
@@ -179,6 +191,7 @@ export class DetailEpisodeComponent implements OnInit {
       'meta_description',
       this.episodeDetails.data.meta_description
     );
+    formData.append('date', this.episodeDetails.data.date);
     formData.append('subtype', this.episodeDetails.data.subtype);
     formData.append('episodeNo', this.episodeDetails.data.episodeNo);
     formData.append('seasonNo', this.episodeDetails.data.seasonNo);

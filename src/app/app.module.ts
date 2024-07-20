@@ -41,6 +41,10 @@ import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/ad
 import { AdminArticleDraftComponent } from './admin/draft/admin-article-draft/admin-article-draft.component';
 import { DataTableDirective } from './Directives/dataTable.directive';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { EpisodeScheduleComponent } from './admin/admin-scheduling/episode-schedule/episode-schedule.component';
+import { ArticleScheduleComponent } from './admin/admin-scheduling/article-schedule/article-schedule.component';
+import { EpisodeTabsComponent } from './admin/admin-tabs/episode-tabs/episode-tabs.component';
+import { ArticleTabsComponent } from './admin/admin-tabs/article-tabs/article-tabs.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +79,11 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     ChangePasswordComponent,
     EditDraftComponent,
     EditArticleDraftComponent,
-    DataTableDirective
+    DataTableDirective,
+    EpisodeScheduleComponent,
+    ArticleScheduleComponent,
+    EpisodeTabsComponent,
+    ArticleTabsComponent
   ],
   imports: [
     BrowserModule,

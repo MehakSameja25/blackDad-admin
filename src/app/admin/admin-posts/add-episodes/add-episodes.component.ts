@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subject, debounceTime } from 'rxjs';
 import { CategoiesService } from '../../services/categoies.service';
 import { AllPostsService } from '../../services/all-posts.service';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-add-episodes',
@@ -17,6 +18,7 @@ export class AddEpisodesComponent implements OnInit {
   inputChanged: Subject<string> = new Subject<string>();
   draftId: any;
   fileType: any;
+  editor = ClassicEditor;
 
   constructor(
     private fb: FormBuilder,
