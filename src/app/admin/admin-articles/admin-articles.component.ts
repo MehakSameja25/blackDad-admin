@@ -1,15 +1,8 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AllPostsService } from '../services/all-posts.service';
 import { CategoiesService } from '../services/categoies.service';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs';
 import { MainNavService } from '../services/main-nav.service';
 import { environment } from 'src/environments/environment';
 
@@ -22,10 +15,10 @@ export class AdminArticlesComponent implements OnInit {
   allcategories: any;
   selectedCategory: any;
   deleteId: any;
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
   sharePost: any;
   urlToCopy!: string;
+  body: any;
+  categoryFilter: any[] = [];
 
   constructor(
     private postService: AllPostsService,
@@ -36,19 +29,15 @@ export class AdminArticlesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-    };
     this.getPosts();
     this.getCategories();
     this.checkPermissions();
   }
 
   getPosts() {
-    this.postService.getArticles().subscribe((response) => {
+    this.body = {};
+    this.postService.getArticles(this.body).subscribe((response) => {
       this.allArticles = response;
-      this.dtTrigger.next(this.dtOptions);
     });
   }
 
@@ -62,11 +51,20 @@ export class AdminArticlesComponent implements OnInit {
     if (category == 'All Categories') {
       this.getPosts();
     } else {
-      this.postService.filterArticleByCategory(category).subscribe((res) => {
+      const categoryIdString = category.toString();
+      const categoryIndex = this.categoryFilter.indexOf(categoryIdString);
+
+      if (categoryIndex === -1) {
+        this.categoryFilter = [categoryIdString];
+      }
+      this.body = {
+        categoryId: this.categoryFilter,
+      };
+      this.postService.getArticles(this.body).subscribe((res) => {
         this.allArticles = res;
       });
     }
-    console.log('Selected Category =>', category);
+    console.log('Selected Category =>', this.categoryFilter);
   }
 
   toDetails(id: any) {

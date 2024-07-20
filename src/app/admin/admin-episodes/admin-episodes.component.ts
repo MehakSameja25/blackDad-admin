@@ -24,16 +24,20 @@ export class AdminEpisodesComponent implements OnInit {
   selectedCategory: any;
   deleteId: any;
   tableData = [];
+  body: any;
 
   tableColumns = [
-    { title: 'thumbnail' },
-    { title: 'name' },
-    { title: 'categoryId' },
-    { title: 'type' },
-    { title: 'date' },
-    { title: 'is_scheduled' },
-    { title: 'action' },
+    { title: 'Thumbnail' },
+    { title: 'Name' },
+    { title: 'Category' },
+    { title: 'File Type' },
+    { title: 'Date' },
+    { title: 'Status' },
+    { title: 'Action' },
   ];
+  allseaosns: any;
+  categoryFilter: any[] = [];
+  seasonFilter: any[] = [];
 
   constructor(
     private postService: AllPostsService,
@@ -45,11 +49,20 @@ export class AdminEpisodesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getPosts();
+    // setTimeout(() => {
+    // }, 2000);
     this.getCategories();
     this.checkPermissions();
+    this.getSeason();
+    this.getPosts();
   }
 
+  getSeason() {
+    this.postService.getSeasons().subscribe((res) => {
+      this.allseaosns = res;
+      console.log(res);
+    });
+  }
   open(content: any, id: any) {
     this.deleteId = id;
     this.modalService.open(content, {
@@ -60,13 +73,16 @@ export class AdminEpisodesComponent implements OnInit {
 
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
   getPosts() {
-    this.postService.getEpisodes().subscribe((response: any) => {
+    if (this.categoryFilter.length === 0 && this.seasonFilter.length === 0) {
+      this.body = {};
+    }
+    this.postService.getEpisodes(this.body).subscribe((response: any) => {
       this.allEpisodes = response;
-      this.tableData = response.data.allSong.map((item: any) => [
+      this.tableData = response.data.map((item: any) => [
         `<img src="${item.thumbnail}" alt="Thumbnail" style="width: 50px; height: auto;">`,
         item.name,
         item.categoryId,
-        item.type,
+        item.filetype,
         item.date,
         item.is_scheduled,
         `<div class="actions d-flex align-items-center gap-2">
@@ -255,13 +271,35 @@ export class AdminEpisodesComponent implements OnInit {
 
   getValue(category: any) {
     if (category == 'All Categories') {
-      this.getPosts();
+      // this.getPosts();
     } else {
-      this.postService.filterPostByCategory(category).subscribe((res) => {
-        this.allEpisodes = res;
-      });
+      const categoryIdString = category.toString();
+      const categoryIndex = this.categoryFilter.indexOf(categoryIdString);
+
+      if (categoryIndex === -1) {
+        this.categoryFilter = [categoryIdString];
+      }
     }
-    console.log('Selected Category =>', category);
+    console.log('Selected category =>', this.categoryFilter);
+  }
+  getValueSeason(season: any) {
+    if (season == 'All Seasons') {
+      // this.getPosts();
+    } else {
+      const seasonIdString = season.toString();
+      const seasonIndex = this.seasonFilter.indexOf(seasonIdString);
+
+      if (seasonIndex === -1) {
+        this.seasonFilter = [seasonIdString];
+      }
+      // this.body = {
+      //   categoryId: this.categoryFilter,
+      // };
+      // this.postService.getEpisodes(this.body).subscribe((res) => {
+      //   this.allEpisodes = res;
+      // });
+    }
+    console.log('Season Category =>', this.seasonFilter);
   }
 
   toDetails(id: any) {
@@ -344,9 +382,7 @@ export class AdminEpisodesComponent implements OnInit {
 
   sharePost: any;
   openShare(content: any, post: any) {
-    this.sharePost = this.allEpisodes.data.allSong.find(
-      (data: any) => data.id == post
-    );
+    this.sharePost = this.allEpisodes.data.find((data: any) => data.id == post);
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
@@ -393,4 +429,10 @@ export class AdminEpisodesComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(tempElement);
   }
+  // getCategoryNames(categoryIds: string[]) {
+  //   const categoryNames = this.allcategories.filter((category: any) =>
+  //     categoryIds.includes(category.id.toString())
+  //   );
+  //   return categoryNames.map((category: any) => category.name).join(', ');
+  // }
 }

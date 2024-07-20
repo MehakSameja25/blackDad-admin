@@ -40,6 +40,7 @@ import { EditArticleDraftComponent } from './admin/draft/edit-article-draft/edit
 import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/admin-episode-draft.component';
 import { AdminArticleDraftComponent } from './admin/draft/admin-article-draft/admin-article-draft.component';
 import { DataTableDirective } from './Directives/dataTable.directive';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { DataTableDirective } from './Directives/dataTable.directive';
     ReactiveFormsModule,
     HttpClientModule,
     NgxSkeletonLoaderModule,
+    CKEditorModule
   ],
   providers: [
     {

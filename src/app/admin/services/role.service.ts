@@ -71,7 +71,7 @@ export class RoleService {
 
   updatePassword(proof: string, body: { password: string }) {
     return this.http.put<any>(
-      `${environment.apiUrl}/update-user?proof=${proof}`,
+      `${environment.apiUrl}/set-password?proof=${proof}`,
       body
     );
   }

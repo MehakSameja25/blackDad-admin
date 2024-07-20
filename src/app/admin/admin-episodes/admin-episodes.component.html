@@ -6,26 +6,61 @@
       <div class="page-header">
         <div class="content-page-header">
           <h5>Episodes</h5>
-          <a class="btn btn-outline-warning" routerLink="/admin/draft-episode">Episode Draft</a>
-          <a class="btn btn-primary" routerLink="/admin/add-episode" *ngIf="addPermission == true">Add New Episodes</a>
+          <a class="btn btn-outline-warning" routerLink="/admin/draft-episode"
+            >Episode Draft</a
+          >
+          <a
+            class="btn btn-primary"
+            routerLink="/admin/add-episode"
+            *ngIf="addPermission == true"
+            >Add New Episodes</a
+          >
         </div>
       </div>
 
       <div class="epitopsc mb-3">
         <app-go-back></app-go-back>
-        <div class="sectioncon">
-          <select class="form-select border-0" aria-label="Default select example" (click)="getValue(cat.value)" #cat>
+        <div class="sectioncon" *ngIf="allcategories && allcategories.data">
+          <select
+            class="form-select border-0"
+            aria-label="Default select example"
+            (change)="getValue(cat.value)"
+            #cat
+          >
             <option selected>All Categories</option>
-            <option *ngFor="let category of allcategories.data" [value]="category.id">
+            <option
+              *ngFor="let category of allcategories.data"
+              [value]="category.id"
+            >
               {{ category.name }}
             </option>
           </select>
-          <select class="form-select border-0" aria-label="Default select example" #val
-            (click)="getPostByFileType(val.value)">
+          <select
+            class="form-select border-0"
+            aria-label="Default select example"
+            #val
+            (change)="getPostByFileType(val.value)"
+          >
             <option selected value="all">Type</option>
             <option value="audio">Audio</option>
             <option value="video">Video</option>
           </select>
+          <span *ngIf="allseaosns && allseaosns.data">
+            <select
+              class="form-select border-0"
+              aria-label="Default select example"
+              (change)="getValueSeason(seas.value)"
+              #seas
+            >
+              <option selected>All Seasons</option>
+              <option
+                *ngFor="let season of allseaosns.data"
+                [value]="season.seasonNo"
+              >
+                {{ season.seasonNo }}
+              </option>
+            </select>
+          </span>
         </div>
       </div>
 
@@ -34,7 +69,13 @@
           <div class="card">
             <div class="card-body">
               <div class="table-responsive">
-                <table #dataTable appDataTable [data]="tableData" [columns]="tableColumns" class="display"></table>
+                <table
+                  #dataTable
+                  appDataTable
+                  [data]="tableData"
+                  [columns]="tableColumns"
+                  class="display"
+                ></table>
               </div>
             </div>
           </div>
@@ -53,13 +94,28 @@
       <div class="form-header">
         <!-- <h3>Delete</h3> -->
         <span>
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="60"
-            height="60" x="0" y="0" viewBox="0 0 512 512" style="enable-background: new 0 0 512 512"
-            xml:space="preserve" class="">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            version="1.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            width="60"
+            height="60"
+            x="0"
+            y="0"
+            viewBox="0 0 512 512"
+            style="enable-background: new 0 0 512 512"
+            xml:space="preserve"
+            class=""
+          >
             <g>
-              <path fill="#ac54f4" fill-rule="evenodd"
+              <path
+                fill="#ac54f4"
+                fill-rule="evenodd"
                 d="M170.8 14.221A14.21 14.21 0 0 1 185 .014L326.991.006a14.233 14.233 0 0 1 14.2 14.223v35.117H170.8zm233.461 477.443a21.75 21.75 0 0 1-21.856 20.33H127.954a21.968 21.968 0 0 1-21.854-20.416L84.326 173.06H427.5l-23.234 318.6zm56.568-347.452H51.171v-33A33.035 33.035 0 0 1 84.176 78.2l343.644-.011a33.051 33.051 0 0 1 33 33.02v33zm-270.79 291.851a14.422 14.422 0 1 0 28.844 0V233.816a14.42 14.42 0 0 0-28.839-.01v202.257zm102.9 0a14.424 14.424 0 1 0 28.848 0V233.816a14.422 14.422 0 0 0-28.843-.01z"
-                opacity="1" data-original="#fc0005" class=""></path>
+                opacity="1"
+                data-original="#fc0005"
+                class=""
+              ></path>
             </g>
           </svg>
         </span>
@@ -69,10 +125,19 @@
       <div class="modal-btn delete-action">
         <div class="row">
           <div class="col-6">
-            <a class="btn btn-primary paid-continue-btn" (click)="deleteEpisode(deleteId)">Delete</a>
+            <a
+              class="btn btn-primary paid-continue-btn"
+              (click)="deleteEpisode(deleteId)"
+              >Delete</a
+            >
           </div>
           <div class="col-6">
-            <a data-bs-dismiss="modal" class="btn btn-primary paid-cancel-btn" (click)="modal.close()">Cancel</a>
+            <a
+              data-bs-dismiss="modal"
+              class="btn btn-primary paid-cancel-btn"
+              (click)="modal.close()"
+              >Cancel</a
+            >
           </div>
         </div>
       </div>
@@ -92,8 +157,18 @@
   </div>
   <div class="modal-body">
     <div class="form-group mb-3 d-flex border align-items-stretch">
-      <input type="text" class="form-control border-0 rounded-0" [(ngModel)]="urlToCopy" disabled aria-label="..." />
-      <button class="btn btn-primary rounded-0" (click)="share()" style="width: 77px">
+      <input
+        type="text"
+        class="form-control border-0 rounded-0"
+        [(ngModel)]="urlToCopy"
+        disabled
+        aria-label="..."
+      />
+      <button
+        class="btn btn-primary rounded-0"
+        (click)="share()"
+        style="width: 77px"
+      >
         <strong>{{ copyMessage }}</strong>
       </button>
     </div>
@@ -144,7 +219,11 @@
     </div> -->
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary rounded-0" (click)="modal.close()">
+    <button
+      type="button"
+      class="btn btn-outline-primary rounded-0"
+      (click)="modal.close()"
+    >
       Close
     </button>
   </div>
