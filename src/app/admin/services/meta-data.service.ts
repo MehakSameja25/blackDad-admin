@@ -9,7 +9,7 @@ export class MetaDataService {
   constructor(private http: HttpClient) {}
 
   getMeta() {
-    return this.http.get(`${environment.apiUrl}/get-meta`);
+    return this.http.get(`${environment.apiUrl}/getMetas`);
   }
 
   getAdvertisements() {
