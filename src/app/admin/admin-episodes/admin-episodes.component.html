@@ -27,7 +27,7 @@
             (change)="getValue(cat.value)"
             #cat
           >
-            <option selected>All Categories</option>
+            <option selected value="all categories">All Categories</option>
             <option
               *ngFor="let category of allcategories.data"
               [value]="category.id"
@@ -41,7 +41,7 @@
             #val
             (change)="getPostByFileType(val.value)"
           >
-            <option selected value="all">Type</option>
+            <option selected value="all type">All Type</option>
             <option value="audio">Audio</option>
             <option value="video">Video</option>
           </select>
@@ -52,7 +52,7 @@
               (change)="getValueSeason(seas.value)"
               #seas
             >
-              <option selected>All Seasons</option>
+              <option selected value="all seasons">All Seasons</option>
               <option
                 *ngFor="let season of allseaosns.data"
                 [value]="season.seasonNo"

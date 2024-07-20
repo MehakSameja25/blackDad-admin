@@ -38,6 +38,7 @@ export class AdminEpisodesComponent implements OnInit {
   allseaosns: any;
   categoryFilter: any[] = [];
   seasonFilter: any[] = [];
+  typeFilter: any[] = [];
 
   constructor(
     private postService: AllPostsService,
@@ -73,8 +74,73 @@ export class AdminEpisodesComponent implements OnInit {
 
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
   getPosts() {
-    if (this.categoryFilter.length === 0 && this.seasonFilter.length === 0) {
+    if (
+      this.categoryFilter.length === 0 &&
+      this.seasonFilter.length === 0 &&
+      this.typeFilter.length === 0
+    ) {
       this.body = {};
+    } else if (
+      this.categoryFilter.length > 0 &&
+      this.seasonFilter.length === 0 &&
+      this.typeFilter.length === 0
+    ) {
+      this.body = {
+        categoryId: this.categoryFilter,
+      };
+    } else if (
+      this.categoryFilter.length === 0 &&
+      this.seasonFilter.length > 0 &&
+      this.typeFilter.length === 0
+    ) {
+      this.body = {
+        seasonNo: this.seasonFilter,
+      };
+    } else if (
+      this.categoryFilter.length === 0 &&
+      this.seasonFilter.length === 0 &&
+      this.typeFilter.length > 0
+    ) {
+      this.body = {
+        filetype: this.typeFilter,
+      };
+    } else if (
+      this.categoryFilter.length > 0 &&
+      this.seasonFilter.length > 0 &&
+      this.typeFilter.length === 0
+    ) {
+      this.body = {
+        categoryId: this.categoryFilter,
+        seasonNo: this.seasonFilter,
+      };
+    } else if (
+      this.categoryFilter.length > 0 &&
+      this.seasonFilter.length === 0 &&
+      this.typeFilter.length > 0
+    ) {
+      this.body = {
+        categoryId: this.categoryFilter,
+        filetype: this.typeFilter,
+      };
+    } else if (
+      this.categoryFilter.length === 0 &&
+      this.seasonFilter.length > 0 &&
+      this.typeFilter.length > 0
+    ) {
+      this.body = {
+        seasonNo: this.seasonFilter,
+        filetype: this.typeFilter,
+      };
+    } else if (
+      this.categoryFilter.length > 0 &&
+      this.seasonFilter.length > 0 &&
+      this.typeFilter.length > 0
+    ) {
+      this.body = {
+        seasonNo: this.seasonFilter,
+        filetype: this.typeFilter,
+        categoryId: this.categoryFilter,
+      };
     }
     this.postService.getEpisodes(this.body).subscribe((response: any) => {
       this.allEpisodes = response;
@@ -270,8 +336,8 @@ export class AdminEpisodesComponent implements OnInit {
   }
 
   getValue(category: any) {
-    if (category == 'All Categories') {
-      // this.getPosts();
+    if (category == 'all Categories') {
+      this.categoryFilter = [];
     } else {
       const categoryIdString = category.toString();
       const categoryIndex = this.categoryFilter.indexOf(categoryIdString);
@@ -280,11 +346,12 @@ export class AdminEpisodesComponent implements OnInit {
         this.categoryFilter = [categoryIdString];
       }
     }
+    this.getPosts();
     console.log('Selected category =>', this.categoryFilter);
   }
   getValueSeason(season: any) {
-    if (season == 'All Seasons') {
-      // this.getPosts();
+    if (season == 'all seasons') {
+      this.seasonFilter = [];
     } else {
       const seasonIdString = season.toString();
       const seasonIndex = this.seasonFilter.indexOf(seasonIdString);
@@ -292,13 +359,8 @@ export class AdminEpisodesComponent implements OnInit {
       if (seasonIndex === -1) {
         this.seasonFilter = [seasonIdString];
       }
-      // this.body = {
-      //   categoryId: this.categoryFilter,
-      // };
-      // this.postService.getEpisodes(this.body).subscribe((res) => {
-      //   this.allEpisodes = res;
-      // });
     }
+    this.getPosts();
     console.log('Season Category =>', this.seasonFilter);
   }
 
@@ -370,14 +432,13 @@ export class AdminEpisodesComponent implements OnInit {
     }
   }
   getPostByFileType(type: any) {
-    if (type === 'all') {
-      this.getPosts();
+    if (type === 'all type') {
+      this.typeFilter = [];
     } else {
-      this.postService.filterPostByFileType(type).subscribe((response) => {
-        this.allEpisodes = response;
-      });
+      this.typeFilter = [type];
     }
-    console.log(type);
+    this.getPosts();
+    console.log('Selected type:', this.typeFilter);
   }
 
   sharePost: any;
