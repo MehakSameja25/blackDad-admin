@@ -65,6 +65,7 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-lg',
     });
   }
 
@@ -77,6 +78,7 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
         this.modalService.open(content, {
           ariaLabelledBy: 'modal-basic-title',
           windowClass: 'share-modal',
+          modalDialogClass: 'modal-dialog-centered modal-lg',
         });
       }
     });
@@ -87,6 +89,7 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered',
     });
   }
 
