@@ -9,10 +9,8 @@
         </div>
       </div>
 
-      <div class="row gap-3 mb-3 justify-content-between m-0">
-        <div class="col-1 p-0">
-          <app-go-back></app-go-back>
-        </div>
+      <div class="mb-3">
+        <app-go-back></app-go-back>
       </div>
 
       <div class="row">
@@ -37,7 +35,7 @@
                           <div class="form-check custom-checkbox">
                             <input class="form-check-input custom-control-input-cat" type="checkbox"
                               id="check {{data.id}}" name="check1 {{data.id}}" data-parsley-multiple="check1"
-                              (change)="addMenu(data.id, $event.target)" [checked]="isRoleExit(data.id)"/>
+                              (change)="addMenu(data.id, $event.target)" [checked]="isRoleExit(data.id)" />
                             <label class="form-check-label m-0" for="check1 {{data.id}}">
                               {{data.name}}
                             </label>
