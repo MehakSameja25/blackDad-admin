@@ -132,7 +132,7 @@
                     >
                       <div class="input-block mb-3">
                         <label>Category</label>
-                        <div>
+                        <div class="d-flex flex-wrap column-gap-3">
                           <span *ngFor="let category of allcategories.data">
                             <input
                               type="checkbox"
@@ -316,10 +316,12 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-5 col-md-6 col-sm-12">
+                    <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block">
                         <label>Banner Image</label>
-                        <div class="input-block service-upload mb-0">
+                        <div
+                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
+                        >
                           <span
                             ><img
                               src="assets/img/drop-icon.svg"
@@ -356,10 +358,12 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-5 col-md-6 col-sm-12">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block">
                         <label>Thumbnail Image</label>
-                        <div class="input-block service-upload mb-0">
+                        <div
+                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
+                        >
                           <span
                             ><img
                               src="assets/img/drop-icon.svg"
@@ -396,12 +400,10 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 col-sm-12">
-                      <button type="submit" class="btn btn-primary w-100 mt-4">
-                        Add
-                      </button>
-                    </div>
+                  <div class="text-end">
+                    <button type="submit" class="btn btn-primary mt-4">
+                      Add
+                    </button>
                   </div>
                 </div>
               </form>

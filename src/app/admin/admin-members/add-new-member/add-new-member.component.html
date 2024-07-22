@@ -44,49 +44,16 @@
                         />
                       </div>
                     </div>
-                    <!-- <div class="col-12">
-                      <div class="input-block mb-3">
-                        <label>Password</label>
-                        <input
-                          type="password"
-                          class="form-control"
-                          formControlName="password"
-                        />
-                      </div>
-                    </div> -->
-
-                    <!-- <div class="col-12">
-                      <div class="input-block mb-3">
-                        <label>Role Type</label>
-                        <select
-                          class="form-select"
-                          formControlName="roleTypeId"
-                          aria-label="Default select example"
-                          *ngIf="allRoles && allRoles.role"
-                        >
-                          <option
-                            *ngFor="let role of allRoles.role"
-                            [value]="role.id"
-                          >
-                            {{ role.name }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12">
-                      <strong class="text-danger">{{ errormessage }}</strong>
-                    </div> -->
-
-                    <div class="col-lg-3 col-md-4 col-sm-12">
-                      <button
-                        type="submit"
-                        class="btn btn-primary w-100 mt-4"
-                        (click)="onSubmit()"
-                      >
-                        Submit
-                      </button>
-                    </div>
                   </form>
+                </div>
+                <div class="text-end">
+                  <button
+                    type="submit"
+                    class="btn btn-primary mt-4"
+                    (click)="onSubmit()"
+                  >
+                    Submit
+                  </button>
                 </div>
               </div>
             </div>
