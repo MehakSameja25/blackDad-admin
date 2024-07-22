@@ -45,6 +45,7 @@ import { EpisodeScheduleComponent } from './admin/admin-scheduling/episode-sched
 import { ArticleScheduleComponent } from './admin/admin-scheduling/article-schedule/article-schedule.component';
 import { EpisodeTabsComponent } from './admin/admin-tabs/episode-tabs/episode-tabs.component';
 import { ArticleTabsComponent } from './admin/admin-tabs/article-tabs/article-tabs.component';
+import { ImageCropperComponent } from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { ArticleTabsComponent } from './admin/admin-tabs/article-tabs/article-ta
     ReactiveFormsModule,
     HttpClientModule,
     NgxSkeletonLoaderModule,
-    CKEditorModule
+    CKEditorModule,
+    ImageCropperComponent
   ],
   providers: [
     {

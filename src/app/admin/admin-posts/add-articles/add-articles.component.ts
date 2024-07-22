@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AllPostsService } from '../../services/all-posts.service';
 import { Subject, debounceTime } from 'rxjs';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-add-articles',
@@ -106,35 +107,36 @@ export class AddArticlesComponent {
     return formData;
   }
 
-  handleBannerImageInput(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        document
-          .getElementById('bannerPreview')!
-          .setAttribute('src', e.target.result);
-      };
-      reader.readAsDataURL(file);
-      this.articleForm.patchValue({ bannerImage: file });
-      this.inputChanged.next('');
-    }
-  }
+  // handleBannerImageInput(event: any): void {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => {
+  //       document
+  //         .getElementById('bannerPreview')!
+  //         .setAttribute('src', e.target.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //     this.articleForm.patchValue({ bannerImage: file });
+  //     this.inputChanged.next('');
+  //   this.showCropper = true;
+  //   }
+  // }
 
-  handleThumbnailImageInput(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        document
-          .getElementById('thumbnailPreview')!
-          .setAttribute('src', e.target.result);
-      };
-      reader.readAsDataURL(file);
-      this.articleForm.patchValue({ thumbnailImage: file });
-      this.inputChanged.next('');
-    }
-  }
+  // handleThumbnailImageInput(event: any): void {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => {
+  //       document
+  //         .getElementById('thumbnailPreview')!
+  //         .setAttribute('src', e.target.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //     this.articleForm.patchValue({ thumbnailImage: file });
+  //     this.inputChanged.next('');
+  //   }
+  // }
 
   getCategoryId(id: any) {
     const index = this.selectedCategories.indexOf(id);
@@ -157,5 +159,87 @@ export class AddArticlesComponent {
   }
   deleteDraft() {
     this.postsService.deleteDraft(this.draftId).subscribe();
+  }
+
+
+  // Banner image variables
+  bannerImageChangedEvent: any = '';
+  croppedBannerImage: string | null = null;
+  showBannerCropper = false;
+
+  // Thumbnail image variables
+  thumbnailImageChangedEvent: any = '';
+  croppedThumbnailImage: string | null = null;
+  showThumbnailCropper = false;
+
+  handleBannerImageInput(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.bannerImageChangedEvent = event;
+      this.showBannerCropper = true;
+    }
+  }
+
+  bannerImageCropped(event: any) {
+    this.convertBlobToBase64(event.blob, (base64: string | null) => {
+      this.croppedBannerImage = base64;
+    });
+  }
+
+  saveCroppedBannerImage() {
+    if (this.croppedBannerImage) {
+      const bannerPreview = document.getElementById('bannerPreview');
+      if (bannerPreview) {
+        bannerPreview.setAttribute('src', this.croppedBannerImage);
+      }
+      this.showBannerCropper = false;
+    }
+  }
+
+  handleThumbnailImageInput(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.thumbnailImageChangedEvent = event;
+      this.showThumbnailCropper = true;
+    }
+  }
+
+  thumbnailImageCropped(event: any) {
+    this.convertBlobToBase64(event.blob, (base64: string | null) => {
+      this.croppedThumbnailImage = base64;
+    });
+  }
+
+  saveCroppedThumbnailImage() {
+    if (this.croppedThumbnailImage) {
+      const thumbnailPreview = document.getElementById('thumbnailPreview');
+      if (thumbnailPreview) {
+        thumbnailPreview.setAttribute('src', this.croppedThumbnailImage);
+      }
+      this.showThumbnailCropper = false;
+    }
+  }
+
+  convertBlobToBase64(blob: Blob, callback: (base64: string | null) => void): void {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      callback(reader.result as string);
+    };
+    reader.onerror = () => {
+      callback(null);
+    };
+    reader.readAsDataURL(blob);
+  }
+
+  imageLoaded() {
+    // Show cropper
+  }
+
+  cropperReady() {
+    // Cropper ready
+  }
+
+  loadImageFailed() {
+    // Show message
   }
 }
