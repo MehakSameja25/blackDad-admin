@@ -177,6 +177,7 @@ export class AddArticlesComponent {
     if (file) {
       this.bannerImageChangedEvent = event;
       this.showBannerCropper = true;
+      this.articleForm.patchValue({ bannerImage: file });
     }
   }
 
@@ -192,6 +193,9 @@ export class AddArticlesComponent {
       if (bannerPreview) {
         bannerPreview.setAttribute('src', this.croppedBannerImage);
       }
+      const bannerFile = this.base64ToFile(this.croppedBannerImage, 'banner-image.png');
+      this.articleForm.patchValue({ thumbnailImage: bannerFile });
+      this.showThumbnailCropper = false;
       this.showBannerCropper = false;
     }
   }
@@ -201,6 +205,7 @@ export class AddArticlesComponent {
     if (file) {
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
+      this.articleForm.patchValue({ thumbnailImage: file });
     }
   }
 
@@ -216,6 +221,8 @@ export class AddArticlesComponent {
       if (thumbnailPreview) {
         thumbnailPreview.setAttribute('src', this.croppedThumbnailImage);
       }
+      const thumbnailFile = this.base64ToFile(this.croppedThumbnailImage, 'thumbnail-image.png');
+      this.articleForm.patchValue({ thumbnailImage: thumbnailFile });
       this.showThumbnailCropper = false;
     }
   }
@@ -231,15 +238,20 @@ export class AddArticlesComponent {
     reader.readAsDataURL(blob);
   }
 
-  imageLoaded() {
-    // Show cropper
+  base64ToFile(base64: string, fileName: string): File {
+    if (!base64 || !fileName) {
+      throw new Error('Invalid base64 string or fileName.');
+    }
+    const [header, data] = base64.split(',');
+    const mimeMatch = header.match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+    const byteString = atob(data);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+    return new File([uint8Array], fileName, { type: mime });
   }
 
-  cropperReady() {
-    // Cropper ready
-  }
-
-  loadImageFailed() {
-    // Show message
-  }
 }

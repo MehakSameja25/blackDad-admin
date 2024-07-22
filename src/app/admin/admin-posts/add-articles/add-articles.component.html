@@ -142,8 +142,7 @@
                           <div id="bannerFrames"></div>
                           <image-cropper *ngIf="showBannerCropper" [imageChangedEvent]="bannerImageChangedEvent"
                             [aspectRatio]="16 / 9" [maintainAspectRatio]="true" format="png"
-                            (imageCropped)="bannerImageCropped($event)" (imageLoaded)="imageLoaded()"
-                            (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                            (imageCropped)="bannerImageCropped($event)"></image-cropper>
                           <button *ngIf="showBannerCropper" (click)="saveCroppedBannerImage()"
                             class="btn btn-primary mt-2">Save</button>
                         </div>
@@ -168,8 +167,7 @@
                           <div id="thumbnailFrames"></div>
                           <image-cropper *ngIf="showThumbnailCropper" [imageChangedEvent]="thumbnailImageChangedEvent"
                             [aspectRatio]="1 / 1" [maintainAspectRatio]="true" format="png"
-                            (imageCropped)="thumbnailImageCropped($event)" (imageLoaded)="imageLoaded()"
-                            (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+                            (imageCropped)="thumbnailImageCropped($event)"></image-cropper>
                           <button *ngIf="showThumbnailCropper" (click)="saveCroppedThumbnailImage()"
                             class="btn btn-primary mt-2">Save</button>
                         </div>
