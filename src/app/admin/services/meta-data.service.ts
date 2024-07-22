@@ -13,7 +13,7 @@ export class MetaDataService {
   }
 
   getAdvertisements() {
-    return this.http.get(`${environment.apiUrl}/get-advertisement`);
+    return this.http.post(`${environment.apiUrl}/getAdvertisment`, {});
   }
   deleteAdvertisements(id: any) {
     return this.http.delete(

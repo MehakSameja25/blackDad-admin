@@ -9,7 +9,7 @@ export class CategoiesService {
   constructor(private http: HttpClient) {}
 
   getCategory() {
-    return this.http.get(`${environment.apiUrl}/get-category`);
+    return this.http.get(`${environment.apiUrl}/get-category?type=all`);
   }
 
   getCategoryById(id: any) {

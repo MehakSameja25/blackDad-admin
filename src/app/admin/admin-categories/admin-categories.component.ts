@@ -49,7 +49,6 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.categoriesService.getCategory().subscribe((res) => {
       this.allCategories = res;
     });
@@ -57,8 +56,7 @@ export class AdminCategoriesComponent implements OnInit, OnDestroy {
     this.checkPermissions();
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 
   openAdd(content: any) {
     this.addCategoryForm.reset();
