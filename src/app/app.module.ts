@@ -46,6 +46,7 @@ import { ArticleScheduleComponent } from './admin/admin-scheduling/article-sched
 import { EpisodeTabsComponent } from './admin/admin-tabs/episode-tabs/episode-tabs.component';
 import { ArticleTabsComponent } from './admin/admin-tabs/article-tabs/article-tabs.component';
 import { ImageCropperComponent } from 'ngx-image-cropper';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { ImageCropperComponent } from 'ngx-image-cropper';
     HttpClientModule,
     NgxSkeletonLoaderModule,
     CKEditorModule,
-    ImageCropperComponent
+    ImageCropperComponent,
+    NgMultiSelectDropDownModule.forRoot(),
   ],
   providers: [
     {

@@ -77,13 +77,19 @@
                         </div>
                       </div>
                     </div>
-                    <div
-                      class="col-lg-6 col-md-6 col-sm-12"
-                      *ngIf="allcategories && allcategories.data"
-                    >
+                    <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Category</label>
-                        <div class="d-flex flex-wrap column-gap-3">
+                        <ng-multiselect-dropdown
+                          [placeholder]="'Select Categories'"
+                          [data]="allcategories"
+                          formControlName="category"
+                          [settings]="dropdownSettings"
+                          (onSelect)="onCategorySelect($event)"
+                          (onDeSelect)="onCategoryDeSelect($event)"
+                        >
+                        </ng-multiselect-dropdown>
+                        <!-- <div class="d-flex flex-wrap column-gap-3">
                           <span *ngFor="let category of allcategories.data"
                             ><input
                               class="form-check-input custom-control-input-cat"
@@ -102,7 +108,21 @@
                             </label>
                             <br
                           /></span>
-                        </div>
+                        </div> -->
+                      </div>
+                      <div
+                        *ngIf="
+                          articleForm.get('category')?.invalid &&
+                          (articleForm.get('category')?.dirty ||
+                            articleForm.get('category')?.touched)
+                        "
+                        class="text-danger"
+                      >
+                        <strong
+                          *ngIf="articleForm.get('category')?.errors?.['required']"
+                        >
+                          Category is required.
+                        </strong>
                       </div>
                     </div>
                     <div class="col-12">

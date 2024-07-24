@@ -21,6 +21,7 @@ export class AddArticlesComponent {
   inputText: string = '';
   inputChanged: Subject<string> = new Subject<string>();
   editor = ClassicEditor;
+  dropdownSettings: {};
 
   constructor(
     private fb: FormBuilder,
@@ -29,18 +30,47 @@ export class AddArticlesComponent {
     private router: Router,
     private modalService: NgbModal
   ) {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'name',
+      allowSearchFilter: true,
+      enableCheckAll: false,
+      unSelectAllText: false,
+      maxWidth: 300,
+      // itemsShowLimit: 3,
+      searchPlaceholderText: 'Search Categories!',
+      closeDropDownOnSelection: true,
+    };
     this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
       this.updateDraft();
     });
   }
+  onCategorySelect(item: any) {
+    const index = this.selectedCategories.indexOf(item.id);
+    if (index === -1) {
+      this.selectedCategories.push(item.id);
+    } else {
+      this.selectedCategories.splice(index, 1);
+    }
+    this.inputChanged.next('');
+    console.log('Selected Category:', this.selectedCategories);
+  }
 
+  onCategoryDeSelect(item: any) {
+    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
+    if (index !== -1) {
+      this.selectedCategories.splice(index, 1);
+    }
+    console.log('Deselected Category:', this.selectedCategories);
+  }
   ngOnInit(): void {
     this.articleForm = this.fb.group({
       articleName: ['', [Validators.required]],
       date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
-      // category: ['', [Validators.required]],
+      category: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       bannerImage: ['', [Validators.required]],
       thumbnailImage: ['', [Validators.required]],
@@ -50,8 +80,8 @@ export class AddArticlesComponent {
   }
 
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response) => {
-      this.allcategories = response;
+    this.categoryService.unblockedCategories().subscribe((response: any) => {
+      this.allcategories = response.data;
       console.log(this.allcategories);
     });
   }
@@ -68,16 +98,17 @@ export class AddArticlesComponent {
   onSubmit() {
     if (this.articleForm.invalid) {
       this.markFormGroupTouched(this.articleForm);
+    } else {
+      const formData = this.createArticleFormData();
+      formData.append('isDraft', '0');
+      this.postsService.addArticle(formData).subscribe((res) => {
+        if (res) {
+          this.deleteDraft();
+          console.log('Article added:', res);
+          this.router.navigate(['/admin/articles']);
+        }
+      });
     }
-    const formData = this.createArticleFormData();
-    formData.append('isDraft', '0');
-    this.postsService.addArticle(formData).subscribe((res) => {
-      if (res) {
-        this.deleteDraft();
-        console.log('Article added:', res);
-        this.router.navigate(['/admin/articles']);
-      }
-    });
   }
   updateDraft() {
     if (this.draftId) {

@@ -20,6 +20,7 @@ export class AddEpisodesComponent implements OnInit {
   draftId: any;
   fileType: any;
   editor = ClassicEditor;
+  dropdownSettings = {};
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +29,18 @@ export class AddEpisodesComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal
   ) {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'name',
+      allowSearchFilter: true,
+      enableCheckAll: false,
+      unSelectAllText: false,
+      maxWidth: 300,
+      // itemsShowLimit: 3,
+      searchPlaceholderText: 'Search Categories!',
+      closeDropDownOnSelection: true,
+    };
     this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
       this.updateDraft();
     });
@@ -41,7 +54,7 @@ export class AddEpisodesComponent implements OnInit {
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
       seasonNumber: ['', [Validators.required]],
-      // category: ['', [Validators.required]],
+      category: ['', [Validators.required]],
       subType1: ['', [Validators.required]],
       // fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
@@ -50,12 +63,14 @@ export class AddEpisodesComponent implements OnInit {
       thumbnailImage: ['', [Validators.required]],
     });
     this.getCategories(); // Fetch categories
-    this.addEpisodeDraft(); // Initial draft save
+    setTimeout(() => {
+      this.addEpisodeDraft(); // Initial draft save
+    }, 3000);
   }
 
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response) => {
-      this.allcategories = response;
+    this.categoryService.unblockedCategories().subscribe((response: any) => {
+      this.allcategories = response.data;
     });
   }
 
@@ -294,5 +309,25 @@ export class AddEpisodesComponent implements OnInit {
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
+  }
+  onCategorySelect(item: any) {
+    const index = this.selectedCategories.indexOf(item.id);
+    if (index === -1) {
+      this.selectedCategories.push(item.id);
+    } else {
+      this.selectedCategories.splice(index, 1);
+    }
+    this.inputChanged.next('');
+    console.log('Selected Category:', this.selectedCategories);
+  }
+
+  onCategoryDeSelect(item: any) {
+    const index = this.selectedCategories.findIndex(
+      (cat) => cat === item.id
+    );
+    if (index !== -1) {
+      this.selectedCategories.splice(index, 1);
+    }
+    console.log('Deselected Category:', this.selectedCategories);
   }
 }
