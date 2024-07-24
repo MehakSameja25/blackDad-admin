@@ -180,7 +180,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'scheduled/draft-articles',
+    path: 'admin/scheduled-articles',
     component: ArticleScheduleComponent,
     canActivate: [AuthGuard],
   },

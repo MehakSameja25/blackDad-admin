@@ -6,6 +6,7 @@ import { AllPostsService } from '../../services/all-posts.service';
 import { Subject, debounceTime } from 'rxjs';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-add-articles',
@@ -25,7 +26,8 @@ export class AddArticlesComponent {
     private fb: FormBuilder,
     private categoryService: CategoiesService,
     private postsService: AllPostsService,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal
   ) {
     this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
       this.updateDraft();
@@ -38,7 +40,7 @@ export class AddArticlesComponent {
       date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
-      category: ['', [Validators.required]],
+      // category: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       bannerImage: ['', [Validators.required]],
       thumbnailImage: ['', [Validators.required]],
@@ -161,7 +163,6 @@ export class AddArticlesComponent {
     this.postsService.deleteDraft(this.draftId).subscribe();
   }
 
-
   // Banner image variables
   bannerImageChangedEvent: any = '';
   croppedBannerImage: string | null = null;
@@ -175,6 +176,7 @@ export class AddArticlesComponent {
   handleBannerImageInput(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      this.IsBannerImage = true;
       this.bannerImageChangedEvent = event;
       this.showBannerCropper = true;
       this.articleForm.patchValue({ bannerImage: file });
@@ -193,7 +195,10 @@ export class AddArticlesComponent {
       if (bannerPreview) {
         bannerPreview.setAttribute('src', this.croppedBannerImage);
       }
-      const bannerFile = this.base64ToFile(this.croppedBannerImage, 'banner-image.png');
+      const bannerFile = this.base64ToFile(
+        this.croppedBannerImage,
+        'banner-image.png'
+      );
       this.articleForm.patchValue({ thumbnailImage: bannerFile });
       this.showThumbnailCropper = false;
       this.showBannerCropper = false;
@@ -221,13 +226,19 @@ export class AddArticlesComponent {
       if (thumbnailPreview) {
         thumbnailPreview.setAttribute('src', this.croppedThumbnailImage);
       }
-      const thumbnailFile = this.base64ToFile(this.croppedThumbnailImage, 'thumbnail-image.png');
+      const thumbnailFile = this.base64ToFile(
+        this.croppedThumbnailImage,
+        'thumbnail-image.png'
+      );
       this.articleForm.patchValue({ thumbnailImage: thumbnailFile });
       this.showThumbnailCropper = false;
     }
   }
 
-  convertBlobToBase64(blob: Blob, callback: (base64: string | null) => void): void {
+  convertBlobToBase64(
+    blob: Blob,
+    callback: (base64: string | null) => void
+  ): void {
     const reader = new FileReader();
     reader.onloadend = () => {
       callback(reader.result as string);
@@ -253,5 +264,12 @@ export class AddArticlesComponent {
     }
     return new File([uint8Array], fileName, { type: mime });
   }
-
+  IsBannerImage = false;
+  open(content: any) {
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-lg',
+    });
+  }
 }

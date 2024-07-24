@@ -186,63 +186,156 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-5 col-md-6 col-sm-12">
+                    <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block">
                         <label>Banner Image</label>
-                        <div class="input-block service-upload mb-0">
-                          <span
-                            ><img
-                              src="assets/img/drop-icon.svg"
+                        <div
+                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
+                        >
+                          <span>
+                            <img
+                              [src]="
+                                croppedBannerImage
+                                  ? croppedBannerImage
+                                  : 'assets/img/drop-icon.svg'
+                              "
                               alt="upload"
                               id="bannerPreview"
-                          /></span>
-                          <h6 class="drop-browse align-center">
+                            />
+                          </span>
+                          <h6
+                            class="drop-browse align-center"
+                            *ngIf="!showBannerCropper"
+                          >
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
                           </h6>
-                          <p class="text-muted">Maximum size: 50MB</p>
+                          <p class="text-muted" *ngIf="!showBannerCropper">
+                            Maximum size: 50MB
+                          </p>
                           <input
                             type="file"
-                            multiple
                             id="bannerImage"
                             (change)="handleBannerImageInput($event)"
                           />
                           <div id="bannerFrames"></div>
+                          <image-cropper
+                            *ngIf="showBannerCropper"
+                            [imageChangedEvent]="bannerImageChangedEvent"
+                            [aspectRatio]="16 / 9"
+                            [maintainAspectRatio]="true"
+                            format="png"
+                            (imageCropped)="bannerImageCropped($event)"
+                          ></image-cropper>
+                          <button
+                            *ngIf="showBannerCropper"
+                            (click)="saveCroppedBannerImage()"
+                            class="btn btn-primary mt-2"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="
+                          articleForm.get('bannerImage')?.invalid &&
+                          (articleForm.get('bannerImage')?.dirty ||
+                            articleForm.get('bannerImage')?.touched)
+                        "
+                        class="text-danger"
+                      >
+                        <div
+                          *ngIf="articleForm.get('bannerImage')?.errors?.['required']"
+                        >
+                          Banner Image is required.
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-5 col-md-6 col-sm-12">
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block">
                         <label>Thumbnail Image</label>
-                        <div class="input-block service-upload mb-0">
-                          <span
-                            ><img
-                              src="assets/img/drop-icon.svg"
+                        <div
+                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
+                        >
+                          <span>
+                            <img
+                              [src]="
+                                croppedThumbnailImage
+                                  ? croppedThumbnailImage
+                                  : 'assets/img/drop-icon.svg'
+                              "
                               id="thumbnailPreview"
                               alt="upload"
-                          /></span>
-                          <h6 class="drop-browse align-center">
+                            />
+                          </span>
+                          <h6
+                            class="drop-browse align-center"
+                            *ngIf="!showThumbnailCropper"
+                          >
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
                           </h6>
-                          <p class="text-muted">Maximum size: 50MB</p>
+                          <p class="text-muted" *ngIf="!showThumbnailCropper">
+                            Maximum size: 50MB
+                          </p>
                           <input
                             type="file"
-                            multiple
                             id="thumbnailImage"
                             (change)="handleThumbnailImageInput($event)"
                           />
                           <div id="thumbnailFrames"></div>
+                          <image-cropper
+                            *ngIf="showThumbnailCropper"
+                            [imageChangedEvent]="thumbnailImageChangedEvent"
+                            [aspectRatio]="1 / 1"
+                            [maintainAspectRatio]="true"
+                            format="png"
+                            (imageCropped)="thumbnailImageCropped($event)"
+                          ></image-cropper>
+                          <button
+                            *ngIf="showThumbnailCropper"
+                            (click)="saveCroppedThumbnailImage()"
+                            class="btn btn-primary mt-2"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="
+                          articleForm.get('thumbnailImage')?.invalid &&
+                          (articleForm.get('thumbnailImage')?.dirty ||
+                            articleForm.get('thumbnailImage')?.touched)
+                        "
+                        class="text-danger"
+                      >
+                        <div
+                          *ngIf="articleForm.get('thumbnailImage')?.errors?.['required']"
+                        >
+                          Thumbnail Image is required.
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-12">
+                    <div class="text-end">
+                      <button
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(previewModal)"
+                        *ngIf="IsBannerImage"
+                      >
+                        Preview Banner Image
+                      </button>
                       <button
                         type="submit"
-                        class="btn btn-primary w-100 mt-4"
+                        class="btn btn-primary mt-4"
                         (click)="onSubmit()"
+                        [disabled]="
+                          showBannerCropper == true ||
+                          showThumbnailCropper == true
+                        "
                       >
-                        Add
+                        Update
                       </button>
                     </div>
                   </div>
@@ -255,3 +348,39 @@
     </div>
   </div>
 </div>
+<ng-template #previewModal let-modal>
+  <div class="modal-header border-0 pb-0">
+    <div class="form-header modal-header-title text-start mb-0">
+      <h4 class="mb-0">Preview Banner Image</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <a class="podcastdetailbanner mb-3">
+      <span>
+        <img
+          [src]="
+            croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
+          "
+          alt="upload"
+          id="bannerPreview"
+        /> </span
+    ></a>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      data-bs-dismiss="modal"
+      class="btn btn-back cancel-btn me-2"
+      (click)="modal.close()"
+    >
+      Cancel
+    </button>
+  </div>
+</ng-template>

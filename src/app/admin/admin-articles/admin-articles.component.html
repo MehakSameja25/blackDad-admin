@@ -7,13 +7,6 @@
         <div class="content-page-header">
           <h5>Articles</h5>
           <div class="d-flex align-items-center gap-3">
-            <div class="modal-footer p-0">
-              <a
-                class="btn btn-back cancel-btn"
-                routerLink="/admin/draft-article"
-                >Article Draft</a
-              >
-            </div>
             <a
               class="btn btn-primary"
               routerLink="/admin/add-article"
@@ -48,13 +41,17 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
-              <div
-                class="card-body"
-                *ngIf="allArticles && allArticles.data && allArticles.data"
-              >
+              <div class="card-body" *ngIf="allArticles && allArticles.data">
+                <app-article-tabs></app-article-tabs>
                 <div class="table-responsive">
-                  <table class="datatable table table-stripped">
-                    <thead>
+                  <table
+                    #dataTable
+                    appDataTable
+                    [data]="tableData"
+                    [columns]="tableColumns"
+                    class="table display"
+                  >
+                    <!-- <thead>
                       <tr>
                         <th>IMAGE</th>
                         <th>Article NAME</th>
@@ -63,8 +60,8 @@
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
-                    </thead>
-                    <tbody>
+                    </thead> -->
+                    <!-- <tbody>
                       <tr *ngFor="let article of allArticles.data">
                         <td>
                           <img
@@ -364,7 +361,7 @@
                           </div>
                         </td>
                       </tr>
-                    </tbody>
+                    </tbody> -->
                   </table>
                 </div>
               </div>

@@ -5,6 +5,7 @@ import { Subject, debounceTime } from 'rxjs';
 import { CategoiesService } from '../../services/categoies.service';
 import { AllPostsService } from '../../services/all-posts.service';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-add-episodes',
@@ -24,7 +25,8 @@ export class AddEpisodesComponent implements OnInit {
     private fb: FormBuilder,
     private categoryService: CategoiesService,
     private postsService: AllPostsService,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal
   ) {
     this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
       this.updateDraft();
@@ -126,35 +128,35 @@ export class AddEpisodesComponent implements OnInit {
     return formData;
   }
 
-  handleBannerImageInput(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        document
-          .getElementById('bannerPreview')!
-          .setAttribute('src', e.target.result);
-      };
-      reader.readAsDataURL(file);
-      this.episodeForm.patchValue({ bannerImage: file });
-      this.inputChanged.next('');
-    }
-  }
+  // handleBannerImageInput(event: any): void {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => {
+  //       document
+  //         .getElementById('bannerPreview')!
+  //         .setAttribute('src', e.target.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //     this.episodeForm.patchValue({ bannerImage: file });
+  //     this.inputChanged.next('');
+  //   }
+  // }
 
-  handleThumbnailImageInput(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        document
-          .getElementById('thumbnailPreview')!
-          .setAttribute('src', e.target.result);
-      };
-      reader.readAsDataURL(file);
-      this.episodeForm.patchValue({ thumbnailImage: file });
-      this.inputChanged.next('');
-    }
-  }
+  // handleThumbnailImageInput(event: any): void {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => {
+  //       document
+  //         .getElementById('thumbnailPreview')!
+  //         .setAttribute('src', e.target.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //     this.episodeForm.patchValue({ thumbnailImage: file });
+  //     this.inputChanged.next('');
+  //   }
+  // }
 
   getCategoryId(id: any) {
     const index = this.selectedCategories.indexOf(id);
@@ -177,6 +179,120 @@ export class AddEpisodesComponent implements OnInit {
       } else {
         control!.markAsTouched({ onlySelf: true });
       }
+    });
+  }
+
+  // Banner image variables
+  bannerImageChangedEvent: any = '';
+  croppedBannerImage: string | null = null;
+  showBannerCropper = false;
+
+  // Thumbnail image variables
+  thumbnailImageChangedEvent: any = '';
+  croppedThumbnailImage: string | null = null;
+  showThumbnailCropper = false;
+  IsBannerImage = false;
+
+  handleBannerImageInput(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.IsBannerImage = true;
+      this.bannerImageChangedEvent = event;
+      this.showBannerCropper = true;
+      this.episodeForm.patchValue({ bannerImage: file });
+      this.inputChanged.next('');
+    }
+  }
+
+  bannerImageCropped(event: any) {
+    this.convertBlobToBase64(event.blob, (base64: string | null) => {
+      this.croppedBannerImage = base64;
+    });
+  }
+
+  saveCroppedBannerImage() {
+    if (this.croppedBannerImage) {
+      const bannerPreview = document.getElementById('bannerPreview');
+      if (bannerPreview) {
+        bannerPreview.setAttribute('src', this.croppedBannerImage);
+      }
+      const bannerFile = this.base64ToFile(
+        this.croppedBannerImage,
+        'banner-image.png'
+      );
+      this.episodeForm.patchValue({ thumbnailImage: bannerFile });
+      this.showThumbnailCropper = false;
+      this.showBannerCropper = false;
+      this.inputChanged.next('');
+    }
+  }
+
+  handleThumbnailImageInput(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.thumbnailImageChangedEvent = event;
+      this.showThumbnailCropper = true;
+      this.episodeForm.patchValue({ thumbnailImage: file });
+      this.inputChanged.next('');
+    }
+  }
+
+  thumbnailImageCropped(event: any) {
+    this.convertBlobToBase64(event.blob, (base64: string | null) => {
+      this.croppedThumbnailImage = base64;
+    });
+  }
+
+  saveCroppedThumbnailImage() {
+    if (this.croppedThumbnailImage) {
+      const thumbnailPreview = document.getElementById('thumbnailPreview');
+      if (thumbnailPreview) {
+        thumbnailPreview.setAttribute('src', this.croppedThumbnailImage);
+      }
+      const thumbnailFile = this.base64ToFile(
+        this.croppedThumbnailImage,
+        'thumbnail-image.png'
+      );
+      this.episodeForm.patchValue({ thumbnailImage: thumbnailFile });
+      this.inputChanged.next('');
+      this.showThumbnailCropper = false;
+    }
+  }
+
+  convertBlobToBase64(
+    blob: Blob,
+    callback: (base64: string | null) => void
+  ): void {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      callback(reader.result as string);
+    };
+    reader.onerror = () => {
+      callback(null);
+    };
+    reader.readAsDataURL(blob);
+  }
+
+  base64ToFile(base64: string, fileName: string): File {
+    if (!base64 || !fileName) {
+      throw new Error('Invalid base64 string or fileName.');
+    }
+    const [header, data] = base64.split(',');
+    const mimeMatch = header.match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+    const byteString = atob(data);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+    return new File([uint8Array], fileName, { type: mime });
+  }
+  open(content: any) {
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-lg',
     });
   }
 }

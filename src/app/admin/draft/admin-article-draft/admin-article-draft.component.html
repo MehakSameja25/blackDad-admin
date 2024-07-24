@@ -5,16 +5,20 @@
     <div class="content container-fluid">
       <div class="page-header">
         <div class="content-page-header">
-          <h5>Draft [ Articles ]</h5>
-          <!-- <a class="btn btn-primary" href="add_episode.html"
-            >Add New Episodes</a
-          > -->
+          <h5>Articles</h5>
+          <div class="d-flex align-items-center gap-3">
+            <a
+              class="btn btn-primary"
+              routerLink="/admin/add-article"
+              *ngIf="addPermission == true"
+              >Add New Article</a
+            >
+          </div>
         </div>
       </div>
+      <app-go-back></app-go-back>
 
-      <div class="row gap-3 mb-3 justify-content-end m-0">
-        <app-go-back></app-go-back>
-      </div>
+      <div class="row gap-3 mb-3 justify-content-end m-0"></div>
       <div class="alert alert-success" role="alert" class="{{ successClass }}">
         <strong> {{ successMessage }} </strong>
       </div>
@@ -22,6 +26,7 @@
         <div class="col-sm-12">
           <div class="card">
             <div class="card-body">
+              <app-article-tabs></app-article-tabs>
               <div class="table-responsive">
                 <table
                   class="datatable table table-stripped"

@@ -47,15 +47,15 @@ export class AdminEpisodesComponent implements OnInit {
     private modalService: NgbModal,
     private navService: MainNavService,
     private renderer: Renderer2
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    // setTimeout(() => {
-    // }, 2000);
     this.getCategories();
     this.checkPermissions();
     this.getSeason();
-    this.getPosts();
+    setTimeout(() => {
+      this.getPosts();
+    }, 2000);
   }
 
   getSeason() {
@@ -181,8 +181,9 @@ export class AdminEpisodesComponent implements OnInit {
               </g>
             </svg>
           </a>
-           ${this.isEditPermission(item) == true
-          ? `<a class="btn-action-icon" data-id="${item.id}" data-action="edit">
+           ${
+             this.isEditPermission(item) == true
+               ? `<a class="btn-action-icon" data-id="${item.id}" data-action="edit">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         version="1.1"
@@ -214,8 +215,8 @@ export class AdminEpisodesComponent implements OnInit {
                         </g>
                       </svg>
                    </a>`
-          : ``
-        }
+               : ``
+           }
           <a class="btn-action-icon" data-id="${item.id}" data-action="details">
              <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -247,8 +248,9 @@ export class AdminEpisodesComponent implements OnInit {
                             </svg>
           </a>
           <a class="btn-action-icon" data-id="${item.id}" data-action="block">
-        ${item.isBlock == 0
-          ? `
+        ${
+          item.isBlock == 0
+            ? `
         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
@@ -280,7 +282,7 @@ export class AdminEpisodesComponent implements OnInit {
                               </g>
                             </svg>
         `
-          : `
+            : `
        <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
@@ -516,7 +518,9 @@ export class AdminEpisodesComponent implements OnInit {
 
   sharePost: any;
   openShare(content: any, post: any) {
+    console.log(post);
     this.sharePost = this.allEpisodes.data.find((data: any) => data.id == post);
+    console.log(this.sharePost);
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
