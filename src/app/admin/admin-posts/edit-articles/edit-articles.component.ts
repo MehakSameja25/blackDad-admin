@@ -196,7 +196,7 @@ export class EditArticlesComponent {
         this.croppedBannerImage,
         'banner-image.png'
       );
-      this.articleForm.patchValue({ thumbnailImage: bannerFile });
+      this.articleForm.patchValue({ bannerImage: bannerFile });
       this.showThumbnailCropper = false;
       this.showBannerCropper = false;
     }

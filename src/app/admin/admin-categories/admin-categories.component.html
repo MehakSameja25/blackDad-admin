@@ -32,8 +32,14 @@
           <div class="card">
             <div class="card-body">
               <div class="table-responsive">
-                <table class="datatable table table-stripped">
-                  <thead>
+                <table
+                  class="datatable table table-stripped table display"
+                  #dataTable
+                  appDataTable
+                  [data]="tableData"
+                  [columns]="tableColumns"
+                >
+                  <!-- <thead>
                     <tr>
                       <th>IMAGE</th>
                       <th>CATEGORY</th>
@@ -244,7 +250,7 @@
                         </div>
                       </td>
                     </tr>
-                  </tbody>
+                  </tbody> -->
                 </table>
               </div>
             </div>

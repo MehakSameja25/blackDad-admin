@@ -20,6 +20,7 @@ export class EditEpisodesComponent {
   fileType!: string;
   subType: any;
   editor = ClassicEditor;
+  dropdownSettings: {};
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoiesService,
@@ -27,7 +28,20 @@ export class EditEpisodesComponent {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal
-  ) {}
+  ) {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'name',
+      allowSearchFilter: true,
+      enableCheckAll: false,
+      unSelectAllText: false,
+      maxWidth: 300,
+      // itemsShowLimit: 3,
+      searchPlaceholderText: 'Search Categories!',
+      closeDropDownOnSelection: true,
+    };
+  }
 
   ngOnInit(): void {
     this.episodeForm = this.fb.group({
@@ -37,7 +51,7 @@ export class EditEpisodesComponent {
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
       seasonNumber: ['', [Validators.required]],
-      // category: ['', [Validators.required]],
+      category: ['', [Validators.required]],
       subType1: ['', [Validators.required]],
       fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
@@ -45,6 +59,7 @@ export class EditEpisodesComponent {
       bannerImage: ['', [Validators.required]],
       thumbnailImage: ['', [Validators.required]],
     });
+
     this.getCategories();
     const id = this.route.snapshot.paramMap.get('id');
     this.postsService.getEpisodeDetails(id).subscribe((response) => {
@@ -79,8 +94,8 @@ export class EditEpisodesComponent {
     });
   }
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response) => {
-      this.allcategories = response;
+    this.categoryService.unblockedCategories().subscribe((response: any) => {
+      this.allcategories = response.data;
       console.log(this.allcategories);
     });
   }
@@ -250,7 +265,7 @@ export class EditEpisodesComponent {
         this.croppedBannerImage,
         'banner-image.png'
       );
-      this.episodeForm.patchValue({ thumbnailImage: bannerFile });
+      this.episodeForm.patchValue({ bannerImage: bannerFile });
       this.showThumbnailCropper = false;
       this.showBannerCropper = false;
     }
@@ -322,5 +337,22 @@ export class EditEpisodesComponent {
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
+  }
+  onCategorySelect(item: any) {
+    const index = this.selectedCategories.indexOf(item.id);
+    if (index === -1) {
+      this.selectedCategories.push(item.id);
+    } else {
+      this.selectedCategories.splice(index, 1);
+    }
+    console.log('Selected Category:', this.selectedCategories);
+  }
+
+  onCategoryDeSelect(item: any) {
+    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
+    if (index !== -1) {
+      this.selectedCategories.splice(index, 1);
+    }
+    console.log('Deselected Category:', this.selectedCategories);
   }
 }

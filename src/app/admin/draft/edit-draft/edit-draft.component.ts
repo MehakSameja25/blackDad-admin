@@ -21,7 +21,7 @@ export class EditDraftComponent {
   fileType: any;
   singleDraft: any;
   draftData: any;
-
+  dropdownSettings: {}
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoiesService,
@@ -30,6 +30,18 @@ export class EditDraftComponent {
     private route: ActivatedRoute,
     private modalService: NgbModal
   ) {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'name',
+      allowSearchFilter: true,
+      enableCheckAll: false,
+      unSelectAllText: false,
+      maxWidth: 300,
+      // itemsShowLimit: 3,
+      searchPlaceholderText: 'Search Categories!',
+      closeDropDownOnSelection: true,
+    };
     this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
       this.updateDraft();
     });
@@ -43,7 +55,7 @@ export class EditDraftComponent {
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
       seasonNumber: ['', [Validators.required]],
-      // category: ['', [Validators.required]],
+      category: ['', [Validators.required]],
       subType1: ['', [Validators.required]],
       // fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
@@ -275,7 +287,7 @@ export class EditDraftComponent {
         this.croppedBannerImage,
         'banner-image.png'
       );
-      this.episodeForm.patchValue({ thumbnailImage: bannerFile });
+      this.episodeForm.patchValue({ bannerImage: bannerFile });
       this.showThumbnailCropper = false;
       this.showBannerCropper = false;
       this.inputChanged.next('');
@@ -350,5 +362,22 @@ export class EditDraftComponent {
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
+  }
+  onCategorySelect(item: any) {
+    const index = this.selectedCategories.indexOf(item.id);
+    if (index === -1) {
+      this.selectedCategories.push(item.id);
+    } else {
+      this.selectedCategories.splice(index, 1);
+    }
+    console.log('Selected Category:', this.selectedCategories);
+  }
+
+  onCategoryDeSelect(item: any) {
+    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
+    if (index !== -1) {
+      this.selectedCategories.splice(index, 1);
+    }
+    console.log('Deselected Category:', this.selectedCategories);
   }
 }

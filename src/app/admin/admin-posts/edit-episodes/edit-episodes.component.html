@@ -111,11 +111,36 @@
                     </div>
                     <div
                       class="col-lg-6 col-md-6 col-sm-12"
-                      *ngIf="allcategories && allcategories.data"
+                      *ngIf="allcategories"
                     >
                       <div class="input-block mb-3">
-                        <label>Category</label>
-                        <div class="d-flex flex-wrap column-gap-3">
+                          <label>Category</label>
+                          <ng-multiselect-dropdown
+                            [placeholder]="'Select Categories'"
+                            [data]="allcategories"
+                            formControlName="category"
+                            [settings]="dropdownSettings"
+                            (onSelect)="onCategorySelect($event)"
+                            (onDeSelect)="onCategoryDeSelect($event)"
+                          >
+                          </ng-multiselect-dropdown>
+                        </div>
+                        <div
+                          *ngIf="
+                            episodeForm.get('category')?.invalid &&
+                            (episodeForm.get('category')?.dirty ||
+                              episodeForm.get('category')?.touched)
+                          "
+                          class="text-danger"
+                        >
+                          <div
+                            *ngIf="episodeForm.get('category')?.errors?.['required']"
+                          >
+                            Category is required.
+                          </div>
+                        </div>
+                        </div>
+                        <!-- <div class="d-flex flex-wrap column-gap-3">
                           <span *ngFor="let category of allcategories.data"
                             ><input
                               class="form-check-input custom-control-input-cat"
@@ -133,9 +158,7 @@
                             </label>
                             <br
                           /></span>
-                        </div>
-                      </div>
-                    </div>
+                        </div> -->
 
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
@@ -417,12 +440,18 @@
                   >
                     Preview Banner Image
                   </button>
-                  <button type="submit" class="btn btn-primary mt-4" [disabled]="showBannerCropper == true || showThumbnailCropper == true" >
+                  <button
+                    type="submit"
+                    class="btn btn-primary mt-4"
+                    [disabled]="
+                      showBannerCropper == true || showThumbnailCropper == true
+                    "
+                  >
                     Update
                   </button>
                 </div>
-                </form>
-              </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -431,38 +460,38 @@
 </div>
 
 <ng-template #previewModal let-modal>
-<div class="modal-header border-0 pb-0">
-  <div class="form-header modal-header-title text-start mb-0">
-    <h4 class="mb-0">Preview Banner Image</h4>
+  <div class="modal-header border-0 pb-0">
+    <div class="form-header modal-header-title text-start mb-0">
+      <h4 class="mb-0">Preview Banner Image</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
   </div>
-  <button
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="modal"
-    aria-label="Close"
-    (click)="modal.close()"
-  ></button>
-</div>
-<div class="modal-body">
-  <a class="podcastdetailbanner mb-3">
-    <span>
-      <img
-        [src]="
-          croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
-        "
-        alt="upload"
-        id="bannerPreview"
-      /> </span
-  ></a>
-</div>
-<div class="modal-footer">
-  <button
-    type="button"
-    data-bs-dismiss="modal"
-    class="btn btn-back cancel-btn me-2"
-    (click)="modal.close()"
-  >
-    Cancel
-  </button>
-</div>
+  <div class="modal-body">
+    <a class="podcastdetailbanner mb-3">
+      <span>
+        <img
+          [src]="
+            croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
+          "
+          alt="upload"
+          id="bannerPreview"
+        /> </span
+    ></a>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      data-bs-dismiss="modal"
+      class="btn btn-back cancel-btn me-2"
+      (click)="modal.close()"
+    >
+      Cancel
+    </button>
+  </div>
 </ng-template>

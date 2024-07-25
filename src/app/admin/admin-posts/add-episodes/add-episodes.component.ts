@@ -235,7 +235,7 @@ export class AddEpisodesComponent implements OnInit {
         this.croppedBannerImage,
         'banner-image.png'
       );
-      this.episodeForm.patchValue({ thumbnailImage: bannerFile });
+      this.episodeForm.patchValue({ bannerImage: bannerFile });
       this.showThumbnailCropper = false;
       this.showBannerCropper = false;
       this.inputChanged.next('');
@@ -328,6 +328,7 @@ export class AddEpisodesComponent implements OnInit {
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);
     }
+    this.inputChanged.next('');
     console.log('Deselected Category:', this.selectedCategories);
   }
 }
