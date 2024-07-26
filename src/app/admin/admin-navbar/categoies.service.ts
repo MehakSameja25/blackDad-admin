@@ -1,33 +1,27 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { apiCallWrapper } from './api.util';
-import { NotificationsService } from 'angular2-notifications';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoiesService {
-  constructor(private http: HttpClient, private notifications: NotificationsService) { }
+  constructor(private http: HttpClient) {}
 
   getCategory() {
     return apiCallWrapper(
       this.http.get(`${environment.apiUrl}/get-category?type=all`),
       {
         notificationsService: this.notifications,
-        action: "Fetching Categories"
+        action: "Fecthing Category"
       }
-    )
+    );
   }
 
   getCategoryById(id: any) {
-    return apiCallWrapper(
-      this.http.get(`${environment.apiUrl}/get-categoryById?categoryId=${id}`),
-      {
-        notificationsService: this.notifications,
-        action: "Fetching Category Detail"
-      }
-    )
+    return this.http.get(
+      `${environment.apiUrl}/get-categoryById?categoryId=${id}`
+    );
   }
 
   addCategory(body: any) {

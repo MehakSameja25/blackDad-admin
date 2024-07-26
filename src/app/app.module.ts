@@ -47,6 +47,7 @@ import { ArticleTabsComponent } from './admin/admin-tabs/article-tabs/article-ta
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,11 @@ import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin
     CKEditorModule,
     ImageCropperComponent,
     NgMultiSelectDropDownModule.forRoot(),
+    SimpleNotificationsModule.forRoot({
+      timeOut: 3500,
+      showProgressBar: true,
+      clickToClose: true
+    }),
   ],
   providers: [
     {
@@ -109,4 +115,4 @@ import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
