@@ -5,7 +5,6 @@ import { AdminEpisodesComponent } from './admin/admin-episodes/admin-episodes.co
 import { AdminArticlesComponent } from './admin/admin-articles/admin-articles.component';
 import { AdminCategoriesComponent } from './admin/admin-categories/admin-categories.component';
 import { AdminMetasComponent } from './admin/admin-metas/admin-metas.component';
-import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
 import { AllMembersComponent } from './admin/admin-members/all-members/all-members.component';
 import { AddNewMemberComponent } from './admin/admin-members/add-new-member/add-new-member.component';
 import { RolesComponent } from './admin/admin-members/roles/roles.component';
@@ -31,6 +30,7 @@ import { AdminArticleDraftComponent } from './admin/draft/admin-article-draft/ad
 import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/admin-episode-draft.component';
 import { EpisodeScheduleComponent } from './admin/admin-scheduling/episode-schedule/episode-schedule.component';
 import { ArticleScheduleComponent } from './admin/admin-scheduling/article-schedule/article-schedule.component';
+import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },

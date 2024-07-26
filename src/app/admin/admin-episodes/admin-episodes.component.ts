@@ -16,7 +16,6 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-admin-episodes',
   templateUrl: './admin-episodes.component.html',
-  styleUrls: ['./admin-episodes.component.css'],
 })
 export class AdminEpisodesComponent implements OnInit {
   allEpisodes: any;
@@ -146,11 +145,14 @@ export class AdminEpisodesComponent implements OnInit {
       this.allEpisodes = response;
       this.tableData = response.data.map((item: any) => [
         `<img src="${item.thumbnail}" alt="Thumbnail" style="width: 50px; height: auto;">`,
-        item.name,
-        item.categoryId,
+        item.name.length > 35 ? this.truncateDescription(item.name) : item.name,
+        `<ul> ${item.category.map(
+          (cat: any) => `<li> ${cat.name} </li>`
+        )} </ul>`,
+
         item.filetype,
         item.date,
-        item.is_scheduled,
+        this.getScheduledStatus(item.isApproved, item.isPublished),
         `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
@@ -411,7 +413,7 @@ export class AdminEpisodesComponent implements OnInit {
   }
 
   getValue(category: any) {
-    if (category == 'all Categories') {
+    if (category == 'all categories') {
       this.categoryFilter = [];
     } else {
       const categoryIdString = category.toString();
@@ -568,10 +570,23 @@ export class AdminEpisodesComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(tempElement);
   }
-  // getCategoryNames(categoryIds: string[]) {
-  //   const categoryNames = this.allcategories.filter((category: any) =>
-  //     categoryIds.includes(category.id.toString())
-  //   );
-  //   return categoryNames.map((category: any) => category.name).join(', ');
-  // }
+  truncateDescription(description: string): string {
+    return description.length > 25
+      ? `${description.slice(0, 25)}...`
+      : description;
+  }
+
+  getScheduledStatus(isApproved: number, isPublished: number): string {
+    if (isApproved == 0 && isPublished == 0) {
+      return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
+    } else if (isApproved == 1 && isPublished == 0) {
+      return `<span class="badge rounded-pill text-bg-success">Approved</span>`;
+    } else if (isApproved == 2 && isPublished == 0) {
+      return `<span class="badge rounded-pill text-bg-danger">Rejected</span>`;
+    } else if (isApproved == 1 && isPublished == 1) {
+      return `<span class="badge rounded-pill text-bg-violet">Published</span>`;
+    } else {
+      return '';
+    }
+  }
 }

@@ -25,6 +25,16 @@ export class AdminEditMetasComponent implements OnInit {
     this.getMetas();
   }
 
+  // getMetas() {
+  //   this.meta_for = this.route.snapshot.paramMap.get('type');
+  //   const body = {
+  //     meta_for: this.meta_for,
+  //   };
+  //   this.metaService.getMetaDetail(body).subscribe((res) => {
+  //     this.allMetas = res;
+  //   });
+  // }
+
   getMetas() {
     this.meta_for = this.route.snapshot.paramMap.get('type');
     this.metaService.getMetaDetail(this.meta_for).subscribe((res) => {

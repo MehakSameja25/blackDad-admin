@@ -12,8 +12,8 @@ export class MetaDataService {
     return this.http.get(`${environment.apiUrl}/getMetas`);
   }
 
-  getAdvertisements() {
-    return this.http.post(`${environment.apiUrl}/getAdvertisment`, {});
+  getAdvertisements(body: any) {
+    return this.http.post(`${environment.apiUrl}/getAdvertisment`, body);
   }
   deleteAdvertisements(id: any) {
     return this.http.delete(
@@ -32,13 +32,15 @@ export class MetaDataService {
     );
   }
   filterAdvertisement(search: any) {
-    return this.http.get(
-      `${environment.apiUrl}/get-advertisement?search=${search}`
-    );
+    return this.http.post(`${environment.apiUrl}/get-advertisement`, search);
   }
 
+  // getMetaDetail(metaFor: any) {
+  //   return this.http.post(`${environment.apiUrl}/getMetas`, metaFor);
+  // }
+
   getMetaDetail(metaFor: any) {
-    return this.http.get(`${environment.apiUrl}/get-meta?meta_for=${metaFor}`);
+    return this.http.get(`${environment.apiUrl}/getMetas?meta_for=${metaFor}`);
   }
   updateMeta(body: any) {
     return this.http.put(`${environment.apiUrl}/update-meta`, body);

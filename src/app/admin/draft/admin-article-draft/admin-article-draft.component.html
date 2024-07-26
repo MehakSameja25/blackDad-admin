@@ -29,10 +29,13 @@
               <app-article-tabs></app-article-tabs>
               <div class="table-responsive">
                 <table
-                  class="datatable table table-stripped"
-                  *ngIf="allDraftdata && allDraftdata.data"
+                  #dataTable
+                  appDataTable
+                  [data]="tableData"
+                  [columns]="tableColumns"
+                  class="table display"
                 >
-                  <thead>
+                  <!-- <thead>
                     <tr>
                       <th>IMAGE</th>
                       <th>EPISODE NAME</th>
@@ -157,7 +160,7 @@
                         </div>
                       </td>
                     </tr>
-                  </tbody>
+                  </tbody> -->
                 </table>
               </div>
             </div>

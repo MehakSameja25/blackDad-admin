@@ -57,15 +57,23 @@ export class AdminArticlesComponent implements OnInit {
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
 
   getPosts() {
-    this.body = {};
+    if (this.categoryFilter.length > 0) {
+      this.body = {
+        categoryId: this.categoryFilter,
+      };
+    } else {
+      this.body = {};
+    }
     this.postService.getArticles(this.body).subscribe((response) => {
       this.allArticles = response;
       this.tableData = response.data.map((item: any) => [
         `<img src="${item.thumbnail}" alt="Thumbnail" style="width: 50px; height: auto;">`,
-        item.name,
-        item.categoryId,
+        item.name.length > 35 ? this.truncateDescription(item.name) : item.name,
+        `<ul> ${item.category.map(
+          (cat: any) => `<li> ${cat.name} </li>`
+        )} </ul>`,
         item.date,
-        item.is_scheduled,
+        this.getScheduledStatus(item.isApproved, item.isPublished),
         `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
@@ -326,6 +334,7 @@ export class AdminArticlesComponent implements OnInit {
 
   getValue(category: any) {
     if (category == 'All Categories') {
+      this.categoryFilter = [];
       this.getPosts();
     } else {
       const categoryIdString = category.toString();
@@ -334,12 +343,13 @@ export class AdminArticlesComponent implements OnInit {
       if (categoryIndex === -1) {
         this.categoryFilter = [categoryIdString];
       }
-      this.body = {
-        categoryId: this.categoryFilter,
-      };
-      this.postService.getArticles(this.body).subscribe((res) => {
-        this.allArticles = res;
-      });
+      // this.body = {
+      //   categoryId: this.categoryFilter,
+      // };
+      // this.postService.getArticles(this.body).subscribe((res) => {
+      //   this.allArticles = res;
+      // });
+      this.getPosts();
     }
     console.log('Selected Category =>', this.categoryFilter);
   }
@@ -368,7 +378,7 @@ export class AdminArticlesComponent implements OnInit {
 
   checkIsBlock(articleData: any) {
     this.postService
-      .updateIsblock(articleData.id, 'article')
+      .updateIsblock(articleData, 'article')
       .subscribe((res) => {
         if (res) {
           console.log(res);
@@ -464,5 +474,24 @@ export class AdminArticlesComponent implements OnInit {
     tempElement.select();
     document.execCommand('copy');
     document.body.removeChild(tempElement);
+  }
+  truncateDescription(description: string): string {
+    return description.length > 25
+      ? `${description.slice(0, 25)}...`
+      : description;
+  }
+
+  getScheduledStatus(isApproved: number, isPublished: number): string {
+    if (isApproved == 0 && isPublished == 0) {
+      return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
+    } else if (isApproved == 1 && isPublished == 0) {
+      return `<span class="badge rounded-pill text-bg-success">Approved</span>`;
+    } else if (isApproved == 2 && isPublished == 0) {
+      return `<span class="badge rounded-pill text-bg-danger">Rejected</span>`;
+    } else if (isApproved == 1 && isPublished == 1) {
+      return `<span class="badge rounded-pill text-bg-violet">Published</span>`;
+    } else {
+      return '';
+    }
   }
 }

@@ -10,7 +10,6 @@ import { AdminNavbarComponent } from './admin/admin-navbar/admin-navbar.componen
 import { AdminArticlesComponent } from './admin/admin-articles/admin-articles.component';
 import { AdminCategoriesComponent } from './admin/admin-categories/admin-categories.component';
 import { AdminMetasComponent } from './admin/admin-metas/admin-metas.component';
-import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
 import { AllMembersComponent } from './admin/admin-members/all-members/all-members.component';
 import { AddNewMemberComponent } from './admin/admin-members/add-new-member/add-new-member.component';
 import { RolesComponent } from './admin/admin-members/roles/roles.component';
@@ -47,6 +46,7 @@ import { EpisodeTabsComponent } from './admin/admin-tabs/episode-tabs/episode-ta
 import { ArticleTabsComponent } from './admin/admin-tabs/article-tabs/article-tabs.component';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +57,6 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     AdminArticlesComponent,
     AdminCategoriesComponent,
     AdminMetasComponent,
-    AdminAdvertisementsComponent,
     AllMembersComponent,
     AddNewMemberComponent,
     RolesComponent,
@@ -85,7 +84,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     EpisodeScheduleComponent,
     ArticleScheduleComponent,
     EpisodeTabsComponent,
-    ArticleTabsComponent
+    ArticleTabsComponent,
+    AdminAdvertisementsComponent,
   ],
   imports: [
     BrowserModule,
@@ -106,6 +106,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
       multi: true,
     },
     AuthGuard,
-  ],  bootstrap: [AppComponent]
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
