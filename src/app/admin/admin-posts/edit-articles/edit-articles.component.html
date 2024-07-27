@@ -28,7 +28,6 @@
                         <input
                           type="text"
                           formControlName="articleName"
-                          [(ngModel)]="singleArticle.data.name"
                           class="form-control"
                           placeholder="Enter Article Name"
                         />
@@ -59,7 +58,6 @@
                           formControlName="date"
                           class="datetimepicker form-control"
                           placeholder="Select Date"
-                          [(ngModel)]="singleArticle.data.date"
                         />
                         <div
                           *ngIf="
@@ -79,30 +77,19 @@
                     </div>
                     <div
                       class="col-lg-6 col-md-6 col-sm-12"
-                      *ngIf="allcategories && allcategories.data"
                     >
-                      <div class="input-block mb-3">
-                        <label>Category</label>
-                        <div>
-                          <span *ngFor="let category of allcategories.data"
-                            ><input
-                              class="form-check-input custom-control-input-cat"
-                              type="checkbox"
-                              id="check{{ category.id }}"
-                              [checked]="isCategorySelected(category.id)"
-                              data-parsley-multiple="check1"
-                              [value]="category.id"
-                              (change)="toggleCategory(category.id)" />
-                            <label
-                              class="form-check-label m-0"
-                              for="check{{ category.id }}"
-                            >
-                              {{ category.name | titlecase }}
-                            </label>
-                            <br
-                          /></span>
-                        </div>
-                      </div>
+                    <div class="input-block mb-3" *ngIf="allcategories">
+                      <label>Category</label>
+                      <ng-multiselect-dropdown
+                        [placeholder]="'Select Categories'"
+                        [settings]="dropdownSettings"
+                        [data]="allcategories"
+                        formControlName="category"
+                        (onSelect)="onCategorySelect($event)"
+                        (onDeSelect)="onCategoryDeSelect($event)"
+                      >
+                      </ng-multiselect-dropdown>
+                    </div>
                     </div>
                     <div class="col-12">
                       <div class="input-block mb-3">
@@ -112,7 +99,6 @@
                           formControlName="slug"
                           class="form-control"
                           placeholder="Enter Slug "
-                          [(ngModel)]="singleArticle.data.slug"
                         />
                         <div
                           *ngIf="
@@ -139,7 +125,6 @@
                           class="form-control"
                           placeholder="Enter Notes"
                           rows="5"
-                          [(ngModel)]="singleArticle.data.description"
                         ></textarea>
                         <div
                           *ngIf="
@@ -165,7 +150,6 @@
                           class="form-control"
                           placeholder="Enter Notes"
                           rows="5"
-                          [(ngModel)]="singleArticle.data.meta_description"
                         ></textarea>
                         <div
                           *ngIf="
@@ -192,9 +176,9 @@
                           <span>
                             <img
                               [src]="
-                                singleArticle.data.image
-                                  ?? croppedBannerImage
-                                  ?? 'assets/img/drop-icon.svg'
+                                singleArticle.data.image ??
+                                croppedBannerImage ??
+                                'assets/img/drop-icon.svg'
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -248,13 +232,13 @@
                         </div>
                       </div>
                       <button
-                      type="button"
-                      class="btn btn-back mt-4"
-                      (click)="open(previewModal)"
-                      *ngIf="IsBannerImage"
-                    >
-                      Preview Banner Image
-                    </button>
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(previewModal)"
+                        *ngIf="IsBannerImage"
+                      >
+                        Preview Banner Image
+                      </button>
                     </div>
 
                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -266,9 +250,9 @@
                           <span>
                             <img
                               [src]="
-                                singleArticle.data.thumbnail
-                                  ?? croppedThumbnailImage
-                                  ?? 'assets/img/drop-icon.svg'
+                                singleArticle.data.thumbnail ??
+                                croppedThumbnailImage ??
+                                'assets/img/drop-icon.svg'
                               "
                               id="thumbnailPreview"
                               alt="upload"
@@ -322,13 +306,13 @@
                         </div>
                       </div>
                       <button
-                      type="button"
-                      class="btn btn-back mt-4"
-                      (click)="open(previewModal)"
-                      *ngIf="IsThumbnailImage"
-                    >
-                      Preview THumbnail Image
-                    </button>
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(previewModal)"
+                        *ngIf="IsThumbnailImage"
+                      >
+                        Preview THumbnail Image
+                      </button>
                     </div>
                     <div class="text-end">
                       <button
@@ -407,7 +391,9 @@
       <span>
         <img
           [src]="
-            croppedThumbnailImage ? croppedThumbnailImage : 'assets/img/drop-icon.svg'
+            croppedThumbnailImage
+              ? croppedThumbnailImage
+              : 'assets/img/drop-icon.svg'
           "
           alt="upload"
           id="thumbnailPreview"

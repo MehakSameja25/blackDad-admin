@@ -6,6 +6,7 @@ import { CategoiesService } from '../../services/categoies.service';
 import { AllPostsService } from '../../services/all-posts.service';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { urlValidator } from '../../urlValidator';
 
 @Component({
   selector: 'app-add-episodes',
@@ -41,12 +42,6 @@ export class AddEpisodesComponent implements OnInit {
       searchPlaceholderText: 'Search Categories!',
       closeDropDownOnSelection: true,
     };
-    this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
-      this.updateDraft();
-    });
-  }
-
-  ngOnInit(): void {
     this.episodeForm = this.fb.group({
       episodeName: ['', [Validators.required]],
       date: ['', [Validators.required]],
@@ -61,6 +56,15 @@ export class AddEpisodesComponent implements OnInit {
       url: ['', [Validators.required]],
       bannerImage: ['', [Validators.required]],
       thumbnailImage: ['', [Validators.required]],
+    });
+    this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
+      this.updateDraft();
+    });
+  }
+
+  ngOnInit(): void {
+    this.episodeForm.get('subType1')?.valueChanges.subscribe((subType) => {
+      this.updateUrlValidators(subType);
     });
     this.getCategories(); // Fetch categories
     setTimeout(() => {
@@ -238,7 +242,6 @@ export class AddEpisodesComponent implements OnInit {
         'banner-image.png'
       );
       this.episodeForm.patchValue({ bannerImage: bannerFile });
-      this.showThumbnailCropper = false;
       this.showBannerCropper = false;
       this.inputChanged.next('');
     }
@@ -254,7 +257,15 @@ export class AddEpisodesComponent implements OnInit {
       this.inputChanged.next('');
     }
   }
+  updateUrlValidators(subType: string): void {
+    const urlControl = this.episodeForm.get('url');
 
+    urlControl?.clearValidators();
+
+    urlControl?.addValidators(urlValidator(subType));
+
+    urlControl?.updateValueAndValidity();
+  }
   thumbnailImageCropped(event: any) {
     this.convertBlobToBase64(event.blob, (base64: string | null) => {
       this.croppedThumbnailImage = base64;

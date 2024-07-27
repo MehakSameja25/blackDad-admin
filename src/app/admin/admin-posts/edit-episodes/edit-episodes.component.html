@@ -349,7 +349,7 @@
                         type="button"
                         class="btn btn-back mt-4"
                         (click)="open(previewModal)"
-                        *ngIf="IsBannerImage"
+                        *ngIf="IsBannerImage || episodeDetails.data.thumbnail"
                       >
                         Preview Banner Image
                       </button>
@@ -437,7 +437,9 @@
                         type="button"
                         class="btn btn-back mt-4"
                         (click)="open(preview2Modal)"
-                        *ngIf="IsThumbnailImage"
+                        *ngIf="
+                          IsThumbnailImage || episodeDetails.data.thumbnail
+                        "
                       >
                         Preview Thumbnail Image
                       </button>
@@ -482,7 +484,7 @@
       <span>
         <img
           [src]="
-            croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
+            croppedBannerImage ? croppedBannerImage : episodeDetails.data.image
           "
           alt="upload"
           id="bannerPreview"
@@ -520,7 +522,7 @@
           [src]="
             croppedThumbnailImage
               ? croppedThumbnailImage
-              : 'assets/img/drop-icon.svg'
+              : episodeDetails.data.thumbnail
           "
           alt="upload"
           id="thumbnailPreview"

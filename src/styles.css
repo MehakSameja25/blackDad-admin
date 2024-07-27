@@ -17256,7 +17256,9 @@ body.filter-opened {
   min-width: 69px;
 }
 
-.modal-footer .btn-back:hover {
+.modal-footer .btn-back:hover,
+.modal-footer .btn-back:active,
+.modal-footer .btn-back.active{
   background: #7539ff;
   border: 1px solid #7539ff;
   box-shadow: inset 0 50px 0 0 #7539ff;

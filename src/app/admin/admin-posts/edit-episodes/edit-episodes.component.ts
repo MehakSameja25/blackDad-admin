@@ -56,8 +56,8 @@ export class EditEpisodesComponent {
       fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       url: ['', [Validators.required]],
-      // bannerImage: ['', [Validators.required]],
-      // thumbnailImage: ['', [Validators.required]],
+      bannerImage: ['', []],
+      thumbnailImage: ['', []],
     });
     if (this.episodeDetails) {
       if (!this.episodeDetails.data.image) {
@@ -86,8 +86,6 @@ export class EditEpisodesComponent {
         }
         this.isLoading = false;
       }
-
-      console.log('CALLLED');
       this.setFormValues();
     });
   }
@@ -105,11 +103,11 @@ export class EditEpisodesComponent {
       thumbnailImage: '',
       category: this.episodeDetails.data.categories,
       fileType: this.episodeDetails.data.filetype,
-      subType1: this.episodeDetails.data.subtype
+      subType1: this.episodeDetails.data.subtype,
     });
     this.episodeDetails.data.categories.map((category: any) => {
       this.selectedCategories.push(category.id);
-    })
+    });
   }
   getCategories() {
     this.categoryService.unblockedCategories().subscribe((response: any) => {
@@ -284,7 +282,6 @@ export class EditEpisodesComponent {
         'banner-image.png'
       );
       this.episodeForm.patchValue({ bannerImage: bannerFile });
-      this.showThumbnailCropper = false;
       this.showBannerCropper = false;
     }
   }

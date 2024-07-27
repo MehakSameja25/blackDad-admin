@@ -15,6 +15,7 @@ export class EditArticlesComponent {
   allcategories: any;
   selectedCategories: any[] = [];
   singleArticle: any;
+  dropdownSettings: {};
 
   constructor(
     private fb: FormBuilder,
@@ -23,7 +24,20 @@ export class EditArticlesComponent {
     private router: Router,
     private route: ActivatedRoute,
     private modalService: NgbModal
-  ) {}
+  ) {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'name',
+      allowSearchFilter: true,
+      enableCheckAll: false,
+      unSelectAllText: false,
+      maxWidth: 300,
+      // itemsShowLimit: 3,
+      searchPlaceholderText: 'Search Categories!',
+      closeDropDownOnSelection: true,
+    };
+  }
 
   ngOnInit(): void {
     this.articleForm = this.fb.group({
@@ -31,7 +45,7 @@ export class EditArticlesComponent {
       date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
-      // category: ['', [Validators.required]],
+      category: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       bannerImage: ['', [Validators.required]],
       thumbnailImage: ['', [Validators.required]],
@@ -49,13 +63,14 @@ export class EditArticlesComponent {
         });
       }
     }
-    this.getCategories();
 
     const articleId = this.route.snapshot.paramMap.get('id');
     this.posts.getArticlesDetails(articleId).subscribe((res) => {
       if (res) {
         console.log('Article data', res);
         this.singleArticle = res;
+        this.getCategories();
+        this.setFormValues();
       }
     });
   }
@@ -85,7 +100,17 @@ export class EditArticlesComponent {
     formData.append('isBlock', this.singleArticle.data.isBlock);
     formData.append('isApproved', this.singleArticle.data.isApproved);
     formData.append('isPublished', this.singleArticle.data.isPublished);
+    if (this.articleForm.value.bannerImage instanceof File) {
+      formData.append('image', this.articleForm.value.bannerImage);
+    } else {
+      formData.delete('image');
+    }
 
+    if (this.articleForm.value.thumbnailImage instanceof File) {
+      formData.append('thumbnail', this.articleForm.value.thumbnailImage);
+    } else {
+      formData.delete('thumbnail');
+    }
     console.log(formData);
     this.posts
       .updateArticle(this.singleArticle.data.id, formData)
@@ -95,6 +120,26 @@ export class EditArticlesComponent {
         }
         console.log(res);
       });
+  }
+  setFormValues(): void {
+    this.articleForm.patchValue({
+      episodeName: this.singleArticle.data.name,
+      date: this.singleArticle.data.date,
+      description: this.singleArticle.data.description,
+      meta: this.singleArticle.data.meta_description,
+      episodeNumber: this.singleArticle.data.episodeNo,
+      seasonNumber: this.singleArticle.data.seasonNo,
+      slug: this.singleArticle.data.slug,
+      url: this.singleArticle.data.url,
+      bannerImage: '',
+      thumbnailImage: '',
+      category: this.singleArticle.data.categories,
+      fileType: this.singleArticle.data.filetype,
+      subType1: this.singleArticle.data.subtype,
+    });
+    this.singleArticle.data.categories.map((category: any) => {
+      this.selectedCategories.push(category.id);
+    });
   }
 
   // handleBannerImageInput(event: any): void {
@@ -282,5 +327,22 @@ export class EditArticlesComponent {
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
+  }
+  onCategorySelect(item: any) {
+    const index = this.selectedCategories.indexOf(item.id);
+    if (index === -1) {
+      this.selectedCategories.push(item.id);
+    } else {
+      this.selectedCategories.splice(index, 1);
+    }
+    console.log('Selected Category:', this.selectedCategories);
+  }
+
+  onCategoryDeSelect(item: any) {
+    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
+    if (index !== -1) {
+      this.selectedCategories.splice(index, 1);
+    }
+    console.log('Deselected Category:', this.selectedCategories);
   }
 }

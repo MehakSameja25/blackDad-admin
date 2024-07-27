@@ -89,26 +89,6 @@
                           (onDeSelect)="onCategoryDeSelect($event)"
                         >
                         </ng-multiselect-dropdown>
-                        <!-- <div class="d-flex flex-wrap column-gap-3">
-                          <span *ngFor="let category of allcategories.data"
-                            ><input
-                              class="form-check-input custom-control-input-cat"
-                              type="checkbox"
-                              id="check{{ category.id }}"
-                              data-parsley-multiple="check1"
-                              value="{{ category.id }}"
-                              #checkBox
-                              (change)="getCategoryId(checkBox.value)" />
-
-                            <label
-                              class="form-check-label m-0 ps-1"
-                              for="check{{ category.id }}"
-                            >
-                              {{ category.name | titlecase }}
-                            </label>
-                            <br
-                          /></span>
-                        </div> -->
                       </div>
                       <div
                         *ngIf="

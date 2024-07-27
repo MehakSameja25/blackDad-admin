@@ -190,6 +190,7 @@
                         <label>File Type</label>
                         <select
                           class="form-select"
+                          #filee
                           aria-label="Default select example"
                           [disabled]="true"
                         >
@@ -239,11 +240,18 @@
 
                     <div class="col-12">
                       <div class="input-block mb-3">
-                        <label>Url/I-Frame</label>
+                        <label
+                          *ngIf="
+                            subtypee.value == 'youtube' ||
+                            filee.value === undefined
+                          "
+                          >iFrame</label
+                        >
+                        <label *ngIf="subtypee.value == 'podcast'">Url</label>
                         <textarea
                           formControlName="url"
                           class="form-control"
-                          placeholder="Enter Notes"
+                          placeholder="Enter URL"
                           rows="5"
                           (change)="this.inputChanged.next('url')"
                         ></textarea>
@@ -258,7 +266,17 @@
                           <div
                             *ngIf="episodeForm.get('url')?.errors?.['required']"
                           >
-                            Url is required.
+                            URL is required.
+                          </div>
+                          <div
+                            *ngIf="episodeForm.get('url')?.errors?.['invalidIframe']"
+                          >
+                            The URL must be an iframe for YouTube.
+                          </div>
+                          <div
+                            *ngIf="episodeForm.get('url')?.errors?.['invalidHttpUrl']"
+                          >
+                            The URL must start with http or https for Podcast.
                           </div>
                         </div>
                       </div>
@@ -367,13 +385,13 @@
                         </div>
                       </div>
                       <button
-                      type="button"
-                      class="btn btn-back mt-4"
-                      (click)="open(previewModal)"
-                      *ngIf="IsBannerImage"
-                    >
-                      Preview Banner Image
-                    </button>
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(previewModal)"
+                        *ngIf="IsBannerImage"
+                      >
+                        Preview Banner Image
+                      </button>
                       <div
                         *ngIf="
                           episodeForm.get('bannerImage')?.invalid &&
@@ -441,13 +459,13 @@
                         </div>
                       </div>
                       <button
-                      type="button"
-                      class="btn btn-back mt-4"
-                      (click)="open(preview2Modal)"
-                      *ngIf="IsThumbnailImage"
-                    >
-                      Preview Thumbnail Image
-                    </button>
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(preview2Modal)"
+                        *ngIf="IsThumbnailImage"
+                      >
+                        Preview Thumbnail Image
+                      </button>
                       <div
                         *ngIf="
                           episodeForm.get('thumbnailImage')?.invalid &&
@@ -540,7 +558,9 @@
       <span>
         <img
           [src]="
-            croppedThumbnailImage ? croppedThumbnailImage : 'assets/img/drop-icon.svg'
+            croppedThumbnailImage
+              ? croppedThumbnailImage
+              : 'assets/img/drop-icon.svg'
           "
           alt="upload"
           id="thumbnailPreview"
