@@ -108,9 +108,7 @@
                         </strong>
                       </div>
                     </div>
-                    <div
-                      class="col-lg-6 col-md-6 col-sm-12"
-                    >
+                    <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Category</label>
                         <div class="input-block mb-3">
@@ -307,9 +305,9 @@
                           <span>
                             <img
                               [src]="
-                                singleDraft.data.image
-                                  ?? croppedBannerImage
-                                  ?? 'assets/img/drop-icon.svg'
+                                singleDraft.data.image ??
+                                croppedBannerImage ??
+                                'assets/img/drop-icon.svg'
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -373,9 +371,9 @@
                           <span>
                             <img
                               [src]="
-                                singleDraft.data.thumbnail
-                                  ?? croppedThumbnailImage
-                                  ?? 'assets/img/drop-icon.svg'
+                                singleDraft.data.thumbnail ??
+                                croppedThumbnailImage ??
+                                'assets/img/drop-icon.svg'
                               "
                               id="thumbnailPreview"
                               alt="upload"
@@ -478,6 +476,8 @@
           [src]="
             croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
           "
+          class="w-100 h-100"
+          style="object-fit: contain"
           alt="upload"
           id="bannerPreview"
         /> </span

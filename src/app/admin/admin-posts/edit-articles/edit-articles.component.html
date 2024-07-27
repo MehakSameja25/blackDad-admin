@@ -75,21 +75,19 @@
                         </div>
                       </div>
                     </div>
-                    <div
-                      class="col-lg-6 col-md-6 col-sm-12"
-                    >
-                    <div class="input-block mb-3" *ngIf="allcategories">
-                      <label>Category</label>
-                      <ng-multiselect-dropdown
-                        [placeholder]="'Select Categories'"
-                        [settings]="dropdownSettings"
-                        [data]="allcategories"
-                        formControlName="category"
-                        (onSelect)="onCategorySelect($event)"
-                        (onDeSelect)="onCategoryDeSelect($event)"
-                      >
-                      </ng-multiselect-dropdown>
-                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3" *ngIf="allcategories">
+                        <label>Category</label>
+                        <ng-multiselect-dropdown
+                          [placeholder]="'Select Categories'"
+                          [settings]="dropdownSettings"
+                          [data]="allcategories"
+                          formControlName="category"
+                          (onSelect)="onCategorySelect($event)"
+                          (onDeSelect)="onCategoryDeSelect($event)"
+                        >
+                        </ng-multiselect-dropdown>
+                      </div>
                     </div>
                     <div class="col-12">
                       <div class="input-block mb-3">
@@ -357,6 +355,8 @@
           [src]="
             croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
           "
+          class="w-100 h-100"
+          style="object-fit: contain"
           alt="upload"
           id="bannerPreview"
         /> </span
@@ -395,6 +395,8 @@
               ? croppedThumbnailImage
               : 'assets/img/drop-icon.svg'
           "
+          class="w-100 h-100"
+          style="object-fit: contain"
           alt="upload"
           id="thumbnailPreview"
         /> </span

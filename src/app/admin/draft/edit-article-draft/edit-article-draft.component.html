@@ -250,14 +250,14 @@
                           Banner Image is required.
                         </div>
                       </div>
-                                        <button
-                    type="button"
-                    class="btn btn-back mt-4"
-                    (click)="open(previewModal)"
-                    *ngIf="IsBannerImage"
-                  >
-                    Preview Banner Image
-                  </button>
+                      <button
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(previewModal)"
+                        *ngIf="IsBannerImage"
+                      >
+                        Preview Banner Image
+                      </button>
                     </div>
 
                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -325,14 +325,14 @@
                         </div>
                       </div>
                     </div>
-                                      <button
-                    type="button"
-                    class="btn btn-back mt-4"
-                    (click)="open(previewModal)"
-                    *ngIf="IsThumbnailImage"
-                  >
-                    Preview Thumbnail Image
-                  </button>
+                    <button
+                      type="button"
+                      class="btn btn-back mt-4"
+                      (click)="open(previewModal)"
+                      *ngIf="IsThumbnailImage"
+                    >
+                      Preview Thumbnail Image
+                    </button>
                     <div class="text-end">
                       <button
                         type="submit"
@@ -378,6 +378,8 @@
             croppedBannerImage ??
             'assets/img/drop-icon.svg'
           "
+          class="w-100 h-100"
+          style="object-fit: contain"
           alt="upload"
           id="bannerPreview"
         /> </span
@@ -412,8 +414,12 @@
       <span>
         <img
           [src]="
-            croppedThumbnailImage ? croppedThumbnailImage : 'assets/img/drop-icon.svg'
+            croppedThumbnailImage
+              ? croppedThumbnailImage
+              : 'assets/img/drop-icon.svg'
           "
+          class="w-100 h-100"
+          style="object-fit: contain"
           alt="upload"
           id="thumbnailPreview"
         /> </span
