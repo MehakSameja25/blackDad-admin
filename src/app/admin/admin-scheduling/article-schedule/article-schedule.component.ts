@@ -370,6 +370,7 @@ export class ArticleScheduleComponent implements OnInit {
             );
           }
         }
+        this.getPosts();
       }
     });
   }

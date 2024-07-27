@@ -192,9 +192,9 @@
                           <span>
                             <img
                               [src]="
-                                croppedBannerImage
-                                  ? croppedBannerImage
-                                  : 'assets/img/drop-icon.svg'
+                                singleArticle.data.image
+                                  ?? croppedBannerImage
+                                  ?? 'assets/img/drop-icon.svg'
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -247,6 +247,14 @@
                           Banner Image is required.
                         </div>
                       </div>
+                      <button
+                      type="button"
+                      class="btn btn-back mt-4"
+                      (click)="open(previewModal)"
+                      *ngIf="IsBannerImage"
+                    >
+                      Preview Banner Image
+                    </button>
                     </div>
 
                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -258,9 +266,9 @@
                           <span>
                             <img
                               [src]="
-                                croppedThumbnailImage
-                                  ? croppedThumbnailImage
-                                  : 'assets/img/drop-icon.svg'
+                                singleArticle.data.thumbnail
+                                  ?? croppedThumbnailImage
+                                  ?? 'assets/img/drop-icon.svg'
                               "
                               id="thumbnailPreview"
                               alt="upload"
@@ -313,16 +321,16 @@
                           Thumbnail Image is required.
                         </div>
                       </div>
+                      <button
+                      type="button"
+                      class="btn btn-back mt-4"
+                      (click)="open(previewModal)"
+                      *ngIf="IsThumbnailImage"
+                    >
+                      Preview THumbnail Image
+                    </button>
                     </div>
                     <div class="text-end">
-                      <button
-                        type="button"
-                        class="btn btn-back mt-4"
-                        (click)="open(previewModal)"
-                        *ngIf="IsBannerImage"
-                      >
-                        Preview Banner Image
-                      </button>
                       <button
                         type="submit"
                         class="btn btn-primary mt-4"
@@ -367,6 +375,42 @@
           "
           alt="upload"
           id="bannerPreview"
+        /> </span
+    ></a>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      data-bs-dismiss="modal"
+      class="btn btn-back cancel-btn me-2"
+      (click)="modal.close()"
+    >
+      Cancel
+    </button>
+  </div>
+</ng-template>
+<ng-template #preview2Modal let-modal>
+  <div class="modal-header border-0 pb-0">
+    <div class="form-header modal-header-title text-start mb-0">
+      <h4 class="mb-0">Preview Banner Image</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <a class="podcastdetailbanner mb-3">
+      <span>
+        <img
+          [src]="
+            croppedThumbnailImage ? croppedThumbnailImage : 'assets/img/drop-icon.svg'
+          "
+          alt="upload"
+          id="thumbnailPreview"
         /> </span
     ></a>
   </div>

@@ -126,6 +126,7 @@ export class AddEpisodesComponent implements OnInit {
     formData.append('type', 'episodes');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.episodeForm.value.description);
+    formData.append('date', this.episodeForm.value.date);
     formData.append('thumbnail', this.episodeForm.value.thumbnailImage);
     formData.append('image', this.episodeForm.value.bannerImage);
     formData.append('filetype', this.fileType);
@@ -201,12 +202,13 @@ export class AddEpisodesComponent implements OnInit {
   bannerImageChangedEvent: any = '';
   croppedBannerImage: string | null = null;
   showBannerCropper = false;
+  IsBannerImage = false;
 
   // Thumbnail image variables
   thumbnailImageChangedEvent: any = '';
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
-  IsBannerImage = false;
+  IsThumbnailImage = false;
 
   handleBannerImageInput(event: any): void {
     const file = event.target.files[0];
@@ -245,6 +247,7 @@ export class AddEpisodesComponent implements OnInit {
   handleThumbnailImageInput(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      this.IsThumbnailImage = true;
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
       this.episodeForm.patchValue({ thumbnailImage: file });
@@ -322,9 +325,7 @@ export class AddEpisodesComponent implements OnInit {
   }
 
   onCategoryDeSelect(item: any) {
-    const index = this.selectedCategories.findIndex(
-      (cat) => cat === item.id
-    );
+    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);
     }

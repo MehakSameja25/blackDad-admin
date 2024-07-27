@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Route, Router } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { MainNavService } from '../services/main-nav.service';
 import { AuthanticationService } from '../services/authantication.service';
 
@@ -17,7 +17,8 @@ export class AdminNavbarComponent implements OnInit {
   userDetails: any;
   userType = '';
   constructor(
-    private route: Router,
+    private router: Router,
+    private route: ActivatedRoute,
     private menuService: MainNavService,
     private authService: AuthanticationService
   ) {
@@ -70,21 +71,21 @@ export class AdminNavbarComponent implements OnInit {
 
   routing(menu: any) {
     if (menu.menu_bar.title === 'Categories') {
-      this.route.navigate(['/admin/categories']);
+      this.router.navigate(['/admin/categories']);
     } else if (menu.menu_bar.title === 'Episodes') {
-      this.route.navigate(['/admin/episodes']);
+      this.router.navigate(['/admin/episodes']);
     } else if (menu.menu_bar.title === 'Articles') {
-      this.route.navigate(['/admin/articles']);
+      this.router.navigate(['/admin/articles']);
     }
     console.log(menu.menu_bar.title);
   }
 
   checkActiveEpisodes() {
-    const url = this.route.url;
+    const url = this.router.url;
     if (
-      url.includes('admin/episodes') ||
-      url.includes('admin/edit-episode') ||
-      url.includes('admin/add-episode')
+      url.includes('/admin/episodes') ||
+      url.includes('/admin/edit-episode') ||
+      url.includes('/admin/add-episode')
     ) {
       return 'active';
     } else {
@@ -96,7 +97,21 @@ export class AdminNavbarComponent implements OnInit {
     localStorage.removeItem('nkt');
 
     setTimeout(() => {
-      this.route.navigate(['/admin-auth']);
-    }, 1000);
+      this.router.navigate(['/admin-auth']);
+    }, 3000);
+  }
+  checkActive(type: any): any {
+    const url: any = this.router.url;
+    if (type == 'Categories') {
+      console.log("------------------------------------")
+      if (url.includes('/admin/categories')) {
+        console.log("---------------222---------------------")
+        return 'active';
+      } else {
+        return '';
+      }
+    } else {
+      return '';
+    }
   }
 }

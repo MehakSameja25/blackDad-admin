@@ -75,7 +75,7 @@ export class AdminCategoriesComponent implements OnInit {
       this.allCategories = res;
 
       this.tableData = res.data.map((item: any) => [
-        `<img src="${item.thumbnail}" alt="Thumbnail" style="width: 50px; height: auto;">`,
+        `<img src="${item.image}" alt="Thumbnail" style="width: 50px; height: auto;">`,
         item.name,
         item.description.length > 25
           ? ` ${this.truncateDescription(item.description)}  <span
@@ -84,7 +84,7 @@ export class AdminCategoriesComponent implements OnInit {
                           data-id="${item.id}" data-action="description"
                           >Read more</span
                         >`
-          : 'N/A',
+          : item.description,
         ` <div class="actions d-flex align-items-center gap-2">
                           <a
                             data-id="${item.id}" data-action="edit"
@@ -478,8 +478,9 @@ export class AdminCategoriesComponent implements OnInit {
   onFileSelected(event: any) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.fileName = file;
+
       if (file) {
+        this.fileName = file;
         const reader = new FileReader();
         reader.onload = (e: any) => {
           document

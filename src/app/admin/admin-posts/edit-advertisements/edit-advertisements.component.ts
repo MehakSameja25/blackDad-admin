@@ -76,8 +76,13 @@ export class EditAdvertisementsComponent {
       formData.append('url', this.advertisementForm.value.url);
       formData.append('description', this.advertisementForm.value.description);
       formData.append('page', this.advertisementForm.value.page);
-      formData.append('image', this.selectedFile);
+      // formData.append('image', this.selectedFile);
       formData.append('isBlock', this.singleAdData.isBlock);
+      if (this.advertisementForm.value.thumbnailImage instanceof File) {
+        formData.append('image', this.advertisementForm.value.image);
+      } else {
+        formData.delete('image');
+      }
       this.metaService
         .UpdateAdvertisements(this.singleAdData.id, formData)
         .subscribe((res) => {
@@ -100,5 +105,71 @@ export class EditAdvertisementsComponent {
     this.metaService.getAdvertisementsByid(adId).subscribe((res: any) => {
       this.singleAdData = res.data;
     });
+  }
+  // Thumbnail image variables
+  thumbnailImageChangedEvent: any = '';
+  croppedThumbnailImage: string | null = null;
+  showThumbnailCropper = false;
+  IsBannerImage = false;
+  handleThumbnailImageInput(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.thumbnailImageChangedEvent = event;
+      this.showThumbnailCropper = true;
+      this.selectedFile = file;
+      this.advertisementForm.patchValue({ image: file });
+    }
+  }
+
+  thumbnailImageCropped(event: any) {
+    this.convertBlobToBase64(event.blob, (base64: string | null) => {
+      this.croppedThumbnailImage = base64;
+    });
+  }
+
+  saveCroppedThumbnailImage() {
+    if (this.croppedThumbnailImage) {
+      const thumbnailPreview = document.getElementById('thumbnailPreview');
+      if (thumbnailPreview) {
+        thumbnailPreview.setAttribute('src', this.croppedThumbnailImage);
+      }
+      const thumbnailFile = this.base64ToFile(
+        this.croppedThumbnailImage,
+        'thumbnail-image.png'
+      );
+      this.selectedFile = thumbnailFile;
+      this.advertisementForm.patchValue({ image: thumbnailFile });
+      this.showThumbnailCropper = false;
+    }
+  }
+
+  convertBlobToBase64(
+    blob: Blob,
+    callback: (base64: string | null) => void
+  ): void {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      callback(reader.result as string);
+    };
+    reader.onerror = () => {
+      callback(null);
+    };
+    reader.readAsDataURL(blob);
+  }
+
+  base64ToFile(base64: string, fileName: string): File {
+    if (!base64 || !fileName) {
+      throw new Error('Invalid base64 string or fileName.');
+    }
+    const [header, data] = base64.split(',');
+    const mimeMatch = header.match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+    const byteString = atob(data);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+    return new File([uint8Array], fileName, { type: mime });
   }
 }

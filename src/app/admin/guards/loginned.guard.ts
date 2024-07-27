@@ -16,20 +16,12 @@ export class loginnedGuard implements CanActivate {
     private router: Router
   ) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
-    const isAuthenticated = this.authService.isAuthenticated();
-    const url: string = state.url;
-
-    if (isAuthenticated && url === '/admin-auth') {
-      this.router.navigate(['/admin/profile']);
-      return false;
+  canActivate(): boolean {
+    if (!this.authService.isAuthenticated()) {
+      return true;
     } else {
-      this.router.navigate(['/']);
+      this.router.navigate(['/admin-auth']);
+      return false;
     }
-
-    return true;
   }
 }

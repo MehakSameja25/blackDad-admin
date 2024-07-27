@@ -56,10 +56,22 @@ export class EditEpisodesComponent {
       fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       url: ['', [Validators.required]],
-      bannerImage: ['', [Validators.required]],
-      thumbnailImage: ['', [Validators.required]],
+      // bannerImage: ['', [Validators.required]],
+      // thumbnailImage: ['', [Validators.required]],
     });
+    if (this.episodeDetails) {
+      if (!this.episodeDetails.data.image) {
+        this.episodeForm = this.fb.group({
+          bannerImage: ['', [Validators.required]],
+        });
+      }
 
+      if (!this.episodeDetails.data.thumbnail) {
+        this.episodeForm = this.fb.group({
+          thumbnailImage: ['', [Validators.required]],
+        });
+      }
+    }
     this.getCategories();
     const id = this.route.snapshot.paramMap.get('id');
     this.postsService.getEpisodeDetails(id).subscribe((response) => {
@@ -238,7 +250,7 @@ export class EditEpisodesComponent {
   thumbnailImageChangedEvent: any = '';
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
-
+  IsThumbnailImage = false;
   handleBannerImageInput(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -274,6 +286,7 @@ export class EditEpisodesComponent {
   handleThumbnailImageInput(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      this.IsThumbnailImage = true;
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
       this.episodeForm.patchValue({ thumbnailImage: file });

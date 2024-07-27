@@ -307,9 +307,9 @@
                           <span>
                             <img
                               [src]="
-                                croppedBannerImage
-                                  ? croppedBannerImage
-                                  : 'assets/img/drop-icon.svg'
+                                singleDraft.data.image
+                                  ?? croppedBannerImage
+                                  ?? 'assets/img/drop-icon.svg'
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -373,9 +373,9 @@
                           <span>
                             <img
                               [src]="
-                                croppedThumbnailImage
-                                  ? croppedThumbnailImage
-                                  : 'assets/img/drop-icon.svg'
+                                singleDraft.data.thumbnail
+                                  ?? croppedThumbnailImage
+                                  ?? 'assets/img/drop-icon.svg'
                               "
                               id="thumbnailPreview"
                               alt="upload"

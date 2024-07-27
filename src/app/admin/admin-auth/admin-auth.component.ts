@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthanticationService } from '../services/authantication.service';
@@ -7,9 +7,17 @@ import { AuthanticationService } from '../services/authantication.service';
   selector: 'app-admin-auth',
   templateUrl: './admin-auth.component.html',
 })
-export class AdminAuthComponent {
+export class AdminAuthComponent implements OnInit {
   LoginForm: FormGroup;
   errormessage: string = '';
+
+  ngOnInit(): void {
+    const isLogin = localStorage.getItem('nkt');
+    // console.log('isLogin -------', isLogin);
+    if (isLogin != null) {
+      this.router.navigate(['/admin/profile']);
+    }
+  }
 
   constructor(
     private formB: FormBuilder,
@@ -30,9 +38,8 @@ export class AdminAuthComponent {
         if (res) {
           localStorage.setItem('nkt', res.data.token);
           localStorage.setItem('userId', res.data.user.id);
-
           setTimeout(() => {
-            this.router.navigate(['/admin/episodes']);
+            this.router.navigate(['/admin/profile']);
           }, 2000);
         }
       },

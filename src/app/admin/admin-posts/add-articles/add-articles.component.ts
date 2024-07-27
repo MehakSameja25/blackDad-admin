@@ -128,8 +128,9 @@ export class AddArticlesComponent {
     formData.append('type', 'articles');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.articleForm.value.description);
-    formData.append('thumbnail', this.articleForm.value.bannerImage);
-    formData.append('image', this.articleForm.value.thumbnailImage);
+    formData.append('date', this.articleForm.value.date);
+    formData.append('thumbnail', this.articleForm.value.thumbnailImage);
+    formData.append('image', this.articleForm.value.bannerImage);
     formData.append('meta_description', this.articleForm.value.meta);
     formData.append('slug', this.articleForm.value.slug);
     formData.append('reason', '');

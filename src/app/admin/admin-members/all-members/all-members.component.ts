@@ -59,11 +59,15 @@ export class AllMembersComponent implements OnInit {
         item.name,
         item.email,
         item.roles.map((role: any) => role.roletype.name),
-        `<ul> ${item.roles.map((role2: any) =>
-          role2.roletype.role_accesses.map(
-            (access: any) => `<li>${access.status}</li>`
+        ` <ul>
+        ${item.roles
+          .map((role: any) =>
+            role.roletype.role_accesses
+              .map((access: any) => `<li>${access.status}</li>`)
+              .join('')
           )
-        )} </ul>`,
+          .join('')}
+      </ul>`,
         `<div class="actions d-flex align-items-center gap-2">
                           <a
                             class="btn-action-icon"

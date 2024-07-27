@@ -30,6 +30,7 @@ export class EpisodeScheduleComponent implements OnInit {
     { title: 'Name' },
     { title: 'Category' },
     { title: 'File Type' },
+    { title: 'Season' },
     { title: 'Date' },
     { title: 'Status' },
     { title: 'Action' },
@@ -46,9 +47,6 @@ export class EpisodeScheduleComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.checkPermissions();
-    setTimeout(() => {
-      this.getPosts();
-    }, 2000);
   }
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
 
@@ -66,6 +64,7 @@ export class EpisodeScheduleComponent implements OnInit {
         )} </ul>`,
 
         item.filetype,
+        item.seasonNo,
         item.date,
         this.getScheduledStatus(item.isApproved, item.isPublished),
         `<div class="actions d-flex align-items-center gap-2">
@@ -393,6 +392,7 @@ export class EpisodeScheduleComponent implements OnInit {
             );
           }
         }
+        this.getPosts();
       }
     });
   }

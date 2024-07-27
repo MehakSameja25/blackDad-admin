@@ -19,6 +19,7 @@ export class DetailArticleComponent {
   successMessage: any = '';
   publishPermission: any;
   type: any;
+  postId: string | null | undefined;
   constructor(
     private route: ActivatedRoute,
     private postsService: AllPostsService,
@@ -35,22 +36,38 @@ export class DetailArticleComponent {
     });
   }
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.postsService.getArticlesDetails(id).subscribe((response) => {
-      this.articleDetails = response;
-      if (this.articleDetails?.data?.description) {
-        this.sanitizedDescription = this.sanitizeDescription(
-          this.articleDetails.data.description
-        );
-        console.log('CALLLED');
+    this.checkPermission();
+  }
+
+  getDetails() {
+    this.postId = this.route.snapshot.paramMap.get('id');
+    this.postsService.getArticlesDetails(this.postId).subscribe((response) => {
+      if (response) {
+        this.articleDetails = response;
+        if (this.articleDetails?.data?.description) {
+          this.sanitizedDescription = this.sanitizeDescription(
+            this.articleDetails.data.description
+          );
+          console.log('CALLLED');
+          this.getSchedulingDetails();
+        }
       }
     });
-
-    this.checkPermission();
   }
 
   sanitizeDescription(description: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(description);
+  }
+  countryName: any;
+
+  timezonne: any;
+
+  scheduledTime: any;
+
+  getSchedulingDetails() {
+    this.countryName = this.articleDetails.data.country;
+    this.timezonne = this.articleDetails.data.timezone;
+    this.scheduledTime = this.articleDetails.data.publish_date;
   }
   approved(articleData: any, type: any, approve: any) {
     this.postsService
@@ -106,13 +123,16 @@ export class DetailArticleComponent {
       this.type = res.data.role.name;
     });
     this.navService.getMenu().subscribe((res: any) => {
-      for (let permission of res.data[0].role_accesses) {
-        if ((permission.menu_bar.title == 'Articles') === true) {
-          this.publishPermission = permission.status.includes('publish');
+      if (res) {
+        for (let permission of res.data[0].role_accesses) {
+          if ((permission.menu_bar.title == 'Articles') === true) {
+            this.publishPermission = permission.status.includes('publish');
 
-          //  console check
-          console.log('publish permission', this.publishPermission);
+            //  console check
+            console.log('publish permission', this.publishPermission);
+          }
         }
+        this.getDetails();
       }
     });
   }
@@ -128,15 +148,19 @@ export class DetailArticleComponent {
 
   schedule() {
     if (this.scheduleForm.valid) {
-      const body = {
-        country: this.scheduleForm.value.country,
-
-        timezone: this.scheduleForm.value.timezone,
-        publish_date: this.scheduleForm.value.scheduled_at,
-        is_scheduled: 'scheduled',
-      };
-      console.log('Scheduled At:', body);
-      this.modalService.dismissAll();
+      const formData = this.createEpisodeFormData();
+      formData.append('country', this.scheduleForm.value.country);
+      formData.append('timezone', this.scheduleForm.value.timezone);
+      formData.append('publish_date', this.scheduleForm.value.scheduled_at);
+      formData.append('is_scheduled', 'scheduled');
+      this.postsService
+        .updateArticle(this.postId, formData)
+        .subscribe((res) => {
+          if (res) {
+            this.checkPermission();
+            this.modalService.dismissAll();
+          }
+        });
     } else {
       console.log('Form Invalid');
     }
@@ -153,5 +177,27 @@ export class DetailArticleComponent {
     this.scheduleForm.patchValue({
       timezone: '',
     });
+  }
+  private createEpisodeFormData(): FormData {
+    const formData = new FormData();
+    formData.append('name', this.articleDetails.data.name);
+    formData.append('type', this.articleDetails.data.type);
+    formData.append('categoryId', this.articleDetails.data.categoryId);
+    formData.append('description', this.articleDetails.data.description);
+    //     formData.append('thumbnail', this.episodeForm.value.thumbnailImage);
+    // formData.append('image', this.episodeForm.value.bannerImage);
+    formData.append(
+      'meta_description',
+      this.articleDetails.data.meta_description
+    );
+    // formData.append('date', this.articleDetails.data.date);
+    formData.append('slug', this.articleDetails.data.description);
+    formData.append('file', this.articleDetails.data.file);
+    formData.append('reason', '');
+    formData.append('url', this.articleDetails.data.url);
+    formData.append('isBlock', this.articleDetails.data.isBlock);
+    formData.append('isApproved', this.articleDetails.data.isApproved);
+    formData.append('isPublished', this.articleDetails.data.isPublished);
+    return formData;
   }
 }

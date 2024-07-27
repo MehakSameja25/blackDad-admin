@@ -133,30 +133,68 @@
                         <div
                           class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
                         >
-                          <span
-                            ><img
-                              src="assets/img/drop-icon.svg"
+                          <span>
+                            <img
+                              [src]="
+                                croppedThumbnailImage
+                                  ? croppedThumbnailImage
+                                  : 'assets/img/drop-icon.svg'
+                              "
                               id="thumbnailPreview"
                               alt="upload"
-                          /></span>
-                          <h6 class="drop-browse align-center">
+                            />
+                          </span>
+                          <h6
+                            class="drop-browse align-center"
+                            *ngIf="!showThumbnailCropper"
+                          >
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
                           </h6>
-                          <p class="text-muted">Maximum size: 50MB</p>
+                          <p class="text-muted" *ngIf="!showThumbnailCropper">
+                            Maximum size: 50MB
+                          </p>
                           <input
                             type="file"
-                            multiple
                             id="thumbnailImage"
-                            (change)="onFileSelected($event)"
+                            (change)="handleThumbnailImageInput($event)"
                           />
                           <div id="thumbnailFrames"></div>
+                          <image-cropper
+                            *ngIf="showThumbnailCropper"
+                            [imageChangedEvent]="thumbnailImageChangedEvent"
+                            [aspectRatio]="1 / 1"
+                            [maintainAspectRatio]="true"
+                            format="png"
+                            (imageCropped)="thumbnailImageCropped($event)"
+                          ></image-cropper>
+                          <button
+                            *ngIf="showThumbnailCropper"
+                            (click)="saveCroppedThumbnailImage()"
+                            class="btn btn-primary mt-2"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="
+                          advertisementForm.get('thumbnailImage')?.invalid &&
+                          (advertisementForm.get('thumbnailImage')?.dirty ||
+                            advertisementForm.get('thumbnailImage')?.touched)
+                        "
+                        class="text-danger"
+                      >
+                        <div
+                          *ngIf="advertisementForm.get('thumbnailImage')?.errors?.['required']"
+                        >
+                          Thumbnail Image is required.
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="text-end">
-                    <button type="submit" class="btn btn-primary mt-4">
+                    <button type="submit" class="btn btn-primary mt-4" [disabled]="showThumbnailCropper">
                       Add
                     </button>
                   </div>

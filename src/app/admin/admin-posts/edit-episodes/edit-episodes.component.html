@@ -109,37 +109,35 @@
                         </strong>
                       </div>
                     </div>
-                    <div
-                      class="col-lg-6 col-md-6 col-sm-12"
-                    >
+                    <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
-                          <label>Category</label>
-                          <ng-multiselect-dropdown
-                            [placeholder]="'Select Categories'"
-                            [data]="allcategories"
-                            formControlName="category"
-                            [settings]="dropdownSettings"
-                            (onSelect)="onCategorySelect($event)"
-                            (onDeSelect)="onCategoryDeSelect($event)"
-                          >
-                          </ng-multiselect-dropdown>
-                        </div>
-                        <div
-                          *ngIf="
-                            episodeForm.get('category')?.invalid &&
-                            (episodeForm.get('category')?.dirty ||
-                              episodeForm.get('category')?.touched)
-                          "
-                          class="text-danger"
+                        <label>Category</label>
+                        <ng-multiselect-dropdown
+                          [placeholder]="'Select Categories'"
+                          [data]="allcategories"
+                          formControlName="category"
+                          [settings]="dropdownSettings"
+                          (onSelect)="onCategorySelect($event)"
+                          (onDeSelect)="onCategoryDeSelect($event)"
                         >
-                          <div
-                            *ngIf="episodeForm.get('category')?.errors?.['required']"
-                          >
-                            Category is required.
-                          </div>
+                        </ng-multiselect-dropdown>
+                      </div>
+                      <div
+                        *ngIf="
+                          episodeForm.get('category')?.invalid &&
+                          (episodeForm.get('category')?.dirty ||
+                            episodeForm.get('category')?.touched)
+                        "
+                        class="text-danger"
+                      >
+                        <div
+                          *ngIf="episodeForm.get('category')?.errors?.['required']"
+                        >
+                          Category is required.
                         </div>
-                        </div>
-                        <!-- <div class="d-flex flex-wrap column-gap-3">
+                      </div>
+                    </div>
+                    <!-- <div class="d-flex flex-wrap column-gap-3">
                           <span *ngFor="let category of allcategories.data"
                             ><input
                               class="form-check-input custom-control-input-cat"
@@ -167,7 +165,7 @@
                           class="form-select"
                           aria-label="Default select example"
                           #subtypee
-                          (click)="getType(subtypee.value)"
+                          (change)="getType(subtypee.value)"
                         >
                           <option class="d-none">Select File Type</option>
                           <option
@@ -306,9 +304,9 @@
                           <span>
                             <img
                               [src]="
-                                croppedBannerImage
-                                  ? croppedBannerImage
-                                  : 'assets/img/drop-icon.svg'
+                                this.episodeDetails.data.image ??
+                                croppedBannerImage ??
+                                'assets/img/drop-icon.svg'
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -347,6 +345,14 @@
                           </button>
                         </div>
                       </div>
+                      <button
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(previewModal)"
+                        *ngIf="IsBannerImage"
+                      >
+                        Preview Banner Image
+                      </button>
                       <div
                         *ngIf="
                           episodeForm.get('bannerImage')?.invalid &&
@@ -372,9 +378,9 @@
                           <span>
                             <img
                               [src]="
-                                croppedThumbnailImage
-                                  ? croppedThumbnailImage
-                                  : 'assets/img/drop-icon.svg'
+                                this.episodeDetails.data.thumbnail ??
+                                croppedThumbnailImage ??
+                                'assets/img/drop-icon.svg'
                               "
                               id="thumbnailPreview"
                               alt="upload"
@@ -427,18 +433,18 @@
                           Thumbnail Image is required.
                         </div>
                       </div>
+                      <button
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(preview2Modal)"
+                        *ngIf="IsThumbnailImage"
+                      >
+                        Preview Thumbnail Image
+                      </button>
                     </div>
                   </div>
                 </div>
                 <div class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-back mt-4"
-                    (click)="open(previewModal)"
-                    *ngIf="IsBannerImage"
-                  >
-                    Preview Banner Image
-                  </button>
                   <button
                     type="submit"
                     class="btn btn-primary mt-4"
@@ -480,6 +486,44 @@
           "
           alt="upload"
           id="bannerPreview"
+        /> </span
+    ></a>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      data-bs-dismiss="modal"
+      class="btn btn-back cancel-btn me-2"
+      (click)="modal.close()"
+    >
+      Cancel
+    </button>
+  </div>
+</ng-template>
+<ng-template #preview2Modal let-modal>
+  <div class="modal-header border-0 pb-0">
+    <div class="form-header modal-header-title text-start mb-0">
+      <h4 class="mb-0">Preview Banner Image</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <a class="podcastdetailbanner mb-3">
+      <span>
+        <img
+          [src]="
+            croppedThumbnailImage
+              ? croppedThumbnailImage
+              : 'assets/img/drop-icon.svg'
+          "
+          alt="upload"
+          id="thumbnailPreview"
         /> </span
     ></a>
   </div>

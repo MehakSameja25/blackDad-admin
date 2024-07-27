@@ -8,16 +8,19 @@ import { NotificationsService } from 'angular2-notifications';
   providedIn: 'root',
 })
 export class CategoiesService {
-  constructor(private http: HttpClient, private notifications: NotificationsService) { }
+  constructor(
+    private http: HttpClient,
+    private notifications: NotificationsService
+  ) {}
 
   getCategory() {
     return apiCallWrapper(
       this.http.get(`${environment.apiUrl}/get-category?type=all`),
       {
         notificationsService: this.notifications,
-        action: "Fetching Categories"
+        action: 'Fetching Categories',
       }
-    )
+    );
   }
 
   getCategoryById(id: any) {
@@ -25,27 +28,51 @@ export class CategoiesService {
       this.http.get(`${environment.apiUrl}/get-categoryById?categoryId=${id}`),
       {
         notificationsService: this.notifications,
-        action: "Fetching Category Detail"
+        action: 'Fetching Category Detail',
       }
-    )
+    );
   }
 
   addCategory(body: any) {
-    return this.http.post(`${environment.apiUrl}/add-category`, body);
+    return apiCallWrapper(
+      this.http.post(`${environment.apiUrl}/add-category`, body),
+      {
+        notificationsService: this.notifications,
+        action: 'Adding Category',
+      }
+    );
   }
 
   editCategory(body: any, id: any) {
-    return this.http.put(
-      `${environment.apiUrl}/update-category?categoryId=${id}`,
-      body
+    return apiCallWrapper(
+      this.http.put(
+        `${environment.apiUrl}/update-category?categoryId=${id}`,
+        body
+      ),
+      {
+        notificationsService: this.notifications,
+        action: 'Updating Category',
+      }
     );
   }
   unblockedCategories() {
-    return this.http.get(`${environment.apiUrl}/get-category?type=onlyUnblock`);
+    return apiCallWrapper(
+      this.http.get(`${environment.apiUrl}/get-category?type=onlyUnblock`),
+      {
+        notificationsService: this.notifications,
+        action: 'Fetching Category',
+      }
+    );
   }
   deleteCategory(id: any) {
-    return this.http.delete(
-      `${environment.apiUrl}/delete-category?categoryId=${id}`
+    return apiCallWrapper(
+      this.http.delete(
+        `${environment.apiUrl}/delete-category?categoryId=${id}`
+      ),
+      {
+        notificationsService: this.notifications,
+        action: 'Deleting Category',
+      }
     );
   }
 }

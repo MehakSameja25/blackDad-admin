@@ -30,6 +30,7 @@ export class AdminEpisodesComponent implements OnInit {
     { title: 'Name' },
     { title: 'Category' },
     { title: 'File Type' },
+    { title: 'Season' },
     { title: 'Date' },
     { title: 'Status' },
     { title: 'Action' },
@@ -52,9 +53,6 @@ export class AdminEpisodesComponent implements OnInit {
     this.getCategories();
     this.checkPermissions();
     this.getSeason();
-    setTimeout(() => {
-      this.getPosts();
-    }, 2000);
   }
 
   getSeason() {
@@ -151,6 +149,7 @@ export class AdminEpisodesComponent implements OnInit {
         )} </ul>`,
 
         item.filetype,
+        item.seasonNo,
         item.date,
         this.getScheduledStatus(item.isApproved, item.isPublished),
         `<div class="actions d-flex align-items-center gap-2">
@@ -492,6 +491,7 @@ export class AdminEpisodesComponent implements OnInit {
               'edit after publish permission',
               this.isEditAfterPublish
             );
+            this.getPosts();
           }
         }
       }

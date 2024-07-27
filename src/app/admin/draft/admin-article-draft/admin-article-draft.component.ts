@@ -23,7 +23,6 @@ export class AdminArticleDraftComponent {
   ) {}
   ngOnInit(): void {
     this.checkPermissions();
-    this.getDraft();
   }
   tableData = [];
   tableColumns = [
@@ -155,7 +154,7 @@ export class AdminArticleDraftComponent {
       }
     });
   }
-truncateDescription(description: string): string {
+  truncateDescription(description: string): string {
     return description.length > 25
       ? `${description.slice(0, 25)}...`
       : description;
@@ -224,6 +223,7 @@ truncateDescription(description: string): string {
             );
           }
         }
+        this.getDraft();
       }
     });
   }

@@ -29,7 +29,6 @@ export class AdminEpisodeDraftComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.checkPermissions();
-    this.getDraft();
   }
   addPermission: any;
   editPermission: any;
@@ -56,6 +55,7 @@ export class AdminEpisodeDraftComponent implements OnInit {
             );
           }
         }
+        this.getDraft();
       }
     });
   }
@@ -76,6 +76,7 @@ export class AdminEpisodeDraftComponent implements OnInit {
     { title: 'Name' },
     { title: 'Category' },
     { title: 'File Type' },
+    { title: 'Season' },
     { title: 'Date' },
     { title: 'Status' },
     { title: 'Action' },
@@ -101,6 +102,7 @@ export class AdminEpisodeDraftComponent implements OnInit {
           : 'No Categories',
 
         item.draft.filetype ? item.draft.filetype : 'N/A',
+        item.draft.seasonNo ? item.draft.seasonNo : 'N/A',
         item.draft.date ? item.draft.date : 'N/A',
         this.getScheduledStatus(item.draft.isApproved, item.draft.isPublished),
         `<div class="actions d-flex align-items-center gap-2">

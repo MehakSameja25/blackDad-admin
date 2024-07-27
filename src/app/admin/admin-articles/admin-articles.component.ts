@@ -38,9 +38,6 @@ export class AdminArticlesComponent implements OnInit {
   ngOnInit(): void {
     this.checkPermissions();
     this.getCategories();
-    setTimeout(() => {
-      this.getPosts();
-    }, 2000);
   }
 
   tableData = [];
@@ -415,6 +412,7 @@ export class AdminArticlesComponent implements OnInit {
             );
           }
         }
+        this.getPosts();
       }
     });
   }

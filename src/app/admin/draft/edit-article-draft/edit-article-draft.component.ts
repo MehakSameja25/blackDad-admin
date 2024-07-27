@@ -169,7 +169,7 @@ export class EditArticleDraftComponent {
   thumbnailImageChangedEvent: any = '';
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
-
+  IsThumbnailImage = false;
   handleBannerImageInput(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -207,11 +207,11 @@ export class EditArticleDraftComponent {
   handleThumbnailImageInput(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      this.IsThumbnailImage = true;
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
       this.articleForm.patchValue({ thumbnailImage: file });
       this.inputChanged.next('');
-
     }
   }
 

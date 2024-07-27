@@ -36,6 +36,19 @@ export class EditArticlesComponent {
       bannerImage: ['', [Validators.required]],
       thumbnailImage: ['', [Validators.required]],
     });
+    if (this.singleArticle) {
+      if (!this.singleArticle.data.image) {
+        this.articleForm = this.fb.group({
+          bannerImage: ['', [Validators.required]],
+        });
+      }
+
+      if (!this.singleArticle.data.thumbnail) {
+        this.articleForm = this.fb.group({
+          thumbnailImage: ['', [Validators.required]],
+        });
+      }
+    }
     this.getCategories();
 
     const articleId = this.route.snapshot.paramMap.get('id');
@@ -53,7 +66,7 @@ export class EditArticlesComponent {
       console.log(this.allcategories);
     });
   }
-
+  IsThumbnailImage = false;
   onSubmit() {
     if (this.articleForm.invalid) {
       this.markFormGroupTouched(this.articleForm);
@@ -63,8 +76,8 @@ export class EditArticlesComponent {
     formData.append('type', 'articles');
     formData.append('categoryId', this.singleArticle.data.categoryId);
     formData.append('description', this.articleForm.value.description);
-    formData.append('thumbnail', this.articleForm.value.bannerImage);
-    formData.append('image', this.articleForm.value.thumbnailImage);
+    formData.append('thumbnail', this.articleForm.value.thumbnailImage);
+    formData.append('image', this.articleForm.value.bannerImage);
     formData.append('meta_description', this.articleForm.value.meta);
     formData.append('slug', this.articleForm.value.slug);
     formData.append('reason', '');
@@ -205,6 +218,7 @@ export class EditArticlesComponent {
   handleThumbnailImageInput(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      this.IsThumbnailImage = true;
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
       this.articleForm.patchValue({ thumbnailImage: file });
