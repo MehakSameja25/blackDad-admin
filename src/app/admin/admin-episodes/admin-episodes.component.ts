@@ -144,7 +144,7 @@ export class AdminEpisodesComponent implements OnInit {
       this.tableData = response.data.map((item: any) => [
         `<img src="${item.thumbnail}" alt="Thumbnail" style="width: 50px; height: auto;">`,
         item.name.length > 35 ? this.truncateDescription(item.name) : item.name,
-        `<ul> ${item.category.map(
+        `<ul> ${item.category?.map(
           (cat: any) => `<li> ${cat.name} </li>`
         )} </ul>`,
 

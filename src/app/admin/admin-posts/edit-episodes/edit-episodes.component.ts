@@ -103,7 +103,13 @@ export class EditEpisodesComponent {
       url: this.episodeDetails.data.url,
       bannerImage: '',
       thumbnailImage: '',
+      category: this.episodeDetails.data.categories,
+      fileType: this.episodeDetails.data.filetype,
+      subType1: this.episodeDetails.data.subtype
     });
+    this.episodeDetails.data.categories.map((category: any) => {
+      this.selectedCategories.push(category.id);
+    })
   }
   getCategories() {
     this.categoryService.unblockedCategories().subscribe((response: any) => {
@@ -157,7 +163,7 @@ export class EditEpisodesComponent {
     const formData = new FormData();
     formData.append('name', this.episodeForm.value.episodeName);
     formData.append('type', 'episodes');
-    formData.append('categoryId', this.episodeDetails.data.categoryId);
+    formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.episodeForm.value.description);
     formData.append('filetype', this.fileType);
     formData.append('meta_description', this.episodeForm.value.meta);

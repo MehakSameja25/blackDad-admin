@@ -110,13 +110,13 @@
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
+                      <div class="input-block mb-3" *ngIf="allcategories">
                         <label>Category</label>
                         <ng-multiselect-dropdown
                           [placeholder]="'Select Categories'"
+                          [settings]="dropdownSettings"
                           [data]="allcategories"
                           formControlName="category"
-                          [settings]="dropdownSettings"
                           (onSelect)="onCategorySelect($event)"
                           (onDeSelect)="onCategoryDeSelect($event)"
                         >
