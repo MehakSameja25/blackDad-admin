@@ -283,6 +283,18 @@
               {{ country.name }}
             </option>
           </select>
+          <div
+            *ngIf="
+              scheduleForm.get('country')?.invalid &&
+              (scheduleForm.get('country')?.dirty ||
+                scheduleForm.get('country')?.touched)
+            "
+            class="text-danger"
+          >
+            <strong *ngIf="scheduleForm.get('country')?.errors?.['required']">
+              Country is required.
+            </strong>
+          </div>
         </div>
         <div class="form-group mb-3">
           <label for="timezone" class="form-label">Timezone</label>
@@ -292,6 +304,18 @@
               {{ tz.tzCode }} (UTC {{ tz.utc }})
             </option>
           </select>
+          <div
+            *ngIf="
+              scheduleForm.get('timezone')?.invalid &&
+              (scheduleForm.get('timezone')?.dirty ||
+                scheduleForm.get('timezone')?.touched)
+            "
+            class="text-danger"
+          >
+            <strong *ngIf="scheduleForm.get('timezone')?.errors?.['required']">
+              Timezone is required.
+            </strong>
+          </div>
         </div>
         <div class="form-group mb-3">
           <label for="scheduled_at">Select Date and Time</label>
@@ -303,6 +327,18 @@
             class="datetimepicker form-control"
             required
           />
+          <div
+            *ngIf="
+              scheduleForm.get('scheduled_at')?.invalid &&
+              (scheduleForm.get('scheduled_at')?.dirty ||
+                scheduleForm.get('scheduled_at')?.touched)
+            "
+            class="text-danger"
+          >
+            <strong *ngIf="scheduleForm.get('scheduled_at')?.errors?.['required']">
+              Scheduled_at are required.
+            </strong>
+          </div>
         </div>
       </div>
       <div class="modal-footer">

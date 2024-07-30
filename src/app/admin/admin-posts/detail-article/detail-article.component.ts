@@ -162,7 +162,7 @@ export class DetailArticleComponent {
           }
         });
     } else {
-      console.log('Form Invalid');
+      this.markFormGroupTouched(this.scheduleForm);
     }
   }
 
@@ -199,5 +199,14 @@ export class DetailArticleComponent {
     formData.append('isApproved', this.articleDetails.data.isApproved);
     formData.append('isPublished', this.articleDetails.data.isPublished);
     return formData;
+  }
+  markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach((control) => {
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

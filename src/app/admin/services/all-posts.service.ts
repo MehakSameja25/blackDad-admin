@@ -166,15 +166,9 @@ export class AllPostsService {
    ----------------------------------------------------------------------------------------------*/
 
   updateDraft(id: any, body: any) {
-    return apiCallWrapper(
-      this.http.put<any>(
-        `${environment.apiUrl}/update-draft?draftId=${id}`,
-        body
-      ),
-      {
-        notificationsService: this.notifications,
-        action: 'Updating Draft',
-      }
+    return this.http.put<any>(
+      `${environment.apiUrl}/update-draft?draftId=${id}`,
+      body
     );
   }
 

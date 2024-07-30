@@ -152,7 +152,7 @@ export class DetailEpisodeComponent implements OnInit {
           }
         });
     } else {
-      console.log('Form Invalid');
+      this.markFormGroupTouched(this.scheduleForm);
     }
   }
 
@@ -203,5 +203,14 @@ export class DetailEpisodeComponent implements OnInit {
     formData.append('isApproved', this.episodeDetails.data.isApproved);
     formData.append('isPublished', this.episodeDetails.data.isPublished);
     return formData;
+  }
+  markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach((control) => {
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }
