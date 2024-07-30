@@ -19,8 +19,6 @@ export class RolesComponent implements OnInit {
   deleteId: any;
   allMembers: any;
   allChangeRoles: { userId: number; roleTypeId: number }[] = [];
-  successMessage!: string;
-  successalertClass!: string;
   constructor(
     private roleService: RoleService,
     private modalService: NgbModal,
@@ -171,16 +169,8 @@ export class RolesComponent implements OnInit {
   deleteRoleApi(id: number) {
     this.roleService.delteRole(id).subscribe((res) => {
       if (res) {
-        setTimeout(() => {
-          this.successMessage = 'Role Deleted!';
-          this.successalertClass = '';
-          this.ngOnInit();
-          this.modalService.dismissAll();
-        }, 1000);
-        setTimeout(() => {
-          this.successMessage = '';
-          this.successalertClass = 'd-none';
-        }, 5000);
+        this.ngOnInit();
+        this.modalService.dismissAll();
       }
     });
   }

@@ -17,8 +17,8 @@ export class AdminProfileComponent {
   updateForm!: FormGroup;
   UserId: any;
   userDetails: any;
-  successMessage: string = '';
-  successalertClass: string = 'd-none';
+  // successMessage: string = '';
+  // successalertClass: string = 'd-none';
   userRole: any;
 
   constructor(
@@ -82,7 +82,6 @@ export class AdminProfileComponent {
       };
       this.updateApiCall(body);
     } else {
-      console.log('Form is invalid.');
       this.updateForm.markAllAsTouched();
     }
   }
@@ -91,12 +90,6 @@ export class AdminProfileComponent {
     this.authService.updateProfile(data).subscribe((res) => {
       if (res) {
         setTimeout(() => {
-          this.successMessage = 'Profile Updated';
-          this.successalertClass = '';
-        }, 1000);
-        setTimeout(() => {
-          this.successMessage = '';
-          this.successalertClass = 'd-none';
           localStorage.removeItem('nkt');
           this.router.navigate(['/admin-auth']);
         }, 2000);

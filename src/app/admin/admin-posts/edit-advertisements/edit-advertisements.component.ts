@@ -91,11 +91,7 @@ export class EditAdvertisementsComponent {
             this.router.navigate(['/admin/advertisements']);
           }
         });
-
-      console.log('Form submitted successfully');
-      console.log('Form values:', formData);
     } else {
-      alert('Form is invalid. Please check errors.');
       this.validateAllFormFields(this.advertisementForm);
     }
   }

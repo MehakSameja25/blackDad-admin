@@ -17,8 +17,8 @@ import { Router } from '@angular/router';
 export class AllMembersComponent implements OnInit {
   allMembers: any;
   deleteId: any;
-  successalertClass: any = 'd-none';
-  successMessage: any = '';
+  // successalertClass: any = 'd-none';
+  // successMessage: any = '';
 
   constructor(
     private roleService: RoleService,
@@ -224,16 +224,8 @@ export class AllMembersComponent implements OnInit {
   deleteMember(id: any) {
     this.roleService.delteMember(id).subscribe((res) => {
       if (res) {
-        setTimeout(() => {
-          this.successMessage = 'Member Deleted!';
-          this.successalertClass = '';
-          this.getMembers();
-          this.modalService.dismissAll();
-        }, 1000);
-        setTimeout(() => {
-          this.successMessage = '';
-          this.successalertClass = 'd-none';
-        }, 5000);
+        this.getMembers();
+        this.modalService.dismissAll();
       }
     });
   }

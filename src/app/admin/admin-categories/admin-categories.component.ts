@@ -20,8 +20,8 @@ import { Subject } from 'rxjs';
 export class AdminCategoriesComponent implements OnInit {
   allCategories: any;
   editId: any;
-  successalertClass: any = 'd-none';
-  successMessage: any = '';
+  // successalertClass: any = 'd-none';
+  // successMessage: any = '';
 
   addCategoryForm!: FormGroup;
   editCategoryForm!: FormGroup;
@@ -350,88 +350,52 @@ export class AdminCategoriesComponent implements OnInit {
 
   addCategory() {
     if (this.addCategoryForm.invalid) {
-      console.log('Form is invalid');
       this.validateAllFormFields(this.addCategoryForm);
       return;
-    }
+    } else {
+      const formData = this.prepareFormData(this.addCategoryForm);
 
-    console.log('Form is valid. Submitting...');
-
-    const formData = this.prepareFormData(this.addCategoryForm);
-
-    this.categoriesService.addCategory(formData).subscribe(
-      (res) => {
-        console.log('API Response:', res);
-
-        if (res) {
-          this.successMessage = 'Category Added';
-          this.successalertClass = '';
-          this.ngOnInit();
-          this.addCategoryForm.reset();
-          this.modalService.dismissAll();
-
-          setTimeout(() => {
-            this.successMessage = '';
-            this.successalertClass = 'd-none';
-          }, 5000);
+      this.categoriesService.addCategory(formData).subscribe(
+        (res) => {
+          if (res) {
+            this.ngOnInit();
+            this.addCategoryForm.reset();
+            this.modalService.dismissAll();
+          }
+        },
+        (error) => {
+          alert(`API Error:, ${error}`);
         }
-      },
-      (error) => {
-        alert(`API Error:, ${error}`);
-      }
-    );
+      );
+    }
   }
 
   editCategory() {
     if (this.editCategoryForm.invalid) {
-      console.log('Form is invalid');
       this.validateAllFormFields(this.editCategoryForm);
       return;
-    }
+    } else {
+      const formData = this.prepareFormData(this.editCategoryForm);
 
-    console.log('Form is valid. Submitting...');
+      formData.append('isblock', this.singleCategoryData.isblock);
 
-    const formData = this.prepareFormData(this.editCategoryForm);
-
-    formData.append('isblock', this.singleCategoryData.isblock);
-
-    this.categoriesService
-      .editCategory(formData, this.singleCategoryData.id)
-      .subscribe(
-        (res) => {
+      this.categoriesService
+        .editCategory(formData, this.singleCategoryData.id)
+        .subscribe((res) => {
           if (res) {
-            console.log(res);
-            this.successMessage = 'Category Updated';
-            this.successalertClass = '';
             this.ngOnInit();
             this.editCategoryForm.reset();
             this.modalService.dismissAll();
-
-            setTimeout(() => {
-              this.successMessage = '';
-              this.successalertClass = 'd-none';
-            }, 5000);
           }
-        },
-        (error) => {
-          console.error('API Error:', error);
-          // Handle API error if needed
-        }
-      );
+        });
+    }
   }
 
   deleteCategory() {
     this.categoriesService.deleteCategory(this.deleteId).subscribe((res) => {
       if (res) {
-        this.successMessage = 'Category Deleted';
-        this.successalertClass = '';
         this.ngOnInit();
         this.modalService.dismissAll();
-
-        setTimeout(() => {
-          this.successMessage = '';
-          this.successalertClass = 'd-none';
-        }, 5000);
       }
     });
   }
@@ -456,9 +420,9 @@ export class AdminCategoriesComponent implements OnInit {
             this.editPermission = permission.status.includes('edit');
             this.deletePermission = permission.status.includes('delete');
             //  console check
-            console.log('add permission', this.addPermission);
-            console.log('edit permission', this.editPermission);
-            console.log('delete permission', this.deletePermission);
+            // console.log('add permission', this.addPermission);
+            // console.log('edit permission', this.editPermission);
+            // console.log('delete permission', this.deletePermission);
           }
         }
       }
@@ -489,29 +453,13 @@ export class AdminCategoriesComponent implements OnInit {
         };
         reader.readAsDataURL(file);
         this.editCategoryForm.patchValue({ thumbnailImage: file });
-        console.log(this.fileName);
       }
     }
   }
   isCheckBlock(categoryData: any) {
     this.allPost.updateIsblock(categoryData, 'categories').subscribe((res) => {
       if (res) {
-        setTimeout(() => {
-          if (categoryData.isblock == false) {
-            this.successMessage = 'Category Blocked';
-            this.successalertClass = '';
-          } else if (categoryData.isblock == true) {
-            this.successMessage = 'Category Unblocked';
-            this.successalertClass = '';
-          }
-
-          this.ngOnInit();
-          console.log(res);
-        }, 1000);
-        setTimeout(() => {
-          this.successMessage = '';
-          this.successalertClass = 'd-none';
-        }, 5000);
+        this.ngOnInit();
       }
     });
   }
