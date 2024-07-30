@@ -5,6 +5,9 @@ import { AllPostsService } from '../../services/all-posts.service';
 import { CategoiesService } from '../../services/categoies.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { urlValidator } from '../../urlValidator';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-edit-draft',
@@ -21,7 +24,11 @@ export class EditDraftComponent {
   fileType: any;
   singleDraft: any;
   draftData: any;
-  dropdownSettings: {}
+  dropdownSettings: {};
+  editor = ClassicEditor;
+  subtype!: string;
+  nullImagePath = environment.nullImagePath;
+
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoiesService,
@@ -60,27 +67,48 @@ export class EditDraftComponent {
       // fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       url: ['', [Validators.required]],
-      bannerImage: ['', []],
-      thumbnailImage: ['', []],
+      bannerImage: ['', [Validators.required]],
+      thumbnailImage: ['', [Validators.required]],
     });
     this.getCategories(); // Fetch categories
     this.getSingleArticle(); // Initial draft save
-    setTimeout(() => {
-      this.setFormValues();
-    }, 2000);
   }
 
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response) => {
-      this.allcategories = response;
+    this.categoryService.unblockedCategories().subscribe((response: any) => {
+      this.allcategories = response.data;
     });
   }
   getSingleArticle() {
     this.draftId = this.route.snapshot.paramMap.get('id');
     this.postsService.getSingleDraft(this.draftId).subscribe((res: any) => {
-      this.singleDraft = res;
-      this.draftData = JSON.parse(res.data.draft);
-      console.log('DATA', this.draftData);
+      if (res) {
+        this.singleDraft = res;
+        this.draftData = res.data.draft;
+        console.log('DATA', this.draftData);
+
+        if (this.draftData && this.draftData.subtype) {
+          if (this.draftData.subtype === 'podcast') {
+            this.fileType = 'audio';
+            this.subtype = 'podcast';
+            this.setFormValues();
+            this.episodeForm
+              .get('subType1')
+              ?.valueChanges.subscribe((subType) => {
+                this.updateUrlValidators(subType);
+              });
+          } else {
+            this.fileType = 'video';
+            this.subtype = 'youtube';
+            this.setFormValues();
+            this.episodeForm
+              .get('subType1')
+              ?.valueChanges.subscribe((subType) => {
+                this.updateUrlValidators(subType);
+              });
+          }
+        }
+      }
     });
   }
 
@@ -109,13 +137,24 @@ export class EditDraftComponent {
       });
     }
   }
+  updateUrlValidators(subType: string): void {
+    const urlControl = this.episodeForm.get('url');
+
+    urlControl?.clearValidators();
+
+    urlControl?.addValidators(urlValidator(subType));
+
+    urlControl?.updateValueAndValidity();
+  }
 
   getType(type: any) {
     if (type === 'youtube') {
       this.fileType = 'video';
+      this.subtype = 'youtube';
     }
     if (type === 'podcast') {
       this.fileType = 'audio';
+      this.subtype = 'podcast';
     }
   }
 
@@ -124,13 +163,14 @@ export class EditDraftComponent {
     formData.append('name', this.episodeForm.value.episodeName);
     formData.append('type', 'episodes');
     formData.append('date', this.episodeForm.value.date);
-    formData.append('categoryId', this.draftData.categoryId);
+    formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.episodeForm.value.description);
+    formData.append('subtype', this.subtype);
+    formData.append('filetype', this.fileType);
+
     // formData.append('thumbnail', this.episodeForm.value.bannerImage); // Replaced
     //     formData.append('image', this.episodeForm.value.thumbnailImage); // Replaced
-    formData.append('filetype', this.fileType);
     formData.append('meta_description', this.episodeForm.value.meta);
-    formData.append('subtype', this.episodeForm.value.subType1);
     formData.append('episodeNo', this.episodeForm.value.episodeNumber);
     formData.append('seasonNo', this.episodeForm.value.seasonNumber);
     formData.append('slug', this.episodeForm.value.slug);
@@ -151,6 +191,14 @@ export class EditDraftComponent {
     } else {
       formData.delete('thumbnail');
     }
+    // if (this.episodeForm.value.subType1) {
+    //   formData.append('subtype', this.episodeForm.value.subType1);
+    //   formData.append('filetype', this.fileType);
+    // } else {
+    //   formData.delete('subtype');
+    //   formData.delete('filetype');
+    // }
+
     return formData;
   }
 
@@ -244,11 +292,23 @@ export class EditDraftComponent {
       meta: this.draftData.meta_description,
       episodeNumber: this.draftData.episodeNo,
       seasonNumber: this.draftData.seasonNo,
+      category: this.singleDraft.data.category,
       slug: this.draftData.slug,
+      subtype1: this.subtype,
+      filetype: this.fileType,
       url: this.draftData.url,
       bannerImage: '',
       thumbnailImage: '',
     });
+    if (
+      this.singleDraft &&
+      this.singleDraft.data &&
+      this.singleDraft.data.category
+    ) {
+      this.singleDraft.data.category.map((category: any) => {
+        this.selectedCategories.push(category.id);
+      });
+    }
   }
   // Banner image variables
   bannerImageChangedEvent: any = '';
@@ -370,6 +430,8 @@ export class EditDraftComponent {
     } else {
       this.selectedCategories.splice(index, 1);
     }
+    this.inputChanged.next('');
+
     console.log('Selected Category:', this.selectedCategories);
   }
 
@@ -378,6 +440,8 @@ export class EditDraftComponent {
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);
     }
+    this.inputChanged.next('');
+
     console.log('Deselected Category:', this.selectedCategories);
   }
 }

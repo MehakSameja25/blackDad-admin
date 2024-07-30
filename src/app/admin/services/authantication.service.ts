@@ -1,15 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { apiCallWrapper } from './api.util';
+import { NotificationsService } from 'angular2-notifications';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthanticationService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notifications: NotificationsService
+  ) {}
 
   AdminAuthantication(data: any) {
-    return this.http.post<any>(`${environment.apiUrl}/login`, data);
+    return apiCallWrapper(
+      this.http.post<any>(`${environment.apiUrl}/login`, data),
+      {
+        notificationsService: this.notifications,
+        action: 'Login-in',
+      }
+    );
   }
   isAuthenticated(): boolean {
     const token = localStorage.getItem('nkt');
@@ -21,9 +32,20 @@ export class AuthanticationService {
   }
 
   updateProfile(body: any) {
-    return this.http.put<any>(`${environment.apiUrl}/update-user?type=editUser`, body);
+    return apiCallWrapper(
+      this.http.put<any>(
+        `${environment.apiUrl}/update-user?type=editUser`,
+        body
+      ),
+      {
+        notificationsService: this.notifications,
+        action: 'Updating Profile',
+      }
+    );
   }
   getUserById(id: any) {
-    return this.http.get<any>(`${environment.apiUrl}/get-userById?userId=${id}`);
+    return this.http.get<any>(
+      `${environment.apiUrl}/get-userById?userId=${id}`
+    );
   }
 }

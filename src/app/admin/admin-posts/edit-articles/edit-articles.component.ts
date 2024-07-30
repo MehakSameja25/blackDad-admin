@@ -4,6 +4,7 @@ import { CategoiesService } from '../../services/categoies.service';
 import { AllPostsService } from '../../services/all-posts.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-edit-articles',
@@ -16,6 +17,7 @@ export class EditArticlesComponent {
   selectedCategories: any[] = [];
   singleArticle: any;
   dropdownSettings: {};
+  editor = ClassicEditor;
 
   constructor(
     private fb: FormBuilder,
@@ -47,8 +49,8 @@ export class EditArticlesComponent {
       meta: ['', [Validators.required]],
       category: ['', [Validators.required]],
       slug: ['', [Validators.required]],
-      bannerImage: ['', [Validators.required]],
-      thumbnailImage: ['', [Validators.required]],
+      bannerImage: ['', []],
+      thumbnailImage: ['', []],
     });
     if (this.singleArticle) {
       if (!this.singleArticle.data.image) {
@@ -76,8 +78,8 @@ export class EditArticlesComponent {
   }
 
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response) => {
-      this.allcategories = response;
+    this.categoryService.unblockedCategories().subscribe((response: any) => {
+      this.allcategories = response.data;
       console.log(this.allcategories);
     });
   }
@@ -89,14 +91,11 @@ export class EditArticlesComponent {
     const formData = new FormData();
     formData.append('name', this.articleForm.value.articleName);
     formData.append('type', 'articles');
-    formData.append('categoryId', this.singleArticle.data.categoryId);
+    formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.articleForm.value.description);
-    formData.append('thumbnail', this.articleForm.value.thumbnailImage);
-    formData.append('image', this.articleForm.value.bannerImage);
     formData.append('meta_description', this.articleForm.value.meta);
     formData.append('slug', this.articleForm.value.slug);
     formData.append('reason', '');
-    formData.append('url', this.articleForm.value.url);
     formData.append('isBlock', this.singleArticle.data.isBlock);
     formData.append('isApproved', this.singleArticle.data.isApproved);
     formData.append('isPublished', this.singleArticle.data.isPublished);
@@ -123,19 +122,12 @@ export class EditArticlesComponent {
   }
   setFormValues(): void {
     this.articleForm.patchValue({
-      episodeName: this.singleArticle.data.name,
+      articleName: this.singleArticle.data.name,
       date: this.singleArticle.data.date,
       description: this.singleArticle.data.description,
       meta: this.singleArticle.data.meta_description,
-      episodeNumber: this.singleArticle.data.episodeNo,
-      seasonNumber: this.singleArticle.data.seasonNo,
       slug: this.singleArticle.data.slug,
-      url: this.singleArticle.data.url,
-      bannerImage: '',
-      thumbnailImage: '',
       category: this.singleArticle.data.categories,
-      fileType: this.singleArticle.data.filetype,
-      subType1: this.singleArticle.data.subtype,
     });
     this.singleArticle.data.categories.map((category: any) => {
       this.selectedCategories.push(category.id);
@@ -170,15 +162,15 @@ export class EditArticlesComponent {
   //   }
   // }
 
-  getCategoryId(id: any) {
-    const index = this.selectedCategories.indexOf(id);
-    if (index === -1) {
-      this.selectedCategories.push(id);
-    } else {
-      this.selectedCategories.splice(index, 1);
-    }
-    console.log(this.selectedCategories);
-  }
+  // getCategoryId(id: any) {
+  //   const index = this.selectedCategories.indexOf(id);
+  //   if (index === -1) {
+  //     this.selectedCategories.push(id);
+  //   } else {
+  //     this.selectedCategories.splice(index, 1);
+  //   }
+  //   console.log(this.selectedCategories);
+  // }
   markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();

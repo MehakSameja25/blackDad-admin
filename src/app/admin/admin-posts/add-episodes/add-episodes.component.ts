@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, debounceTime } from 'rxjs';
@@ -22,6 +22,7 @@ export class AddEpisodesComponent implements OnInit {
   fileType: any;
   editor = ClassicEditor;
   dropdownSettings = {};
+  firstKeyPress: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -67,9 +68,13 @@ export class AddEpisodesComponent implements OnInit {
       this.updateUrlValidators(subType);
     });
     this.getCategories(); // Fetch categories
-    setTimeout(() => {
-      this.addEpisodeDraft(); // Initial draft save
-    }, 3000);
+  }
+  @HostListener('document:keydown', ['$event'])
+  handleKeyPress(event: KeyboardEvent): void {
+    if (!this.firstKeyPress) {
+      this.addEpisodeDraft();
+      this.firstKeyPress = true;
+    }
   }
 
   getCategories() {

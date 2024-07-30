@@ -4,7 +4,7 @@
     <div class="content container-fluid">
       <div class="page-header">
         <div class="content-page-header">
-          <h5>Edit Episode</h5>
+          <h5>Edit Draft Episode</h5>
         </div>
       </div>
       <div class="row gap-3 mb-3 justify-content-between m-0">
@@ -111,33 +111,31 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Category</label>
-                        <div class="input-block mb-3">
-                          <label>Category</label>
-                          <ng-multiselect-dropdown
-                            [placeholder]="'Select Categories'"
-                            [data]="allcategories"
-                            formControlName="category"
-                            [settings]="dropdownSettings"
-                            (onSelect)="onCategorySelect($event)"
-                            (onDeSelect)="onCategoryDeSelect($event)"
-                          >
-                          </ng-multiselect-dropdown>
-                        </div>
-                        <div
-                          *ngIf="
-                            episodeForm.get('category')?.invalid &&
-                            (episodeForm.get('category')?.dirty ||
-                              episodeForm.get('category')?.touched)
-                          "
-                          class="text-danger"
+                        <ng-multiselect-dropdown
+                          [placeholder]="'Select Categories'"
+                          [settings]="dropdownSettings"
+                          [data]="allcategories"
+                          formControlName="category"
+                          (onSelect)="onCategorySelect($event)"
+                          (onDeSelect)="onCategoryDeSelect($event)"
                         >
-                          <div
-                            *ngIf="episodeForm.get('category')?.errors?.['required']"
-                          >
-                            Category is required.
-                          </div>
+                        </ng-multiselect-dropdown>
+                      </div>
+                      <div
+                        *ngIf="
+                          episodeForm.get('category')?.invalid &&
+                          (episodeForm.get('category')?.dirty ||
+                            episodeForm.get('category')?.touched)
+                        "
+                        class="text-danger"
+                      >
+                        <div
+                          *ngIf="episodeForm.get('category')?.errors?.['required']"
+                        >
+                          Category is required.
                         </div>
-                        <!-- <div>
+                      </div>
+                      <!-- <div>
                           <span *ngFor="let category of allcategories.data"
                             ><input
                               class="form-check-input custom-control-input-cat"
@@ -156,7 +154,6 @@
                             <br
                           /></span>
                         </div> -->
-                      </div>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -243,27 +240,43 @@
                           rows="5"
                           (change)="this.inputChanged.next('url')"
                         ></textarea>
-                        <strong
-                          class="text-danger"
+                        <div
                           *ngIf="
                             episodeForm.get('url')?.invalid &&
-                            episodeForm.get('url')?.touched
+                            (episodeForm.get('url')?.dirty ||
+                              episodeForm.get('url')?.touched)
                           "
+                          class="text-danger"
                         >
-                          URL or I-Frame is required.
-                        </strong>
+                          <strong
+                            *ngIf="episodeForm.get('url')?.errors?.['required']"
+                          >
+                            URL is required.
+                          </strong>
+                          <strong
+                            *ngIf="episodeForm.get('url')?.errors?.['invalidIframe']"
+                          >
+                            The URL must be an iframe for YouTube.
+                          </strong>
+                          <strong
+                            *ngIf="episodeForm.get('url')?.errors?.['invalidHttpUrl']"
+                          >
+                            The URL must start with http or https for Podcast.
+                          </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Description</label>
-                        <textarea
+                        <ckeditor
+                          [editor]="editor"
                           formControlName="description"
                           class="form-control"
                           placeholder="Enter Description"
                           rows="5"
                           (change)="this.inputChanged.next('description')"
-                        ></textarea>
+                        ></ckeditor>
                         <strong
                           class="text-danger"
                           *ngIf="
@@ -348,6 +361,7 @@
                       </div>
                       <div
                         *ngIf="
+                          singleDraft.data.image == nullImagePath &&
                           episodeForm.get('bannerImage')?.invalid &&
                           (episodeForm.get('bannerImage')?.dirty ||
                             episodeForm.get('bannerImage')?.touched)
@@ -414,6 +428,7 @@
                       </div>
                       <div
                         *ngIf="
+                          singleDraft.data.thumbnail == nullImagePath &&
                           episodeForm.get('thumbnailImage')?.invalid &&
                           (episodeForm.get('thumbnailImage')?.dirty ||
                             episodeForm.get('thumbnailImage')?.touched)

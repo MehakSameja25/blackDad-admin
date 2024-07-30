@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoiesService } from '../../services/categoies.service';
 import { Router } from '@angular/router';
@@ -76,7 +76,16 @@ export class AddArticlesComponent {
       thumbnailImage: ['', [Validators.required]],
     });
     this.getCategories();
-    this.addArticleDraft();
+    // this.addArticleDraft();
+  }
+
+  firstKeyPress: boolean = false;
+  @HostListener('document:keydown', ['$event'])
+  handleKeyPress(event: KeyboardEvent): void {
+    if (!this.firstKeyPress) {
+      this.addArticleDraft();
+      this.firstKeyPress = true;
+    }
   }
 
   getCategories() {
@@ -129,15 +138,23 @@ export class AddArticlesComponent {
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.articleForm.value.description);
     formData.append('date', this.articleForm.value.date);
-    formData.append('thumbnail', this.articleForm.value.thumbnailImage);
-    formData.append('image', this.articleForm.value.bannerImage);
     formData.append('meta_description', this.articleForm.value.meta);
     formData.append('slug', this.articleForm.value.slug);
     formData.append('reason', '');
-    formData.append('url', this.articleForm.value.url);
     formData.append('isBlock', '0');
     formData.append('isApproved', '0');
     formData.append('isPublished', '0');
+    if (this.articleForm.value.bannerImage instanceof File) {
+      formData.append('image', this.articleForm.value.bannerImage);
+    } else {
+      formData.delete('image');
+    }
+
+    if (this.articleForm.value.thumbnailImage instanceof File) {
+      formData.append('thumbnail', this.articleForm.value.thumbnailImage);
+    } else {
+      formData.delete('thumbnail');
+    }
     return formData;
   }
 
@@ -204,6 +221,7 @@ export class AddArticlesComponent {
   thumbnailImageChangedEvent: any = '';
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
+  IsThumbnailImage = false;
 
   handleBannerImageInput(event: any): void {
     const file = event.target.files[0];
@@ -232,8 +250,9 @@ export class AddArticlesComponent {
         'banner-image.png'
       );
       this.articleForm.patchValue({ bannerImage: bannerFile });
-      this.showThumbnailCropper = false;
+      // this.showThumbnailCropper = false;
       this.showBannerCropper = false;
+      this.inputChanged.next('');
     }
   }
 
@@ -243,6 +262,7 @@ export class AddArticlesComponent {
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
       this.articleForm.patchValue({ thumbnailImage: file });
+      this.IsThumbnailImage = true;
     }
   }
 
@@ -264,6 +284,7 @@ export class AddArticlesComponent {
       );
       this.articleForm.patchValue({ thumbnailImage: thumbnailFile });
       this.showThumbnailCropper = false;
+      this.inputChanged.next('');
     }
   }
 

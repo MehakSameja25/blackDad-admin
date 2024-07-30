@@ -5,6 +5,8 @@ import { CategoiesService } from '../../services/categoies.service';
 import { AllPostsService } from '../../services/all-posts.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-edit-article-draft',
@@ -20,6 +22,9 @@ export class EditArticleDraftComponent {
   inputChanged: Subject<string> = new Subject<string>();
   singleDraft: any;
   draftData: any;
+  editor = ClassicEditor;
+  dropdownSettings: {};
+  nullImagePath = environment.nullImagePath;
 
   constructor(
     private fb: FormBuilder,
@@ -29,6 +34,18 @@ export class EditArticleDraftComponent {
     private route: ActivatedRoute,
     private modalService: NgbModal
   ) {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'name',
+      allowSearchFilter: true,
+      enableCheckAll: false,
+      unSelectAllText: false,
+      maxWidth: 300,
+      // itemsShowLimit: 3,
+      searchPlaceholderText: 'Search Categories!',
+      closeDropDownOnSelection: true,
+    };
     this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
       this.updateDraft();
     });
@@ -49,9 +66,23 @@ export class EditArticleDraftComponent {
     this.getSingleArticle();
   }
 
+  setFormValues(): void {
+    this.articleForm.patchValue({
+      articleName: this.draftData.name,
+      date: this.draftData.date,
+      description: this.draftData.description,
+      meta: this.draftData.meta_description,
+      slug: this.draftData.slug,
+      category: this.singleDraft.data.category,
+    });
+    this.singleDraft.data.category.map((category: any) => {
+      this.selectedCategories.push(category.id);
+    });
+  }
+
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response) => {
-      this.allcategories = response;
+    this.categoryService.unblockedCategories().subscribe((response: any) => {
+      this.allcategories = response.data;
       console.log(this.allcategories);
     });
   }
@@ -59,23 +90,25 @@ export class EditArticleDraftComponent {
     this.draftId = this.route.snapshot.paramMap.get('id');
     this.postsService.getSingleDraft(this.draftId).subscribe((res: any) => {
       this.singleDraft = res;
-      this.draftData = JSON.parse(res.data.draft);
+      this.draftData = res.data.draft;
+      this.setFormValues();
       console.log('DATA', this.draftData);
     });
   }
   onSubmit() {
     if (this.articleForm.invalid) {
       this.markFormGroupTouched(this.articleForm);
+    } else {
+      const formData = this.createArticleFormData();
+      formData.append('isDraft', '0');
+      this.postsService.addArticle(formData).subscribe((res) => {
+        if (res) {
+          this.deleteDraft();
+          console.log('Article added:', res);
+          this.router.navigate(['/admin/articles']);
+        }
+      });
     }
-    const formData = this.createArticleFormData();
-    formData.append('isDraft', '0');
-    this.postsService.addArticle(formData).subscribe((res) => {
-      if (res) {
-        this.deleteDraft();
-        console.log('Article added:', res);
-        this.router.navigate(['/admin/articles']);
-      }
-    });
   }
   updateDraft() {
     if (this.draftId) {
@@ -95,15 +128,26 @@ export class EditArticleDraftComponent {
     formData.append('type', 'articles');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.articleForm.value.description);
-    formData.append('thumbnail', this.articleForm.value.bannerImage);
-    formData.append('image', this.articleForm.value.thumbnailImage);
+    formData.append('date', this.articleForm.value.date);
+    // formData.append('thumbnail', this.articleForm.value.bannerImage);
+    // formData.append('image', this.articleForm.value.thumbnailImage);
     formData.append('meta_description', this.articleForm.value.meta);
     formData.append('slug', this.articleForm.value.slug);
     formData.append('reason', '');
-    formData.append('url', this.articleForm.value.url);
     formData.append('isBlock', '0');
     formData.append('isApproved', '0');
     formData.append('isPublished', '0');
+    if (this.articleForm.value.bannerImage instanceof File) {
+      formData.append('image', this.articleForm.value.bannerImage);
+    } else {
+      formData.delete('image');
+    }
+
+    if (this.articleForm.value.thumbnailImage instanceof File) {
+      formData.append('thumbnail', this.articleForm.value.thumbnailImage);
+    } else {
+      formData.delete('thumbnail');
+    }
     return formData;
   }
 
@@ -198,7 +242,6 @@ export class EditArticleDraftComponent {
         'banner-image.png'
       );
       this.articleForm.patchValue({ bannerImage: bannerFile });
-      this.showThumbnailCropper = false;
       this.showBannerCropper = false;
       this.inputChanged.next('');
     }
@@ -273,5 +316,24 @@ export class EditArticleDraftComponent {
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
+  }
+  onCategorySelect(item: any) {
+    const index = this.selectedCategories.indexOf(item.id);
+    if (index === -1) {
+      this.selectedCategories.push(item.id);
+    } else {
+      this.selectedCategories.splice(index, 1);
+    }
+    this.inputChanged.next("");
+    console.log('Selected Category:', this.selectedCategories);
+  }
+
+  onCategoryDeSelect(item: any) {
+    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
+    if (index !== -1) {
+      this.selectedCategories.splice(index, 1);
+    }
+    this.inputChanged.next("");
+    console.log('Deselected Category:', this.selectedCategories);
   }
 }

@@ -25,14 +25,14 @@ export class AdminNavbarComponent implements OnInit {
     this.userId = localStorage.getItem('userId');
     this.menuService.getMenu().subscribe((response: any) => {
       this.menuData = response.data[0];
-      console.log(this.menuData);
+      // console.log(this.menuData);
     });
 
     this.authService.getUserById(this.userId).subscribe((res: any) => {
       if (res) {
         this.userDetails = res.data;
         this.userType = res.data.role.name;
-        console.log(this.userType);
+        // console.log(this.userType);
       }
     });
   }
@@ -77,7 +77,7 @@ export class AdminNavbarComponent implements OnInit {
     } else if (menu.menu_bar.title === 'Articles') {
       this.router.navigate(['/admin/articles']);
     }
-    console.log(menu.menu_bar.title);
+    // console.log(menu.menu_bar.title);
   }
 
   checkActiveEpisodes() {
@@ -103,9 +103,7 @@ export class AdminNavbarComponent implements OnInit {
   checkActive(type: any): any {
     const url: any = this.router.url;
     if (type == 'Categories') {
-      console.log("------------------------------------")
       if (url.includes('/admin/categories')) {
-        console.log("---------------222---------------------")
         return 'active';
       } else {
         return '';

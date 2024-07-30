@@ -60,7 +60,7 @@
                           class="form-control"
                           formControlName="email"
                           placeholder="Enter Email"
-                          [readOnly]="userDetails.user.id != 1"
+                          [readOnly]="userRole != 'Super Admin'"
                           [(ngModel)]="userDetails.user.email"
                         />
                         <strong

@@ -174,7 +174,7 @@ export class AdminArticleDraftComponent {
     }
   }
   toEdit(id: any) {
-    this.router.navigate([`/admin/edit-draft-episode/${id}`]);
+    this.router.navigate([`/admin/edit-draft-article/${id}`]);
   }
   open(content: any, id: any) {
     this.deleteId = id;

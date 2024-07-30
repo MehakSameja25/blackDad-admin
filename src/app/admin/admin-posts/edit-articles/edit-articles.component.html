@@ -88,6 +88,20 @@
                         >
                         </ng-multiselect-dropdown>
                       </div>
+                      <div
+                        *ngIf="
+                          articleForm.get('category')?.invalid &&
+                          (articleForm.get('category')?.dirty ||
+                            articleForm.get('category')?.touched)
+                        "
+                        class="text-danger"
+                      >
+                        <strong
+                          *ngIf="articleForm.get('category')?.errors?.['required']"
+                        >
+                          Category is required.
+                        </strong>
+                      </div>
                     </div>
                     <div class="col-12">
                       <div class="input-block mb-3">
@@ -118,12 +132,13 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Description</label>
-                        <textarea
+                        <ckeditor
+                          [editor]="editor"
                           formControlName="description"
                           class="form-control"
-                          placeholder="Enter Notes"
+                          placeholder="Enter Description"
                           rows="5"
-                        ></textarea>
+                        ></ckeditor>
                         <div
                           *ngIf="
                             articleForm.get('description')?.invalid &&
@@ -233,7 +248,6 @@
                         type="button"
                         class="btn btn-back mt-4"
                         (click)="open(previewModal)"
-                        *ngIf="IsBannerImage"
                       >
                         Preview Banner Image
                       </button>
@@ -306,10 +320,9 @@
                       <button
                         type="button"
                         class="btn btn-back mt-4"
-                        (click)="open(previewModal)"
-                        *ngIf="IsThumbnailImage"
+                        (click)="open(preview2Modal)"
                       >
-                        Preview THumbnail Image
+                        Preview Thumbnail Image
                       </button>
                     </div>
                     <div class="text-end">
@@ -353,7 +366,7 @@
       <span>
         <img
           [src]="
-            croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
+            croppedBannerImage ? croppedBannerImage : singleArticle?.data?.image
           "
           class="w-100 h-100"
           style="object-fit: contain"
@@ -376,7 +389,7 @@
 <ng-template #preview2Modal let-modal>
   <div class="modal-header border-0 pb-0">
     <div class="form-header modal-header-title text-start mb-0">
-      <h4 class="mb-0">Preview Banner Image</h4>
+      <h4 class="mb-0">Preview Thumbnail Image</h4>
     </div>
     <button
       type="button"
@@ -393,7 +406,7 @@
           [src]="
             croppedThumbnailImage
               ? croppedThumbnailImage
-              : 'assets/img/drop-icon.svg'
+              : singleArticle?.data?.thumbnail
           "
           class="w-100 h-100"
           style="object-fit: contain"

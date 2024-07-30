@@ -271,6 +271,7 @@
       class="btn-close"
       data-bs-dismiss="modal"
       aria-label="Close"
+      (click)="modal.close()"
     ></button>
   </div>
   <form [formGroup]="addCategoryForm">
@@ -371,6 +372,7 @@
       class="btn-close"
       data-bs-dismiss="modal"
       aria-label="Close"
+      (click)="modal.close()"
     ></button>
   </div>
   <form [formGroup]="editCategoryForm" (ngSubmit)="editCategory()">

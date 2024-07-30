@@ -5,6 +5,8 @@ import { AllPostsService } from '../../services/all-posts.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { urlValidator } from '../../urlValidator';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-edit-episodes',
@@ -21,6 +23,7 @@ export class EditEpisodesComponent {
   subType: any;
   editor = ClassicEditor;
   dropdownSettings: {};
+  nullImagePath = environment.nullImagePath;
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoiesService,
@@ -56,8 +59,11 @@ export class EditEpisodesComponent {
       fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       url: ['', [Validators.required]],
-      bannerImage: ['', []],
-      thumbnailImage: ['', []],
+      bannerImage: ['', [Validators.required]],
+      thumbnailImage: ['', [Validators.required]],
+    });
+    this.episodeForm.get('subType1')?.valueChanges.subscribe((subType) => {
+      this.updateUrlValidators(subType);
     });
     if (this.episodeDetails) {
       if (!this.episodeDetails.data.image) {
@@ -72,11 +78,12 @@ export class EditEpisodesComponent {
         });
       }
     }
-    this.getCategories();
     const id = this.route.snapshot.paramMap.get('id');
     this.postsService.getEpisodeDetails(id).subscribe((response) => {
       if (response) {
         this.episodeDetails = response;
+        this.getCategories();
+        this.setFormValues();
         this.subType = this.episodeDetails?.data?.subtype;
         console.log(this.subType);
         if (this.subType === 'youtube') {
@@ -86,8 +93,16 @@ export class EditEpisodesComponent {
         }
         this.isLoading = false;
       }
-      this.setFormValues();
     });
+  }
+  updateUrlValidators(subType: string): void {
+    const urlControl = this.episodeForm.get('url');
+
+    urlControl?.clearValidators();
+
+    urlControl?.addValidators(urlValidator(subType));
+
+    urlControl?.updateValueAndValidity();
   }
   setFormValues(): void {
     this.episodeForm.patchValue({
@@ -99,8 +114,8 @@ export class EditEpisodesComponent {
       seasonNumber: this.episodeDetails.data.seasonNo,
       slug: this.episodeDetails.data.slug,
       url: this.episodeDetails.data.url,
-      bannerImage: '',
-      thumbnailImage: '',
+      // bannerImage: '',
+      // thumbnailImage: '',
       category: this.episodeDetails.data.categories,
       fileType: this.episodeDetails.data.filetype,
       subType1: this.episodeDetails.data.subtype,

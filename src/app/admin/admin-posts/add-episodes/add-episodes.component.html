@@ -241,12 +241,10 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label
-                          *ngIf="
-                            subtypee.value == 'youtube' ||
-                            filee.value === undefined
-                          "
-                          >iFrame</label
-                        >
+                        *ngIf="
+                          subtypee.value !== 'podcast'"
+                        >iFrame</label
+                      >
                         <label *ngIf="subtypee.value == 'podcast'">Url</label>
                         <textarea
                           formControlName="url"
@@ -288,7 +286,7 @@
                           [editor]="editor"
                           formControlName="description"
                           class="form-control"
-                          placeholder="Enter Notes"
+                          placeholder="Enter Description"
                           rows="5"
                           (change)="this.inputChanged.next('description')"
                         ></ckeditor>

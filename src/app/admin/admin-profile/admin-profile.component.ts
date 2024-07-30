@@ -19,6 +19,7 @@ export class AdminProfileComponent {
   userDetails: any;
   successMessage: string = '';
   successalertClass: string = 'd-none';
+  userRole: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,6 +44,8 @@ export class AdminProfileComponent {
     this.authService.getUserById(this.UserId).subscribe((res: any) => {
       if (res) {
         this.userDetails = res.data;
+        this.userRole = res.data.role.name;
+        // console.log(this.userRole, 'ROLES');
       }
     });
   }
