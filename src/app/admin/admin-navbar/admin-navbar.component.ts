@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { MainNavService } from '../services/main-nav.service';
 import { AuthanticationService } from '../services/authantication.service';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-admin-navbar',
@@ -20,7 +21,8 @@ export class AdminNavbarComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private menuService: MainNavService,
-    private authService: AuthanticationService
+    private authService: AuthanticationService,
+    private notification: NotificationsService
   ) {
     this.userId = localStorage.getItem('userId');
     this.menuService.getMenu().subscribe((response: any) => {
@@ -95,10 +97,15 @@ export class AdminNavbarComponent implements OnInit {
 
   logOut() {
     localStorage.removeItem('nkt');
-
+    this.notification.warn(
+      'Loggining out.'
+    );
     setTimeout(() => {
+      this.notification.success(
+        'You have been successfully logged out.'
+      );
       this.router.navigate(['/admin-auth']);
-    }, 3000);
+    }, 2000);
   }
   checkActive(type: any): any {
     const url: any = this.router.url;
