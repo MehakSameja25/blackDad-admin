@@ -235,11 +235,9 @@
 
                     <div class="col-12">
                       <div class="input-block mb-3">
-                        <label
-                        *ngIf="
-                          subtypee.value !== 'podcast'"
-                        >iFrame</label
-                      >
+                        <label *ngIf="subtypee.value !== 'podcast'"
+                          >iFrame</label
+                        >
                         <label *ngIf="subtypee.value == 'podcast'">Url</label>
                         <textarea
                           formControlName="url"
@@ -375,6 +373,7 @@
                       </button>
                       <div
                         *ngIf="
+                          episodeDetails.data.image == nullImagePath &&
                           episodeForm.get('bannerImage')?.invalid &&
                           (episodeForm.get('bannerImage')?.dirty ||
                             episodeForm.get('bannerImage')?.touched)
@@ -441,6 +440,7 @@
                       </div>
                       <div
                         *ngIf="
+                        episodeDetails.data.thumbnail == nullImagePath &&
                           episodeForm.get('thumbnailImage')?.invalid &&
                           (episodeForm.get('thumbnailImage')?.dirty ||
                             episodeForm.get('thumbnailImage')?.touched)

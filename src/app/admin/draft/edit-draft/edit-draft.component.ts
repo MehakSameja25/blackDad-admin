@@ -174,7 +174,7 @@ export class EditDraftComponent {
     formData.append('episodeNo', this.episodeForm.value.episodeNumber);
     formData.append('seasonNo', this.episodeForm.value.seasonNumber);
     formData.append('slug', this.episodeForm.value.slug);
-    formData.append('file', this.episodeForm.value.url);
+    formData.append('file', '');
     formData.append('reason', '');
     formData.append('url', this.episodeForm.value.url);
     formData.append('isBlock', '0');

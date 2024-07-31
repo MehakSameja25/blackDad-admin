@@ -232,6 +232,7 @@
                       </div>
                       <div
                         *ngIf="
+                          singleArticle.data.image == nullImagePath ||
                           articleForm.get('bannerImage')?.invalid &&
                           (articleForm.get('bannerImage')?.dirty ||
                             articleForm.get('bannerImage')?.touched)
@@ -305,6 +306,7 @@
                       </div>
                       <div
                         *ngIf="
+                          singleArticle.data.thumbnail == nullImagePath ||
                           articleForm.get('thumbnailImage')?.invalid &&
                           (articleForm.get('thumbnailImage')?.dirty ||
                             articleForm.get('thumbnailImage')?.touched)

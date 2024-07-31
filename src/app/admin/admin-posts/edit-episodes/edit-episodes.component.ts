@@ -59,8 +59,8 @@ export class EditEpisodesComponent {
       fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       url: ['', [Validators.required]],
-      bannerImage: ['', [Validators.required]],
-      thumbnailImage: ['', [Validators.required]],
+      bannerImage: ['', []],
+      thumbnailImage: ['', []],
     });
     this.episodeForm.get('subType1')?.valueChanges.subscribe((subType) => {
       this.updateUrlValidators(subType);
@@ -142,6 +142,7 @@ export class EditEpisodesComponent {
   }
   onSubmit() {
     if (this.episodeForm.valid) {
+      console.log('valid');
       if (this.fileType !== undefined) {
         const formData = this.buildFormData();
 
@@ -184,7 +185,7 @@ export class EditEpisodesComponent {
     formData.append('episodeNo', this.episodeForm.value.episodeNumber);
     formData.append('seasonNo', this.episodeForm.value.seasonNumber);
     formData.append('slug', this.episodeForm.value.slug);
-    formData.append('file', this.episodeForm.value.url);
+    formData.append('file', '');
     formData.append('reason', '');
     formData.append('url', this.episodeForm.value.url);
     formData.append('isBlock', this.episodeDetails.data.isBlock);

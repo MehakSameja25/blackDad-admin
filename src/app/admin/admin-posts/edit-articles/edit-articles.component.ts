@@ -5,6 +5,7 @@ import { AllPostsService } from '../../services/all-posts.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-edit-articles',
@@ -18,6 +19,7 @@ export class EditArticlesComponent {
   singleArticle: any;
   dropdownSettings: {};
   editor = ClassicEditor;
+  nullImagePath = environment.nullImagePath;
 
   constructor(
     private fb: FormBuilder,
@@ -87,38 +89,39 @@ export class EditArticlesComponent {
   onSubmit() {
     if (this.articleForm.invalid) {
       this.markFormGroupTouched(this.articleForm);
-    }
-    const formData = new FormData();
-    formData.append('name', this.articleForm.value.articleName);
-    formData.append('type', 'articles');
-    formData.append('categoryId', JSON.stringify(this.selectedCategories));
-    formData.append('description', this.articleForm.value.description);
-    formData.append('meta_description', this.articleForm.value.meta);
-    formData.append('slug', this.articleForm.value.slug);
-    formData.append('reason', '');
-    formData.append('isBlock', this.singleArticle.data.isBlock);
-    formData.append('isApproved', this.singleArticle.data.isApproved);
-    formData.append('isPublished', this.singleArticle.data.isPublished);
-    if (this.articleForm.value.bannerImage instanceof File) {
-      formData.append('image', this.articleForm.value.bannerImage);
     } else {
-      formData.delete('image');
-    }
+      const formData = new FormData();
+      formData.append('name', this.articleForm.value.articleName);
+      formData.append('type', 'articles');
+      formData.append('categoryId', JSON.stringify(this.selectedCategories));
+      formData.append('description', this.articleForm.value.description);
+      formData.append('meta_description', this.articleForm.value.meta);
+      formData.append('slug', this.articleForm.value.slug);
+      formData.append('reason', '');
+      formData.append('isBlock', this.singleArticle.data.isBlock);
+      formData.append('isApproved', this.singleArticle.data.isApproved);
+      formData.append('isPublished', this.singleArticle.data.isPublished);
+      if (this.articleForm.value.bannerImage instanceof File) {
+        formData.append('image', this.articleForm.value.bannerImage);
+      } else {
+        formData.delete('image');
+      }
 
-    if (this.articleForm.value.thumbnailImage instanceof File) {
-      formData.append('thumbnail', this.articleForm.value.thumbnailImage);
-    } else {
-      formData.delete('thumbnail');
+      if (this.articleForm.value.thumbnailImage instanceof File) {
+        formData.append('thumbnail', this.articleForm.value.thumbnailImage);
+      } else {
+        formData.delete('thumbnail');
+      }
+      console.log(formData);
+      this.posts
+        .updateArticle(this.singleArticle.data.id, formData)
+        .subscribe((res) => {
+          if (res) {
+            this.router.navigate(['/admin/articles']);
+          }
+          console.log(res);
+        });
     }
-    console.log(formData);
-    this.posts
-      .updateArticle(this.singleArticle.data.id, formData)
-      .subscribe((res) => {
-        if (res) {
-          this.router.navigate(['/admin/articles']);
-        }
-        console.log(res);
-      });
   }
   setFormValues(): void {
     this.articleForm.patchValue({
