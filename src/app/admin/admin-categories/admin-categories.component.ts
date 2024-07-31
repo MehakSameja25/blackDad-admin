@@ -86,7 +86,9 @@ export class AdminCategoriesComponent implements OnInit {
                         >`
           : item.description,
         ` <div class="actions d-flex align-items-center gap-2">
-                          <a
+        ${
+          this.editPermission === true
+            ? `<a
                             data-id="${item.id}" data-action="edit"
                             class="btn-action-icon"
                             *ngIf="editPermission == true"
@@ -121,7 +123,10 @@ export class AdminCategoriesComponent implements OnInit {
                                 ></path>
                               </g>
                             </svg>
-                          </a>
+                          </a>`
+            : ''
+        }
+                          
                            <a class="btn-action-icon" data-id="${
                              item.id
                            }" data-action="block">
@@ -228,7 +233,9 @@ export class AdminCategoriesComponent implements OnInit {
         `
         }
           </a>
-                          <a
+                        ${
+                          this.deletePermission === true
+                            ? `<a
                             class="btn-action-icon"
                             data-id="${item.id}" data-action="delete"
                             *ngIf="deletePermission == true"
@@ -261,7 +268,9 @@ export class AdminCategoriesComponent implements OnInit {
                                 ></path>
                               </g>
                             </svg>
-                          </a>
+                          </a>`
+                            : ''
+                        }  
                         </div>`,
       ]);
 

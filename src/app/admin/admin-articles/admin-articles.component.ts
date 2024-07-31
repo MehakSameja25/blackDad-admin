@@ -72,7 +72,9 @@ export class AdminArticlesComponent implements OnInit {
         item.date,
         this.getScheduledStatus(item.isApproved, item.isPublished),
         `<div class="actions d-flex align-items-center gap-2">
-          <a class="btn-action-icon" data-id="${item.id}" data-action="open">
+        ${
+          this.deletePermission === true
+            ? `<a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
               xmlns=" http://www.w3.org/2000/svg"
               version="1.1"
@@ -100,7 +102,10 @@ export class AdminArticlesComponent implements OnInit {
                 ></path>
               </g>
             </svg>
-          </a>
+          </a>`
+            : ''
+        }
+          
            ${
              this.isEditPermission(item) == true
                ? `<a class="btn-action-icon" data-id="${item.id}" data-action="edit">
@@ -374,14 +379,12 @@ export class AdminArticlesComponent implements OnInit {
   }
 
   checkIsBlock(articleData: any) {
-    this.postService
-      .updateIsblock(articleData, 'article')
-      .subscribe((res) => {
-        if (res) {
-          console.log(res);
-          this.getPosts();
-        }
-      });
+    this.postService.updateIsblock(articleData, 'article').subscribe((res) => {
+      if (res) {
+        console.log(res);
+        this.getPosts();
+      }
+    });
   }
 
   toEdit(id: any) {
