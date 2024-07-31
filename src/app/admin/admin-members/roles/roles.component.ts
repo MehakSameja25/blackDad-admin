@@ -43,9 +43,9 @@ export class RolesComponent implements OnInit {
       this.tableData = res.data.role.map((item: any) => [
         item.name,
         `<select class="form-select" aria-label="Default select example"
-                          >${item.role_accesses.map(
-                            (access: any) =>
-                              `<option value="1">${access.status}</option>`
+                          > ${item.role_accesses.map(
+                            (access: any) => 
+                              `<option value="1">${access.menu_bar.title}-${access.status}</option>`
                           )}</select>`,
         `<div class="actions d-flex align-items-center gap-2">
                           <a routerLink="/admin/edit-role/{{role.id}}" class="btn-action-icon" data-id="${item.id}" data-action="edit">

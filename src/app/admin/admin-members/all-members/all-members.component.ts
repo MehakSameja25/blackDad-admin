@@ -63,7 +63,7 @@ export class AllMembersComponent implements OnInit {
         ${item.roles
           .map((role: any) =>
             role.roletype.role_accesses
-              .map((access: any) => `<li>${access.status}</li>`)
+              .map((access: any) => `<li> ${access.menu_bar.title}--${access.status}</li>`)
               .join('')
           )
           .join('')}
