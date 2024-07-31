@@ -61,7 +61,7 @@
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="add1"
+                              id="add{{data.id}}"
                               name="select1[]"
                               value="add"
                               data-parsley-multiple="select1"
@@ -71,7 +71,7 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'add')"
                             />
-                            <label class="form-check-label m-0" for="add1">
+                            <label class="form-check-label m-0" for="add{{data.id}}">
                               Add
                             </label>
                           </div>
@@ -80,7 +80,7 @@
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="edit1"
+                              id="edit {{data.id}}"
                               name="select1[]"
                               value="edit"
                               data-parsley-multiple="select1"
@@ -90,7 +90,7 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'edit')"
                             />
-                            <label class="form-check-label m-0" for="edit1">
+                            <label class="form-check-label m-0" for="edit{{data.id}}">
                               Edit
                             </label>
                           </div>
@@ -98,9 +98,9 @@
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="delete1"
+                              id="delete{{data.id}}"
                               name="select1[]"
-                              value="delete"
+                              value="delete "
                               data-parsley-multiple="select1"
                               (change)="
                                 addMenuAccess(data.id, $event.target, 'delete')
@@ -108,7 +108,7 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'delete')"
                             />
-                            <label class="form-check-label m-0" for="delete1">
+                            <label class="form-check-label m-0" for="delete {{data.id}}">
                               Delete
                             </label>
                           </div>
@@ -119,7 +119,7 @@
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="publish1"
+                              id="publish{{data.id}}"
                               name="select1[]"
                               value="publish"
                               data-parsley-multiple="select1"
@@ -129,7 +129,7 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'publish')"
                             />
-                            <label class="form-check-label m-0" for="publish1">
+                            <label class="form-check-label m-0" for="publish{{data.id}}">
                               Publish
                             </label>
                           </div>
@@ -140,7 +140,7 @@
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="editpublish1"
+                              id="editpublish{{data.id}}"
                               name="select1[]"
                               value="edit after publish"
                               data-parsley-multiple="select1"
@@ -158,7 +158,7 @@
                             />
                             <label
                               class="form-check-label m-0"
-                              for="editpublish1"
+                              for="editpublish{{data.id}}"
                             >
                               Edit After Publish
                             </label>
@@ -170,7 +170,7 @@
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="own1"
+                              id="own{{data.id}}"
                               name="select1[]"
                               value="self record"
                               data-parsley-multiple="select1"
@@ -184,7 +184,7 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'self record')"
                             />
-                            <label class="form-check-label m-0" for="own1">
+                            <label class="form-check-label m-0" for="own{{data.id}}">
                               Self Record
                             </label>
                           </div>
