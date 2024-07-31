@@ -32,23 +32,36 @@ export class AddNewMemberComponent implements OnInit {
   }
 
   onSubmit() {
-    const body = this.myForm.value;
-    this.roleService.addMember(body).subscribe(
-      (res) => {
-        console.log(res);
-        if (res) {
-          this.myForm.reset();
+    if (this.myForm.invalid) {
+      this.markFormGroupTouched(this.myForm);
+    } else {
+      const body = this.myForm.value;
+      this.roleService.addMember(body).subscribe(
+        (res) => {
+          console.log(res);
+          if (res) {
+            this.myForm.reset();
+            setTimeout(() => {
+              this.router.navigate(['/admin/all-members']);
+            }, 1000);
+          }
+        },
+        (error) => {
+          this.errormessage = error.error.message;
           setTimeout(() => {
-            this.router.navigate(['/admin/all-members']);
-          }, 1000);
+            this.errormessage = '';
+          }, 5000);
         }
-      },
-      (error) => {
-        this.errormessage = error.error.message;
-        setTimeout(() => {
-          this.errormessage = '';
-        }, 5000);
+      );
+    }
+  }
+  markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach((control) => {
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
       }
-    );
+    });
   }
 }

@@ -32,6 +32,20 @@
                           placeholder="Enter Name"
                         />
                       </div>
+                      <div
+                          *ngIf="
+                            myForm.get('name')?.invalid &&
+                            (myForm.get('name')?.dirty ||
+                              myForm.get('name')?.touched)
+                          "
+                          class="text-danger"
+                        >
+                          <strong
+                            *ngIf="myForm.get('name')?.errors?.['required']"
+                          >
+                            Name is required.
+                          </strong>
+                        </div>
                     </div>
 
                     <div class="col-12">
@@ -42,6 +56,20 @@
                           class="form-control"
                           formControlName="email"
                         />
+                      </div>
+                      <div
+                        *ngIf="
+                          myForm.get('email')?.invalid &&
+                          (myForm.get('email')?.dirty ||
+                            myForm.get('email')?.touched)
+                        "
+                        class="text-danger"
+                      >
+                        <strong
+                          *ngIf="myForm.get('email')?.errors?.['required']"
+                        >
+                          Email is required.
+                        </strong>
                       </div>
                     </div>
                   </form>
