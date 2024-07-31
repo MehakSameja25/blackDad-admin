@@ -131,7 +131,7 @@ export class AdminCategoriesComponent implements OnInit {
                              item.id
                            }" data-action="block">
         ${
-          item.isblock == 0
+          item.isblock == 1
             ? `
         <svg
                               xmlns="http://www.w3.org/2000/svg"
