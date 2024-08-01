@@ -75,7 +75,7 @@ export class AdminCategoriesComponent implements OnInit {
       this.allCategories = res;
 
       this.tableData = res.data.map((item: any) => [
-        `<img src="${item.image}" alt="Thumbnail" style="width: 50px; height: auto;">`,
+        `<div class="table-img"><img src="${item.image}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
         item.name,
         item.description.length > 25
           ? ` ${this.truncateDescription(item.description)}  <span
@@ -86,9 +86,8 @@ export class AdminCategoriesComponent implements OnInit {
                         >`
           : item.description,
         ` <div class="actions d-flex align-items-center gap-2">
-        ${
-          this.editPermission === true
-            ? `<a
+        ${this.editPermission === true
+          ? `<a
                             data-id="${item.id}" data-action="edit"
                             class="btn-action-icon"
                             *ngIf="editPermission == true"
@@ -124,15 +123,13 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
                           </a>`
-            : ''
+          : ''
         }
                           
-                           <a class="btn-action-icon" data-id="${
-                             item.id
-                           }" data-action="block">
-        ${
-          item.isblock == 1
-            ? `
+                           <a class="btn-action-icon" data-id="${item.id
+        }" data-action="block">
+        ${item.isblock == 1
+          ? `
         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
@@ -164,7 +161,7 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
         `
-            : `
+          : `
        <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
@@ -233,9 +230,8 @@ export class AdminCategoriesComponent implements OnInit {
         `
         }
           </a>
-                        ${
-                          this.deletePermission === true
-                            ? `<a
+                        ${this.deletePermission === true
+          ? `<a
                             class="btn-action-icon"
                             data-id="${item.id}" data-action="delete"
                             *ngIf="deletePermission == true"
@@ -269,8 +265,8 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
                           </a>`
-                            : ''
-                        }  
+          : ''
+        }  
                         </div>`,
       ]);
 
@@ -448,11 +444,13 @@ export class AdminCategoriesComponent implements OnInit {
 
   fileName: any = '';
 
+  showImageRequired: boolean = true;
   onFileSelected(event: any) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
 
       if (file) {
+        this.showImageRequired = false;
         this.fileName = file;
         const reader = new FileReader();
         reader.onload = (e: any) => {

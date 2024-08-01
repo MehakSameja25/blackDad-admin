@@ -40,7 +40,7 @@ export class AdminArticleDraftComponent {
       console.log(res);
       this.tableData = res.data.map((item: any) => [
         item.thumbnail
-          ? `<img src="${item.thumbnail}" alt="Thumbnail" style="width: 50px; height: auto;">`
+          ? `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`
           : 'No Image',
         item.draft.name
           ? item.draft.name.length > 35

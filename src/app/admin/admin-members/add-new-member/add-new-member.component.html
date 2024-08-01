@@ -22,7 +22,7 @@
               <div class="form-group-item border-0 mb-0">
                 <div class="row align-item-center">
                   <form [formGroup]="myForm">
-                    <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Name</label>
                         <input
@@ -40,11 +40,11 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="myForm.get('name')?.errors?.['required']"
                           >
                             Name is required.
-                          </strong>
+                          </div>
                         </div>
                     </div>
 
@@ -65,11 +65,11 @@
                         "
                         class="text-danger"
                       >
-                        <strong
+                        <div
                           *ngIf="myForm.get('email')?.errors?.['required']"
                         >
                           Email is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                   </form>

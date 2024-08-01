@@ -57,7 +57,7 @@ export class ArticleScheduleComponent implements OnInit {
       console.log(response);
 
       this.tableData = response.data.map((item: any) => [
-        `<img src="${item.thumbnail}" alt="Thumbnail" style="width: 50px; height: auto;">`,
+        `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
         item.name.length > 35 ? this.truncateDescription(item.name) : item.name,
         `<ul> ${item.category.map(
           (cat: any) => `<li> ${cat.name} </li>`

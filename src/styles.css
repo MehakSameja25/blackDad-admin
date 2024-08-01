@@ -6371,10 +6371,10 @@ div.dt-container .dt-length label {
 
 .table tbody td a.btn-action-icon,
 .table tbody td button.btn-action-icon {
-  background: #f3f3f3;
+  background: #faf5fe;
   color: #3f4254;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   padding: 0;
   border-radius: 50px;
 }
@@ -17258,7 +17258,7 @@ body.filter-opened {
 
 .modal-footer .btn-back:hover,
 .modal-footer .btn-back:active,
-.modal-footer .btn-back.active{
+.modal-footer .btn-back.active {
   background: #7539ff;
   border: 1px solid #7539ff;
   box-shadow: inset 0 50px 0 0 #7539ff;
@@ -35400,7 +35400,7 @@ td .invoice-detail i {
 
 .sidebar-inner.slimscroll {
   overflow: auto !important;
-  height: calc(100vh - 312px);
+  height: calc(100vh - 280px);
 }
 
 img.adver {
@@ -35432,17 +35432,16 @@ img.adver {
     var(--bs-spinner-animation-name);
 }
 .podcastdetailbanner {
-    height: 500px;
-    position: relative;
-    display: block;
+  height: 500px;
+  position: relative;
+  display: block;
 }
 
 .mb-3 {
-    margin-bottom: 1rem !important;
+  margin-bottom: 1rem !important;
 }
 
 /* notification css */
-
 
 .simple-notification-wrapper .simple-notification {
   width: 100%;
@@ -35539,4 +35538,21 @@ img.adver {
 }
 .simple-notification-wrapper .simple-notification.error .sn-content {
   color: #ff5757 !important;
+}
+
+.category-img {
+  max-width: 6rem;
+}
+
+table thead tr th,
+table tbody tr td {
+  text-align: start !important;
+  vertical-align: middle !important;
+}
+
+.table-img {
+  background: #faf5fe;
+  display: inline-flex;
+  padding: 12px;
+  border-radius: 10px;
 }

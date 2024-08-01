@@ -37,7 +37,7 @@
                           class="form-control"
                           placeholder="Enter Episode Name"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('episodeName')?.invalid &&
@@ -45,7 +45,7 @@
                           "
                         >
                           Episode Name is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
 
@@ -58,7 +58,7 @@
                           class="datetimepicker form-control"
                           placeholder="Select Date"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('date')?.invalid &&
@@ -66,7 +66,7 @@
                           "
                         >
                           Date is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -78,7 +78,7 @@
                           class="form-control"
                           placeholder="Enter Episode Number"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('episodeNumber')?.invalid &&
@@ -86,7 +86,7 @@
                           "
                         >
                           Episode Number is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -98,7 +98,7 @@
                           class="form-control"
                           placeholder="Enter Season Number"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('seasonNumber')?.invalid &&
@@ -106,7 +106,7 @@
                           "
                         >
                           Season Number is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -221,7 +221,7 @@
                           class="form-control"
                           placeholder="Enter Slug"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('slug')?.invalid &&
@@ -229,7 +229,7 @@
                           "
                         >
                           Slug is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
 
@@ -282,7 +282,7 @@
                           placeholder="Enter Description"
                           rows="5"
                         ></ckeditor>
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('description')?.invalid &&
@@ -290,7 +290,7 @@
                           "
                         >
                           Description is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-12">
@@ -302,7 +302,7 @@
                           placeholder="Enter Meta Description"
                           rows="5"
                         ></textarea>
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('meta')?.invalid &&
@@ -310,7 +310,7 @@
                           "
                         >
                           Meta Description is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-8 col-md-6 col-sm-12">
@@ -440,7 +440,7 @@
                       </div>
                       <div
                         *ngIf="
-                        episodeDetails.data.thumbnail == nullImagePath &&
+                          episodeDetails.data.thumbnail == nullImagePath &&
                           episodeForm.get('thumbnailImage')?.invalid &&
                           (episodeForm.get('thumbnailImage')?.dirty ||
                             episodeForm.get('thumbnailImage')?.touched)
