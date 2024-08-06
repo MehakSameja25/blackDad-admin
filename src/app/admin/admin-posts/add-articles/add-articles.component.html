@@ -40,13 +40,13 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="
                               articleForm.get('articleName')?.errors?.['required']
                             "
                           >
                             Article Name is required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -69,11 +69,11 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="articleForm.get('date')?.errors?.['required']"
                           >
                             Date is required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -98,11 +98,11 @@
                         "
                         class="text-danger"
                       >
-                        <strong
+                        <div
                           *ngIf="articleForm.get('category')?.errors?.['required']"
                         >
                           Category is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-12">
@@ -123,11 +123,11 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="articleForm.get('slug')?.errors?.['required']"
                           >
                             Slug is required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -153,11 +153,11 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="articleForm.get('description')?.errors?.['required']"
                           >
                             Description is required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -179,11 +179,11 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="articleForm.get('meta')?.errors?.['required']"
                           >
                             Metas are required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -251,14 +251,14 @@
                           Banner Image is required.
                         </div>
                       </div>
-                                          <button
-                      type="button"
-                      class="btn btn-back mt-4"
-                      (click)="open(previewModal)"
-                      *ngIf="IsBannerImage"
-                    >
-                      Preview Banner Image
-                    </button>
+                      <button
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(previewModal)"
+                        *ngIf="IsBannerImage"
+                      >
+                        Preview Banner Image
+                      </button>
                     </div>
 
                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -326,13 +326,13 @@
                         </div>
                       </div>
                       <button
-                      type="button"
-                      class="btn btn-back mt-4"
-                      (click)="open(preview2Modal)"
-                      *ngIf="IsThumbnailImage"
-                    >
-                      Preview Thumnail Image
-                    </button>
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(preview2Modal)"
+                        *ngIf="IsThumbnailImage"
+                      >
+                        Preview Thumnail Image
+                      </button>
                     </div>
                   </div>
                   <div class="text-end">
@@ -378,7 +378,7 @@
             croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
           "
           class="w-100 h-100"
-          style="object-fit: contain;"
+          style="object-fit: contain"
           alt="upload"
           id="bannerPreview"
         /> </span
@@ -418,7 +418,7 @@
               : 'assets/img/drop-icon.svg'
           "
           class="w-100 h-100"
-          style="object-fit: contain;"
+          style="object-fit: contain"
           alt="upload"
           id="thumbnailPreview"
         /> </span

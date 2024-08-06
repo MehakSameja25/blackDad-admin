@@ -316,16 +316,18 @@
           id="newPassword"
           formControlName="newPassword"
         />
-        <strong
+        <div
           class="text-danger"
           *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors?.['required']"
-          >New Password is required.</strong
         >
-        <strong
+          New Password is required.
+        </div>
+        <div
           class="text-danger"
           *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors?.['minlength']"
-          >New Password must be at least 6 characters long.</strong
         >
+          New Password must be at least 6 characters long.
+        </div>
       </div>
       <div class="mb-3">
         <label for="cnfPassword" class="form-label">Confirm Password</label>
@@ -335,16 +337,18 @@
           id="cnfPassword"
           formControlName="cnfPassword"
         />
-        <strong
+        <div
           class="text-danger"
           *ngIf="passwordForm.get('cnfPassword')?.touched && passwordForm.get('cnfPassword')?.errors?.['required']"
-          >Confirm Password is required.</strong
         >
-        <strong
+          Confirm Password is required.
+        </div>
+        <div
           class="text-danger"
           *ngIf="passwordForm.get('cnfPassword')?.touched && passwordForm.get('cnfPassword')?.errors?.['mismatch']"
-          >Passwords do not match.</strong
         >
+          Passwords do not match.
+        </div>
       </div>
     </div>
     <div class="modal-footer">

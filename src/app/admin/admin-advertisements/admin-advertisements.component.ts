@@ -45,7 +45,7 @@ export class AdminAdvertisementsComponent implements OnInit {
     this.metaService.getAdvertisements(this.body).subscribe((response: any) => {
       this.allAdvertisements = response;
       this.tableData = response.data.map((item: any) => [
-        `<img src="${item.image}" alt="Thumbnail" style="width: 50px; height: auto;">`,
+        `<img src="${item.image}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
         item.title,
         item.clicks > 0 ? item.clicks : 'No Clicks',
         `<div class="actions d-flex align-items-center gap-2">
@@ -342,7 +342,7 @@ export class AdminAdvertisementsComponent implements OnInit {
         .subscribe((response: any) => {
           this.allAdvertisements = response;
           this.tableData = response.data.map((item: any) => [
-            `<img src="${item.image}" alt="Thumbnail " style="width: 50px; height: auto;">`,
+            `<img src="${item.image}" alt="Thumbnail " style="border-radius: 10px; width: 60px; height: 60px;">`,
             item.title,
             item.clicks > 0 ? item.clicks : 'No Clicks',
             `<div class="actions d-flex align-items-center gap-2">

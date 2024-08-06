@@ -291,9 +291,9 @@
             "
             class="text-danger"
           >
-            <strong *ngIf="scheduleForm.get('country')?.errors?.['required']">
+            <div *ngIf="scheduleForm.get('country')?.errors?.['required']">
               Country is required.
-            </strong>
+            </div>
           </div>
         </div>
         <div class="form-group mb-3">
@@ -312,9 +312,9 @@
             "
             class="text-danger"
           >
-            <strong *ngIf="scheduleForm.get('timezone')?.errors?.['required']">
+            <div *ngIf="scheduleForm.get('timezone')?.errors?.['required']">
               Timezone is required.
-            </strong>
+            </div>
           </div>
         </div>
         <div class="form-group mb-3">
@@ -335,9 +335,9 @@
             "
             class="text-danger"
           >
-            <strong *ngIf="scheduleForm.get('scheduled_at')?.errors?.['required']">
+            <div *ngIf="scheduleForm.get('scheduled_at')?.errors?.['required']">
               Scheduled_at are required.
-            </strong>
+            </div>
           </div>
         </div>
       </div>

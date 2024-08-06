@@ -39,13 +39,13 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="
                               articleForm.get('articleName')?.errors?.['required']
                             "
                           >
                             Article Name is required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -68,11 +68,11 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="articleForm.get('date')?.errors?.['required']"
                           >
                             Date is required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -98,13 +98,13 @@
                         "
                         class="text-danger"
                       >
-                        <strong
+                        <div
                           *ngIf="
                           articleForm.get('category')?.errors?.['required']
                         "
                         >
                           Category is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-12">
@@ -125,11 +125,11 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="articleForm.get('slug')?.errors?.['required']"
                           >
                             Slug is required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -152,11 +152,11 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="articleForm.get('description')?.errors?.['required']"
                           >
                             Description is required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -178,11 +178,11 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="articleForm.get('meta')?.errors?.['required']"
                           >
                             Metas are required.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>

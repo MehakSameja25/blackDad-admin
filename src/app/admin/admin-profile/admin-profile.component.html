@@ -29,7 +29,10 @@
         <div class="col-sm-12">
           <div class="card">
             <div class="card-body">
-              <div class="form-group-item border-0 mb-0" *ngIf="userDetails && userDetails.user && userDetails.role">
+              <div
+                class="form-group-item border-0 mb-0"
+                *ngIf="userDetails && userDetails.user && userDetails.role"
+              >
                 <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
                   <div class="row align-item-center">
                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -42,14 +45,15 @@
                           [(ngModel)]="userDetails.user.name"
                           placeholder="Enter Name"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             updateForm.get('name')?.invalid &&
                             updateForm.get('name')?.touched
                           "
-                          >Name is required</strong
                         >
+                          Name is required
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -63,14 +67,15 @@
                           [readOnly]="userRole != 'Super Admin'"
                           [(ngModel)]="userDetails.user.email"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             updateForm.get('email')?.invalid &&
                             updateForm.get('email')?.touched
                           "
-                          >Invalid email</strong
                         >
+                          Invalid email
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -82,14 +87,15 @@
                           formControlName="password"
                           placeholder="Enter Password"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             updateForm.get('password')?.invalid &&
                             updateForm.get('password')?.touched
                           "
-                          >Password is required</strong
                         >
+                          Password is required
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">

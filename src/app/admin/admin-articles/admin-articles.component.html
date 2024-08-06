@@ -436,11 +436,14 @@
   <!-- ======== -->
 </ng-template>
 <ng-template #sharee let-modal>
-  <div class="modal-header bg-primary rounded-0">
-    <h1 class="modal-title fs-5 text-white">
-      Share the url
-      <i class="bi bi-share shareIcons"></i>
-    </h1>
+  <div class="modal-header">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Share the url</h1>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      (click)="modal.close()"
+    ></button>
   </div>
   <div class="modal-body">
     <div class="form-group mb-3 d-flex border align-items-stretch">
@@ -459,58 +462,9 @@
         <strong>{{ copyMessage }}</strong>
       </button>
     </div>
-    <!-- <div class="keepintouch mt-3">
-      <ul
-        class="social-links d-flex align-items-center justify-content-center list-unstyled"
-      >
-        <li>
-          <a
-            class="btn d-flex align-items-center justify-content-center"
-            role="button"
-            target="_blank"
-            appCustomTooltip="Mail"
-            placement="top"
-            delay="{{ 0 }}"
-            aria-label="button-label"
-            (click)="shareByEmail(sharePost)"
-            ><i class="bi bi-envelope"></i
-          ></a>
-        </li>
-        <li>
-          <a
-            class="btn d-flex align-items-center justify-content-center"
-            role="button"
-            target="_blank"
-            appCustomTooltip="Twitter"
-            placement="top"
-            delay="{{ 0 }}"
-            aria-label="button-label"
-            (click)="shareOnTwitter(sharePost)"
-            ><i class="bi bi-twitter-x"></i
-          ></a>
-        </li>
-        <li>
-          <a
-            class="btn d-flex align-items-center justify-content-center"
-            role="button"
-            target="_blank"
-            appCustomTooltip="Facebbok"
-            (click)="shareOnFaceBook(sharePost)"
-            placement="top"
-            delay="{{ 0 }}"
-            aria-label="button-label"
-            ><i class="bi bi-facebook"></i
-          ></a>
-        </li>
-      </ul>
-    </div> -->
   </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline-primary rounded-0"
-      (click)="modal.close()"
-    >
+  <div class="modal-footer p-3">
+    <button type="button" class="btn btn-back" (click)="modal.close()">
       Close
     </button>
   </div>

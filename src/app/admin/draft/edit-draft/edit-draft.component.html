@@ -33,7 +33,7 @@
                           placeholder="Enter Episode Name"
                           (change)="this.inputChanged.next('episodeName')"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('episodeName')?.invalid &&
@@ -41,7 +41,7 @@
                           "
                         >
                           Episode Name is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
 
@@ -55,7 +55,7 @@
                           placeholder="Select Date"
                           (change)="this.inputChanged.next('date')"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('date')?.invalid &&
@@ -63,7 +63,7 @@
                           "
                         >
                           Date is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -76,7 +76,7 @@
                           placeholder="Enter Episode Number"
                           (change)="this.inputChanged.next('episodeNumber')"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('episodeNumber')?.invalid &&
@@ -84,7 +84,7 @@
                           "
                         >
                           Episode Number is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -97,7 +97,7 @@
                           placeholder="Enter Season Number"
                           (change)="this.inputChanged.next('seasonNumber')"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('seasonNumber')?.invalid &&
@@ -105,7 +105,7 @@
                           "
                         >
                           Season Number is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -218,7 +218,7 @@
                           placeholder="Enter Slug"
                           (change)="this.inputChanged.next('slug')"
                         />
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('slug')?.invalid &&
@@ -226,7 +226,7 @@
                           "
                         >
                           Slug is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
 
@@ -248,21 +248,21 @@
                           "
                           class="text-danger"
                         >
-                          <strong
+                          <div
                             *ngIf="episodeForm.get('url')?.errors?.['required']"
                           >
                             URL is required.
-                          </strong>
-                          <strong
+                          </div>
+                          <div
                             *ngIf="episodeForm.get('url')?.errors?.['invalidIframe']"
                           >
                             The URL must be an iframe for YouTube.
-                          </strong>
-                          <strong
+                          </div>
+                          <div
                             *ngIf="episodeForm.get('url')?.errors?.['invalidHttpUrl']"
                           >
                             The URL must start with http or https for Podcast.
-                          </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -277,7 +277,7 @@
                           rows="5"
                           (change)="this.inputChanged.next('description')"
                         ></ckeditor>
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('description')?.invalid &&
@@ -285,7 +285,7 @@
                           "
                         >
                           Description is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-12">
@@ -298,7 +298,7 @@
                           rows="5"
                           (change)="this.inputChanged.next('meta')"
                         ></textarea>
-                        <strong
+                        <div
                           class="text-danger"
                           *ngIf="
                             episodeForm.get('meta')?.invalid &&
@@ -306,7 +306,7 @@
                           "
                         >
                           Meta Description is required.
-                        </strong>
+                        </div>
                       </div>
                     </div>
                     <div class="col-lg-8 col-md-6 col-sm-12">
