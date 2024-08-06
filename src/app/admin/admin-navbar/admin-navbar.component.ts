@@ -119,7 +119,7 @@ export class AdminNavbarComponent implements OnInit {
     this.notificationService.warn('Logging Out');
     setTimeout(() => {
       this.router.navigate(['/admin-auth']);
-      this.notificationService.warn('Successfully Logged out');
+      this.notificationService.success('Successfully Logged out');
     }, 3000);
   }
 }
