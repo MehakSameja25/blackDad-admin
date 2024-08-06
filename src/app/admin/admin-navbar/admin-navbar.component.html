@@ -63,9 +63,7 @@
     <div id="sidebar-menu" class="sidebar-menu">
       <ul class="sidebar-vertical" *ngIf="menuData && menuData.role_accesses">
         <li *ngFor="let menu of menuData.role_accesses">
-          <a
-            [routerLinkActive]="checkActive(menu.menu_bar.title)"
-            (click)="routing(menu)"
+          <a (click)="routing(menu)" [ngClass]="{ active: isLinkActive(menu) }"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

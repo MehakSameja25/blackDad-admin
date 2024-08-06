@@ -49,7 +49,6 @@ export class EditEpisodesComponent {
   ngOnInit(): void {
     this.episodeForm = this.fb.group({
       episodeName: ['', [Validators.required]],
-      date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
@@ -107,7 +106,6 @@ export class EditEpisodesComponent {
   setFormValues(): void {
     this.episodeForm.patchValue({
       episodeName: this.episodeDetails.data.name,
-      date: this.episodeDetails.data.date,
       description: this.episodeDetails.data.description,
       meta: this.episodeDetails.data.meta_description,
       episodeNumber: this.episodeDetails.data.episodeNo,

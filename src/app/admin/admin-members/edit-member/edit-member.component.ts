@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleService } from '../../services/role.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthanticationService } from '../../services/authantication.service';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-edit-member',
@@ -20,6 +21,7 @@ export class EditMemberComponent implements OnInit {
     private roleService: RoleService,
     private router: Router,
     private route: ActivatedRoute,
+    private notificationService: NotificationsService
   ) {
     this.myForm = this.fb.group({
       name: ['', Validators.required],
@@ -33,7 +35,7 @@ export class EditMemberComponent implements OnInit {
       this.allRoles = res.data;
     });
 
-     this.memberId = this.route.snapshot.paramMap.get('id');
+    this.memberId = this.route.snapshot.paramMap.get('id');
     this.roleService.getMemberById(this.memberId).subscribe((res: any) => {
       this.memberData = res.data.user;
       console.log(this.memberData);
@@ -41,23 +43,31 @@ export class EditMemberComponent implements OnInit {
   }
 
   onSubmit() {
-    const body = this.myForm.value;
-    this.roleService.updateUser('editUserByAdmin', this.memberId, body).subscribe(
-      (res) => {
-        console.log(res);
-        if (res) {
-          this.myForm.reset();
-          setTimeout(() => {
+    if (this.myForm.invalid) {
+      this.notificationService.error("Form is invalid")
+      this.markFormGroupTouched(this.myForm);
+    } else {
+      const body = this.myForm.value;
+      this.roleService.updateUser('editUserByAdmin', this.memberId, body).subscribe(
+        (res) => {
+          console.log(res);
+          if (res) {
+            this.myForm.reset();
             this.router.navigate(['/admin/all-members']);
-          }, 1000);
-        }
-      },
-      (error) => {
-        this.errormessage = error.error.message;
-        setTimeout(() => {
-          this.errormessage = '';
-        }, 5000);
+          }
+        },
+      );
+    }
+
+  }
+
+  markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach((control) => {
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
       }
-    );
+    });
   }
 }

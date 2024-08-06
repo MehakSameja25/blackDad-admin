@@ -45,7 +45,6 @@ export class AddEpisodesComponent implements OnInit {
     };
     this.episodeForm = this.fb.group({
       episodeName: ['', [Validators.required]],
-      date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
@@ -135,7 +134,6 @@ export class AddEpisodesComponent implements OnInit {
     formData.append('type', 'episodes');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.episodeForm.value.description);
-    formData.append('date', this.episodeForm.value.date);
     formData.append('thumbnail', this.episodeForm.value.thumbnailImage);
     formData.append('image', this.episodeForm.value.bannerImage);
     formData.append('filetype', this.fileType);

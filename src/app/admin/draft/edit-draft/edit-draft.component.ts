@@ -57,7 +57,6 @@ export class EditDraftComponent {
   ngOnInit(): void {
     this.episodeForm = this.fb.group({
       episodeName: ['', [Validators.required]],
-      date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
@@ -162,7 +161,6 @@ export class EditDraftComponent {
     const formData = new FormData();
     formData.append('name', this.episodeForm.value.episodeName);
     formData.append('type', 'episodes');
-    formData.append('date', this.episodeForm.value.date);
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.episodeForm.value.description);
     formData.append('subtype', this.subtype);
@@ -287,7 +285,6 @@ export class EditDraftComponent {
   setFormValues(): void {
     this.episodeForm.patchValue({
       episodeName: this.draftData.name,
-      date: this.draftData.date,
       description: this.draftData.description,
       meta: this.draftData.meta_description,
       episodeNumber: this.draftData.episodeNo,

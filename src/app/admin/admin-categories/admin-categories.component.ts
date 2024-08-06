@@ -66,7 +66,6 @@ export class AdminCategoriesComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkPermissions();
-    this.getCategory();
   }
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
 
@@ -424,10 +423,7 @@ export class AdminCategoriesComponent implements OnInit {
             this.addPermission = permission.status.includes('add');
             this.editPermission = permission.status.includes('edit');
             this.deletePermission = permission.status.includes('delete');
-            //  console check
-            // console.log('add permission', this.addPermission);
-            // console.log('edit permission', this.editPermission);
-            // console.log('delete permission', this.deletePermission);
+            this.getCategory();
           }
         }
       }

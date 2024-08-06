@@ -46,7 +46,6 @@ export class EditArticlesComponent {
   ngOnInit(): void {
     this.articleForm = this.fb.group({
       articleName: ['', [Validators.required]],
-      date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       category: ['', [Validators.required]],
@@ -126,7 +125,6 @@ export class EditArticlesComponent {
   setFormValues(): void {
     this.articleForm.patchValue({
       articleName: this.singleArticle.data.name,
-      date: this.singleArticle.data.date,
       description: this.singleArticle.data.description,
       meta: this.singleArticle.data.meta_description,
       slug: this.singleArticle.data.slug,

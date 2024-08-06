@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { MainNavService } from '../services/main-nav.service';
 import { AuthanticationService } from '../services/authantication.service';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-admin-navbar',
@@ -20,7 +21,8 @@ export class AdminNavbarComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private menuService: MainNavService,
-    private authService: AuthanticationService
+    private authService: AuthanticationService,
+    private notificationService: NotificationsService
   ) {
     this.userId = localStorage.getItem('userId');
     this.menuService.getMenu().subscribe((response: any) => {
@@ -80,36 +82,44 @@ export class AdminNavbarComponent implements OnInit {
     // console.log(menu.menu_bar.title);
   }
 
-  checkActiveEpisodes() {
-    const url = this.router.url;
-    if (
-      url.includes('/admin/episodes') ||
-      url.includes('/admin/edit-episode') ||
-      url.includes('/admin/add-episode')
-    ) {
-      return 'active';
-    } else {
-      return '';
+  isLinkActive(menu: any): boolean {
+    const currentRoute = this.router.url;
+    if (menu.menu_bar.title === 'Categories') {
+      return currentRoute.includes('/admin/categories');
+    } else if (menu.menu_bar.title === 'Episodes') {
+      if (
+        currentRoute.includes('/admin/episodes') ||
+        currentRoute.includes('/admin/draft-episode') ||
+        currentRoute.includes('/admin/scheduled-episodes') ||
+        currentRoute.includes('/admin/edit-draft-episode') ||
+        currentRoute.includes('/admin/add-episode') ||
+        currentRoute.includes('/admin/detail-episode') ||
+        currentRoute.includes('/admin/edit-episode')
+      ) {
+        return true;
+      }
+    } else if (menu.menu_bar.title === 'Articles') {
+      if (
+        currentRoute.includes('/admin/articles') ||
+        currentRoute.includes('/admin/draft-article') ||
+        currentRoute.includes('/admin/scheduled-articles') ||
+        currentRoute.includes('/admin/edit-draft-article') ||
+        currentRoute.includes('/admin/add-article') ||
+        currentRoute.includes('/admin/detail-article') ||
+        currentRoute.includes('/admin/edit-article')
+      ) {
+        return true;
+      }
     }
+    return false;
   }
 
   logOut() {
     localStorage.removeItem('nkt');
-
+    this.notificationService.warn('Logging Out');
     setTimeout(() => {
       this.router.navigate(['/admin-auth']);
+      this.notificationService.warn('Successfully Logged out');
     }, 3000);
-  }
-  checkActive(type: any): any {
-    const url: any = this.router.url;
-    if (type == 'Categories') {
-      if (url.includes('/admin/categories')) {
-        return 'active';
-      } else {
-        return '';
-      }
-    } else {
-      return '';
-    }
   }
 }

@@ -67,7 +67,6 @@ export class AddArticlesComponent {
   ngOnInit(): void {
     this.articleForm = this.fb.group({
       articleName: ['', [Validators.required]],
-      date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       category: ['', [Validators.required]],
@@ -137,7 +136,6 @@ export class AddArticlesComponent {
     formData.append('type', 'articles');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.articleForm.value.description);
-    formData.append('date', this.articleForm.value.date);
     formData.append('meta_description', this.articleForm.value.meta);
     formData.append('slug', this.articleForm.value.slug);
     formData.append('reason', '');

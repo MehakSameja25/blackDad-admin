@@ -54,7 +54,6 @@ export class EditArticleDraftComponent {
   ngOnInit(): void {
     this.articleForm = this.fb.group({
       articleName: ['', [Validators.required]],
-      date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       category: ['', [Validators.required]],
@@ -69,7 +68,6 @@ export class EditArticleDraftComponent {
   setFormValues(): void {
     this.articleForm.patchValue({
       articleName: this.draftData.name,
-      date: this.draftData.date,
       description: this.draftData.description,
       meta: this.draftData.meta_description,
       slug: this.draftData.slug,
@@ -128,7 +126,6 @@ export class EditArticleDraftComponent {
     formData.append('type', 'articles');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.articleForm.value.description);
-    formData.append('date', this.articleForm.value.date);
     // formData.append('thumbnail', this.articleForm.value.bannerImage);
     // formData.append('image', this.articleForm.value.thumbnailImage);
     formData.append('meta_description', this.articleForm.value.meta);
