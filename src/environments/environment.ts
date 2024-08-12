@@ -1,5 +1,5 @@
 export const environment = {
-  apiUrl: 'https://adminblackdad.iwebwiser.in/api/v1',
+  apiUrl: 'http://api.blackdad.chooseyourfabric.in/api/v1',
   shareUrl: 'https://www.blackdadunfiltered.com/details',
-  nullImagePath: 'https://adminblackdad.iwebwiser.in/api/v1/null',
+  nullImagePath: 'http://api.blackdad.chooseyourfabric.in/api/v1/null',
 };
