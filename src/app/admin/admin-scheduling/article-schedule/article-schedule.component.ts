@@ -62,7 +62,7 @@ export class ArticleScheduleComponent implements OnInit {
         `<ul> ${item.category.map(
           (cat: any) => `<li> ${cat.name} </li>`
         )} </ul>`,
-        item.date,
+        item.created_at ? item.created_at.split('T')[0] : 'N/A',
         this.getScheduledStatus(item.isApproved, item.isPublished),
         `<div class="actions d-flex align-items-center gap-2">
         <a class="btn-action-icon" data-id="${item.id}" data-action="open">
@@ -162,7 +162,7 @@ export class ArticleScheduleComponent implements OnInit {
         </a>
         <a class="btn-action-icon" data-id="${item.id}" data-action="block">
       ${
-        item.isBlock == 0
+        item.isBlock == 1
           ? `
       <svg
                             xmlns="http://www.w3.org/2000/svg"

@@ -53,7 +53,7 @@ export class AdminArticleDraftComponent {
             )} </ul>`
           : 'No Categories',
 
-        item.draft.date ? item.draft.date : 'N/A',
+        item.created_at ? item.created_at.split('T')[0] : 'N/A',
         this.getScheduledStatus(item.draft.isApproved, item.draft.isPublished),
         `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">

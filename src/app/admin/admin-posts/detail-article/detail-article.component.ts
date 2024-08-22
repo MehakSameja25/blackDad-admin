@@ -99,20 +99,12 @@ export class DetailArticleComponent {
       });
   }
 
-  publish(articleData: any, type: any) {
+  publish(articleData: any) {
     this.postsService
-      .updateIsPublished(articleData.id, type)
+      .updateIsPublished(articleData.id, 'article')
       .subscribe((res) => {
         if (res) {
-          setTimeout(() => {
-            this.successMessage = 'Article Published';
-            this.successalertClass = '';
-            this.ngOnInit();
-          }, 1000);
-          setTimeout(() => {
-            this.successMessage = '';
-            this.successalertClass = 'd-none';
-          }, 5000);
+          this.ngOnInit();
         }
       });
   }

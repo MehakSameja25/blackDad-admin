@@ -95,22 +95,17 @@ export class DetailEpisodeComponent implements OnInit {
       .updateIsApproved(episodeData.id, type, approve)
       .subscribe((res) => {
         if (res) {
-          if (approve == 1) {
-            this.showSuccessMessage('Episode Approved');
-          } else if (approve == 2) {
-            this.showSuccessMessage('Episode Rejected');
-          }
+          this.ngOnInit();
         }
       });
   }
 
-  publish(episodeData: any, type: any) {
+  publish(episodeData: any) {
     this.postsService
-      .updateIsPublished(episodeData.id, type)
+      .updateIsPublished(episodeData.id, 'episode')
       .subscribe((res) => {
         if (res) {
-          this.getSchedulingDetails();
-          this.showSuccessMessage('Episode Published');
+          this.ngOnInit();
         }
       });
   }
@@ -147,8 +142,8 @@ export class DetailEpisodeComponent implements OnInit {
         .updateEpisode(this.postId, formData)
         .subscribe((res) => {
           if (res) {
+            this.ngOnInit();
             this.modalService.dismissAll();
-            this.showSuccessMessage('Episode Added in Scheduling');
           }
         });
     } else {
@@ -169,15 +164,6 @@ export class DetailEpisodeComponent implements OnInit {
     });
   }
 
-  private showSuccessMessage(message: string) {
-    this.successMessage = message;
-    this.successalertClass = '';
-    this.ngOnInit();
-    setTimeout(() => {
-      this.successMessage = '';
-      this.successalertClass = 'd-none';
-    }, 5000);
-  }
   private createEpisodeFormData(): FormData {
     const formData = new FormData();
     formData.append('name', this.episodeDetails.data.name);

@@ -46,13 +46,13 @@ export class AdminEpisodeDraftComponent implements OnInit {
               permission.status.includes('edit after publish');
             this.deletePermission = permission.status.includes('delete');
             //  console check
-            console.log('add permission', this.addPermission);
-            console.log('delete permission', this.deletePermission);
-            console.log('edit permission', this.isEdit);
-            console.log(
-              'edit after publish permission',
-              this.isEditAfterPublish
-            );
+            // console.log('add permission', this.addPermission);
+            // console.log('delete permission', this.deletePermission);
+            // console.log('edit permission', this.isEdit);
+            // console.log(
+            //   'edit after publish permission',
+            //   this.isEditAfterPublish
+            // );
           }
         }
         this.getDraft();
@@ -103,7 +103,7 @@ export class AdminEpisodeDraftComponent implements OnInit {
 
         item.draft.filetype ? item.draft.filetype : 'N/A',
         item.draft.seasonNo ? item.draft.seasonNo : 'N/A',
-        item.draft.date ? item.draft.date : 'N/A',
+        item.created_at ? item.created_at.split('T')[0] : 'N/A',
         this.getScheduledStatus(item.draft.isApproved, item.draft.isPublished),
         `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">

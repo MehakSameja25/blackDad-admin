@@ -350,10 +350,11 @@ export class EditDraftComponent {
       this.inputChanged.next('');
     }
   }
-
+  IsThumbnailImage = false;
   handleThumbnailImageInput(event: any): void {
     const file = event.target.files[0];
     if (file) {
+      this.IsThumbnailImage = true;
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
       this.episodeForm.patchValue({ thumbnailImage: file });
