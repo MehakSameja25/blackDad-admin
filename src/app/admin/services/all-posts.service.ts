@@ -128,7 +128,7 @@ export class AllPostsService {
    * --------------------------------FOR STATUS AND FILTER----------------------------------------
    ---------------------------------------------------------------------------------------------*/
 
-  updateIsblock(id: string, type: string) {
+  updateIsblock(id: string | null, type: string) {
     return apiCallWrapper(
       this.http.get<any>(
         `${environment.apiUrl}/update-status?id=${id}&menu=${type}`

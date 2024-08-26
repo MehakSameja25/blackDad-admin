@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthanticationService } from '../services/authantication.service';
+import { Authantication } from '../model/login.model';
 
 @Component({
   selector: 'app-admin-auth',
@@ -34,10 +35,9 @@ export class AdminAuthComponent implements OnInit {
     const authData = this.LoginForm.value;
     console.log('FORM DATA :=>', authData);
     this.authService.AdminAuthantication(authData).subscribe(
-      (res: any) => {
+      (res: Authantication) => {
         if (res) {
           localStorage.setItem('nkt', res.data.token);
-          localStorage.setItem('userId', res.data.user.id);
           setTimeout(() => {
             this.router.navigate(['/admin/profile']);
           }, 2000);
@@ -49,9 +49,9 @@ export class AdminAuthComponent implements OnInit {
     );
   }
 
-  show: any = false;
-  hidden: any = true;
-  type: any = 'password';
+  show: boolean = false;
+  hidden: boolean = true;
+  type: string = 'password';
 
   showPassword() {
     this.show = true;

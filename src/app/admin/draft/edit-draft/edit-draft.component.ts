@@ -62,15 +62,15 @@ export class EditDraftComponent {
       episodeNumber: ['', [Validators.required]],
       seasonNumber: ['', [Validators.required]],
       category: ['', [Validators.required]],
-      subType1: ['', [Validators.required]],
+      subType1: [''],
       // fileType: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       url: ['', [Validators.required]],
-      bannerImage: ['', [Validators.required]],
-      thumbnailImage: ['', [Validators.required]],
+      bannerImage: [''],
+      thumbnailImage: [''],
     });
     this.getCategories(); // Fetch categories
-    this.getSingleArticle(); // Initial draft save
+    this.getSingleEpisode(); // Initial draft save
   }
 
   getCategories() {
@@ -78,13 +78,12 @@ export class EditDraftComponent {
       this.allcategories = response.data;
     });
   }
-  getSingleArticle() {
+  getSingleEpisode() {
     this.draftId = this.route.snapshot.paramMap.get('id');
     this.postsService.getSingleDraft(this.draftId).subscribe((res: any) => {
       if (res) {
         this.singleDraft = res;
         this.draftData = res.data.draft;
-        console.log('DATA', this.draftData);
 
         if (this.draftData && this.draftData.subtype) {
           if (this.draftData.subtype === 'podcast') {
@@ -108,6 +107,7 @@ export class EditDraftComponent {
           }
         }
       }
+      this.updateValidators();
     });
   }
 
@@ -123,8 +123,37 @@ export class EditDraftComponent {
         }
       });
     } else {
+      console.log('INVALID', this.episodeForm.value);
       this.validateAllFormFields(this.episodeForm);
     }
+  }
+
+  updateValidators(): void {
+    const bannerImageControl = this.episodeForm.get('bannerImage');
+    const thumbnailImageControl = this.episodeForm.get('thumbnailImage');
+
+    // Adjust validators based on draft data
+    if (
+      this.singleDraft &&
+      this.singleDraft.data &&
+      this.singleDraft.data.image != this.nullImagePath
+    ) {
+      bannerImageControl?.clearValidators();
+    } else {
+      bannerImageControl?.addValidators(Validators.required);
+    }
+    bannerImageControl?.updateValueAndValidity();
+
+    if (
+      this.singleDraft &&
+      this.singleDraft.data &&
+      this.singleDraft.data.thumbnail != this.nullImagePath
+    ) {
+      thumbnailImageControl?.clearValidators();
+    } else {
+      thumbnailImageControl?.addValidators(Validators.required);
+    }
+    thumbnailImageControl?.updateValueAndValidity();
   }
 
   updateDraft() {

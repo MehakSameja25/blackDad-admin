@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class AdminAdvertisementsComponent implements OnInit {
   allAdvertisements: any;
-  deleteId: any;
+  deleteId!: string | null;
   tableData = [];
 
   tableColumns = [
@@ -314,7 +314,7 @@ export class AdminAdvertisementsComponent implements OnInit {
     });
   }
 
-  open(content: any, id: any) {
+  open(content: ElementRef, id: string | null) {
     this.deleteId = id;
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -329,7 +329,7 @@ export class AdminAdvertisementsComponent implements OnInit {
     });
   }
 
-  adPage(page: any) {
+  adPage(page: string) {
     if (page == 'all') {
       this.body = {};
       this.getAdvetisements();
@@ -565,10 +565,10 @@ export class AdminAdvertisementsComponent implements OnInit {
     }
     console.log('Advertisement Page =>', page);
   }
-  toEdit(id: any) {
+  toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-advertisement/${id}`]);
   }
-  toDetails(id: any) {
+  toDetails(id: string | null) {
     this.router.navigate([`/admin/detail-advertisement/${id}`]);
   }
 }

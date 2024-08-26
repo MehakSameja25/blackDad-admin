@@ -58,8 +58,8 @@ export class EditArticleDraftComponent {
       meta: ['', [Validators.required]],
       category: ['', [Validators.required]],
       slug: ['', [Validators.required]],
-      bannerImage: ['', [Validators.required]],
-      thumbnailImage: ['', [Validators.required]],
+      bannerImage: [''],
+      thumbnailImage: [''],
     });
     this.getCategories();
     this.getSingleArticle();
@@ -87,10 +87,12 @@ export class EditArticleDraftComponent {
   getSingleArticle() {
     this.draftId = this.route.snapshot.paramMap.get('id');
     this.postsService.getSingleDraft(this.draftId).subscribe((res: any) => {
-      this.singleDraft = res;
-      this.draftData = res.data.draft;
-      this.setFormValues();
-      console.log('DATA', this.draftData);
+      if (res) {
+        this.singleDraft = res;
+        this.draftData = res.data.draft;
+        this.setFormValues();
+        this.updateValidators();
+      }
     });
   }
   onSubmit() {
@@ -108,6 +110,35 @@ export class EditArticleDraftComponent {
       });
     }
   }
+
+  updateValidators(): void {
+    const bannerImageControl = this.articleForm.get('bannerImage');
+    const thumbnailImageControl = this.articleForm.get('thumbnailImage');
+
+    // Adjust validators based on draft data
+    if (
+      this.singleDraft &&
+      this.singleDraft.data &&
+      this.singleDraft.data.image != this.nullImagePath
+    ) {
+      bannerImageControl?.clearValidators();
+    } else {
+      bannerImageControl?.addValidators(Validators.required);
+    }
+    bannerImageControl?.updateValueAndValidity();
+
+    if (
+      this.singleDraft &&
+      this.singleDraft.data &&
+      this.singleDraft.data.thumbnail != this.nullImagePath
+    ) {
+      thumbnailImageControl?.clearValidators();
+    } else {
+      thumbnailImageControl?.addValidators(Validators.required);
+    }
+    thumbnailImageControl?.updateValueAndValidity();
+  }
+
   updateDraft() {
     if (this.draftId) {
       const formData = this.createArticleFormData();
@@ -321,7 +352,7 @@ export class EditArticleDraftComponent {
     } else {
       this.selectedCategories.splice(index, 1);
     }
-    this.inputChanged.next("");
+    this.inputChanged.next('');
     console.log('Selected Category:', this.selectedCategories);
   }
 
@@ -330,7 +361,7 @@ export class EditArticleDraftComponent {
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);
     }
-    this.inputChanged.next("");
+    this.inputChanged.next('');
     console.log('Deselected Category:', this.selectedCategories);
   }
 }

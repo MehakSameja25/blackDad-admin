@@ -177,7 +177,6 @@ export class DetailEpisodeComponent implements OnInit {
       'meta_description',
       this.episodeDetails.data.meta_description
     );
-    formData.append('date', this.episodeDetails.data.date);
     formData.append('subtype', this.episodeDetails.data.subtype);
     formData.append('episodeNo', this.episodeDetails.data.episodeNo);
     formData.append('seasonNo', this.episodeDetails.data.seasonNo);

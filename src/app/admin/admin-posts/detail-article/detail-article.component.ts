@@ -74,27 +74,7 @@ export class DetailArticleComponent {
       .updateIsApproved(articleData.id, type, approve)
       .subscribe((res) => {
         if (res) {
-          if (approve == 1) {
-            setTimeout(() => {
-              this.successMessage = 'Article Approved';
-              this.successalertClass = '';
-              this.ngOnInit();
-            }, 1000);
-            setTimeout(() => {
-              this.successMessage = '';
-              this.successalertClass = 'd-none';
-            }, 5000);
-          } else if (approve == 2) {
-            setTimeout(() => {
-              this.successMessage = 'Article Rejected';
-              this.successalertClass = '';
-              this.ngOnInit();
-            }, 1000);
-            setTimeout(() => {
-              this.successMessage = '';
-              this.successalertClass = 'd-none';
-            }, 5000);
-          }
+          this.ngOnInit();
         }
       });
   }
@@ -150,6 +130,7 @@ export class DetailArticleComponent {
         .subscribe((res) => {
           if (res) {
             this.checkPermission();
+            this.ngOnInit();
             this.modalService.dismissAll();
           }
         });

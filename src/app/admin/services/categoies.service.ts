@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { apiCallWrapper } from './api.util';
 import { NotificationsService } from 'angular2-notifications';
+import { Observable } from 'rxjs';
+import { Category } from '../model/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -55,9 +57,11 @@ export class CategoiesService {
       }
     );
   }
-  unblockedCategories() {
+  unblockedCategories(): Observable<Category> {
     return apiCallWrapper(
-      this.http.get(`${environment.apiUrl}/get-category?type=onlyUnblock`),
+      this.http.get<Category>(
+        `${environment.apiUrl}/get-category?type=onlyUnblock`
+      ),
       {
         notificationsService: this.notifications,
         action: 'Fetching Category',

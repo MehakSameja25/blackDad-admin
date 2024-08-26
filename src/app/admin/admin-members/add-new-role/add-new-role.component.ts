@@ -70,9 +70,6 @@ export class AddNewRoleComponent {
     this.menuData.push({ id: 3, name: 'Artical' });
   }
 
-  onSubmit() {
-
-  }
 
   addMenu(id: number, event: any) {
     if (event.checked) {
