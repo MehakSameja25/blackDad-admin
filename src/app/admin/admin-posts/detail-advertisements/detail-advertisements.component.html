@@ -24,13 +24,13 @@
                   <div class="ep-cover">
                     <div class="card p-0 m-0">
                       <img
-                        src="{{ singleAdData.image }}"
+                        src="{{ singleAdData.data.image }}"
                         class="card-img-top"
                         alt="..."
                       />
                       <div class="card-body">
                         <p class="card-text">
-                          {{ singleAdData.title | titlecase }}
+                          {{ singleAdData.data.title | titlecase }}
                         </p>
                       </div>
                     </div>
@@ -41,28 +41,28 @@
                     <div class="col-lg-12 col-md-12 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Title</label>
-                        <p>{{ singleAdData.title | titlecase }}</p>
+                        <p>{{ singleAdData.data.title | titlecase }}</p>
                       </div>
                     </div>
 
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Page</label>
-                        <p>{{ singleAdData.page | titlecase }}</p>
+                        <p>{{ singleAdData.data.page | titlecase }}</p>
                       </div>
                     </div>
 
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Url</label>
-                        <p>{{ singleAdData.url }}</p>
+                        <p>{{ singleAdData.data.url }}</p>
                       </div>
                     </div>
 
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Click Counts</label>
-                        <p>{{ singleAdData.clicks }}</p>
+                        <p>{{ singleAdData.data.clicks }}</p>
                       </div>
                     </div>
 
@@ -70,7 +70,7 @@
                       <div class="input-block mb-3">
                         <label>Description</label>
                         <p>
-                          {{ singleAdData.description }}
+                          {{ singleAdData.data.description }}
                         </p>
                       </div>
                     </div>

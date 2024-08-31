@@ -58,8 +58,8 @@
                           [settings]="dropdownSettings"
                           [data]="allcategories"
                           formControlName="category"
-                          (onSelect)="onCategorySelect($event)"
-                          (onDeSelect)="onCategoryDeSelect($event)"
+                          (onSelect)="onCategorySelect($event.id)"
+                          (onDeSelect)="onCategoryDeSelect($event.id)"
                           (change)="this.inputChanged.next('category')"
                         >
                         </ng-multiselect-dropdown>
@@ -171,7 +171,7 @@
                               [src]="
                                 croppedBannerImage
                                   ? croppedBannerImage
-                                  : singleDraft?.data?.image
+                                  : singleDraft.data.image
                               "
                               alt="upload"
                               id="bannerPreview"

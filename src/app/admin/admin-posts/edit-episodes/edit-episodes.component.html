@@ -97,8 +97,8 @@
                           [settings]="dropdownSettings"
                           [data]="allcategories"
                           formControlName="category"
-                          (onSelect)="onCategorySelect($event)"
-                          (onDeSelect)="onCategoryDeSelect($event)"
+                          (onSelect)="onCategorySelect($event.id)"
+                          (onDeSelect)="onCategoryDeSelect($event.id)"
                         >
                         </ng-multiselect-dropdown>
                       </div>
@@ -151,7 +151,7 @@
                           <option
                             value="podcast"
                             [selected]="
-                              episodeDetails?.data.subtype === 'podcast'
+                              episodeDetails.data.subtype === 'podcast'
                             "
                           >
                             podcast
@@ -159,7 +159,7 @@
                           <option
                             value="youtube"
                             [selected]="
-                              episodeDetails?.data.subtype === 'youtube'
+                              episodeDetails.data.subtype === 'youtube'
                             "
                           >
                             youtube
@@ -302,9 +302,8 @@
                           <span>
                             <img
                               [src]="
-                                this.episodeDetails.data.image ??
-                                croppedBannerImage ??
-                                'assets/img/drop-icon.svg'
+                                croppedBannerImage ?
+                                croppedBannerImage : this.episodeDetails.data.image
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -377,9 +376,9 @@
                           <span>
                             <img
                               [src]="
-                                this.episodeDetails.data.thumbnail ??
-                                croppedThumbnailImage ??
-                                'assets/img/drop-icon.svg'
+                                croppedThumbnailImage ?
+                                croppedThumbnailImage :
+                                this.episodeDetails.data.thumbnail
                               "
                               id="thumbnailPreview"
                               alt="upload"

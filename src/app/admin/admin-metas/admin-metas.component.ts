@@ -7,26 +7,27 @@ import {
 } from '@angular/core';
 import { MetaDataService } from '../services/meta-data.service';
 import { Router } from '@angular/router';
+import { MetaList, SingleMeta } from '../model/meta.model';
 
 @Component({
   selector: 'app-admin-metas',
   templateUrl: './admin-metas.component.html',
 })
 export class AdminMetasComponent implements OnInit {
-  allMetas: any;
+  allMetas!: MetaList;
   constructor(
     private metaService: MetaDataService,
     private router: Router,
     private renderer: Renderer2
   ) {}
-  tableData = [];
+  tableData: any = [];
 
   tableColumns = [{ title: 'Meta For' }, { title: 'Action' }];
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
   ngOnInit(): void {
-    this.metaService.getMeta().subscribe((response: any) => {
+    this.metaService.getMeta().subscribe((response: MetaList) => {
       this.allMetas = response;
-      this.tableData = response.data.map((item: any) => [
+      this.tableData = response.data.map((item: { meta_for: string }) => [
         item.meta_for,
         `<div class="actions d-flex align-items-center gap-2">
                           <a
@@ -97,7 +98,7 @@ export class AdminMetasComponent implements OnInit {
       }
     });
   }
-  toEdit(id: any) {
+  toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-metas/${id}`]);
   }
 }

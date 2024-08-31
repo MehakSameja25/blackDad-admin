@@ -35,6 +35,7 @@ import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
   { path: '', redirectTo: 'admin-auth', pathMatch: 'full' },
+  { path: 'forget-password', component: AdminAuthComponent },
   {
     path: 'admin/episodes',
     component: AdminEpisodesComponent,

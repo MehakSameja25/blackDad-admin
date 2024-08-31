@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AllPostsService } from '../../services/all-posts.service';
@@ -7,18 +7,20 @@ import { MainNavService } from '../../services/main-nav.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { COUNTRIES } from '../../countries';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Menu } from '../../model/menu.model';
+import { SingleArticle } from '../../model/article.model';
 
 @Component({
   selector: 'app-detail-article',
   templateUrl: './detail-article.component.html',
 })
 export class DetailArticleComponent {
-  articleDetails: any;
+  articleDetails!: SingleArticle;
   sanitizedDescription: SafeHtml | undefined;
-  successalertClass: any = 'd-none';
-  successMessage: any = '';
-  publishPermission: any;
-  type: any;
+  successalertClass: string = 'd-none';
+  successMessage: string = '';
+  publishPermission!: boolean;
+  type!: string;
   postId: string | null | undefined;
   constructor(
     private route: ActivatedRoute,
@@ -58,20 +60,20 @@ export class DetailArticleComponent {
   sanitizeDescription(description: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(description);
   }
-  countryName: any;
+  countryName!: string | null;
 
-  timezonne: any;
+  timezonne!: string | null;
 
-  scheduledTime: any;
+  scheduledTime!: string | null;
 
   getSchedulingDetails() {
     this.countryName = this.articleDetails.data.country;
     this.timezonne = this.articleDetails.data.timezone;
     this.scheduledTime = this.articleDetails.data.publish_date;
   }
-  approved(articleData: any, type: any, approve: any) {
+  approved(articleData: { id: string | number }, approve: string) {
     this.postsService
-      .updateIsApproved(articleData.id, type, approve)
+      .updateIsApproved(articleData.id, 'article', approve)
       .subscribe((res) => {
         if (res) {
           this.ngOnInit();
@@ -79,7 +81,7 @@ export class DetailArticleComponent {
       });
   }
 
-  publish(articleData: any) {
+  publish(articleData: { id: string }) {
     this.postsService
       .updateIsPublished(articleData.id, 'article')
       .subscribe((res) => {
@@ -94,14 +96,11 @@ export class DetailArticleComponent {
     this.authService.getUserById(userId).subscribe((res) => {
       this.type = res.data.role.name;
     });
-    this.navService.getMenu().subscribe((res: any) => {
+    this.navService.getMenu().subscribe((res: Menu) => {
       if (res) {
         for (let permission of res.data[0].role_accesses) {
           if ((permission.menu_bar.title == 'Articles') === true) {
             this.publishPermission = permission.status.includes('publish');
-
-            //  console check
-            console.log('publish permission', this.publishPermission);
           }
         }
         this.getDetails();
@@ -109,10 +108,20 @@ export class DetailArticleComponent {
     });
   }
   scheduleForm!: FormGroup;
-  countries: any = COUNTRIES;
+  countries: {
+    code: string;
+    name: string;
+    timezones: {
+      tzCode: string;
+      utc: string;
+    }[];
+  }[] = COUNTRIES;
 
-  timezones: any[] = [];
-  openScheduleModal(content: any) {
+  timezones: {
+    tzCode: string;
+    utc: string;
+  }[] = [];
+  openScheduleModal(content: TemplateRef<unknown>) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
     });
@@ -142,7 +151,9 @@ export class DetailArticleComponent {
   onCountryChange() {
     const selectedCountry = this.scheduleForm.get('country')?.value;
     console.log('selectedCountry => ', selectedCountry);
-    const country = this.countries.find((c: any) => c.name === selectedCountry);
+    const country = this.countries.find(
+      (c: { name: string }) => c.name === selectedCountry
+    );
 
     this.timezones = country ? country.timezones : [];
     console.log('timezones => ', this.timezones);
@@ -154,7 +165,7 @@ export class DetailArticleComponent {
   private createEpisodeFormData(): FormData {
     const formData = new FormData();
     formData.append('name', this.articleDetails.data.name);
-    formData.append('type', this.articleDetails.data.type);
+    formData.append('type', 'articles');
     formData.append('categoryId', this.articleDetails.data.categoryId);
     formData.append('description', this.articleDetails.data.description);
     //     formData.append('thumbnail', this.episodeForm.value.thumbnailImage);
@@ -165,9 +176,9 @@ export class DetailArticleComponent {
     );
     // formData.append('date', this.articleDetails.data.date);
     formData.append('slug', this.articleDetails.data.description);
-    formData.append('file', this.articleDetails.data.file);
+    formData.append('file', '');
     formData.append('reason', '');
-    formData.append('url', this.articleDetails.data.url);
+    formData.append('url', '');
     formData.append('isBlock', this.articleDetails.data.isBlock);
     formData.append('isApproved', this.articleDetails.data.isApproved);
     formData.append('isPublished', this.articleDetails.data.isPublished);

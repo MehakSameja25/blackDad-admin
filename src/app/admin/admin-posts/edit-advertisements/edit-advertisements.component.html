@@ -19,7 +19,7 @@
         <div class="col-sm-12">
           <div class="card">
             <div class="card-body">
-              <div class="form-group-item border-0 mb-0">
+              <div class="form-group-item border-0 mb-0" *ngIf="singleAdData">
                 <form [formGroup]="advertisementForm" (ngSubmit)="onSubmit()">
                   <div class="row align-item-center">
                     <div class="col-12">
@@ -115,19 +115,19 @@
                         <select class="form-select" formControlName="page">
                           <option
                             value="Home"
-                            [selected]="singleAdData.page == 'Home'"
+                            [selected]="singleAdData.page == 'home'"
                           >
                             Home
                           </option>
                           <option
                             value="Episodes"
-                            [selected]="singleAdData.page == 'Episodes'"
+                            [selected]="singleAdData.page == 'episodes'"
                           >
                             Episodes
                           </option>
                           <option
                             value="Articles"
-                            [selected]="singleAdData.page == 'Articles'"
+                            [selected]="singleAdData.page == 'articles'"
                           >
                             Articles
                           </option>
@@ -156,7 +156,7 @@
                               [src]="
                                 croppedThumbnailImage
                                   ? croppedThumbnailImage
-                                  : singleAdData?.image
+                                  : singleAdData.image
                               "
                               id="thumbnailPreview"
                               alt="upload"

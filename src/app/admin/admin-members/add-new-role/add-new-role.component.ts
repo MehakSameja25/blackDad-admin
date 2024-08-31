@@ -9,13 +9,17 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./add-new-role.component.css'],
 })
 export class AddNewRoleComponent {
-  menuData: { id: number, name: string }[] = [];
+  menuData: { id: number; name: string }[] = [];
   roleData: any = {
     name: '',
     role: [],
   };
   categoriesChecked: boolean = false;
-  permissions: any = {
+  permissions: {
+    add: boolean;
+    edit: boolean;
+    delete: boolean;
+  } = {
     add: false,
     edit: false,
     delete: false,
@@ -26,24 +30,29 @@ export class AddNewRoleComponent {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.route.params
-      .subscribe(params => {
-        if (params['id']) {
-          this.roleId = params['id'];
-          this.roleService.getRoleWithId(this.roleId).subscribe(res => {
-            if (res && res.data) {
-              this.roleData.name = res.data.name;
-              res.data.role_accesses.map((data: any) => {
-                this.roleData.role.push({ id: data.id, menu_id: data.menu_id, status: JSON.parse(data.status) });
-              })
-            }
-          })
-        }
-      });
+    this.route.params.subscribe((params) => {
+      if (params['id']) {
+        this.roleId = params['id'];
+        this.roleService.getRoleWithId(this.roleId).subscribe((res) => {
+          if (res && res.data) {
+            this.roleData.name = res.data.name;
+            res.data.role_accesses.map((data: { id: number; menu_id: number; status: string; }) => {
+              this.roleData.role.push({
+                id: data.id,
+                menu_id: data.menu_id,
+                status: JSON.parse(data.status),
+              });
+            });
+          }
+        });
+      }
+    });
   }
 
   isStatusExit(id: number, status: string) {
-    const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
+    const role = this.roleData.role.find(
+      (data: { menu_id: number }) => data.menu_id == id
+    );
     if (role) {
       if (!role.status) {
         role.status = [];
@@ -57,7 +66,9 @@ export class AddNewRoleComponent {
   }
 
   isRoleExit(id: number) {
-    const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
+    const role = this.roleData.role.find(
+      (data: { menu_id: number }) => data.menu_id == id
+    );
     if (role) {
       return true;
     }
@@ -70,12 +81,13 @@ export class AddNewRoleComponent {
     this.menuData.push({ id: 3, name: 'Artical' });
   }
 
-
   addMenu(id: number, event: any) {
     if (event.checked) {
       this.roleData.role.push({ menu_id: id });
     } else {
-      const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
+      const role = this.roleData.role.find(
+        (data: { menu_id: number }) => data.menu_id == id
+      );
       if (role) {
         this.roleData.role.splice(this.roleData.role.indexOf(role), 1);
       }
@@ -83,7 +95,9 @@ export class AddNewRoleComponent {
   }
 
   addMenuAccess(id: number, event: any, status: string) {
-    const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
+    const role = this.roleData.role.find(
+      (data: { menu_id: number }) => data.menu_id == id
+    );
     if (event.checked) {
       if (role) {
         if (!role.status) {
@@ -102,7 +116,9 @@ export class AddNewRoleComponent {
   }
 
   isMenuExist(id: number) {
-    const role = this.roleData.role.find((data: { menu_id: number }) => data.menu_id == id);
+    const role = this.roleData.role.find(
+      (data: { menu_id: number }) => data.menu_id == id
+    );
     if (role) {
       return false;
     }
@@ -114,10 +130,10 @@ export class AddNewRoleComponent {
     if (this.roleId) {
       role = this.roleService.editRole(this.roleData, +this.roleId);
     } else {
-      role = this.roleService.addRole(this.roleData)
+      role = this.roleService.addRole(this.roleData);
     }
-    role.subscribe(res => {
+    role.subscribe((res) => {
       this.router.navigate(['/admin/role-type']);
-    })
+    });
   }
 }

@@ -163,9 +163,9 @@
                           <span>
                             <img
                               [src]="
-                                singleArticle.data.image ??
-                                croppedBannerImage ??
-                                'assets/img/drop-icon.svg'
+                                croppedBannerImage
+                                  ? croppedBannerImage
+                                  : singleArticle.data.image
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -207,9 +207,9 @@
                       <div
                         *ngIf="
                           singleArticle.data.image == nullImagePath ||
-                          articleForm.get('bannerImage')?.invalid &&
-                          (articleForm.get('bannerImage')?.dirty ||
-                            articleForm.get('bannerImage')?.touched)
+                          (articleForm.get('bannerImage')?.invalid &&
+                            (articleForm.get('bannerImage')?.dirty ||
+                              articleForm.get('bannerImage')?.touched))
                         "
                         class="text-danger"
                       >
@@ -237,9 +237,9 @@
                           <span>
                             <img
                               [src]="
-                                singleArticle.data.thumbnail ??
-                                croppedThumbnailImage ??
-                                'assets/img/drop-icon.svg'
+                                croppedThumbnailImage
+                                  ? croppedThumbnailImage
+                                  : singleArticle.data.thumbnail
                               "
                               id="thumbnailPreview"
                               alt="upload"
@@ -281,9 +281,9 @@
                       <div
                         *ngIf="
                           singleArticle.data.thumbnail == nullImagePath ||
-                          articleForm.get('thumbnailImage')?.invalid &&
-                          (articleForm.get('thumbnailImage')?.dirty ||
-                            articleForm.get('thumbnailImage')?.touched)
+                          (articleForm.get('thumbnailImage')?.invalid &&
+                            (articleForm.get('thumbnailImage')?.dirty ||
+                              articleForm.get('thumbnailImage')?.touched))
                         "
                         class="text-danger"
                       >
@@ -342,7 +342,7 @@
       <span>
         <img
           [src]="
-            croppedBannerImage ? croppedBannerImage : singleArticle?.data?.image
+            croppedBannerImage ? croppedBannerImage : singleArticle.data.image
           "
           class="w-100 h-100"
           style="object-fit: contain"
@@ -382,7 +382,7 @@
           [src]="
             croppedThumbnailImage
               ? croppedThumbnailImage
-              : singleArticle?.data?.thumbnail
+              : singleArticle.data.thumbnail
           "
           class="w-100 h-100"
           style="object-fit: contain"

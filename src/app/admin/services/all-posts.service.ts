@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { apiCallWrapper } from './api.util';
 import { NotificationsService } from 'angular2-notifications';
+import { Episode } from '../model/episode.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,9 +20,9 @@ export class AllPostsService {
   /** -------------------------------------------------------------------------------------------------
    * ------------------------------------FOR EPISODES -------------------------------------------------
    ---------------------------------------------------------------------------------------------------*/
-  getEpisodes(body: any) {
+  getEpisodes(body: any): Observable<Episode> {
     return apiCallWrapper(
-      this.http.post<any>(`${environment.apiUrl}/get-song`, body),
+      this.http.post<Episode>(`${environment.apiUrl}/get-song`, body),
       {
         notificationsService: this.notifications,
         action: 'Fecthing All Episodes',

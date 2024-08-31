@@ -4,6 +4,7 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { CategoiesService } from '../services/categoies.service';
@@ -11,30 +12,27 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AllPostsService } from '../services/all-posts.service';
 import { MainNavService } from '../services/main-nav.service';
-import { Subject } from 'rxjs';
+import { Category, SingleCategory } from '../model/category.model';
+import { Menu } from '../model/menu.model';
 
 @Component({
   selector: 'app-admin-categories',
   templateUrl: './admin-categories.component.html',
 })
 export class AdminCategoriesComponent implements OnInit {
-  allCategories: any;
-  editId: any;
-  // successalertClass: any = 'd-none';
-  // successMessage: any = '';
+  allCategories!: Category;
 
   addCategoryForm!: FormGroup;
   editCategoryForm!: FormGroup;
 
   errormessage: string = '';
-  singleCategoryData: any;
-  deleteId: any;
+  singleCategoryData!: SingleCategory;
+  deleteId!: string | null;
 
-  addPermission: any;
-  editPermission: any;
-  deletePermission: any;
-  selectedFile: any;
-  tableData = [];
+  addPermission!: boolean;
+  editPermission!: boolean;
+  deletePermission!: boolean;
+  tableData: any[] = [];
 
   tableColumns = [
     { title: 'Image' },
@@ -70,23 +68,31 @@ export class AdminCategoriesComponent implements OnInit {
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
 
   getCategory() {
-    this.categoriesService.getCategory().subscribe((res: any) => {
+    this.categoriesService.getCategory().subscribe((res: Category) => {
       this.allCategories = res;
 
-      this.tableData = res.data.map((item: any) => [
-        `<div class="table-img"><img src="${item.image}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
-        item.name,
-        item.description.length > 25
-          ? ` ${this.truncateDescription(item.description)}  <span
+      this.tableData = res.data.map(
+        (item: {
+          id: number | null;
+          name: string;
+          image: string;
+          isblock: string;
+          description: string;
+        }) => [
+          `<div class="table-img"><img src="${item.image}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
+          item.name,
+          item.description.length > 25
+            ? ` ${this.truncateDescription(item.description)}  <span
                           class="badge rounded-pill text-bg-violet"
                           style="cursor: pointer"
                           data-id="${item.id}" data-action="description"
                           >Read more</span
                         >`
-          : item.description,
-        ` <div class="actions d-flex align-items-center gap-2">
-        ${this.editPermission === true
-          ? `<a
+            : item.description,
+          ` <div class="actions d-flex align-items-center gap-2">
+        ${
+          this.editPermission === true
+            ? `<a
                             data-id="${item.id}" data-action="edit"
                             class="btn-action-icon"
                             *ngIf="editPermission == true"
@@ -122,13 +128,15 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
                           </a>`
-          : ''
+            : ''
         }
                           
-                           <a class="btn-action-icon" data-id="${item.id
-        }" data-action="block">
-        ${item.isblock == 1
-          ? `
+                           <a class="btn-action-icon" data-id="${
+                             item.id
+                           }" data-action="block">
+        ${
+          item.isblock == '1'
+            ? `
         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
@@ -160,7 +168,7 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
         `
-          : `
+            : `
        <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
@@ -229,8 +237,9 @@ export class AdminCategoriesComponent implements OnInit {
         `
         }
           </a>
-                        ${this.deletePermission === true
-          ? `<a
+                        ${
+                          this.deletePermission === true
+                            ? `<a
                             class="btn-action-icon"
                             data-id="${item.id}" data-action="delete"
                             *ngIf="deletePermission == true"
@@ -264,26 +273,27 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
                           </a>`
-          : ''
-        }  
+                            : ''
+                        }  
                         </div>`,
-      ]);
+        ]
+      );
 
       setTimeout(() => this.bindEvents(), 0);
     });
   }
 
   @ViewChild('deletee')
-  public deleteModel!: ElementRef;
+  public deleteModel!: TemplateRef<unknown>;
 
   @ViewChild('edit')
-  public editModel!: ElementRef;
+  public editModel!: TemplateRef<unknown>;
 
   @ViewChild('add')
-  public addModel!: ElementRef;
+  public addModel!: TemplateRef<unknown>;
 
   @ViewChild('descriptionn')
-  public descModel!: ElementRef;
+  public descModel!: TemplateRef<unknown>;
 
   bindEvents(): void {
     const tableElement = this.table.nativeElement;
@@ -319,7 +329,7 @@ export class AdminCategoriesComponent implements OnInit {
     });
   }
 
-  openAdd(content: any) {
+  openAdd(content: TemplateRef<unknown>) {
     this.addCategoryForm.reset();
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -328,11 +338,11 @@ export class AdminCategoriesComponent implements OnInit {
     });
   }
 
-  openEdit(content: any, id: any) {
+  openEdit(content: TemplateRef<unknown>, id: string | null) {
     this.editCategoryForm.reset();
-    this.categoriesService.getCategoryById(id).subscribe((Response: any) => {
-      this.singleCategoryData = Response.data;
-      // this.selectedFile = this.singleCategoryData.image;
+    this.categoriesService.getCategoryById(id).subscribe((Response) => {
+      this.singleCategoryData = Response;
+      console.log(this.singleCategoryData);
       if (this.singleCategoryData) {
         this.modalService.open(content, {
           ariaLabelledBy: 'modal-basic-title',
@@ -343,7 +353,7 @@ export class AdminCategoriesComponent implements OnInit {
     });
   }
 
-  openDelete(content: any, id: any) {
+  openDelete(content: TemplateRef<unknown>, id: string | null) {
     this.deleteId = id;
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -380,11 +390,9 @@ export class AdminCategoriesComponent implements OnInit {
       return;
     } else {
       const formData = this.prepareFormData(this.editCategoryForm);
-
-      formData.append('isblock', this.singleCategoryData.isblock);
-
+      formData.append('isblock', this.singleCategoryData.data.isblock);
       this.categoriesService
-        .editCategory(formData, this.singleCategoryData.id)
+        .editCategory(formData, this.singleCategoryData.data.id)
         .subscribe((res) => {
           if (res) {
             this.ngOnInit();
@@ -416,7 +424,7 @@ export class AdminCategoriesComponent implements OnInit {
   }
 
   checkPermissions() {
-    this.navService.getMenu().subscribe((res: any) => {
+    this.navService.getMenu().subscribe((res: Menu) => {
       if (res && res.data) {
         for (let permission of res.data[0].role_accesses) {
           if ((permission.menu_bar.title == 'Categories') === true) {
@@ -438,28 +446,32 @@ export class AdminCategoriesComponent implements OnInit {
     return formData;
   }
 
-  fileName: any = '';
+  fileName!: File;
 
   showImageRequired: boolean = true;
-  onFileSelected(event: any) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
 
       if (file) {
         this.showImageRequired = false;
         this.fileName = file;
         const reader = new FileReader();
-        reader.onload = (e: any) => {
-          document
-            .getElementById('thumbnailPreview')!
-            .setAttribute('src', e.target.result);
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          const result = e.target?.result as string;
+          const previewElement = document.getElementById('thumbnailPreview');
+          if (previewElement) {
+            previewElement.setAttribute('src', result);
+          }
         };
         reader.readAsDataURL(file);
         this.editCategoryForm.patchValue({ thumbnailImage: file });
       }
     }
   }
-  isCheckBlock(categoryData: any) {
+  isCheckBlock(categoryData: string | null) {
     this.allPost.updateIsblock(categoryData, 'categories').subscribe((res) => {
       if (res) {
         this.ngOnInit();

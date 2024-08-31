@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoiesService } from '../../services/categoies.service';
 import { AllPostsService } from '../../services/all-posts.service';
@@ -6,6 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { environment } from 'src/environments/environment';
+import { Category } from '../../model/category.model';
+import { SingleArticle } from '../../model/article.model';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-edit-articles',
@@ -14,9 +17,17 @@ import { environment } from 'src/environments/environment';
 })
 export class EditArticlesComponent {
   articleForm!: FormGroup;
-  allcategories: any;
-  selectedCategories: any[] = [];
-  singleArticle: any;
+  allcategories!: [
+    {
+      id: number | null;
+      name: string;
+      image: string;
+      isblock: string;
+      description: string;
+    }
+  ];
+  selectedCategories: string[] = [];
+  singleArticle!: SingleArticle;
   dropdownSettings: {};
   editor = ClassicEditor;
   nullImagePath = environment.nullImagePath;
@@ -79,10 +90,12 @@ export class EditArticlesComponent {
   }
 
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response: any) => {
-      this.allcategories = response.data;
-      console.log(this.allcategories);
-    });
+    this.categoryService
+      .unblockedCategories()
+      .subscribe((response: Category) => {
+        this.allcategories = response.data;
+        console.log(this.allcategories);
+      });
   }
   IsThumbnailImage = false;
   onSubmit() {
@@ -130,48 +143,21 @@ export class EditArticlesComponent {
       slug: this.singleArticle.data.slug,
       category: this.singleArticle.data.categories,
     });
-    this.singleArticle.data.categories.map((category: any) => {
-      this.selectedCategories.push(category.id);
-    });
+    this.singleArticle.data.categories.map(
+      (category: {
+        id: number;
+        name: string;
+        image: string;
+        isblock: string;
+        description: string;
+        created_at: string;
+        updated_at: string;
+      }) => {
+        this.selectedCategories.push(category.id.toString());
+      }
+    );
   }
 
-  // handleBannerImageInput(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       document
-  //         .getElementById('bannerPreview')!
-  //         .setAttribute('src', e.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     this.articleForm.patchValue({ bannerImage: file });
-  //   }
-  // }
-
-  // handleThumbnailImageInput(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       document
-  //         .getElementById('thumbnailPreview')!
-  //         .setAttribute('src', e.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     this.articleForm.patchValue({ thumbnailImage: file });
-  //   }
-  // }
-
-  // getCategoryId(id: any) {
-  //   const index = this.selectedCategories.indexOf(id);
-  //   if (index === -1) {
-  //     this.selectedCategories.push(id);
-  //   } else {
-  //     this.selectedCategories.splice(index, 1);
-  //   }
-  //   console.log(this.selectedCategories);
-  // }
   markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
@@ -187,7 +173,7 @@ export class EditArticlesComponent {
     }
 
     return this.singleArticle.data.categories.some(
-      (category: any) => category.id === categoryId
+      (category) => category.id === categoryId
     );
   }
 
@@ -212,17 +198,18 @@ export class EditArticlesComponent {
   }
 
   // Banner image variables
-  bannerImageChangedEvent: any = '';
+  bannerImageChangedEvent!: Event;
   croppedBannerImage: string | null = null;
   showBannerCropper = false;
 
   // Thumbnail image variables
-  thumbnailImageChangedEvent: any = '';
+  thumbnailImageChangedEvent!: Event;
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
 
-  handleBannerImageInput(event: any): void {
-    const file = event.target.files[0];
+  handleBannerImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     if (file) {
       this.IsBannerImage = true;
       this.bannerImageChangedEvent = event;
@@ -231,10 +218,12 @@ export class EditArticlesComponent {
     }
   }
 
-  bannerImageCropped(event: any) {
-    this.convertBlobToBase64(event.blob, (base64: string | null) => {
-      this.croppedBannerImage = base64;
-    });
+  bannerImageCropped(event: ImageCroppedEvent) {
+    if (event.blob) {
+      this.convertBlobToBase64(event.blob, (base64: string | null) => {
+        this.croppedBannerImage = base64;
+      });
+    }
   }
 
   saveCroppedBannerImage() {
@@ -253,8 +242,9 @@ export class EditArticlesComponent {
     }
   }
 
-  handleThumbnailImageInput(event: any): void {
-    const file = event.target.files[0];
+  handleThumbnailImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     if (file) {
       this.IsThumbnailImage = true;
       this.thumbnailImageChangedEvent = event;
@@ -263,10 +253,12 @@ export class EditArticlesComponent {
     }
   }
 
-  thumbnailImageCropped(event: any) {
-    this.convertBlobToBase64(event.blob, (base64: string | null) => {
-      this.croppedThumbnailImage = base64;
-    });
+  thumbnailImageCropped(event: ImageCroppedEvent) {
+    if (event.blob) {
+      this.convertBlobToBase64(event.blob, (base64: string | null) => {
+        this.croppedThumbnailImage = base64;
+      });
+    }
   }
 
   saveCroppedThumbnailImage() {
@@ -314,25 +306,27 @@ export class EditArticlesComponent {
     return new File([uint8Array], fileName, { type: mime });
   }
   IsBannerImage = false;
-  open(content: any) {
+  open(content: TemplateRef<unknown>) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
   }
-  onCategorySelect(item: any) {
-    const index = this.selectedCategories.indexOf(item.id);
+  onCategorySelect(item: { id: String | number }) {
+    const index = this.selectedCategories.indexOf(item.id.toString());
     if (index === -1) {
-      this.selectedCategories.push(item.id);
+      this.selectedCategories.push(item.id.toString());
     } else {
       this.selectedCategories.splice(index, 1);
     }
     console.log('Selected Category:', this.selectedCategories);
   }
 
-  onCategoryDeSelect(item: any) {
-    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
+  onCategoryDeSelect(item: { id: String | number }) {
+    const index = this.selectedCategories.findIndex(
+      (cat) => cat === item.id.toString()
+    );
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);
     }

@@ -45,8 +45,8 @@
                       <div class="input-block mb-3">
                         <label>Category</label>
                         <ng-multiselect-dropdown [placeholder]="'Select Categories'" [data]="allcategories"
-                          formControlName="category" [settings]="dropdownSettings" (onSelect)="onCategorySelect($event)"
-                          (onDeSelect)="onCategoryDeSelect($event)">
+                          formControlName="category" [settings]="dropdownSettings" (onSelect)="onCategorySelect($event.id)"
+                          (onDeSelect)="onCategoryDeSelect($event.id)">
                         </ng-multiselect-dropdown>
                       </div>
                       <div *ngIf="

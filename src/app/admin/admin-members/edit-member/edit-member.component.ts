@@ -10,7 +10,6 @@ import { NotificationsService } from 'angular2-notifications';
   templateUrl: './edit-member.component.html',
 })
 export class EditMemberComponent implements OnInit {
-  allRoles: any;
   myForm: FormGroup;
   errormessage: string = '';
   memberData: any;
@@ -31,12 +30,8 @@ export class EditMemberComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.roleService.getRoles().subscribe((res: any) => {
-      this.allRoles = res.data;
-    });
-
     this.memberId = this.route.snapshot.paramMap.get('id');
-    this.roleService.getMemberById(this.memberId).subscribe((res: any) => {
+    this.roleService.getMemberById(this.memberId).subscribe((res) => {
       this.memberData = res.data.user;
       console.log(this.memberData);
     });

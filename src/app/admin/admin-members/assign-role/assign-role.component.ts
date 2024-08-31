@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RoleService } from '../../services/role.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MemberListing, RoleList } from '../../model/member.model';
 
 @Component({
   selector: 'app-assign-role',
@@ -9,10 +10,10 @@ import { Router } from '@angular/router';
 })
 export class AssignRoleComponent implements OnInit {
   myForm!: FormGroup;
-  allRoles: any;
-  allMembers: any;
-  successalertClass: any = 'd-none';
-  errormessage: any;
+  allRoles!: RoleList;
+  allMembers!: MemberListing;
+  successalertClass: string = 'd-none';
+  errormessage!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -26,8 +27,9 @@ export class AssignRoleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.roleService.getRoles().subscribe((res: any) => {
-      this.allRoles = res.data;
+    this.roleService.getRoles().subscribe((res: RoleList) => {
+      console.log(res);
+      this.allRoles = res;
     });
 
     this.roleService.getMember().subscribe((res) => {

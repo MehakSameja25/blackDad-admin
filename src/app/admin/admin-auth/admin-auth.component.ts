@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthanticationService } from '../services/authantication.service';
 import { Authantication } from '../model/login.model';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-admin-auth',
@@ -10,9 +11,12 @@ import { Authantication } from '../model/login.model';
 })
 export class AdminAuthComponent implements OnInit {
   LoginForm: FormGroup;
+  PasswordForm: FormGroup;
   errormessage: string = '';
+  currentPage!: string;
 
   ngOnInit(): void {
+    this.currentPage = this.router.url;
     const isLogin = localStorage.getItem('nkt');
     // console.log('isLogin -------', isLogin);
     if (isLogin != null) {
@@ -23,30 +27,36 @@ export class AdminAuthComponent implements OnInit {
   constructor(
     private formB: FormBuilder,
     private router: Router,
-    private authService: AuthanticationService
+    private authService: AuthanticationService,
+    private notify: NotificationsService
   ) {
     this.LoginForm = this.formB.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
+    this.PasswordForm = this.formB.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
   }
 
   AdminLogin() {
-    const authData = this.LoginForm.value;
-    console.log('FORM DATA :=>', authData);
-    this.authService.AdminAuthantication(authData).subscribe(
-      (res: Authantication) => {
-        if (res) {
-          localStorage.setItem('nkt', res.data.token);
-          setTimeout(() => {
+    if (this.LoginForm.invalid) {
+      this.notify.alert('Form Invalid');
+    } else {
+      const authData = this.LoginForm.value;
+      this.authService.AdminAuthantication(authData).subscribe(
+        (res: Authantication) => {
+          if (res) {
+            localStorage.setItem('userId', res.data.user.id.toString());
+            localStorage.setItem('nkt', res.data.token);
             this.router.navigate(['/admin/profile']);
-          }, 2000);
+          }
+        },
+        (error) => {
+          this.errormessage = error.error.message;
         }
-      },
-      (error) => {
-        this.errormessage = error.error.message;
-      }
-    );
+      );
+    }
   }
 
   show: boolean = false;
@@ -63,5 +73,20 @@ export class AdminAuthComponent implements OnInit {
     this.hidden = true;
     this.show = false;
     this.type = 'password';
+  }
+
+  resetPassword() {
+    if (this.PasswordForm.invalid) {
+      this.notify.alert('Form Invalid');
+    } else {
+      const body = {
+        email: this.PasswordForm.value.email,
+      };
+      this.authService.resetPassword(body).subscribe((res) => {
+        if (res) {
+          this.router.navigate(['/']);
+        }
+      });
+    }
   }
 }

@@ -10,6 +10,8 @@ import { AllPostsService } from '../../services/all-posts.service';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
+import { Episode } from '../../model/episode.model';
+import { Menu } from '../../model/menu.model';
 
 @Component({
   selector: 'app-episode-schedule',
@@ -17,13 +19,13 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./episode-schedule.component.css'],
 })
 export class EpisodeScheduleComponent implements OnInit {
-  addPermission: any;
-  editPermission: any;
-  isEdit: any;
-  isEditAfterPublish: any;
-  deletePermission: any;
-  body: any;
-  tableData = [];
+  addPermission!: boolean;
+  editPermission!: boolean;
+  isEdit!: boolean;
+  isEditAfterPublish!: boolean;
+  deletePermission!: boolean;
+  body!: {};
+  tableData : any = [];
 
   tableColumns = [
     { title: 'Thumbnail' },
@@ -35,9 +37,9 @@ export class EpisodeScheduleComponent implements OnInit {
     { title: 'Status' },
     { title: 'Action' },
   ];
-  allEpisodes: any;
+  allEpisodes!: Episode;
   urlToCopy!: string;
-  deleteId: any;
+  deleteId!: string | null;
   constructor(
     private postService: AllPostsService,
     private router: Router,
@@ -54,13 +56,13 @@ export class EpisodeScheduleComponent implements OnInit {
     this.body = {
       is_scheduled: 'scheduled',
     };
-    this.postService.getEpisodes(this.body).subscribe((response: any) => {
+    this.postService.getEpisodes(this.body).subscribe((response: Episode) => {
       this.allEpisodes = response;
-      this.tableData = response.data.map((item: any) => [
+      this.tableData = response.data.map((item) => [
         `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
         item.name.length > 35 ? this.truncateDescription(item.name) : item.name,
         `<ul> ${item.category.map(
-          (cat: any) => `<li> ${cat.name} </li>`
+          (cat) => `<li> ${cat.name} </li>`
         )} </ul>`,
 
         item.filetype,
@@ -165,7 +167,7 @@ export class EpisodeScheduleComponent implements OnInit {
           </a>
           <a class="btn-action-icon" data-id="${item.id}" data-action="block">
         ${
-          item.isBlock == 1
+          item.isBlock == '1'
             ? `
         <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -318,39 +320,39 @@ export class EpisodeScheduleComponent implements OnInit {
       }
     });
   }
-  open(content: any, id: any) {
+  open(content: ElementRef, id: string | null) {
     this.deleteId = id;
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
     });
   }
-  sharePost: any;
-  openShare(content: any, post: any) {
-    this.sharePost = this.allEpisodes.data.find((data: any) => data.id == post);
+  sharePost: { id: number | null | string; name: string; type: string; subtype: string; image: string; thumbnail: string; file: string; filetype: string; description: string; isBlock: string; isPublished: string; isApproved: string; reason: string; url: string; htmlcode: string; meta_description: string; episodeNo: number; seasonNo: number; slug: string; date: string; categoryId: string; country: null | string; timezone: null | string; publish_date: null | string; is_scheduled: string; created_at: string; updated_at: string; deleted_at: null | string; userId: number; category: [{ id: number; name: string; image: string; isblock: string; description: string; created_at: string; updated_at: string; }]; } | undefined;
+  openShare(content: ElementRef, post: string | null) {
+    this.sharePost = this.allEpisodes.data.find((data) => data.id == post);
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered',
     });
-    if (this.sharePost.name.includes('?')) {
+    if (this.sharePost?.name.includes('?')) {
       const titleWq = this.sharePost.name.split('?').join('%3F');
       const title = titleWq.trim().replace(/\s+/g, '_');
       const url = `${environment.shareUrl}/${this.sharePost.type}/${this.sharePost.id}/${title}?subType=${this.sharePost.subtype}`;
       this.urlToCopy = url;
     } else {
-      const title = this.sharePost.name.trim().replace(/\s+/g, '_');
-      const url = `${environment.shareUrl}/${this.sharePost.type}/${this.sharePost.id}/${title}?subType=${this.sharePost.subtype}`;
+      const title = this.sharePost?.name.trim().replace(/\s+/g, '_');
+      const url = `${environment.shareUrl}/${this.sharePost?.type}/${this.sharePost?.id}/${title}?subType=${this.sharePost?.subtype}`;
       this.urlToCopy = url;
     }
   }
-  toDetails(id: any) {
+  toDetails(id: string | null) {
     this.router.navigate([`/admin/detail-episode/${id}`]);
   }
-  toEdit(id: any) {
+  toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-episode/${id}`]);
   }
-  deleteEpisode(id: any) {
+  deleteEpisode(id: string | null) {
     this.postService.deleteEpisode(id).subscribe((res) => {
       console.log(res);
       if (res) {
@@ -373,7 +375,7 @@ export class EpisodeScheduleComponent implements OnInit {
     }
   }
   checkPermissions() {
-    this.navService.getMenu().subscribe((res: any) => {
+    this.navService.getMenu().subscribe((res: Menu) => {
       if (res && res.data) {
         for (let permission of res.data[0].role_accesses) {
           if ((permission.menu_bar.title == 'Episodes') === true) {
@@ -397,7 +399,7 @@ export class EpisodeScheduleComponent implements OnInit {
     });
   }
 
-  isEditPermission(episode: any) {
+  isEditPermission(episode: {isPublished : number | string}) {
     // console.log(episode);
     if (this.isEdit == true && this.isEditAfterPublish == true) {
       return true;
@@ -442,7 +444,7 @@ export class EpisodeScheduleComponent implements OnInit {
       ? `${description.slice(0, 25)}...`
       : description;
   }
-  getScheduledStatus(isApproved: number, isPublished: number): string {
+  getScheduledStatus(isApproved: number | string, isPublished: number | string): string {
     if (isApproved == 0 && isPublished == 0) {
       return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
     } else if (isApproved == 1 && isPublished == 0) {

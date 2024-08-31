@@ -4,7 +4,10 @@ import { environment } from 'src/environments/environment';
 import { apiCallWrapper } from './api.util';
 import { NotificationsService } from 'angular2-notifications';
 import { Observable } from 'rxjs';
-import { Category } from '../model/category.model';
+import {
+  Category,
+  SingleCategory,
+} from '../model/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,9 +18,9 @@ export class CategoiesService {
     private notifications: NotificationsService
   ) {}
 
-  getCategory() {
+  getCategory(): Observable<Category> {
     return apiCallWrapper(
-      this.http.get(`${environment.apiUrl}/get-category?type=all`),
+      this.http.get<Category>(`${environment.apiUrl}/get-category?type=all`),
       {
         notificationsService: this.notifications,
         action: 'Fetching Categories',
@@ -25,9 +28,11 @@ export class CategoiesService {
     );
   }
 
-  getCategoryById(id: any) {
+  getCategoryById(id: string | null): Observable<SingleCategory> {
     return apiCallWrapper(
-      this.http.get(`${environment.apiUrl}/get-categoryById?categoryId=${id}`),
+      this.http.get<SingleCategory>(
+        `${environment.apiUrl}/get-categoryById?categoryId=${id}`
+      ),
       {
         notificationsService: this.notifications,
         action: 'Fetching Category Detail',

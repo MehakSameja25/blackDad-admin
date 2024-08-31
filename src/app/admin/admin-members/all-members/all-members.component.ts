@@ -9,16 +9,15 @@ import { RoleService } from '../../services/role.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MemberListing } from '../../model/member.model';
 
 @Component({
   selector: 'app-all-members',
   templateUrl: './all-members.component.html',
 })
 export class AllMembersComponent implements OnInit {
-  allMembers: any;
-  deleteId: any;
-  // successalertClass: any = 'd-none';
-  // successMessage: any = '';
+  allMembers!: MemberListing;
+  deleteId!: string | null;
 
   constructor(
     private roleService: RoleService,
@@ -48,22 +47,26 @@ export class AllMembersComponent implements OnInit {
     { title: 'Access' },
     { title: 'Action' },
   ];
-  tableData = [];
+  tableData: any = [];
 
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
 
   getMembers() {
-    this.roleService.getMember().subscribe((response) => {
+    this.roleService.getMember().subscribe((response: MemberListing) => {
+      console.log(response);
       this.allMembers = response;
-      this.tableData = response.data.map((item: any) => [
+      this.tableData = response.data.map((item) => [
         item.name,
         item.email,
-        item.roles.map((role: any) => role.roletype.name),
+        item.roles.map((role) => role.roletype.name),
         ` <ul>
         ${item.roles
-          .map((role: any) =>
+          .map((role) =>
             role.roletype.role_accesses
-              .map((access: any) => `<li> ${access.menu_bar.title}--${access.status}</li>`)
+              .map(
+                (access) =>
+                  `<li> ${access.menu_bar.title}--${access.status}</li>`
+              )
               .join('')
           )
           .join('')}
@@ -213,7 +216,7 @@ export class AllMembersComponent implements OnInit {
     });
   }
 
-  open(content: any, id: any) {
+  open(content: ElementRef, id: string | null) {
     this.deleteId = id;
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -221,7 +224,7 @@ export class AllMembersComponent implements OnInit {
     });
     console.log(id);
   }
-  deleteMember(id: any) {
+  deleteMember(id: string | null) {
     this.roleService.delteMember(id).subscribe((res) => {
       if (res) {
         this.getMembers();
@@ -284,7 +287,7 @@ export class AllMembersComponent implements OnInit {
       }
     });
   }
-  toEdit(id: any) {
+  toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-member/${id}`]);
   }
 }

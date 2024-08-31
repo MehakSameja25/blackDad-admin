@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AdminAuthComponent } from './admin/admin-auth/admin-auth.component';
@@ -103,7 +103,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
     SimpleNotificationsModule.forRoot({
       timeOut: 3500,
       showProgressBar: true,
-      clickToClose: true
+      clickToClose: true,
     }),
   ],
   providers: [
@@ -116,4 +116,4 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

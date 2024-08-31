@@ -3,7 +3,33 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 import { MainNavService } from '../services/main-nav.service';
 import { AuthanticationService } from '../services/authantication.service';
 import { NotificationsService } from 'angular2-notifications';
-
+import { MainUser } from '../model/user.model';
+import { Menu } from '../model/menu.model';
+interface userDetails {
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at: null;
+    password: string;
+    text_password: null;
+    remember_token: null;
+    type: string;
+    user_verification: string;
+    isBlock: boolean;
+    is_deleted: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+  };
+  role: {
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+  };
+}
 @Component({
   selector: 'app-admin-navbar',
   templateUrl: './admin-navbar.component.html',
@@ -13,28 +39,48 @@ export class AdminNavbarComponent implements OnInit {
   styleDrop: string = '';
   displayClass: string = 'display: none';
   anchorClass: string = '';
-  menuData: any;
-  userId: any;
-  userDetails: any;
+  menuData!: {
+    role_accesses: [
+      {
+        id: number;
+        status: string;
+        created_at: string;
+        updated_at: string;
+        deleted_at: null | string;
+        menu_id: number;
+        role_type_id: number;
+        menu_bar: {
+          id: number;
+          title: string;
+          route: string;
+          icon: string;
+          is_parent: number;
+          created_at: string;
+          updated_at: string;
+        };
+      }
+    ];
+  };
+  userId: string | null;
+  userDetails!: userDetails;
   userType = '';
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private menuService: MainNavService,
     private authService: AuthanticationService,
     private notificationService: NotificationsService
   ) {
     this.userId = localStorage.getItem('userId');
-    this.menuService.getMenu().subscribe((response: any) => {
+    this.menuService.getMenu().subscribe((response: Menu) => {
       this.menuData = response.data[0];
       // console.log(this.menuData);
     });
 
-    this.authService.getUserById(this.userId).subscribe((res: any) => {
+    this.authService.getUserById(this.userId).subscribe((res: MainUser) => {
       if (res) {
         this.userDetails = res.data;
         this.userType = res.data.role.name;
-        // console.log(this.userType);
+        console.log(res);
       }
     });
   }
@@ -71,7 +117,7 @@ export class AdminNavbarComponent implements OnInit {
     }
   }
 
-  routing(menu: any) {
+  routing(menu: { menu_bar: { title: string } }) {
     if (menu.menu_bar.title === 'Categories') {
       this.router.navigate(['/admin/categories']);
     } else if (menu.menu_bar.title === 'Episodes') {
@@ -82,7 +128,7 @@ export class AdminNavbarComponent implements OnInit {
     // console.log(menu.menu_bar.title);
   }
 
-  isLinkActive(menu: any): boolean {
+  isLinkActive(menu: { menu_bar: { title: string } }): boolean {
     const currentRoute = this.router.url;
     if (menu.menu_bar.title === 'Categories') {
       return currentRoute.includes('/admin/categories');
@@ -115,11 +161,11 @@ export class AdminNavbarComponent implements OnInit {
   }
 
   logOut() {
-    localStorage.removeItem('nkt');
+    localStorage.clear();
     this.notificationService.warn('Logging Out');
     setTimeout(() => {
       this.router.navigate(['/admin-auth']);
       this.notificationService.success('Successfully Logged out');
-    }, 3000);
+    }, 1500);
   }
 }

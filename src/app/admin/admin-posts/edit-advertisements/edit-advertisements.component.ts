@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AllPostsService } from '../../services/all-posts.service';
 import { MetaDataService } from '../../services/meta-data.service';
+import { SingleAdvertisement } from '../../model/ad.model';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 
 @Component({
   selector: 'app-edit-advertisements',
@@ -11,11 +14,22 @@ import { MetaDataService } from '../../services/meta-data.service';
 export class EditAdvertisementsComponent {
   advertisementForm!: FormGroup;
   selectedFile!: File;
-  singleAdData: any;
+  singleAdData!: {
+    id: number | null;
+    title: string;
+    description: string;
+    image: string;
+    url: string;
+    isBlock: string;
+    clicks: number;
+    page: string;
+    created_at?: string;
+    updated_at?: string;
+    deleted_at?: null | string;
+  };
 
   constructor(
     private fb: FormBuilder,
-    private postsService: AllPostsService,
     private metaService: MetaDataService,
     private router: Router,
     private route: ActivatedRoute
@@ -44,27 +58,35 @@ export class EditAdvertisementsComponent {
       }
     });
   }
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    const maxFileSize = 50 * 1024 * 1024;
-    console.log(file);
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    const maxFileSize = 50 * 1024 * 1024; // 50MB
+
     if (file) {
       if (file.size > maxFileSize) {
         alert('File size exceeds maximum limit (50MB)');
         return;
       }
+
       if (!file.type.match('image/*')) {
         alert('Invalid file type. Only images are allowed.');
         return;
       }
+
       this.selectedFile = file;
+
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        document
-          .getElementById('thumbnailPreview')!
-          .setAttribute('src', e.target.result);
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const imgElement = document.getElementById(
+          'thumbnailPreview'
+        ) as HTMLImageElement;
+        if (imgElement) {
+          imgElement.src = e.target?.result as string;
+        }
       };
       reader.readAsDataURL(file);
+
       this.advertisementForm.patchValue({ thumbnailImage: file });
     }
   }
@@ -78,8 +100,8 @@ export class EditAdvertisementsComponent {
       formData.append('page', this.advertisementForm.value.page);
       // formData.append('image', this.selectedFile);
       formData.append('isBlock', this.singleAdData.isBlock);
-      if (this.advertisementForm.value.thumbnailImage instanceof File) {
-        formData.append('image', this.advertisementForm.value.image);
+      if (this.IsImage) {
+        formData.append('image', this.selectedFile);
       } else {
         formData.delete('image');
       }
@@ -98,18 +120,23 @@ export class EditAdvertisementsComponent {
 
   getAdbyId() {
     const adId = this.route.snapshot.paramMap.get('id');
-    this.metaService.getAdvertisementsByid(adId).subscribe((res: any) => {
-      this.singleAdData = res.data;
-    });
+    this.metaService
+      .getAdvertisementsByid(adId)
+      .subscribe((res: SingleAdvertisement) => {
+        this.singleAdData = res.data;
+      });
   }
   // Thumbnail image variables
-  thumbnailImageChangedEvent: any = '';
+  thumbnailImageChangedEvent!: Event;
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
-  IsBannerImage = false;
-  handleThumbnailImageInput(event: any): void {
-    const file = event.target.files[0];
+  IsImage = false;
+  handleThumbnailImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
     if (file) {
+      this.IsImage = true;
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
       this.selectedFile = file;
@@ -117,10 +144,12 @@ export class EditAdvertisementsComponent {
     }
   }
 
-  thumbnailImageCropped(event: any) {
-    this.convertBlobToBase64(event.blob, (base64: string | null) => {
-      this.croppedThumbnailImage = base64;
-    });
+  thumbnailImageCropped(event: ImageCroppedEvent) {
+    if (event.blob) {
+      this.convertBlobToBase64(event.blob, (base64: string | null) => {
+        this.croppedThumbnailImage = base64;
+      });
+    }
   }
 
   saveCroppedThumbnailImage() {

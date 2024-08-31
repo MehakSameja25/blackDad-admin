@@ -2,7 +2,7 @@
   <div class="main-wrapper login-body" style="visibility: visible">
     <div class="login-wrapper">
       <div class="container">
-        <div class="loginbox">
+        <div class="loginbox" *ngIf="currentPage === '/admin-auth'">
           <div class="login-right">
             <div class="login-right-wrap">
               <h1>Login</h1>
@@ -27,7 +27,7 @@
                     />
                     <span *ngIf="hidden == true"
                       ><i
-                        class="fa-solid fa-eye toggle-password" 
+                        class="fa-solid fa-eye toggle-password"
                         title="Show"
                         (click)="showPassword()"
                       ></i
@@ -41,17 +41,41 @@
                     ></span>
                   </div>
                 </div>
-                <div id="sub_msg" class="text-danger">{{
-                  errormessage
-                }}</div>
+                <div id="sub_msg" class="text-danger">{{ errormessage }}</div>
                 <button
                   class="btn btn-lg btn-primary w-100"
                   type="submit"
-                  [disabled]="LoginForm.invalid"
                   (click)="AdminLogin()"
                 >
                   Login
                 </button>
+                <a routerLink="/forget-password">Forgot password?</a>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="loginbox" *ngIf="currentPage === '/forget-password'">
+          <div class="login-right">
+            <div class="login-right-wrap">
+              <h1>Reset Password</h1>
+              <form [formGroup]="PasswordForm">
+                <div class="input-block mb-3">
+                  <label class="form-control-label">Email Address</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    required
+                  />
+                </div>
+                <button
+                  class="btn btn-lg btn-primary w-100"
+                  type="submit"
+                  (click)="resetPassword()"
+                >
+                  Reset
+                </button>
+                <a routerLink="/admin-auth">Cancel</a>
               </form>
             </div>
           </div>

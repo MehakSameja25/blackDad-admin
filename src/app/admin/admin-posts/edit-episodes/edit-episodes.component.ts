@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoiesService } from '../../services/categoies.service';
 import { AllPostsService } from '../../services/all-posts.service';
@@ -7,6 +7,9 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { urlValidator } from '../../urlValidator';
 import { environment } from 'src/environments/environment';
+import { Category } from '../../model/category.model';
+import { SingleEpisode } from '../../model/episode.model';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-edit-episodes',
@@ -15,12 +18,20 @@ import { environment } from 'src/environments/environment';
 })
 export class EditEpisodesComponent {
   episodeForm!: FormGroup;
-  allcategories: any;
-  episodeDetails: any;
-  selectedCategories: any[] = [];
-  isLoading: any = true;
+  allcategories!: [
+    {
+      id: number | null;
+      name: string;
+      image: string;
+      isblock: string;
+      description: string;
+    }
+  ];
+  episodeDetails!: SingleEpisode;
+  selectedCategories: String[] = [];
+  isLoading: boolean = true;
   fileType!: string;
-  subType: any;
+  subType!: string;
   editor = ClassicEditor;
   dropdownSettings: {};
   nullImagePath = environment.nullImagePath;
@@ -78,21 +89,23 @@ export class EditEpisodesComponent {
       }
     }
     const id = this.route.snapshot.paramMap.get('id');
-    this.postsService.getEpisodeDetails(id).subscribe((response) => {
-      if (response) {
-        this.episodeDetails = response;
-        this.getCategories();
-        this.setFormValues();
-        this.subType = this.episodeDetails?.data?.subtype;
-        console.log(this.subType);
-        if (this.subType === 'youtube') {
-          this.fileType = 'video';
-        } else if (this.subType === 'podcast') {
-          this.fileType = 'audio';
+    if (id) {
+      this.postsService.getEpisodeDetails(id).subscribe((response) => {
+        if (response) {
+          this.episodeDetails = response;
+          this.getCategories();
+          this.setFormValues();
+          this.subType = this.episodeDetails?.data?.subtype;
+          console.log(this.subType);
+          if (this.subType === 'youtube') {
+            this.fileType = 'video';
+          } else if (this.subType === 'podcast') {
+            this.fileType = 'audio';
+          }
+          this.isLoading = false;
         }
-        this.isLoading = false;
-      }
-    });
+      });
+    }
   }
   updateUrlValidators(subType: string): void {
     const urlControl = this.episodeForm.get('url');
@@ -118,17 +131,21 @@ export class EditEpisodesComponent {
       fileType: this.episodeDetails.data.filetype,
       subType1: this.episodeDetails.data.subtype,
     });
-    this.episodeDetails.data.categories.map((category: any) => {
-      this.selectedCategories.push(category.id);
-    });
+    this.episodeDetails.data.categories.map(
+      (category: { id: String | number }) => {
+        this.selectedCategories.push(category.id.toString());
+      }
+    );
   }
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response: any) => {
-      this.allcategories = response.data;
-      console.log(this.allcategories);
-    });
+    this.categoryService
+      .unblockedCategories()
+      .subscribe((response: Category) => {
+        this.allcategories = response.data;
+        console.log(this.allcategories);
+      });
   }
-  getType(type: any) {
+  getType(type: string) {
     if (type === 'youtube') {
       this.fileType = 'video';
       this.subType = 'youtube';
@@ -192,40 +209,13 @@ export class EditEpisodesComponent {
     return formData;
   }
 
-  // handleBannerImageInput(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       document
-  //         .getElementById('bannerPreview')!
-  //         .setAttribute('src', e.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     this.episodeForm.patchValue({ bannerImage: file });
-  //   }
-  // }
-
-  // handleThumbnailImageInput(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       document
-  //         .getElementById('thumbnailPreview')!
-  //         .setAttribute('src', e.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     this.episodeForm.patchValue({ thumbnailImage: file });
-  //   }
-  // }
   isCategorySelected(categoryId: number): boolean {
     if (!this.episodeDetails || !this.episodeDetails.data.categories) {
       return false;
     }
 
     return this.episodeDetails.data.categories.some(
-      (category: any) => category.id === categoryId
+      (category) => category.id === categoryId
     );
   }
 
@@ -260,17 +250,18 @@ export class EditEpisodesComponent {
   }
 
   // Banner image variables
-  bannerImageChangedEvent: any = '';
+  bannerImageChangedEvent!: Event;
   croppedBannerImage: string | null = null;
   showBannerCropper = false;
 
   // Thumbnail image variables
-  thumbnailImageChangedEvent: any = '';
+  thumbnailImageChangedEvent!: Event;
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
   IsThumbnailImage = false;
-  handleBannerImageInput(event: any): void {
-    const file = event.target.files[0];
+  handleBannerImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     if (file) {
       this.bannerImageChangedEvent = event;
       this.IsBannerImage = true;
@@ -279,10 +270,12 @@ export class EditEpisodesComponent {
     }
   }
 
-  bannerImageCropped(event: any) {
-    this.convertBlobToBase64(event.blob, (base64: string | null) => {
-      this.croppedBannerImage = base64;
-    });
+  bannerImageCropped(event: ImageCroppedEvent) {
+    if (event.blob) {
+      this.convertBlobToBase64(event.blob, (base64: string | null) => {
+        this.croppedBannerImage = base64;
+      });
+    }
   }
 
   saveCroppedBannerImage() {
@@ -300,8 +293,9 @@ export class EditEpisodesComponent {
     }
   }
 
-  handleThumbnailImageInput(event: any): void {
-    const file = event.target.files[0];
+  handleThumbnailImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     if (file) {
       this.IsThumbnailImage = true;
       this.thumbnailImageChangedEvent = event;
@@ -310,10 +304,12 @@ export class EditEpisodesComponent {
     }
   }
 
-  thumbnailImageCropped(event: any) {
-    this.convertBlobToBase64(event.blob, (base64: string | null) => {
-      this.croppedThumbnailImage = base64;
-    });
+  thumbnailImageCropped(event: ImageCroppedEvent) {
+    if (event.blob) {
+      this.convertBlobToBase64(event.blob, (base64: string | null) => {
+        this.croppedThumbnailImage = base64;
+      });
+    }
   }
 
   saveCroppedThumbnailImage() {
@@ -361,25 +357,25 @@ export class EditEpisodesComponent {
     return new File([uint8Array], fileName, { type: mime });
   }
   IsBannerImage = false;
-  open(content: any) {
+  open(content: TemplateRef<unknown>) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
   }
-  onCategorySelect(item: any) {
-    const index = this.selectedCategories.indexOf(item.id);
+  onCategorySelect(item: String | number) {
+    const index = this.selectedCategories.indexOf(item.toString());
     if (index === -1) {
-      this.selectedCategories.push(item.id);
+      this.selectedCategories.push(item.toString());
     } else {
       this.selectedCategories.splice(index, 1);
     }
     console.log('Selected Category:', this.selectedCategories);
   }
 
-  onCategoryDeSelect(item: any) {
-    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
+  onCategoryDeSelect(item: String | number) {
+    const index = this.selectedCategories.findIndex((cat) => cat === item);
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);
     }
