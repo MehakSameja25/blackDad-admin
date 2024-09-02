@@ -1,4 +1,9 @@
-import { Component, HostListener } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  TemplateRef,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoiesService } from '../../services/categoies.service';
 import { Router } from '@angular/router';
@@ -7,6 +12,8 @@ import { Subject, debounceTime } from 'rxjs';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Category } from '../../model/category.model';
+import { ListItem } from 'ng-multiselect-dropdown/multiselect.model';
 
 @Component({
   selector: 'app-add-articles',
@@ -15,9 +22,17 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class AddArticlesComponent {
   articleForm!: FormGroup;
-  allcategories: any;
-  selectedCategories: any[] = [];
-  draftId: any;
+  allcategories!: [
+    {
+      id: number | null;
+      name: string;
+      image: string;
+      isblock: string;
+      description: string;
+    }
+  ];
+  selectedCategories: String[] = [];
+  draftId!: null | string;
   inputText: string = '';
   inputChanged: Subject<string> = new Subject<string>();
   editor = ClassicEditor;
@@ -46,10 +61,11 @@ export class AddArticlesComponent {
       this.updateDraft();
     });
   }
-  onCategorySelect(item: any) {
-    const index = this.selectedCategories.indexOf(item.id);
+  onCategorySelect(item: number | String) {
+    console.log(typeof this.selectedCategories, this.selectedCategories);
+    const index = this.selectedCategories.indexOf(item.toString());
     if (index === -1) {
-      this.selectedCategories.push(item.id);
+      this.selectedCategories.push(item.toString());
     } else {
       this.selectedCategories.splice(index, 1);
     }
@@ -57,8 +73,10 @@ export class AddArticlesComponent {
     console.log('Selected Category:', this.selectedCategories);
   }
 
-  onCategoryDeSelect(item: any) {
-    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
+  onCategoryDeSelect(item: number | String) {
+    const index = this.selectedCategories.findIndex(
+      (cat) => cat === item.toString()
+    );
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);
     }
@@ -67,7 +85,6 @@ export class AddArticlesComponent {
   ngOnInit(): void {
     this.articleForm = this.fb.group({
       articleName: ['', [Validators.required]],
-      date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       category: ['', [Validators.required]],
@@ -89,15 +106,17 @@ export class AddArticlesComponent {
   }
 
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response: any) => {
-      this.allcategories = response.data;
-      console.log(this.allcategories);
-    });
+    this.categoryService
+      .unblockedCategories()
+      .subscribe((response: Category) => {
+        this.allcategories = response.data;
+        console.log(this.allcategories);
+      });
   }
   addArticleDraft() {
     const formData = this.createArticleFormData();
     formData.append('isDraft', '1');
-    this.postsService.addArticle(formData).subscribe((res: any) => {
+    this.postsService.addArticle(formData).subscribe((res) => {
       if (res) {
         this.draftId = res.data.id;
         console.log('Draft added:', res);
@@ -123,11 +142,9 @@ export class AddArticlesComponent {
     if (this.draftId) {
       const formData = this.createArticleFormData();
       formData.append('isDraft', '1');
-      this.postsService
-        .updateDraft(this.draftId, formData)
-        .subscribe((res: any) => {
-          console.log('Draft updated:', res);
-        });
+      this.postsService.updateDraft(this.draftId, formData).subscribe((res) => {
+        console.log('Draft updated:', res);
+      });
     }
   }
 
@@ -137,7 +154,6 @@ export class AddArticlesComponent {
     formData.append('type', 'articles');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.articleForm.value.description);
-    formData.append('date', this.articleForm.value.date);
     formData.append('meta_description', this.articleForm.value.meta);
     formData.append('slug', this.articleForm.value.slug);
     formData.append('reason', '');
@@ -158,47 +174,6 @@ export class AddArticlesComponent {
     return formData;
   }
 
-  // handleBannerImageInput(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       document
-  //         .getElementById('bannerPreview')!
-  //         .setAttribute('src', e.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     this.articleForm.patchValue({ bannerImage: file });
-  //     this.inputChanged.next('');
-  //   this.showCropper = true;
-  //   }
-  // }
-
-  // handleThumbnailImageInput(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       document
-  //         .getElementById('thumbnailPreview')!
-  //         .setAttribute('src', e.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     this.articleForm.patchValue({ thumbnailImage: file });
-  //     this.inputChanged.next('');
-  //   }
-  // }
-
-  getCategoryId(id: any) {
-    const index = this.selectedCategories.indexOf(id);
-    if (index === -1) {
-      this.selectedCategories.push(id);
-    } else {
-      this.selectedCategories.splice(index, 1);
-    }
-    console.log(this.selectedCategories);
-    this.inputChanged.next('');
-  }
   markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
@@ -213,18 +188,19 @@ export class AddArticlesComponent {
   }
 
   // Banner image variables
-  bannerImageChangedEvent: any = '';
+  bannerImageChangedEvent?: Event;
   croppedBannerImage: string | null = null;
   showBannerCropper = false;
 
   // Thumbnail image variables
-  thumbnailImageChangedEvent: any = '';
+  thumbnailImageChangedEvent!: Event;
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
   IsThumbnailImage = false;
 
-  handleBannerImageInput(event: any): void {
-    const file = event.target.files[0];
+  handleBannerImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files ? input.files[0] : null;
     if (file) {
       this.IsBannerImage = true;
       this.bannerImageChangedEvent = event;
@@ -233,10 +209,12 @@ export class AddArticlesComponent {
     }
   }
 
-  bannerImageCropped(event: any) {
-    this.convertBlobToBase64(event.blob, (base64: string | null) => {
-      this.croppedBannerImage = base64;
-    });
+  bannerImageCropped(event: ImageCroppedEvent): void {
+    if (event.blob) {
+      this.convertBlobToBase64(event.blob, (base64: string | null) => {
+        this.croppedBannerImage = base64;
+      });
+    }
   }
 
   saveCroppedBannerImage() {
@@ -256,20 +234,23 @@ export class AddArticlesComponent {
     }
   }
 
-  handleThumbnailImageInput(event: any): void {
-    const file = event.target.files[0];
+  handleThumbnailImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files ? input.files[0] : null;
     if (file) {
+      this.IsThumbnailImage = true;
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
       this.articleForm.patchValue({ thumbnailImage: file });
-      this.IsThumbnailImage = true;
     }
   }
 
-  thumbnailImageCropped(event: any) {
-    this.convertBlobToBase64(event.blob, (base64: string | null) => {
-      this.croppedThumbnailImage = base64;
-    });
+  thumbnailImageCropped(event: ImageCroppedEvent) {
+    if (event.blob) {
+      this.convertBlobToBase64(event.blob, (base64: string | null) => {
+        this.croppedThumbnailImage = base64;
+      });
+    }
   }
 
   saveCroppedThumbnailImage() {
@@ -318,7 +299,7 @@ export class AddArticlesComponent {
     return new File([uint8Array], fileName, { type: mime });
   }
   IsBannerImage = false;
-  open(content: any) {
+  open(content: TemplateRef<unknown>) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',

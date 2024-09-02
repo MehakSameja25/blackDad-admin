@@ -7,8 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-add-new-member',
   templateUrl: './add-new-member.component.html',
 })
-export class AddNewMemberComponent implements OnInit {
-  allRoles: any;
+export class AddNewMemberComponent{
   myForm: FormGroup;
   errormessage: string = '';
 
@@ -22,12 +21,6 @@ export class AddNewMemberComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       // password: ['', Validators.required],
       // roleTypeId: ['', Validators.required],
-    });
-  }
-
-  ngOnInit(): void {
-    this.roleService.getRoles().subscribe((res: any) => {
-      this.allRoles = res.data;
     });
   }
 

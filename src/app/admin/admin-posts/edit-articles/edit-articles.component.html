@@ -49,32 +49,6 @@
                         </div>
                       </div>
                     </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Date</label>
-                        <input
-                          type="date"
-                          formControlName="date"
-                          class="datetimepicker form-control"
-                          placeholder="Select Date"
-                        />
-                        <div
-                          *ngIf="
-                            articleForm.get('date')?.invalid &&
-                            (articleForm.get('date')?.dirty ||
-                              articleForm.get('date')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="articleForm.get('date')?.errors?.['required']"
-                          >
-                            Date is required.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3" *ngIf="allcategories">
                         <label>Category</label>
@@ -189,9 +163,9 @@
                           <span>
                             <img
                               [src]="
-                                singleArticle.data.image ??
-                                croppedBannerImage ??
-                                'assets/img/drop-icon.svg'
+                                croppedBannerImage
+                                  ? croppedBannerImage
+                                  : singleArticle.data.image
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -233,9 +207,9 @@
                       <div
                         *ngIf="
                           singleArticle.data.image == nullImagePath ||
-                          articleForm.get('bannerImage')?.invalid &&
-                          (articleForm.get('bannerImage')?.dirty ||
-                            articleForm.get('bannerImage')?.touched)
+                          (articleForm.get('bannerImage')?.invalid &&
+                            (articleForm.get('bannerImage')?.dirty ||
+                              articleForm.get('bannerImage')?.touched))
                         "
                         class="text-danger"
                       >
@@ -263,9 +237,9 @@
                           <span>
                             <img
                               [src]="
-                                singleArticle.data.thumbnail ??
-                                croppedThumbnailImage ??
-                                'assets/img/drop-icon.svg'
+                                croppedThumbnailImage
+                                  ? croppedThumbnailImage
+                                  : singleArticle.data.thumbnail
                               "
                               id="thumbnailPreview"
                               alt="upload"
@@ -307,9 +281,9 @@
                       <div
                         *ngIf="
                           singleArticle.data.thumbnail == nullImagePath ||
-                          articleForm.get('thumbnailImage')?.invalid &&
-                          (articleForm.get('thumbnailImage')?.dirty ||
-                            articleForm.get('thumbnailImage')?.touched)
+                          (articleForm.get('thumbnailImage')?.invalid &&
+                            (articleForm.get('thumbnailImage')?.dirty ||
+                              articleForm.get('thumbnailImage')?.touched))
                         "
                         class="text-danger"
                       >
@@ -368,7 +342,7 @@
       <span>
         <img
           [src]="
-            croppedBannerImage ? croppedBannerImage : singleArticle?.data?.image
+            croppedBannerImage ? croppedBannerImage : singleArticle.data.image
           "
           class="w-100 h-100"
           style="object-fit: contain"
@@ -408,7 +382,7 @@
           [src]="
             croppedThumbnailImage
               ? croppedThumbnailImage
-              : singleArticle?.data?.thumbnail
+              : singleArticle.data.thumbnail
           "
           class="w-100 h-100"
           style="object-fit: contain"

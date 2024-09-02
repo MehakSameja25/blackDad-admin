@@ -8,16 +8,71 @@ import {
 import { RoleService } from '../../services/role.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
+import { RoleList } from '../../model/member.model';
 
+interface MemData {
+  id: number;
+  name: string;
+  email: string;
+  roles: [
+    {
+      id: number;
+      type: string;
+      deleted_at: null;
+      user_id: number;
+      role_type_id: number | string;
+      roletype: {
+        id: number;
+        name: string;
+        deleted_at: string | null;
+        role_accesses: [
+          {
+            id: number;
+            status: string;
+            menu_id: number;
+            menu_bar: {
+              id: number;
+              title: string;
+              route: string;
+              icon: null;
+            };
+          },
+          {
+            id: number;
+            status: string;
+            menu_id: number;
+            menu_bar: {
+              id: number;
+              title: string;
+              route: string;
+              icon: null;
+            };
+          },
+          {
+            id: number;
+            status: string;
+            menu_id: 1;
+            menu_bar: {
+              id: number;
+              title: string;
+              route: string;
+              icon: null;
+            };
+          }
+        ];
+      };
+    }
+  ];
+}
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
 })
 export class RolesComponent implements OnInit {
-  allRoles: any;
+  allRoles!: RoleList;
   filterRole: any;
-  deleteId: any;
-  allMembers: any;
+  deleteId!: string | null;
+  allMembers!: MemData[];
   allChangeRoles: { userId: number; roleTypeId: number }[] = [];
   constructor(
     private roleService: RoleService,
@@ -29,7 +84,7 @@ export class RolesComponent implements OnInit {
   ngOnInit(): void {
     this.getRoles();
   }
-  tableData = [];
+  tableData: any = [];
 
   tableColumns = [
     { title: 'Role Name' },
@@ -37,14 +92,14 @@ export class RolesComponent implements OnInit {
     { title: 'Action' },
   ];
   getRoles() {
-    this.roleService.getRoles().subscribe((res: any) => {
-      this.allRoles = res.data;
+    this.roleService.getRoles().subscribe((res: RoleList) => {
+      this.allRoles = res;
 
-      this.tableData = res.data.role.map((item: any) => [
+      this.tableData = res.data.role.map((item) => [
         item.name,
         `<select class="form-select" aria-label="Default select example"
                           > ${item.role_accesses.map(
-                            (access: any) => 
+                            (access) =>
                               `<option value="1">${access.menu_bar.title}-${access.status}</option>`
                           )}</select>`,
         `<div class="actions d-flex align-items-center gap-2">
@@ -113,19 +168,19 @@ export class RolesComponent implements OnInit {
     });
   }
 
-  open(content: any, id: any) {
+  open(content: ElementRef, id: string | null) {
     this.allChangeRoles = [];
     this.deleteId = id;
-    this.filterRole = [...this.allRoles.role];
+    this.filterRole = [...this.allRoles.data.role];
     const indexToRemove = this.filterRole.findIndex(
-      (role: { id: number }) => role.id === this.deleteId
+      (role: { id: number | string }) => role.id == this.deleteId
     );
     if (indexToRemove !== -1) {
       this.filterRole.splice(indexToRemove, 1);
     }
     this.roleService.getMember().subscribe((res) => {
       this.allMembers = res.data.filter(
-        (data: any) =>
+        (data: MemData) =>
           data.roles[0] && data.roles[0].role_type_id == this.deleteId
       );
       this.modalService.open(content, {
@@ -156,7 +211,7 @@ export class RolesComponent implements OnInit {
     return true;
   }
 
-  deleteRole(id: any) {
+  deleteRole(id: string | null) {
     if (this.allMembers.length) {
       this.roleService.assignRole(this.allChangeRoles).subscribe((res) => {
         this.deleteRoleApi(id);
@@ -166,7 +221,7 @@ export class RolesComponent implements OnInit {
     }
   }
 
-  deleteRoleApi(id: number) {
+  deleteRoleApi(id: string | null) {
     this.roleService.delteRole(id).subscribe((res) => {
       if (res) {
         this.ngOnInit();
@@ -174,7 +229,7 @@ export class RolesComponent implements OnInit {
       }
     });
   }
-  toEdit(id: any) {
+  toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-role/${id}`]);
   }
 }

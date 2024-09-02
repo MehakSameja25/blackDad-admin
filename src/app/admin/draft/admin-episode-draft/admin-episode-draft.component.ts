@@ -9,6 +9,8 @@ import { AllPostsService } from '../../services/all-posts.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MainNavService } from '../../services/main-nav.service';
 import { Router } from '@angular/router';
+import { Menu } from '../../model/menu.model';
+import { Draft } from '../../model/article.model';
 
 @Component({
   selector: 'app-admin-episode-draft',
@@ -16,8 +18,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin-episode-draft.component.css'],
 })
 export class AdminEpisodeDraftComponent implements OnInit {
-  allDraftdata: any;
-  deleteId: any;
+  allDraftdata!: Draft;
+  deleteId!: string | null;
   successClass: string = 'd-none';
   successMessage!: string;
   constructor(
@@ -30,13 +32,13 @@ export class AdminEpisodeDraftComponent implements OnInit {
   ngOnInit(): void {
     this.checkPermissions();
   }
-  addPermission: any;
-  editPermission: any;
-  isEdit: any;
-  isEditAfterPublish: any;
-  deletePermission: any;
+  addPermission!: boolean;
+  editPermission!: boolean;
+  isEdit!: boolean;
+  isEditAfterPublish!: boolean;
+  deletePermission!: boolean;
   checkPermissions() {
-    this.navService.getMenu().subscribe((res: any) => {
+    this.navService.getMenu().subscribe((res: Menu) => {
       if (res && res.data) {
         for (let permission of res.data[0].role_accesses) {
           if ((permission.menu_bar.title == 'Episodes') === true) {
@@ -46,13 +48,13 @@ export class AdminEpisodeDraftComponent implements OnInit {
               permission.status.includes('edit after publish');
             this.deletePermission = permission.status.includes('delete');
             //  console check
-            console.log('add permission', this.addPermission);
-            console.log('delete permission', this.deletePermission);
-            console.log('edit permission', this.isEdit);
-            console.log(
-              'edit after publish permission',
-              this.isEditAfterPublish
-            );
+            // console.log('add permission', this.addPermission);
+            // console.log('delete permission', this.deletePermission);
+            // console.log('edit permission', this.isEdit);
+            // console.log(
+            //   'edit after publish permission',
+            //   this.isEditAfterPublish
+            // );
           }
         }
         this.getDraft();
@@ -60,7 +62,7 @@ export class AdminEpisodeDraftComponent implements OnInit {
     });
   }
 
-  isEditPermission(episode: any) {
+  isEditPermission(episode: { isPublished: string | number }) {
     // console.log(episode);
     if (this.isEdit == true && this.isEditAfterPublish == true) {
       return true;
@@ -86,26 +88,43 @@ export class AdminEpisodeDraftComponent implements OnInit {
   getDraft() {
     this.postService.getDraft('episodes').subscribe((res) => {
       this.allDraftdata = res;
-      this.tableData = res.data.map((item: any) => [
-        item.thumbnail
-          ? `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`
-          : 'No Image',
-        item.draft.name
-          ? item.draft.name.length > 35
-            ? this.truncateDescription(item.draft.name)
-            : item.draft.name
-          : 'N/A',
-        item.category.length > 0
-          ? `<ul> ${item.category.map(
-              (cat: any) => `<li> ${cat.name} </li>`
-            )} </ul>`
-          : 'No Categories',
+      this.tableData = res.data.map(
+        (item: {
+          thumbnail: string;
+          draft: {
+            name: string;
+            filetype: string;
+            seasonNo: number;
+            isApproved: number | string;
+            isPublished: number;
+          };
+          category: [{ name: string }];
+          created_at: string;
+          id: string;
+          isPublished: string | number;
+        }) => [
+          item.thumbnail
+            ? `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`
+            : 'No Image',
+          item.draft.name
+            ? item.draft.name.length > 35
+              ? this.truncateDescription(item.draft.name)
+              : item.draft.name
+            : 'N/A',
+          item.category.length > 0
+            ? `<ul> ${item.category.map(
+                (cat) => `<li> ${cat.name} </li>`
+              )} </ul>`
+            : 'No Categories',
 
-        item.draft.filetype ? item.draft.filetype : 'N/A',
-        item.draft.seasonNo ? item.draft.seasonNo : 'N/A',
-        item.draft.date ? item.draft.date : 'N/A',
-        this.getScheduledStatus(item.draft.isApproved, item.draft.isPublished),
-        `<div class="actions d-flex align-items-center gap-2">
+          item.draft.filetype ? item.draft.filetype : 'N/A',
+          item.draft.seasonNo ? item.draft.seasonNo : 'N/A',
+          item.created_at ? item.created_at.split('T')[0] : 'N/A',
+          this.getScheduledStatus(
+            item.draft.isApproved,
+            item.draft.isPublished
+          ),
+          `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
               xmlns=" http://www.w3.org/2000/svg"
@@ -172,7 +191,8 @@ export class AdminEpisodeDraftComponent implements OnInit {
                : ``
            }
         </div>`,
-      ]);
+        ]
+      );
 
       setTimeout(() => this.bindEvents(), 0);
     });
@@ -204,7 +224,7 @@ export class AdminEpisodeDraftComponent implements OnInit {
       }
     });
   }
-  open(content: any, id: any) {
+  open(content: ElementRef, id: string | null) {
     this.deleteId = id;
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -213,7 +233,7 @@ export class AdminEpisodeDraftComponent implements OnInit {
   }
 
   deleteDraft() {
-    this.postService.deleteDraft(this.deleteId).subscribe((res: any) => {
+    this.postService.deleteDraft(this.deleteId).subscribe((res) => {
       if (res) {
         this.modalService.dismissAll();
         this.successMessage = 'Draft Deleted!';
@@ -232,7 +252,10 @@ export class AdminEpisodeDraftComponent implements OnInit {
       : description;
   }
 
-  getScheduledStatus(isApproved: number, isPublished: number): string {
+  getScheduledStatus(
+    isApproved: number | string,
+    isPublished: number | string
+  ): string {
     if (isApproved == 0 && isPublished == 0) {
       return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
     } else if (isApproved == 1 && isPublished == 0) {
@@ -245,7 +268,7 @@ export class AdminEpisodeDraftComponent implements OnInit {
       return '';
     }
   }
-  toEdit(id: any) {
+  toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-draft-episode/${id}`]);
   }
 }

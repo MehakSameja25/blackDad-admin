@@ -54,10 +54,10 @@
                           class="form-select"
                           formControlName="roleTypeId"
                           aria-label="Default select example"
-                          *ngIf="allRoles && allRoles.role"
+                          *ngIf="allRoles && allRoles.data"
                         >
                           <option
-                            *ngFor="let role of allRoles.role"
+                            *ngFor="let role of allRoles.data.role"
                             [value]="role.id"
                           >
                             {{ role.name }}

@@ -48,32 +48,6 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Date</label>
-                        <input
-                          type="date"
-                          formControlName="date"
-                          class="datetimepicker form-control"
-                          placeholder="Select Date"
-                          (change)="this.inputChanged.next('date')"
-                        />
-                        <div
-                          *ngIf="
-                            episodeForm.get('date')?.invalid &&
-                            (episodeForm.get('date')?.dirty ||
-                              episodeForm.get('date')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('date')?.errors?.['required']"
-                          >
-                            Date is required.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Episode Number</label>
@@ -134,8 +108,8 @@
                           [data]="allcategories"
                           formControlName="category"
                           [settings]="dropdownSettings"
-                          (onSelect)="onCategorySelect($event)"
-                          (onDeSelect)="onCategoryDeSelect($event)"
+                          (onSelect)="onCategorySelect($event.id)"
+                          (onDeSelect)="onCategoryDeSelect($event.id)"
                         >
                         </ng-multiselect-dropdown>
                       </div>

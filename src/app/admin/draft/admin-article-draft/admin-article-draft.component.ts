@@ -3,6 +3,8 @@ import { AllPostsService } from '../../services/all-posts.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MainNavService } from '../../services/main-nav.service';
 import { Router } from '@angular/router';
+import { Draft } from '../../model/article.model';
+import { Menu } from '../../model/menu.model';
 
 @Component({
   selector: 'app-admin-article-draft',
@@ -10,8 +12,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin-article-draft.component.css'],
 })
 export class AdminArticleDraftComponent {
-  allDraftdata: any;
-  deleteId: any;
+  allDraftdata!: Draft;
+  deleteId!: string | null;
   successClass: string = 'd-none';
   successMessage!: string;
   constructor(
@@ -38,7 +40,7 @@ export class AdminArticleDraftComponent {
     this.postService.getDraft('articles').subscribe((res) => {
       this.allDraftdata = res;
       console.log(res);
-      this.tableData = res.data.map((item: any) => [
+      this.tableData = res.data.map((item: { thumbnail: string; draft: { name: string; isApproved: number |string; isPublished: number | string; }; category: [{name: string}]; created_at: string; id: string; }) => [
         item.thumbnail
           ? `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`
           : 'No Image',
@@ -49,11 +51,11 @@ export class AdminArticleDraftComponent {
           : 'N/A',
         item.category.length > 0
           ? `<ul> ${item.category.map(
-              (cat: any) => `<li> ${cat.name} </li>`
+              (cat) => `<li> ${cat.name} </li>`
             )} </ul>`
           : 'No Categories',
 
-        item.draft.date ? item.draft.date : 'N/A',
+        item.created_at ? item.created_at.split('T')[0] : 'N/A',
         this.getScheduledStatus(item.draft.isApproved, item.draft.isPublished),
         `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
@@ -160,7 +162,7 @@ export class AdminArticleDraftComponent {
       : description;
   }
 
-  getScheduledStatus(isApproved: number, isPublished: number): string {
+  getScheduledStatus(isApproved: number | string, isPublished: number | string): string {
     if (isApproved == 0 && isPublished == 0) {
       return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
     } else if (isApproved == 1 && isPublished == 0) {
@@ -173,10 +175,10 @@ export class AdminArticleDraftComponent {
       return '';
     }
   }
-  toEdit(id: any) {
+  toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-draft-article/${id}`]);
   }
-  open(content: any, id: any) {
+  open(content: ElementRef, id: string | null) {
     this.deleteId = id;
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -185,7 +187,7 @@ export class AdminArticleDraftComponent {
   }
 
   deleteDraft() {
-    this.postService.deleteDraft(this.deleteId).subscribe((res: any) => {
+    this.postService.deleteDraft(this.deleteId).subscribe((res) => {
       if (res) {
         this.modalService.dismissAll();
         this.successMessage = 'Draft Deleted!';
@@ -198,13 +200,13 @@ export class AdminArticleDraftComponent {
       }
     });
   }
-  addPermission: any;
-  editPermission: any;
-  isEdit: any;
-  isEditAfterPublish: any;
-  deletePermission: any;
+  addPermission!: boolean;
+  editPermission!: boolean;
+  isEdit!: boolean;
+  isEditAfterPublish!: boolean;
+  deletePermission!: boolean;
   checkPermissions() {
-    this.navService.getMenu().subscribe((res: any) => {
+    this.navService.getMenu().subscribe((res: Menu) => {
       if (res && res.data) {
         for (let permission of res.data[0].role_accesses) {
           if ((permission.menu_bar.title == 'Articles') === true) {
@@ -228,7 +230,7 @@ export class AdminArticleDraftComponent {
     });
   }
 
-  isEditPermission(article: any) {
+  isEditPermission(article: { thumbnail?: string; draft?: { name: string; isApproved: number | string; isPublished: number | string; }; category?: [{ name: string; }]; created_at?: string; id?: string; isPublished?: string | number; }) {
     console.log(this.isEdit, this.isEditAfterPublish);
     if (this.isEdit == true && this.isEditAfterPublish == true) {
       return true;

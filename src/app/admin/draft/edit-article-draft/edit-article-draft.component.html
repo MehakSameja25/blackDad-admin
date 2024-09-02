@@ -51,32 +51,6 @@
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Date</label>
-                        <input
-                          type="date"
-                          formControlName="date"
-                          class="datetimepicker form-control"
-                          placeholder="Select Date"
-                          (change)="this.inputChanged.next('date')"
-                        />
-                        <div
-                          *ngIf="
-                            articleForm.get('date')?.invalid &&
-                            (articleForm.get('date')?.dirty ||
-                              articleForm.get('date')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="articleForm.get('date')?.errors?.['required']"
-                          >
-                            Date is required.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3" *ngIf="allcategories">
                         <label>Category</label>
                         <ng-multiselect-dropdown
@@ -84,8 +58,8 @@
                           [settings]="dropdownSettings"
                           [data]="allcategories"
                           formControlName="category"
-                          (onSelect)="onCategorySelect($event)"
-                          (onDeSelect)="onCategoryDeSelect($event)"
+                          (onSelect)="onCategorySelect($event.id)"
+                          (onDeSelect)="onCategoryDeSelect($event.id)"
                           (change)="this.inputChanged.next('category')"
                         >
                         </ng-multiselect-dropdown>
@@ -197,7 +171,7 @@
                               [src]="
                                 croppedBannerImage
                                   ? croppedBannerImage
-                                  : singleDraft?.data?.image
+                                  : singleDraft.data.image
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -255,7 +229,7 @@
                         type="button"
                         class="btn btn-back mt-4"
                         (click)="open(previewModal)"
-                        *ngIf="IsBannerImage"
+                        *ngIf="IsBannerImage || singleDraft.data.image != nullImagePath"
                       >
                         Preview Banner Image
                       </button>
@@ -330,7 +304,7 @@
                         type="button"
                         class="btn btn-back mt-4"
                         (click)="open(preview2Modal)"
-                        *ngIf="IsThumbnailImage"
+                        *ngIf="IsThumbnailImage || singleDraft.data.thumbnail != nullImagePath"
                       >
                         Preview Thumbnail Image
                       </button>

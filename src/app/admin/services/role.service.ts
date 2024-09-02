@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { apiCallWrapper } from './api.util';
 import { NotificationsService } from 'angular2-notifications';
+import { Observable } from 'rxjs';
+import { MemberListing, RoleList } from '../model/member.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +15,14 @@ export class RoleService {
     private notifications: NotificationsService
   ) {}
 
-  getRoles() {
-    return apiCallWrapper(this.http.get(`${environment.apiUrl}/get-role`), {
-      notificationsService: this.notifications,
-      action: 'Fetching Roles',
-    });
+  getRoles(): Observable<RoleList> {
+    return apiCallWrapper(
+      this.http.get<RoleList>(`${environment.apiUrl}/get-role`),
+      {
+        notificationsService: this.notifications,
+        action: 'Fetching Roles',
+      }
+    );
   }
 
   addMember(body: any) {
@@ -30,9 +35,9 @@ export class RoleService {
     );
   }
 
-  getMember() {
+  getMember(): Observable<MemberListing> {
     return apiCallWrapper(
-      this.http.get<any>(`${environment.apiUrl}/get-user`),
+      this.http.get<MemberListing>(`${environment.apiUrl}/get-user`),
       {
         notificationsService: this.notifications,
         action: 'Fetching Members',

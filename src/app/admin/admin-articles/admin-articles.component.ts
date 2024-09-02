@@ -11,28 +11,89 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MainNavService } from '../services/main-nav.service';
 import { environment } from 'src/environments/environment';
+import { Article } from '../model/article.model';
+import { Category } from '../model/category.model';
+import { Menu } from '../model/menu.model';
 
 @Component({
   selector: 'app-admin-articles',
   templateUrl: './admin-articles.component.html',
 })
 export class AdminArticlesComponent implements OnInit {
-  allArticles: any;
-  allcategories: any;
-  selectedCategory: any;
-  deleteId: any;
-  sharePost: any;
-  urlToCopy!: string;
-  body: any;
-  categoryFilter: any[] = [];
+  /**--------Start of Variable Declarations---------**/
 
+  /** --Public Variables-- **/
+  public allArticles!: Article;
+  public allcategories!: Category;
+  public urlToCopy!: string;
+  public addPermission!: boolean;
+
+  /** --Private Variables-- **/
+  private sharePost:
+    | {
+        id: string | number | null;
+        name: string;
+        description: string;
+        image: string;
+        thumbnail: string;
+        isBlock: string;
+        isPublished: string;
+        isApproved: string;
+        reason: string;
+        meta_title: null | string;
+        meta_description: string;
+        meta_url: null | string;
+        slug: string;
+        date: string;
+        url: null | string;
+        categoryId: string;
+        country: null | string;
+        timezone: null | string;
+        publish_date: null | string;
+        is_scheduled: string;
+        userId: number;
+        category: Category;
+      }
+    | undefined;
+  private isEdit!: boolean;
+  private deleteId!: string | null;
+  protected deletePermission!: boolean;
+  private isEditAfterPublish!: boolean;
+  private categoryFilter: string[] = [];
+  private body!: { categoryId: number } | {};
+  protected copyMessage: string = 'Copy';
+  protected copyClass: string = '';
+  protected tickClass: string = 'd-none';
+
+  /** --Modal Declarations-- **/
+  @ViewChild('contentt')
+  public deleteModel!: ElementRef;
+
+  @ViewChild('sharee')
+  public shareModel!: ElementRef;
+
+  /** --Table Declarations **/
+  @ViewChild('dataTable', { static: false })
+  public table!: ElementRef;
+  public tableData = [];
+  public tableColumns: { title: string }[] = [
+    { title: 'Image' },
+    { title: 'Name' },
+    { title: 'Category' },
+    { title: 'Created At' },
+    { title: 'Status' },
+    { title: 'Action' },
+  ];
+  /**---------End of Variable Declarations----------**/
+
+  /** --------Injection for services and important in built packages------- **/
   constructor(
-    private postService: AllPostsService,
-    private categoryService: CategoiesService,
     private router: Router,
+    private renderer: Renderer2,
     private modalService: NgbModal,
     private navService: MainNavService,
-    private renderer: Renderer2
+    private postService: AllPostsService,
+    private categoryService: CategoiesService
   ) {}
 
   ngOnInit(): void {
@@ -40,19 +101,10 @@ export class AdminArticlesComponent implements OnInit {
     this.getCategories();
   }
 
-  tableData = [];
+  /**
+   * @description Retrieves and displays articles based on the category filter. If a filter is applied, it includes the filter criteria in the request; otherwise, it fetches all articles. The response is used to populate a table with article details including thumbnail, title, categories, creation date, status, and action buttons (view, edit, block/unblock, share).
 
-  tableColumns = [
-    { title: 'Image' },
-    { title: 'Name' },
-    { title: 'Category' },
-    // { title: 'File Type' },
-    { title: 'Created At' },
-    { title: 'Status' },
-    { title: 'Action' },
-  ];
-  @ViewChild('dataTable', { static: false }) table!: ElementRef;
-
+   */
   getPosts() {
     if (this.categoryFilter.length > 0) {
       this.body = {
@@ -63,15 +115,27 @@ export class AdminArticlesComponent implements OnInit {
     }
     this.postService.getArticles(this.body).subscribe((response) => {
       this.allArticles = response;
-      this.tableData = response.data.map((item: any) => [
-        `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
-        item.name.length > 35 ? this.truncateDescription(item.name) : item.name,
-        `<ul> ${item.category.map(
-          (cat: any) => `<li> ${cat.name} </li>`
-        )} </ul>`,
-        item.date,
-        this.getScheduledStatus(item.isApproved, item.isPublished),
-        `<div class="actions d-flex align-items-center gap-2">
+      this.tableData = response.data.map(
+        (item: {
+          thumbnail: string;
+          name: string;
+          category: [];
+          created_at: string;
+          isApproved: string;
+          isPublished: string;
+          id: string | null;
+          isBlock: string;
+        }) => [
+          `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
+          item.name.length > 35
+            ? this.truncateDescription(item.name)
+            : item.name,
+          `<ul> ${item.category
+            .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
+            .join('')} </ul>`,
+          item.created_at ? item.created_at.split('T')[0] : 'N/A',
+          this.getScheduledStatus(item.isApproved, item.isPublished),
+          `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
               xmlns=" http://www.w3.org/2000/svg"
@@ -169,7 +233,7 @@ export class AdminArticlesComponent implements OnInit {
           </a>
           <a class="btn-action-icon" data-id="${item.id}" data-action="block">
         ${
-          item.isBlock == 0
+          item.isBlock == '1'
             ? `
         <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -276,18 +340,16 @@ export class AdminArticlesComponent implements OnInit {
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 512 512.005" xml:space="preserve" style="enable-background: new 0 0 16 16;"><g><path d="M453.336 512.004H58.668c-32.363 0-58.664-26.305-58.664-58.664V144.004c0-32.363 26.3-58.664 58.664-58.664h74.668c8.832 0 16 7.168 16 16s-7.168 16-16 16H58.668c-14.7 0-26.664 11.965-26.664 26.664V453.34c0 14.695 11.965 26.664 26.664 26.664h394.668c14.7 0 26.668-11.969 26.668-26.664V272.004c0-8.832 7.168-16 16-16s16 7.168 16 16V453.34c0 32.36-26.305 58.664-58.668 58.664zm0 0" fill="#000000" opacity="1" data-original="#000000"></path><path d="M143.98 341.063a14.09 14.09 0 0 1-3.52-.43c-7.23-1.684-12.456-7.871-12.456-15.293v-32c0-114.688 93.312-208 208-208h5.332V16.004a16.024 16.024 0 0 1 10.027-14.848 15.979 15.979 0 0 1 17.492 3.754l138.668 144c5.973 6.188 5.973 16 0 22.188l-138.668 144c-4.523 4.715-11.5 6.168-17.492 3.754a16.024 16.024 0 0 1-10.027-14.848v-69.332h-25.344c-67.113 0-127.426 37.289-157.418 97.3-2.754 5.548-8.535 9.09-14.594 9.09zM336.004 117.34c-89.602 0-163.797 67.305-174.656 154.023 38.78-43.261 94.398-68.691 154.644-68.691h41.344c8.832 0 16 7.168 16 16v45.652l100.457-104.32-100.457-104.32v45.656c0 8.832-7.168 16-16 16zm0 0" fill="#000000" opacity="1" data-original="#000000"></path></g></svg>
         </a>
         </div>`,
-      ]);
+        ]
+      );
 
       setTimeout(() => this.bindEvents(), 0);
     });
   }
 
-  @ViewChild('contentt')
-  public deleteModel!: ElementRef;
-
-  @ViewChild('sharee')
-  public shareModel!: ElementRef;
-
+  /**
+   * @description  Attaches event listeners to action buttons within the table. Each button's action (e.g., open, edit, details, block, share) is handled based on its 'data-action' attribute, and the corresponding method is called with the button's 'data-id' as an argument.
+   */
   bindEvents(): void {
     const tableElement = this.table.nativeElement;
     const actionButtons = tableElement.querySelectorAll(
@@ -310,7 +372,7 @@ export class AdminArticlesComponent implements OnInit {
           this.renderer.listen(button, 'click', () => this.toDetails(id));
           break;
         case 'block':
-          this.renderer.listen(button, 'click', () => this.checkIsBlock(id));
+          this.renderer.listen(button, 'click', () => this.updateBlock(id));
           break;
         case 'shareing':
           this.renderer.listen(button, 'click', () =>
@@ -323,39 +385,50 @@ export class AdminArticlesComponent implements OnInit {
     });
   }
 
+  /**
+   * @description Fetches and stores a list of unblocked categories from the category service. Updates 'allcategories' with the response data.
+   */
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response) => {
-      this.allcategories = response;
-    });
+    this.categoryService
+      .unblockedCategories()
+      .subscribe((response: Category) => {
+        if (response) {
+          this.allcategories = response;
+        }
+      });
   }
 
-  getValue(category: any) {
+  /**
+   * @description Updates the category filter based on the selected category. If 'All Categories' is selected, clears the filter. Otherwise, sets the filter to the selected category and then refreshes the posts.
+   * @param category
+   */
+  getValue(category: string) {
     if (category == 'All Categories') {
       this.categoryFilter = [];
-      this.getPosts();
     } else {
-      const categoryIdString = category.toString();
-      const categoryIndex = this.categoryFilter.indexOf(categoryIdString);
+      const categoryIndex = this.categoryFilter.indexOf(category);
 
       if (categoryIndex === -1) {
-        this.categoryFilter = [categoryIdString];
+        this.categoryFilter = [category];
       }
-      // this.body = {
-      //   categoryId: this.categoryFilter,
-      // };
-      // this.postService.getArticles(this.body).subscribe((res) => {
-      //   this.allArticles = res;
-      // });
-      this.getPosts();
     }
-    console.log('Selected Category =>', this.categoryFilter);
+    this.getPosts();
   }
 
-  toDetails(id: any) {
+  /**
+   * @description Navigates to the detail view of an article using its ID.
+   * @param id
+   */
+  toDetails(id: string | null) {
     this.router.navigate([`/admin/detail-article/${id}`]);
   }
 
-  open(content: any, id: any) {
+  /**
+   * @description Opens a modal for article deletion and sets the article ID to be deleted.
+   * @param content
+   * @param id
+   */
+  open(content: ElementRef<unknown>, id: string | null) {
     this.deleteId = id;
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -363,9 +436,11 @@ export class AdminArticlesComponent implements OnInit {
     });
   }
 
-  deleteArticle(id: any) {
-    this.postService.deleteArticle(id).subscribe((res) => {
-      console.log(res);
+  /**
+   * @description Deletes the article with the specified ID and refreshes the post list upon success.
+   */
+  deleteArticle() {
+    this.postService.deleteArticle(this.deleteId).subscribe((res) => {
       if (res) {
         this.modalService.dismissAll();
         this.getPosts();
@@ -373,27 +448,32 @@ export class AdminArticlesComponent implements OnInit {
     });
   }
 
-  checkIsBlock(articleData: any) {
-    this.postService
-      .updateIsblock(articleData, 'article')
-      .subscribe((res) => {
-        if (res) {
-          console.log(res);
-          this.getPosts();
-        }
-      });
+  /**
+   * @description Toggles the block status of the article with the specified ID and refreshes the post list upon success.
+   * @param id
+   */
+  updateBlock(id: string | null) {
+    this.postService.updateIsblock(id, 'article').subscribe((res) => {
+      if (res) {
+        this.getPosts();
+      }
+    });
   }
 
-  toEdit(id: any) {
+  /**
+   * @description  Navigates to the article editing view using the article ID.
+   * @param id
+   */
+  toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-article/${id}`]);
   }
-  addPermission: any;
-  editPermission: any;
-  isEdit: any;
-  isEditAfterPublish: any;
-  deletePermission: any;
+
+  /**
+   * @description Checks user permissions for various actions and sets the corresponding flags. Fetches the post list after updating permissions.
+   */
   checkPermissions() {
-    this.navService.getMenu().subscribe((res: any) => {
+    this.navService.getMenu().subscribe((res: Menu) => {
+      console.log(res);
       if (res && res.data) {
         for (let permission of res.data[0].role_accesses) {
           if ((permission.menu_bar.title == 'Articles') === true) {
@@ -402,52 +482,61 @@ export class AdminArticlesComponent implements OnInit {
             this.isEditAfterPublish =
               permission.status.includes('edit after publish');
             this.deletePermission = permission.status.includes('delete');
-            //  console check
-            console.log('add permission', this.addPermission);
-            console.log('delete permission', this.deletePermission);
-            console.log('edit permission', this.isEdit);
-            console.log(
-              'edit after publish permission',
-              this.isEditAfterPublish
-            );
           }
         }
         this.getPosts();
       }
     });
   }
-
-  isEditPermission(article: any) {
-    console.log(this.isEdit, this.isEditAfterPublish);
+  /**
+   * @description  Determines if the current user has permission to edit the given article based on its publication status and permission flags.
+   * @param article
+   * @returns
+   */
+  isEditPermission(article: { isPublished: string }) {
     if (this.isEdit == true && this.isEditAfterPublish == true) {
       return true;
-    } else if (this.isEdit && article.isPublished == 0) {
+    } else if (this.isEdit && article.isPublished == '0') {
       return true;
     } else {
       return false;
     }
   }
 
-  openShare(content: any, post: any) {
-    console.log(post);
-    this.sharePost = this.allArticles.data.find((data: any) => data.id == post);
+  /**
+   * @description Opens a modal for sharing a post and generates a shareable URL.
+   * @param content - The ElementRef for the modal content.
+   * @param post - The ID of the post to be shared.
+   *
+   * Finds the post from `allArticles` data based on the provided `post` ID,
+   * logs the post details, and opens a modal with sharing options. Generates a
+   * URL for the post based on its type and ID, then sets this URL to `urlToCopy`.
+   */
+  openShare(content: ElementRef, post: string | null) {
+    this.sharePost = this.allArticles.data.find(
+      (data: { id: string | number }) => data.id == post
+    );
     console.log(this.sharePost);
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
-      modalDialogClass: 'modal-dialog-centered'
+      modalDialogClass: 'modal-dialog-centered',
     });
 
-    const title = this.sharePost.name.trim().replace(/\s+/g, '_');
-    const url = `${environment.shareUrl}/${this.sharePost.type ?? 'articles'}/${
-      this.sharePost.id
+    const title = this.sharePost?.name.trim().replace(/\s+/g, '_');
+    const url = `${environment.shareUrl}/${'articles'}/${
+      this.sharePost?.id
     }/${title}`;
     this.urlToCopy = url;
   }
 
-  copyMessage: string = 'Copy';
-  copyClass: string = '';
-  tickClass: string = 'd-none';
+  /**
+   * @description Copies the shareable URL to the clipboard and updates the UI to reflect the copy action.
+   *
+   * Calls `copyTextToClipboard` to copy the `urlToCopy` to the clipboard,
+   * updates the UI to show a confirmation message, and then resets the message
+   * and UI state after a short delay. Dismisses the modal after the action is complete.
+   */
   share() {
     this.copyTextToClipboard(this.urlToCopy);
     this.copyMessage = 'Link Copied!';
@@ -461,6 +550,14 @@ export class AdminArticlesComponent implements OnInit {
     }, 2000);
   }
 
+  /**
+   * @description Copies the provided text to the clipboard.
+   * @param text - The text to be copied to the clipboard.
+   *
+   * Creates a temporary textarea element, sets its value to the provided text,
+   * and programmatically selects and copies the text. The temporary element is
+   * removed from the document after the copy operation.
+   */
   copyTextToClipboard(text: string) {
     const tempElement = document.createElement('textarea');
     tempElement.value = text;
@@ -474,20 +571,39 @@ export class AdminArticlesComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(tempElement);
   }
+
+  /**
+   * @description Truncates a description to a specified length with an ellipsis if it exceeds the length.
+   * @param description - The description text to be truncated.
+   * @returns The truncated description with an ellipsis if it exceeds 25 characters, otherwise returns the original description.
+   *
+   * Checks the length of the provided description and truncates it to a maximum
+   * of 25 characters, appending an ellipsis if necessary.
+   */
   truncateDescription(description: string): string {
     return description.length > 25
       ? `${description.slice(0, 25)}...`
       : description;
   }
 
-  getScheduledStatus(isApproved: number, isPublished: number): string {
-    if (isApproved == 0 && isPublished == 0) {
+  /**
+   * @description Returns the status of a post based on approval and publication status.
+   * @param isApproved - The approval status of the post.
+   * @param isPublished - The publication status of the post.
+   * @returns A string containing HTML to display a badge with the post's status.
+   *
+   * Determines the status of a post by evaluating its approval and publication
+   * status and returns an HTML string with a badge indicating the current status
+   * (e.g., Pending, Approved, Rejected, Published).
+   */
+  getScheduledStatus(isApproved: string, isPublished: string): string {
+    if (isApproved == '0' && isPublished == '0') {
       return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
-    } else if (isApproved == 1 && isPublished == 0) {
+    } else if (isApproved == '1' && isPublished == '0') {
       return `<span class="badge rounded-pill text-bg-success">Approved</span>`;
-    } else if (isApproved == 2 && isPublished == 0) {
+    } else if (isApproved == '2' && isPublished == '0') {
       return `<span class="badge rounded-pill text-bg-danger">Rejected</span>`;
-    } else if (isApproved == 1 && isPublished == 1) {
+    } else if (isApproved == '1' && isPublished == '1') {
       return `<span class="badge rounded-pill text-bg-violet">Published</span>`;
     } else {
       return '';

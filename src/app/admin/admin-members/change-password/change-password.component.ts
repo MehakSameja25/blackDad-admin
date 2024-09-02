@@ -39,7 +39,7 @@ export class ChangePasswordComponent {
     console.log('FORM DATA :=>', authData);
     if (this.proof) {
       this.roleService.updatePassword(this.proof, authData).subscribe(
-        (res: any) => {
+        (res) => {
           if (res) {
             this.router.navigate(['/admin-auth']);
           }

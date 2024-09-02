@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { AuthanticationService } from '../services/authantication.service';
 import { Router } from '@angular/router';
+import { MainUser, User } from '../model/user.model';
 
 @Component({
   selector: 'app-admin-profile',
@@ -15,11 +16,11 @@ import { Router } from '@angular/router';
 })
 export class AdminProfileComponent {
   updateForm!: FormGroup;
-  UserId: any;
-  userDetails: any;
+  UserId!: string | null;
+  userDetails!: any;
   // successMessage: string = '';
   // successalertClass: string = 'd-none';
-  userRole: any;
+  userRole!: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,7 +42,7 @@ export class AdminProfileComponent {
     );
 
     this.UserId = localStorage.getItem('userId');
-    this.authService.getUserById(this.UserId).subscribe((res: any) => {
+    this.authService.getUserById(this.UserId).subscribe((res) => {
       if (res) {
         this.userDetails = res.data;
         this.userRole = res.data.role.name;
@@ -86,7 +87,12 @@ export class AdminProfileComponent {
     }
   }
 
-  updateApiCall(data: any) {
+  updateApiCall(data: {
+    name: string;
+    email: string;
+    password: string;
+    type: string;
+  }) {
     this.authService.updateProfile(data).subscribe((res) => {
       if (res) {
         setTimeout(() => {
@@ -96,9 +102,9 @@ export class AdminProfileComponent {
       }
     });
   }
-  show: any = false;
-  hidden: any = true;
-  type: any = 'password';
+  show: boolean = false;
+  hidden: boolean = true;
+  type: string = 'password';
 
   showPassword() {
     this.show = true;

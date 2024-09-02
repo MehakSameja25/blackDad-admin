@@ -1,4 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  TemplateRef,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, debounceTime } from 'rxjs';
@@ -7,6 +13,8 @@ import { AllPostsService } from '../../services/all-posts.service';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { urlValidator } from '../../urlValidator';
+import { Category } from '../../model/category.model';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-add-episodes',
@@ -14,12 +22,20 @@ import { urlValidator } from '../../urlValidator';
 })
 export class AddEpisodesComponent implements OnInit {
   episodeForm!: FormGroup;
-  allcategories: any;
-  selectedCategories: any[] = [];
+  allcategories!: [
+    {
+      id: number | null;
+      name: string;
+      image: string;
+      isblock: string;
+      description: string;
+    }
+  ];
+  selectedCategories: String[] = [];
   inputText: string = '';
   inputChanged: Subject<string> = new Subject<string>();
-  draftId: any;
-  fileType: any;
+  draftId!: string | number;
+  fileType!: string;
   editor = ClassicEditor;
   dropdownSettings = {};
   firstKeyPress: boolean = false;
@@ -45,7 +61,6 @@ export class AddEpisodesComponent implements OnInit {
     };
     this.episodeForm = this.fb.group({
       episodeName: ['', [Validators.required]],
-      date: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       episodeNumber: ['', [Validators.required]],
@@ -78,15 +93,19 @@ export class AddEpisodesComponent implements OnInit {
   }
 
   getCategories() {
-    this.categoryService.unblockedCategories().subscribe((response: any) => {
-      this.allcategories = response.data;
-    });
+    this.categoryService
+      .unblockedCategories()
+      .subscribe((response: Category) => {
+        if (response) {
+          this.allcategories = response.data;
+        }
+      });
   }
 
   addEpisodeDraft() {
     const formData = this.createEpisodeFormData();
     formData.append('isDraft', '1');
-    this.postsService.addEpisode(formData).subscribe((res: any) => {
+    this.postsService.addEpisode(formData).subscribe((res) => {
       if (res) {
         this.draftId = res.data.id;
         console.log('Draft added:', res);
@@ -120,7 +139,7 @@ export class AddEpisodesComponent implements OnInit {
     }
   }
 
-  getType(type: any) {
+  getType(type: string) {
     if (type === 'youtube') {
       this.fileType = 'video';
     }
@@ -135,7 +154,6 @@ export class AddEpisodesComponent implements OnInit {
     formData.append('type', 'episodes');
     formData.append('categoryId', JSON.stringify(this.selectedCategories));
     formData.append('description', this.episodeForm.value.description);
-    formData.append('date', this.episodeForm.value.date);
     formData.append('thumbnail', this.episodeForm.value.thumbnailImage);
     formData.append('image', this.episodeForm.value.bannerImage);
     formData.append('filetype', this.fileType);
@@ -153,45 +171,6 @@ export class AddEpisodesComponent implements OnInit {
     return formData;
   }
 
-  // handleBannerImageInput(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       document
-  //         .getElementById('bannerPreview')!
-  //         .setAttribute('src', e.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     this.episodeForm.patchValue({ bannerImage: file });
-  //     this.inputChanged.next('');
-  //   }
-  // }
-
-  // handleThumbnailImageInput(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       document
-  //         .getElementById('thumbnailPreview')!
-  //         .setAttribute('src', e.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //     this.episodeForm.patchValue({ thumbnailImage: file });
-  //     this.inputChanged.next('');
-  //   }
-  // }
-
-  getCategoryId(id: any) {
-    const index = this.selectedCategories.indexOf(id);
-    if (index === -1) {
-      this.selectedCategories.push(id);
-    } else {
-      this.selectedCategories.splice(index, 1);
-    }
-    this.inputChanged.next('');
-  }
   deleteDraft() {
     this.postsService.deleteDraft(this.draftId).subscribe();
   }
@@ -208,32 +187,35 @@ export class AddEpisodesComponent implements OnInit {
   }
 
   // Banner image variables
-  bannerImageChangedEvent: any = '';
+  bannerImageChangedEvent!: Event;
   croppedBannerImage: string | null = null;
   showBannerCropper = false;
   IsBannerImage = false;
 
   // Thumbnail image variables
-  thumbnailImageChangedEvent: any = '';
+  thumbnailImageChangedEvent!: Event;
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
   IsThumbnailImage = false;
 
-  handleBannerImageInput(event: any): void {
-    const file = event.target.files[0];
+  handleBannerImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files ? input.files[0] : null;
     if (file) {
-      this.IsBannerImage = true;
       this.bannerImageChangedEvent = event;
       this.showBannerCropper = true;
-      this.episodeForm.patchValue({ bannerImage: file });
+      this.IsBannerImage = true;
       this.inputChanged.next('');
+      this.episodeForm.patchValue({ bannerImage: file });
     }
   }
 
-  bannerImageCropped(event: any) {
-    this.convertBlobToBase64(event.blob, (base64: string | null) => {
-      this.croppedBannerImage = base64;
-    });
+  bannerImageCropped(event: ImageCroppedEvent) {
+    if (event.blob) {
+      this.convertBlobToBase64(event.blob, (base64: string | null) => {
+        this.croppedBannerImage = base64;
+      });
+    }
   }
 
   saveCroppedBannerImage() {
@@ -251,17 +233,18 @@ export class AddEpisodesComponent implements OnInit {
       this.inputChanged.next('');
     }
   }
-
-  handleThumbnailImageInput(event: any): void {
-    const file = event.target.files[0];
+  handleThumbnailImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files ? input.files[0] : null;
     if (file) {
       this.IsThumbnailImage = true;
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;
-      this.episodeForm.patchValue({ thumbnailImage: file });
       this.inputChanged.next('');
+      this.episodeForm.patchValue({ thumbnailImage: file });
     }
   }
+
   updateUrlValidators(subType: string): void {
     const urlControl = this.episodeForm.get('url');
 
@@ -271,10 +254,12 @@ export class AddEpisodesComponent implements OnInit {
 
     urlControl?.updateValueAndValidity();
   }
-  thumbnailImageCropped(event: any) {
-    this.convertBlobToBase64(event.blob, (base64: string | null) => {
-      this.croppedThumbnailImage = base64;
-    });
+  thumbnailImageCropped(event: ImageCroppedEvent) {
+    if (event.blob) {
+      this.convertBlobToBase64(event.blob, (base64: string | null) => {
+        this.croppedThumbnailImage = base64;
+      });
+    }
   }
 
   saveCroppedThumbnailImage() {
@@ -322,17 +307,17 @@ export class AddEpisodesComponent implements OnInit {
     }
     return new File([uint8Array], fileName, { type: mime });
   }
-  open(content: any) {
+  open(content: TemplateRef<unknown>) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
   }
-  onCategorySelect(item: any) {
-    const index = this.selectedCategories.indexOf(item.id);
+  onCategorySelect(item: String | number) {
+    const index = this.selectedCategories.indexOf(item.toString());
     if (index === -1) {
-      this.selectedCategories.push(item.id);
+      this.selectedCategories.push(item.toString());
     } else {
       this.selectedCategories.splice(index, 1);
     }
@@ -340,8 +325,10 @@ export class AddEpisodesComponent implements OnInit {
     console.log('Selected Category:', this.selectedCategories);
   }
 
-  onCategoryDeSelect(item: any) {
-    const index = this.selectedCategories.findIndex((cat) => cat === item.id);
+  onCategoryDeSelect(item: String | number) {
+    const index = this.selectedCategories.findIndex(
+      (cat) => cat === item.toString()
+    );
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AllPostsService } from '../../services/all-posts.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -7,6 +7,8 @@ import { AuthanticationService } from '../../services/authantication.service';
 import { MainNavService } from '../../services/main-nav.service';
 import { COUNTRIES } from '../../countries';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Menu } from '../../model/menu.model';
+import { Episode, SingleEpisode } from '../../model/episode.model';
 
 @Component({
   selector: 'app-detail-episode',
@@ -14,20 +16,30 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./detail-episode.component.css'],
 })
 export class DetailEpisodeComponent implements OnInit {
-  episodeDetails: any;
+  episodeDetails!: SingleEpisode;
   sanitizedDescription: SafeHtml | undefined;
   sanitizedUrl: SafeHtml | undefined;
-  successalertClass: any = 'd-none';
-  successMessage: any = '';
-  type: any;
-  publishPermission: any = false;
+  successalertClass: string = 'd-none';
+  successMessage: string = '';
+  type!: string;
+  publishPermission: boolean = false;
   scheduleForm!: FormGroup;
-  countries: any = COUNTRIES;
-  timezones: any[] = [];
+  countries: {
+    code: string;
+    name: string;
+    timezones: {
+      tzCode: string;
+      utc: string;
+    }[];
+  }[] = COUNTRIES;
+  timezones: {
+    tzCode: string;
+    utc: string;
+  }[] = [];
   postId!: string | null;
-  countryName: any;
-  timezonne: any;
-  scheduledTime: any;
+  countryName!: string | null;
+  timezonne!: string | null;
+  scheduledTime!: string | null;
   constructor(
     private route: ActivatedRoute,
     private postsService: AllPostsService,
@@ -46,17 +58,19 @@ export class DetailEpisodeComponent implements OnInit {
 
   ngOnInit(): void {
     this.postId = this.route.snapshot.paramMap.get('id');
-    this.postsService.getEpisodeDetails(this.postId).subscribe((response) => {
-      if (response) {
-        this.episodeDetails = response;
-        this.getSchedulingDetails();
-        if (this.episodeDetails?.data?.description) {
-          this.sanitizedDescription = this.sanitizeDescription(
-            this.episodeDetails.data.description
-          );
+    if (this.postId) {
+      this.postsService.getEpisodeDetails(this.postId).subscribe((response) => {
+        if (response) {
+          this.episodeDetails = response;
+          this.getSchedulingDetails();
+          if (this.episodeDetails?.data?.description) {
+            this.sanitizedDescription = this.sanitizeDescription(
+              this.episodeDetails.data.description
+            );
+          }
         }
-      }
-    });
+      });
+    }
     this.checkPermission();
   }
 
@@ -71,7 +85,7 @@ export class DetailEpisodeComponent implements OnInit {
     this.timezonne = this.episodeDetails.data.timezone;
     this.scheduledTime = this.episodeDetails.data.publish_date;
   }
-  open(content: any, post: any) {
+  open(content: TemplateRef<unknown>, post: { url: string }) {
     this.scheduleForm.reset();
     if (post) {
       this.sanitizedUrl = this.sanitizeUrl(post.url);
@@ -90,32 +104,27 @@ export class DetailEpisodeComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(url);
   }
 
-  approved(episodeData: any, type: any, approve: any) {
+  approved(episodeData: { id: string | number | null }, approve: string) {
     this.postsService
-      .updateIsApproved(episodeData.id, type, approve)
+      .updateIsApproved(episodeData.id, 'episode', approve)
       .subscribe((res) => {
         if (res) {
-          if (approve == 1) {
-            this.showSuccessMessage('Episode Approved');
-          } else if (approve == 2) {
-            this.showSuccessMessage('Episode Rejected');
-          }
+          this.ngOnInit();
         }
       });
   }
 
-  publish(episodeData: any, type: any) {
+  publish(episodeData: { id: string | number | null }) {
     this.postsService
-      .updateIsPublished(episodeData.id, type)
+      .updateIsPublished(episodeData.id, 'episode')
       .subscribe((res) => {
         if (res) {
-          this.getSchedulingDetails();
-          this.showSuccessMessage('Episode Published');
+          this.ngOnInit();
         }
       });
   }
 
-  openScheduleModal(content: any) {
+  openScheduleModal(content: TemplateRef<unknown>) {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
     });
@@ -126,7 +135,7 @@ export class DetailEpisodeComponent implements OnInit {
     this.authService.getUserById(userId).subscribe((res) => {
       this.type = res.data.role.name;
     });
-    this.navService.getMenu().subscribe((res: any) => {
+    this.navService.getMenu().subscribe((res: Menu) => {
       for (let permission of res.data[0].role_accesses) {
         if (permission.menu_bar.title === 'Episodes') {
           this.publishPermission = permission.status.includes('publish');
@@ -147,8 +156,8 @@ export class DetailEpisodeComponent implements OnInit {
         .updateEpisode(this.postId, formData)
         .subscribe((res) => {
           if (res) {
+            this.ngOnInit();
             this.modalService.dismissAll();
-            this.showSuccessMessage('Episode Added in Scheduling');
           }
         });
     } else {
@@ -159,7 +168,7 @@ export class DetailEpisodeComponent implements OnInit {
   onCountryChange() {
     const selectedCountry = this.scheduleForm.get('country')?.value;
     console.log('selectedCountry => ', selectedCountry);
-    const country = this.countries.find((c: any) => c.name === selectedCountry);
+    const country = this.countries.find((c) => c.name === selectedCountry);
 
     this.timezones = country ? country.timezones : [];
     console.log('timezones => ', this.timezones);
@@ -169,15 +178,6 @@ export class DetailEpisodeComponent implements OnInit {
     });
   }
 
-  private showSuccessMessage(message: string) {
-    this.successMessage = message;
-    this.successalertClass = '';
-    this.ngOnInit();
-    setTimeout(() => {
-      this.successMessage = '';
-      this.successalertClass = 'd-none';
-    }, 5000);
-  }
   private createEpisodeFormData(): FormData {
     const formData = new FormData();
     formData.append('name', this.episodeDetails.data.name);
@@ -191,10 +191,9 @@ export class DetailEpisodeComponent implements OnInit {
       'meta_description',
       this.episodeDetails.data.meta_description
     );
-    formData.append('date', this.episodeDetails.data.date);
     formData.append('subtype', this.episodeDetails.data.subtype);
-    formData.append('episodeNo', this.episodeDetails.data.episodeNo);
-    formData.append('seasonNo', this.episodeDetails.data.seasonNo);
+    formData.append('episodeNo', this.episodeDetails.data.episodeNo.toString());
+    formData.append('seasonNo', this.episodeDetails.data.seasonNo.toString());
     formData.append('slug', this.episodeDetails.data.description);
     formData.append('file', this.episodeDetails.data.file);
     formData.append('reason', '');

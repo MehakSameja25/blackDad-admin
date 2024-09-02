@@ -3,6 +3,7 @@ import {
   ElementRef,
   OnInit,
   Renderer2,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { AllPostsService } from '../services/all-posts.service';
@@ -10,20 +11,64 @@ import { Router } from '@angular/router';
 import { CategoiesService } from '../services/categoies.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MainNavService } from '../services/main-nav.service';
-import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Category } from '../model/category.model';
+import { Episode, SingleEpisode } from '../model/episode.model';
+import { Menu } from '../model/menu.model';
+
+interface share {
+  id: number | null | string;
+  name: string;
+  type: string;
+  subtype: string;
+  image: string;
+  thumbnail: string;
+  file: string;
+  filetype: string;
+  description: string;
+  isBlock: string;
+  isPublished: string;
+  isApproved: string;
+  reason: string;
+  url: string;
+  htmlcode: string;
+  meta_description: string;
+  episodeNo: number;
+  seasonNo: number;
+  slug: string;
+  date: string;
+  categoryId: string;
+  country: null | string;
+  timezone: null | string;
+  publish_date: null | string;
+  is_scheduled: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: null | string;
+  userId: number;
+  category: [
+    {
+      id: number;
+      name: string;
+      image: string;
+      isblock: string;
+      description: string;
+      created_at: string;
+      updated_at: string;
+    }
+  ];
+}
 
 @Component({
   selector: 'app-admin-episodes',
   templateUrl: './admin-episodes.component.html',
 })
 export class AdminEpisodesComponent implements OnInit {
-  allEpisodes: any;
-  allcategories: any;
-  selectedCategory: any;
-  deleteId: any;
-  tableData = [];
-  body: any;
+  allEpisodes!: Episode;
+  allcategories!: Category;
+  deleteId!: string | null | string;
+  tableData: any[] = [];
+  body!: {};
 
   tableColumns = [
     { title: 'Thumbnail' },
@@ -35,10 +80,10 @@ export class AdminEpisodesComponent implements OnInit {
     { title: 'Status' },
     { title: 'Action' },
   ];
-  allseaosns: any;
-  categoryFilter: any[] = [];
-  seasonFilter: any[] = [];
-  typeFilter: any[] = [];
+  allseaosns!: { data: [{}] };
+  categoryFilter: string[] = [];
+  seasonFilter: string[] = [];
+  typeFilter: string[] = [];
 
   constructor(
     private postService: AllPostsService,
@@ -61,7 +106,7 @@ export class AdminEpisodesComponent implements OnInit {
       console.log(res);
     });
   }
-  open(content: any, id: any) {
+  open(content: ElementRef<unknown>, id: string | null | string) {
     this.deleteId = id;
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
@@ -139,20 +184,23 @@ export class AdminEpisodesComponent implements OnInit {
         categoryId: this.categoryFilter,
       };
     }
-    this.postService.getEpisodes(this.body).subscribe((response: any) => {
-      this.allEpisodes = response;
-      this.tableData = response.data.map((item: any) => [
-        `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
-        item.name.length > 35 ? this.truncateDescription(item.name) : item.name,
-        `<ul> ${item.category?.map(
-          (cat: any) => `<li> ${cat.name} </li>`
-        )} </ul>`,
+    this.postService.getEpisodes(this.body).subscribe((response: Episode) => {
+      if (response) {
+        this.allEpisodes = response;
+        this.tableData = response.data.map((item) => [
+          `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
+          item.name.length > 35
+            ? this.truncateDescription(item.name)
+            : item.name,
+          `<ul> ${item.category
+            .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
+            .join('')} </ul>`,
 
-        item.filetype,
-        item.seasonNo,
-        item.date,
-        this.getScheduledStatus(item.isApproved, item.isPublished),
-        `<div class="actions d-flex align-items-center gap-2">
+          item.filetype,
+          item.seasonNo,
+          item.created_at ? item.created_at.split('T')[0] : 'N/A',
+          this.getScheduledStatus(item.isApproved, item.isPublished),
+          `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
               xmlns=" http://www.w3.org/2000/svg"
@@ -250,7 +298,7 @@ export class AdminEpisodesComponent implements OnInit {
           </a>
           <a class="btn-action-icon" data-id="${item.id}" data-action="block">
         ${
-          item.isBlock == 0
+          item.isBlock == '1'
             ? `
         <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -357,8 +405,8 @@ export class AdminEpisodesComponent implements OnInit {
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 512 512.005" xml:space="preserve" style="enable-background: new 0 0 16 16;"><g><path d="M453.336 512.004H58.668c-32.363 0-58.664-26.305-58.664-58.664V144.004c0-32.363 26.3-58.664 58.664-58.664h74.668c8.832 0 16 7.168 16 16s-7.168 16-16 16H58.668c-14.7 0-26.664 11.965-26.664 26.664V453.34c0 14.695 11.965 26.664 26.664 26.664h394.668c14.7 0 26.668-11.969 26.668-26.664V272.004c0-8.832 7.168-16 16-16s16 7.168 16 16V453.34c0 32.36-26.305 58.664-58.668 58.664zm0 0" fill="#000000" opacity="1" data-original="#000000"></path><path d="M143.98 341.063a14.09 14.09 0 0 1-3.52-.43c-7.23-1.684-12.456-7.871-12.456-15.293v-32c0-114.688 93.312-208 208-208h5.332V16.004a16.024 16.024 0 0 1 10.027-14.848 15.979 15.979 0 0 1 17.492 3.754l138.668 144c5.973 6.188 5.973 16 0 22.188l-138.668 144c-4.523 4.715-11.5 6.168-17.492 3.754a16.024 16.024 0 0 1-10.027-14.848v-69.332h-25.344c-67.113 0-127.426 37.289-157.418 97.3-2.754 5.548-8.535 9.09-14.594 9.09zM336.004 117.34c-89.602 0-163.797 67.305-174.656 154.023 38.78-43.261 94.398-68.691 154.644-68.691h41.344c8.832 0 16 7.168 16 16v45.652l100.457-104.32-100.457-104.32v45.656c0 8.832-7.168 16-16 16zm0 0" fill="#000000" opacity="1" data-original="#000000"></path></g></svg>
         </a>
         </div>`,
-      ]);
-
+        ]);
+      }
       setTimeout(() => this.bindEvents(), 0);
     });
   }
@@ -411,42 +459,38 @@ export class AdminEpisodesComponent implements OnInit {
     });
   }
 
-  getValue(category: any) {
+  getValue(category: string) {
     if (category == 'all categories') {
       this.categoryFilter = [];
     } else {
-      const categoryIdString = category.toString();
-      const categoryIndex = this.categoryFilter.indexOf(categoryIdString);
+      const categoryIndex = this.categoryFilter.indexOf(category);
 
       if (categoryIndex === -1) {
-        this.categoryFilter = [categoryIdString];
+        this.categoryFilter = [category];
       }
     }
     this.getPosts();
-    console.log('Selected category =>', this.categoryFilter);
   }
-  getValueSeason(season: any) {
+  getValueSeason(season: string) {
     if (season == 'all seasons') {
       this.seasonFilter = [];
     } else {
-      const seasonIdString = season.toString();
-      const seasonIndex = this.seasonFilter.indexOf(seasonIdString);
+      const seasonIndex = this.seasonFilter.indexOf(season);
 
       if (seasonIndex === -1) {
-        this.seasonFilter = [seasonIdString];
+        this.seasonFilter = [season];
       }
     }
     this.getPosts();
-    console.log('Season Category =>', this.seasonFilter);
   }
 
-  toDetails(id: any) {
+  toDetails(id: string | null | string) {
     this.router.navigate([`/admin/detail-episode/${id}`]);
   }
-  toEdit(id: any) {
+  toEdit(id: string | null | string) {
     this.router.navigate([`/admin/edit-episode/${id}`]);
   }
-  deleteEpisode(id: any) {
+  deleteEpisode(id: string | null | string) {
     this.postService.deleteEpisode(id).subscribe((res) => {
       console.log(res);
       if (res) {
@@ -456,7 +500,7 @@ export class AdminEpisodesComponent implements OnInit {
     });
   }
 
-  checkIsBlock(episodeData: string | null) {
+  checkIsBlock(episodeData: string | null | string) {
     if (episodeData) {
       this.postService
         .updateIsblock(episodeData, 'episode')
@@ -468,13 +512,13 @@ export class AdminEpisodesComponent implements OnInit {
         });
     }
   }
-  addPermission: any;
-  editPermission: any;
-  isEdit: any;
-  isEditAfterPublish: any;
-  deletePermission: any;
+  addPermission!: boolean;
+  editPermission!: boolean;
+  isEdit!: boolean;
+  isEditAfterPublish!: boolean;
+  deletePermission!: boolean;
   checkPermissions() {
-    this.navService.getMenu().subscribe((res: any) => {
+    this.navService.getMenu().subscribe((res: Menu) => {
       if (res && res.data) {
         for (let permission of res.data[0].role_accesses) {
           if ((permission.menu_bar.title == 'Episodes') === true) {
@@ -498,17 +542,16 @@ export class AdminEpisodesComponent implements OnInit {
     });
   }
 
-  isEditPermission(episode: any) {
-    // console.log(episode);
+  isEditPermission(episode: { isPublished: string }) {
     if (this.isEdit == true && this.isEditAfterPublish == true) {
       return true;
-    } else if (this.isEdit && episode.isPublished == 0) {
+    } else if (this.isEdit && episode.isPublished == '0') {
       return true;
     } else {
       return false;
     }
   }
-  getPostByFileType(type: any) {
+  getPostByFileType(type: string) {
     if (type === 'all type') {
       this.typeFilter = [];
     } else {
@@ -518,24 +561,23 @@ export class AdminEpisodesComponent implements OnInit {
     console.log('Selected type:', this.typeFilter);
   }
 
-  sharePost: any;
-  openShare(content: any, post: any) {
-    console.log(post);
-    this.sharePost = this.allEpisodes.data.find((data: any) => data.id == post);
+  sharePost!: share | undefined;
+  openShare(content: ElementRef<unknown>, post: string | null | string) {
+    this.sharePost = this.allEpisodes.data.find((data) => data.id == post);
     console.log(this.sharePost);
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered',
     });
-    if (this.sharePost.name.includes('?')) {
+    if (this.sharePost?.name.includes('?')) {
       const titleWq = this.sharePost.name.split('?').join('%3F');
       const title = titleWq.trim().replace(/\s+/g, '_');
       const url = `${environment.shareUrl}/${this.sharePost.type}/${this.sharePost.id}/${title}?subType=${this.sharePost.subtype}`;
       this.urlToCopy = url;
     } else {
-      const title = this.sharePost.name.trim().replace(/\s+/g, '_');
-      const url = `${environment.shareUrl}/${this.sharePost.type}/${this.sharePost.id}/${title}?subType=${this.sharePost.subtype}`;
+      const title = this.sharePost?.name.trim().replace(/\s+/g, '_');
+      const url = `${environment.shareUrl}/${this.sharePost?.type}/${this.sharePost?.id}/${title}?subType=${this.sharePost?.subtype}`;
       this.urlToCopy = url;
     }
   }
@@ -576,14 +618,14 @@ export class AdminEpisodesComponent implements OnInit {
       : description;
   }
 
-  getScheduledStatus(isApproved: number, isPublished: number): string {
-    if (isApproved == 0 && isPublished == 0) {
+  getScheduledStatus(isApproved: string, isPublished: string): string {
+    if (isApproved == '0' && isPublished == '0') {
       return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
-    } else if (isApproved == 1 && isPublished == 0) {
+    } else if (isApproved == '1' && isPublished == '0') {
       return `<span class="badge rounded-pill text-bg-success">Approved</span>`;
-    } else if (isApproved == 2 && isPublished == 0) {
+    } else if (isApproved == '2' && isPublished == '0') {
       return `<span class="badge rounded-pill text-bg-danger">Rejected</span>`;
-    } else if (isApproved == 1 && isPublished == 1) {
+    } else if (isApproved == '1' && isPublished == '1') {
       return `<span class="badge rounded-pill text-bg-violet">Published</span>`;
     } else {
       return '';

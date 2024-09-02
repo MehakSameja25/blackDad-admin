@@ -34,14 +34,14 @@
                     </div>
                   </div>
                   <form [formGroup]="metaForm">
-                    <div class="col-12">
+                    <div class="col-12" *ngIf="allMetas && allMetas.data">
                       <div class="input-block mb-3">
                         <label>Sub Type</label>
                         <textarea
                           class="form-control"
                           formControlName="description"
                           placeholder="Enter description"
-                          [(ngModel)]="allMetas?.data.meta_description"
+                          [(ngModel)]="allMetas.data.meta_description"
                           rows="5"
                         ></textarea>
                       </div>

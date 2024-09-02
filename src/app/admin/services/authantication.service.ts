@@ -48,4 +48,13 @@ export class AuthanticationService {
       `${environment.apiUrl}/get-userById?userId=${id}`
     );
   }
+  resetPassword(body: any) {
+    return apiCallWrapper(
+      this.http.post<any>(`${environment.apiUrl}/forget-password`, body),
+      {
+        notificationsService: this.notifications,
+        action: 'Sending reset link',
+      }
+    );
+  }
 }

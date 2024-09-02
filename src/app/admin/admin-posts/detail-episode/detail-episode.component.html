@@ -34,7 +34,7 @@
                         appearance="line"
                       ></ngx-skeleton-loader>
                       <img
-                        [src]="episodeDetails?.data.image"
+                        [src]="episodeDetails.data.image"
                         class="card-img-top"
                         alt="..."
                         (load)="onImageLoad()"
@@ -60,17 +60,13 @@
                       >
                         <button
                           class="btn btn-outline-success"
-                          (click)="
-                            approved(episodeDetails.data, 'episode', '1')
-                          "
+                          (click)="approved(episodeDetails.data, '1')"
                         >
                           Approve
                         </button>
                         <button
                           class="btn btn-outline-success"
-                          (click)="
-                            approved(episodeDetails.data, 'episode', '2')
-                          "
+                          (click)="approved(episodeDetails.data, '2')"
                         >
                           Reject
                         </button>
@@ -88,7 +84,7 @@
                       >
                         <button
                           class="btn btn-primary"
-                          (click)="publish(episodeDetails.data, 'episode')"
+                          (click)="publish(episodeDetails.data)"
                         >
                           Publish Now
                         </button>
@@ -148,7 +144,13 @@
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Category</label>
-                        <ul *ngIf="episodeDetails.data.categories">
+                        <ul
+                          *ngIf="
+                            episodeDetails &&
+                            episodeDetails.data &&
+                            episodeDetails.data.categories
+                          "
+                        >
                           <li
                             *ngFor="
                               let category of episodeDetails.data.categories

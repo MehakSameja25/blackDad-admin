@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { apiCallWrapper } from './api.util';
 import { NotificationsService } from 'angular2-notifications';
+import { MetaList, SingleMeta } from '../model/meta.model';
+import { Observable } from 'rxjs';
+import { Advertisement, SingleAdvertisement } from '../model/ad.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,16 +16,22 @@ export class MetaDataService {
     private notifications: NotificationsService
   ) {}
 
-  getMeta() {
-    return apiCallWrapper(this.http.get(`${environment.apiUrl}/getMetas`), {
-      notificationsService: this.notifications,
-      action: 'Fetching Meta Data',
-    });
+  getMeta(): Observable<MetaList> {
+    return apiCallWrapper(
+      this.http.get<MetaList>(`${environment.apiUrl}/getMetas`),
+      {
+        notificationsService: this.notifications,
+        action: 'Fetching Meta Data',
+      }
+    );
   }
 
-  getAdvertisements(body: any) {
+  getAdvertisements(body: {}): Observable<Advertisement> {
     return apiCallWrapper(
-      this.http.post(`${environment.apiUrl}/getAdvertisment`, body),
+      this.http.post<Advertisement>(
+        `${environment.apiUrl}/getAdvertisment`,
+        body
+      ),
       {
         notificationsService: this.notifications,
         action: 'Fetching Advertisements',
@@ -52,9 +61,9 @@ export class MetaDataService {
       }
     );
   }
-  getAdvertisementsByid(id: any) {
+  getAdvertisementsByid(id: any) : Observable<SingleAdvertisement> {
     return apiCallWrapper(
-      this.http.get(
+      this.http.get<SingleAdvertisement>(
         `${environment.apiUrl}/get-advertismentById?advertisementId=${id}`
       ),
       {
@@ -73,9 +82,11 @@ export class MetaDataService {
     );
   }
 
-  getMetaDetail(metaFor: any) {
+  getMetaDetail(metaFor: any): Observable<SingleMeta> {
     return apiCallWrapper(
-      this.http.get(`${environment.apiUrl}/getMetas?meta_for=${metaFor}`),
+      this.http.get<SingleMeta>(
+        `${environment.apiUrl}/getMetas?meta_for=${metaFor}`
+      ),
       {
         notificationsService: this.notifications,
         action: 'Fetching Meta Details',

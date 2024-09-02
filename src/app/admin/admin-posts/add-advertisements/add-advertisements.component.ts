@@ -39,10 +39,11 @@ export class AddAdvertisementsComponent {
       }
     });
   }
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files ? input.files[0] : null;
     const maxFileSize = 50 * 1024 * 1024;
-    console.log(file);
+
     if (file) {
       if (file.size > maxFileSize) {
         alert('File size exceeds maximum limit (50MB)');
@@ -54,10 +55,14 @@ export class AddAdvertisementsComponent {
       }
       this.selectedFile = file;
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        document
-          .getElementById('thumbnailPreview')!
-          .setAttribute('src', e.target.result);
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const target = e.target as FileReader;
+        const previewElement = document.getElementById(
+          'thumbnailPreview'
+        ) as HTMLImageElement;
+        if (target.result) {
+          previewElement.setAttribute('src', target.result as string);
+        }
       };
       reader.readAsDataURL(file);
       this.advertisementForm.patchValue({ thumbnailImage: file });
@@ -65,7 +70,7 @@ export class AddAdvertisementsComponent {
   }
 
   onSubmit(): void {
-    if (this.advertisementForm.valid) {
+    if (this.advertisementForm.valid) { 
       const formData = new FormData();
       formData.append('title', this.advertisementForm.value.title);
       formData.append('url', this.advertisementForm.value.url);
@@ -88,12 +93,13 @@ export class AddAdvertisementsComponent {
     }
   }
   // Thumbnail image variables
-  thumbnailImageChangedEvent: any = '';
+  thumbnailImageChangedEvent!: Event;
   croppedThumbnailImage: string | null = null;
   showThumbnailCropper = false;
   IsBannerImage = false;
-  handleThumbnailImageInput(event: any): void {
-    const file = event.target.files[0];
+  handleThumbnailImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files ? input.files[0] : null;
     if (file) {
       this.thumbnailImageChangedEvent = event;
       this.showThumbnailCropper = true;

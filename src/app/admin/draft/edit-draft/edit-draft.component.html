@@ -45,27 +45,6 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Date</label>
-                        <input
-                          type="date"
-                          formControlName="date"
-                          class="datetimepicker form-control"
-                          placeholder="Select Date"
-                          (change)="this.inputChanged.next('date')"
-                        />
-                        <div
-                          class="text-danger"
-                          *ngIf="
-                            episodeForm.get('date')?.invalid &&
-                            episodeForm.get('date')?.touched
-                          "
-                        >
-                          Date is required.
-                        </div>
-                      </div>
-                    </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Episode Number</label>
@@ -116,8 +95,8 @@
                           [settings]="dropdownSettings"
                           [data]="allcategories"
                           formControlName="category"
-                          (onSelect)="onCategorySelect($event)"
-                          (onDeSelect)="onCategoryDeSelect($event)"
+                          (onSelect)="onCategorySelect($event.id)"
+                          (onDeSelect)="onCategoryDeSelect($event.id)"
                         >
                         </ng-multiselect-dropdown>
                       </div>
@@ -318,9 +297,7 @@
                           <span>
                             <img
                               [src]="
-                                singleDraft.data.image ??
-                                croppedBannerImage ??
-                                'assets/img/drop-icon.svg'
+                                croppedBannerImage ?? singleDraft.data.image
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -374,6 +351,17 @@
                           Banner Image is required.
                         </div>
                       </div>
+                      <button
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(previewModal)"
+                        *ngIf="
+                          IsBannerImage ||
+                          singleDraft.data.image != nullImagePath
+                        "
+                      >
+                        Preview Banner Image
+                      </button>
                     </div>
 
                     <div class="col-lg-4 col-md-6 col-sm-12">
@@ -385,9 +373,8 @@
                           <span>
                             <img
                               [src]="
-                                singleDraft.data.thumbnail ??
                                 croppedThumbnailImage ??
-                                'assets/img/drop-icon.svg'
+                                singleDraft.data.thumbnail
                               "
                               id="thumbnailPreview"
                               alt="upload"
@@ -441,18 +428,21 @@
                           Thumbnail Image is required.
                         </div>
                       </div>
+                      <button
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(preview2Modal)"
+                        *ngIf="
+                          IsThumbnailImage ||
+                          singleDraft.data.thumbnail != nullImagePath
+                        "
+                      >
+                        Preview Thumbnail Image
+                      </button>
                     </div>
                   </div>
                 </div>
                 <div class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-back mt-4"
-                    (click)="open(previewModal)"
-                    *ngIf="IsBannerImage"
-                  >
-                    Preview Banner Image
-                  </button>
                   <button
                     type="submit"
                     class="btn btn-primary mt-4"
@@ -489,7 +479,47 @@
       <span>
         <img
           [src]="
-            croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
+            croppedBannerImage ? croppedBannerImage : singleDraft.data.image
+          "
+          class="w-100 h-100"
+          style="object-fit: contain"
+          alt="upload"
+          id="bannerPreview"
+        /> </span
+    ></a>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      data-bs-dismiss="modal"
+      class="btn btn-back cancel-btn me-2"
+      (click)="modal.close()"
+    >
+      Cancel
+    </button>
+  </div>
+</ng-template>
+<ng-template #preview2Modal let-modal>
+  <div class="modal-header border-0 pb-0">
+    <div class="form-header modal-header-title text-start mb-0">
+      <h4 class="mb-0">Preview Thumbnail Image</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <a class="podcastdetailbanner mb-3">
+      <span>
+        <img
+          [src]="
+            croppedThumbnailImage
+              ? croppedThumbnailImage
+              : singleDraft.data.thumbnail
           "
           class="w-100 h-100"
           style="object-fit: contain"

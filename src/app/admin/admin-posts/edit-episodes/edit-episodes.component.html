@@ -49,26 +49,6 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Date</label>
-                        <input
-                          type="date"
-                          formControlName="date"
-                          class="datetimepicker form-control"
-                          placeholder="Select Date"
-                        />
-                        <div
-                          class="text-danger"
-                          *ngIf="
-                            episodeForm.get('date')?.invalid &&
-                            episodeForm.get('date')?.touched
-                          "
-                        >
-                          Date is required.
-                        </div>
-                      </div>
-                    </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Episode Number</label>
@@ -117,8 +97,8 @@
                           [settings]="dropdownSettings"
                           [data]="allcategories"
                           formControlName="category"
-                          (onSelect)="onCategorySelect($event)"
-                          (onDeSelect)="onCategoryDeSelect($event)"
+                          (onSelect)="onCategorySelect($event.id)"
+                          (onDeSelect)="onCategoryDeSelect($event.id)"
                         >
                         </ng-multiselect-dropdown>
                       </div>
@@ -171,7 +151,7 @@
                           <option
                             value="podcast"
                             [selected]="
-                              episodeDetails?.data.subtype === 'podcast'
+                              episodeDetails.data.subtype === 'podcast'
                             "
                           >
                             podcast
@@ -179,7 +159,7 @@
                           <option
                             value="youtube"
                             [selected]="
-                              episodeDetails?.data.subtype === 'youtube'
+                              episodeDetails.data.subtype === 'youtube'
                             "
                           >
                             youtube
@@ -322,9 +302,8 @@
                           <span>
                             <img
                               [src]="
-                                this.episodeDetails.data.image ??
-                                croppedBannerImage ??
-                                'assets/img/drop-icon.svg'
+                                croppedBannerImage ?
+                                croppedBannerImage : this.episodeDetails.data.image
                               "
                               alt="upload"
                               id="bannerPreview"
@@ -397,9 +376,9 @@
                           <span>
                             <img
                               [src]="
-                                this.episodeDetails.data.thumbnail ??
-                                croppedThumbnailImage ??
-                                'assets/img/drop-icon.svg'
+                                croppedThumbnailImage ?
+                                croppedThumbnailImage :
+                                this.episodeDetails.data.thumbnail
                               "
                               id="thumbnailPreview"
                               alt="upload"
