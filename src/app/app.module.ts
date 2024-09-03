@@ -48,6 +48,7 @@ import { ImageCropperComponent } from 'ngx-image-cropper';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
+import { ListManufacturerComponent } from './admin/ecommerce/manufacturer/list-manufacturer/list-manufacturer.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
     EpisodeTabsComponent,
     ArticleTabsComponent,
     AdminAdvertisementsComponent,
+    ListManufacturerComponent,
   ],
   imports: [
     BrowserModule,
