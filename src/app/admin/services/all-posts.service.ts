@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AllPostsService {
-  userId: any = localStorage.getItem('userId');
+  userId: string | null = localStorage.getItem('userId');
 
   constructor(
     private http: HttpClient,

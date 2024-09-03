@@ -100,9 +100,9 @@ export class ArticleScheduleComponent implements OnInit {
           item.name.length > 35
             ? this.truncateDescription(item.name)
             : item.name,
-          `<ul> ${item.category.map(
-            (cat: { name: string }) => `<li> ${cat.name} </li>`
-          )} </ul>`,
+          `<ul> ${item.category
+            .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
+            .join('')} </ul>`,
           item.created_at ? item.created_at.split('T')[0] : 'N/A',
           this.getScheduledStatus(item.isApproved, item.isPublished),
           `<div class="actions d-flex align-items-center gap-2">
@@ -365,6 +365,7 @@ export class ArticleScheduleComponent implements OnInit {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
     });
   }
 

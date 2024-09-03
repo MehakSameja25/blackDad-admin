@@ -25,7 +25,7 @@ export class EpisodeScheduleComponent implements OnInit {
   isEditAfterPublish!: boolean;
   deletePermission!: boolean;
   body!: {};
-  tableData : any = [];
+  tableData: any = [];
 
   tableColumns = [
     { title: 'Thumbnail' },
@@ -61,9 +61,9 @@ export class EpisodeScheduleComponent implements OnInit {
       this.tableData = response.data.map((item) => [
         `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
         item.name.length > 35 ? this.truncateDescription(item.name) : item.name,
-        `<ul> ${item.category.map(
-          (cat) => `<li> ${cat.name} </li>`
-        )} </ul>`,
+        `<ul> ${item.category
+          .map((cat) => `<li> ${cat.name} </li>`)
+          .join('')} </ul>`,
 
         item.filetype,
         item.seasonNo,
@@ -325,9 +325,53 @@ export class EpisodeScheduleComponent implements OnInit {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
     });
   }
-  sharePost: { id: number | null | string; name: string; type: string; subtype: string; image: string; thumbnail: string; file: string; filetype: string; description: string; isBlock: string; isPublished: string; isApproved: string; reason: string; url: string; htmlcode: string; meta_description: string; episodeNo: number; seasonNo: number; slug: string; date: string; categoryId: string; country: null | string; timezone: null | string; publish_date: null | string; is_scheduled: string; created_at: string; updated_at: string; deleted_at: null | string; userId: number; category: [{ id: number; name: string; image: string; isblock: string; description: string; created_at: string; updated_at: string; }]; } | undefined;
+  sharePost:
+    | {
+        id: number | null | string;
+        name: string;
+        type: string;
+        subtype: string;
+        image: string;
+        thumbnail: string;
+        file: string;
+        filetype: string;
+        description: string;
+        isBlock: string;
+        isPublished: string;
+        isApproved: string;
+        reason: string;
+        url: string;
+        htmlcode: string;
+        meta_description: string;
+        episodeNo: number;
+        seasonNo: number;
+        slug: string;
+        date: string;
+        categoryId: string;
+        country: null | string;
+        timezone: null | string;
+        publish_date: null | string;
+        is_scheduled: string;
+        created_at: string;
+        updated_at: string;
+        deleted_at: null | string;
+        userId: number;
+        category: [
+          {
+            id: number;
+            name: string;
+            image: string;
+            isblock: string;
+            description: string;
+            created_at: string;
+            updated_at: string;
+          }
+        ];
+      }
+    | undefined;
   openShare(content: ElementRef, post: string | null) {
     this.sharePost = this.allEpisodes.data.find((data) => data.id == post);
     this.modalService.open(content, {
@@ -352,14 +396,16 @@ export class EpisodeScheduleComponent implements OnInit {
   toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-episode/${id}`]);
   }
-  deleteEpisode(id: string | null) {
-    this.postService.deleteEpisode(id).subscribe((res) => {
-      console.log(res);
-      if (res) {
-        this.modalService.dismissAll();
-        this.ngOnInit();
-      }
-    });
+  deleteEpisode() {
+    if (this.deleteId) {
+      this.postService.deleteEpisode(this.deleteId).subscribe((res) => {
+        console.log(res);
+        if (res) {
+          this.modalService.dismissAll();
+          this.ngOnInit();
+        }
+      });
+    }
   }
 
   checkIsBlock(episodeData: string | null) {
@@ -399,7 +445,7 @@ export class EpisodeScheduleComponent implements OnInit {
     });
   }
 
-  isEditPermission(episode: {isPublished : number | string}) {
+  isEditPermission(episode: { isPublished: number | string }) {
     // console.log(episode);
     if (this.isEdit == true && this.isEditAfterPublish == true) {
       return true;
@@ -444,7 +490,10 @@ export class EpisodeScheduleComponent implements OnInit {
       ? `${description.slice(0, 25)}...`
       : description;
   }
-  getScheduledStatus(isApproved: number | string, isPublished: number | string): string {
+  getScheduledStatus(
+    isApproved: number | string,
+    isPublished: number | string
+  ): string {
     if (isApproved == 0 && isPublished == 0) {
       return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
     } else if (isApproved == 1 && isPublished == 0) {

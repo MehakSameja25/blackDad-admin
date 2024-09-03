@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AllPostsService } from '../../services/all-posts.service';
 import { Router } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-add-advertisements',
@@ -14,7 +15,8 @@ export class AddAdvertisementsComponent {
   constructor(
     private fb: FormBuilder,
     private postsService: AllPostsService,
-    private router: Router
+    private router: Router,
+    private notify: NotificationsService
   ) {}
 
   ngOnInit(): void {
@@ -26,6 +28,7 @@ export class AddAdvertisementsComponent {
         [Validators.required, Validators.pattern(/^(http|https):\/\/[^ "]+$/)],
       ],
       page: ['Home', Validators.required],
+      image: ['', Validators.required],
     });
   }
 
@@ -70,7 +73,7 @@ export class AddAdvertisementsComponent {
   }
 
   onSubmit(): void {
-    if (this.advertisementForm.valid) { 
+    if (this.advertisementForm.valid) {
       const formData = new FormData();
       formData.append('title', this.advertisementForm.value.title);
       formData.append('url', this.advertisementForm.value.url);
@@ -88,7 +91,7 @@ export class AddAdvertisementsComponent {
       console.log('Form submitted successfully');
       console.log('Form values:', formData);
     } else {
-      alert('Form is invalid. Please check errors.');
+      this.notify.alert('Form is invalid. Please check errors.');
       this.validateAllFormFields(this.advertisementForm);
     }
   }

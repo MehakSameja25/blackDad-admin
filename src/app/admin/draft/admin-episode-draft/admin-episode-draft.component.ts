@@ -112,9 +112,9 @@ export class AdminEpisodeDraftComponent implements OnInit {
               : item.draft.name
             : 'N/A',
           item.category.length > 0
-            ? `<ul> ${item.category.map(
-                (cat) => `<li> ${cat.name} </li>`
-              )} </ul>`
+            ? `<ul> ${item.category
+                .map((cat) => `<li> ${cat.name} </li>`)
+                .join('')} </ul>`
             : 'No Categories',
 
           item.draft.filetype ? item.draft.filetype : 'N/A',
@@ -229,6 +229,7 @@ export class AdminEpisodeDraftComponent implements OnInit {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
     });
   }
 

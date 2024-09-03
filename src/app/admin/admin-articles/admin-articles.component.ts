@@ -433,6 +433,7 @@ export class AdminArticlesComponent implements OnInit {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
     });
   }
 
@@ -520,7 +521,7 @@ export class AdminArticlesComponent implements OnInit {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
-      modalDialogClass: 'modal-dialog-centered',
+      modalDialogClass: 'modal-dialog-centered modal-md',
     });
 
     const title = this.sharePost?.name.trim().replace(/\s+/g, '_');

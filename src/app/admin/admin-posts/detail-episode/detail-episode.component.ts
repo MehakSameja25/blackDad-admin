@@ -195,7 +195,7 @@ export class DetailEpisodeComponent implements OnInit {
     formData.append('episodeNo', this.episodeDetails.data.episodeNo.toString());
     formData.append('seasonNo', this.episodeDetails.data.seasonNo.toString());
     formData.append('slug', this.episodeDetails.data.description);
-    formData.append('file', this.episodeDetails.data.file);
+    formData.append('file', '');
     formData.append('reason', '');
     formData.append('url', this.episodeDetails.data.url);
     formData.append('isBlock', this.episodeDetails.data.isBlock);

@@ -181,51 +181,6 @@
   </div>
 </div>
 <ng-template #deletee let-modal>
-  <!-- ======== -->
-  <!-- delete modal -->
-  <!-- ======== -->
-  <div class="modal-body">
-    <div class="form-header">
-      <span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          version="1.1"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          width="60"
-          height="60"
-          x="0"
-          y="0"
-          viewBox="0 0 512 512"
-          style="enable-background: new 0 0 512 512"
-          xml:space="preserve"
-          class=""
-        >
-          <g>
-            <path
-              fill="#ac54f4"
-              fill-rule="evenodd"
-              d="M170.8 14.221A14.21 14.21 0 0 1 185 .014L326.991.006a14.233 14.233 0 0 1 14.2 14.223v35.117H170.8zm233.461 477.443a21.75 21.75 0 0 1-21.856 20.33H127.954a21.968 21.968 0 0 1-21.854-20.416L84.326 173.06H427.5l-23.234 318.6zm56.568-347.452H51.171v-33A33.035 33.035 0 0 1 84.176 78.2l343.644-.011a33.051 33.051 0 0 1 33 33.02v33zm-270.79 291.851a14.422 14.422 0 1 0 28.844 0V233.816a14.42 14.42 0 0 0-28.839-.01v202.257zm102.9 0a14.424 14.424 0 1 0 28.848 0V233.816a14.422 14.422 0 0 0-28.843-.01z"
-              opacity="1"
-              data-original="#fc0005"
-              class=""
-            ></path>
-          </g>
-        </svg>
-      </span>
-
-      <p class="mt-3">Are you sure want to delete?</p>
-    </div>
-    <div class="modal-footer gap-3 justify-content-center p-0">
-      <a class="btn btn-primary" (click)="deleteMember(deleteId)">Delete</a>
-
-      <a data-bs-dismiss="modal" class="btn btn-back" (click)="modal.close()"
-        >Cancel</a
-      >
-    </div>
-  </div>
-</ng-template>
-<!-- delete model -->
-<!-- <ng-template #editt let-modal>
   <div class="modal-content">
     <div class="modal-body">
       <div class="form-header">
@@ -245,34 +200,26 @@
           >
             <g>
               <path
-                d="M370.59 250.973c-5.524 0-10 4.476-10 10v88.789c-.02 16.562-13.438 29.984-30 30H50c-16.563-.016-29.98-13.438-30-30V89.172c.02-16.559 13.438-29.98 30-30h88.79c5.523 0 10-4.477 10-10 0-5.52-4.477-10-10-10H50c-27.602.031-49.969 22.398-50 50v260.594c.031 27.601 22.398 49.968 50 50h280.59c27.601-.032 49.969-22.399 50-50v-88.793c0-5.524-4.477-10-10-10zm0 0"
                 fill="#ac54f4"
                 fill-rule="evenodd"
+                d="M170.8 14.221A14.21 14.21 0 0 1 185 .014L326.991.006a14.233 14.233 0 0 1 14.2 14.223v35.117H170.8zm233.461 477.443a21.75 21.75 0 0 1-21.856 20.33H127.954a21.968 21.968 0 0 1-21.854-20.416L84.326 173.06H427.5l-23.234 318.6zm56.568-347.452H51.171v-33A33.035 33.035 0 0 1 84.176 78.2l343.644-.011a33.051 33.051 0 0 1 33 33.02v33zm-270.79 291.851a14.422 14.422 0 1 0 28.844 0V233.816a14.42 14.42 0 0 0-28.839-.01v202.257zm102.9 0a14.424 14.424 0 1 0 28.848 0V233.816a14.422 14.422 0 0 0-28.843-.01z"
                 opacity="1"
-                data-original="#000000"
-                class=""
-              ></path>
-              <path
-                d="M376.629 13.441c-17.574-17.574-46.067-17.574-63.64 0L134.581 191.848a9.997 9.997 0 0 0-2.566 4.402l-23.461 84.7a9.997 9.997 0 0 0 12.304 12.308l84.7-23.465a9.997 9.997 0 0 0 4.402-2.566l178.402-178.41c17.547-17.587 17.547-46.055 0-63.641zM156.37 198.348 302.383 52.332l47.09 47.09-146.016 146.016zm-9.406 18.875 37.62 37.625-52.038 14.418zM374.223 74.676 363.617 85.28l-47.094-47.094 10.61-10.605c9.762-9.762 25.59-9.762 35.351 0l11.739 11.734c9.746 9.774 9.746 25.59 0 35.36zm0 0"
-                fill="#ac54f4"
-                fill-rule="evenodd"
-                opacity="1"
-                data-original="#000000"
+                data-original="#fc0005"
                 class=""
               ></path>
             </g>
           </svg>
         </span>
 
-        <p class="mt-3">Are you sure want to edit this user?</p>
+        <p class="mt-3">Are you sure want to delete?</p>
       </div>
       <div class="modal-btn delete-action">
         <div class="row">
           <div class="col-6">
             <a
               class="btn btn-primary paid-continue-btn"
-              (click)="UpdateMember(deleteId)"
-              >Update</a
+              (click)="deleteMember(deleteId)"
+              >Delete</a
             >
           </div>
           <div class="col-6">
@@ -287,7 +234,7 @@
       </div>
     </div>
   </div>
-</ng-template> -->
+</ng-template>
 
 <ng-template #password let-modal>
   <div class="modal-header">
