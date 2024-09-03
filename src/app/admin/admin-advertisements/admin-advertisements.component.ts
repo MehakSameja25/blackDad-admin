@@ -16,8 +16,10 @@ import { Advertisement } from '../model/ad.model';
   templateUrl: './admin-advertisements.component.html',
 })
 export class AdminAdvertisementsComponent implements OnInit {
-  allAdvertisements!: Advertisement;
-  deleteId!: string | null;
+  /**---- Variable Declarations  ---**/
+  public allAdvertisements!: Advertisement;
+  private deleteId!: string | null;
+
   tableData: any = [];
 
   tableColumns = [
@@ -27,7 +29,13 @@ export class AdminAdvertisementsComponent implements OnInit {
     { title: 'Action' },
   ];
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
+
+  @ViewChild('contentt')
+  public deleteModel!: ElementRef;
   body!: {};
+
+  /**------------------------------**/
+
   constructor(
     private metaService: MetaDataService,
     private postService: AllPostsService,
@@ -269,9 +277,6 @@ export class AdminAdvertisementsComponent implements OnInit {
       });
   }
 
-  @ViewChild('contentt')
-  public deleteModel!: ElementRef;
-
   bindEvents(): void {
     const tableElement = this.table.nativeElement;
     const actionButtons = tableElement.querySelectorAll(
@@ -321,11 +326,13 @@ export class AdminAdvertisementsComponent implements OnInit {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
     });
   }
   deleteAd() {
     this.metaService.deleteAdvertisements(this.deleteId).subscribe((res) => {
       if (res) {
+        this.modalService.dismissAll();
         this.getAdvetisements();
       }
     });

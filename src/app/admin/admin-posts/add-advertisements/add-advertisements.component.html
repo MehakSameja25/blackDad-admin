@@ -179,14 +179,14 @@
                       </div>
                       <div
                         *ngIf="
-                          advertisementForm.get('thumbnailImage')?.invalid &&
-                          (advertisementForm.get('thumbnailImage')?.dirty ||
-                            advertisementForm.get('thumbnailImage')?.touched)
+                          advertisementForm.get('image')?.invalid &&
+                          (advertisementForm.get('image')?.dirty ||
+                            advertisementForm.get('image')?.touched)
                         "
                         class="text-danger"
                       >
                         <div
-                          *ngIf="advertisementForm.get('thumbnailImage')?.errors?.['required']"
+                          *ngIf="advertisementForm.get('image')?.errors?.['required']"
                         >
                           Thumbnail Image is required.
                         </div>

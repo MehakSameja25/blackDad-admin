@@ -13,7 +13,6 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Category } from '../../model/category.model';
-import { ListItem } from 'ng-multiselect-dropdown/multiselect.model';
 
 @Component({
   selector: 'app-add-articles',

@@ -40,24 +40,38 @@ export class AdminArticleDraftComponent {
     this.postService.getDraft('articles').subscribe((res) => {
       this.allDraftdata = res;
       console.log(res);
-      this.tableData = res.data.map((item: { thumbnail: string; draft: { name: string; isApproved: number |string; isPublished: number | string; }; category: [{name: string}]; created_at: string; id: string; }) => [
-        item.thumbnail
-          ? `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`
-          : 'No Image',
-        item.draft.name
-          ? item.draft.name.length > 35
-            ? this.truncateDescription(item.draft.name)
-            : item.draft.name
-          : 'N/A',
-        item.category.length > 0
-          ? `<ul> ${item.category.map(
-              (cat) => `<li> ${cat.name} </li>`
-            )} </ul>`
-          : 'No Categories',
+      this.tableData = res.data.map(
+        (item: {
+          thumbnail: string;
+          draft: {
+            name: string;
+            isApproved: number | string;
+            isPublished: number | string;
+          };
+          category: [{ name: string }];
+          created_at: string;
+          id: string;
+        }) => [
+          item.thumbnail
+            ? `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`
+            : 'No Image',
+          item.draft.name
+            ? item.draft.name.length > 35
+              ? this.truncateDescription(item.draft.name)
+              : item.draft.name
+            : 'N/A',
+          item.category.length > 0
+            ? `<ul> ${item.category
+                .map((cat) => `<li> ${cat.name} </li>`)
+                .join('')} </ul>`
+            : 'No Categories',
 
-        item.created_at ? item.created_at.split('T')[0] : 'N/A',
-        this.getScheduledStatus(item.draft.isApproved, item.draft.isPublished),
-        `<div class="actions d-flex align-items-center gap-2">
+          item.created_at ? item.created_at.split('T')[0] : 'N/A',
+          this.getScheduledStatus(
+            item.draft.isApproved,
+            item.draft.isPublished
+          ),
+          `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
               xmlns=" http://www.w3.org/2000/svg"
@@ -124,7 +138,8 @@ export class AdminArticleDraftComponent {
                : ``
            }
         </div>`,
-      ]);
+        ]
+      );
 
       setTimeout(() => this.bindEvents(), 0);
     });
@@ -162,7 +177,10 @@ export class AdminArticleDraftComponent {
       : description;
   }
 
-  getScheduledStatus(isApproved: number | string, isPublished: number | string): string {
+  getScheduledStatus(
+    isApproved: number | string,
+    isPublished: number | string
+  ): string {
     if (isApproved == 0 && isPublished == 0) {
       return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
     } else if (isApproved == 1 && isPublished == 0) {
@@ -183,6 +201,7 @@ export class AdminArticleDraftComponent {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
     });
   }
 
@@ -230,7 +249,18 @@ export class AdminArticleDraftComponent {
     });
   }
 
-  isEditPermission(article: { thumbnail?: string; draft?: { name: string; isApproved: number | string; isPublished: number | string; }; category?: [{ name: string; }]; created_at?: string; id?: string; isPublished?: string | number; }) {
+  isEditPermission(article: {
+    thumbnail?: string;
+    draft?: {
+      name: string;
+      isApproved: number | string;
+      isPublished: number | string;
+    };
+    category?: [{ name: string }];
+    created_at?: string;
+    id?: string;
+    isPublished?: string | number;
+  }) {
     console.log(this.isEdit, this.isEditAfterPublish);
     if (this.isEdit == true && this.isEditAfterPublish == true) {
       return true;

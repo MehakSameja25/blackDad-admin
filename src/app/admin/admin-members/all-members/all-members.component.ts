@@ -221,8 +221,8 @@ export class AllMembersComponent implements OnInit {
     this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
     });
-    console.log(id);
   }
   deleteMember(id: string | null) {
     this.roleService.delteMember(id).subscribe((res) => {
