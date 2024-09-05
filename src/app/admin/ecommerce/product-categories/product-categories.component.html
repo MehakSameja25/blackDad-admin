@@ -4,24 +4,30 @@
     <div class="content container-fluid">
       <div class="page-header">
         <div class="content-page-header">
-          <h5>All Manufacturers</h5>
-          <a class="btn btn-primary" routerLink="/add-manufacturer"
-            >Add New Manufacture</a
+          <h5>Category</h5>
+          <a
+            class="btn btn-primary"
+            href="javascript:void(0);"
+            data-bs-toggle="modal"
+            data-bs-target="#add_category"
+            (click)="openAdd(add)"
+            >Add Category</a
           >
         </div>
       </div>
       <app-go-back></app-go-back>
+
       <div class="row">
         <div class="col-sm-12">
           <div class="card">
             <div class="card-body">
               <div class="table-responsive">
                 <table
+                  class="datatable table table-stripped table display"
                   #dataTable
                   appDataTable
                   [data]="tableData"
                   [columns]="tableColumns"
-                  class="table display"
                 ></table>
               </div>
             </div>
@@ -31,6 +37,68 @@
     </div>
   </div>
 </div>
+<ng-template #add let-modal>
+  <div class="modal-body">
+    <div class="form-header">
+      <h3>Add Category</h3>
+      <form [formGroup]="addCategoryForm">
+        <div class="col-lg-12 col-md-12">
+          <div class="input-block mb-3">
+            <label>Category Name</label>
+            <input type="text" class="form-control" formControlName="name" />
+            <div
+              *ngIf="
+                addCategoryForm.get('name')?.invalid &&
+                addCategoryForm.get('name')?.touched
+              "
+              class="text-danger"
+            >
+              Category Name is required.
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-end gap-3">
+    <a data-bs-dismiss="modal" class="btn btn-back" (click)="modal.close()"
+      >Close</a
+    >
+    <a class="btn btn-primary" (click)="addCategory()">Add Category</a>
+  </div></ng-template
+>
+
+<ng-template #edit let-modal>
+  <div class="modal-body">
+    <div class="form-header">
+      <h3>Update Category</h3>
+      <form [formGroup]="editCategoryForm">
+        <div class="col-lg-12 col-md-12">
+          <div class="input-block mb-3">
+            <label>Category Name</label>
+            <input type="text" class="form-control" formControlName="name" />
+            <div
+              *ngIf="
+                editCategoryForm.get('name')?.invalid &&
+                editCategoryForm.get('name')?.touched
+              "
+              class="text-danger"
+            >
+              Category Name is required.
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-end gap-3">
+    <a data-bs-dismiss="modal" class="btn btn-back" (click)="modal.close()"
+      >Close</a
+    >
+    <a class="btn btn-primary" (click)="editCategory()">Update Category</a>
+  </div></ng-template
+>
+
 <ng-template #contentt let-modal>
   <div class="modal-content">
     <div class="modal-body">

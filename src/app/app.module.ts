@@ -49,6 +49,11 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ListManufacturerComponent } from './admin/ecommerce/manufacturer/list-manufacturer/list-manufacturer.component';
+import { ListProductComponent } from './admin/ecommerce/product/list-product/list-product.component';
+import { EditProductComponent } from './admin/ecommerce/product/edit-product/edit-product.component';
+import { EditManufacturerComponent } from './admin/ecommerce/manufacturer/edit-manufacturer/edit-manufacturer.component';
+import { ProductCategoriesComponent } from './admin/ecommerce/product-categories/product-categories.component';
+import { DetalisProductComponent } from './admin/ecommerce/product/detalis-product/detalis-product.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +94,11 @@ import { ListManufacturerComponent } from './admin/ecommerce/manufacturer/list-m
     ArticleTabsComponent,
     AdminAdvertisementsComponent,
     ListManufacturerComponent,
+    EditManufacturerComponent,
+    ListProductComponent,
+    EditProductComponent,
+    ProductCategoriesComponent,
+    DetalisProductComponent,
   ],
   imports: [
     BrowserModule,

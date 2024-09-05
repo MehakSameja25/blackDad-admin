@@ -4,24 +4,24 @@
     <div class="content container-fluid">
       <div class="page-header">
         <div class="content-page-header">
-          <h5>All Manufacturers</h5>
-          <a class="btn btn-primary" routerLink="/add-manufacturer"
-            >Add New Manufacture</a
+          <h5>All Products</h5>
+          <a class="btn btn-primary" routerLink="/add-product"
+            >Add New Product</a
           >
         </div>
       </div>
-      <app-go-back></app-go-back>
+
       <div class="row">
         <div class="col-sm-12">
           <div class="card">
             <div class="card-body">
               <div class="table-responsive">
                 <table
+                  class="datatable table table-stripped table display"
                   #dataTable
                   appDataTable
                   [data]="tableData"
                   [columns]="tableColumns"
-                  class="table display"
                 ></table>
               </div>
             </div>
@@ -67,7 +67,9 @@
       <div class="modal-btn delete-action">
         <div class="row">
           <div class="col-6">
-            <a class="btn btn-primary paid-continue-btn" (click)="delete()"
+            <a
+              class="btn btn-primary paid-continue-btn"
+              (click)="delete()"
               >Delete</a
             >
           </div>

@@ -3,19 +3,30 @@ import {
   ElementRef,
   OnInit,
   Renderer2,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ManufacturersService } from 'src/app/admin/services/manufacturers.service';
+import { ProductCategoryService } from '../../services/product-category.service';
 
 @Component({
-  selector: 'app-list-manufacturer',
-  templateUrl: './list-manufacturer.component.html',
-  styleUrls: ['./list-manufacturer.component.css'],
+  selector: 'app-product-categories',
+  templateUrl: './product-categories.component.html',
+  styleUrls: ['./product-categories.component.css'],
 })
-export class ListManufacturerComponent implements OnInit {
+export class ProductCategoriesComponent implements OnInit {
+  addCategoryForm!: FormGroup;
+  editCategoryForm!: FormGroup;
+  editId!: string | null;
   deleteId!: string | null;
+
+  /** --Modal Declarations-- **/
+  @ViewChild('contentt')
+  public deleteModel!: ElementRef;
+
+  @ViewChild('edit')
+  public editModel!: ElementRef;
 
   /** --Table Declarations **/
   @ViewChild('dataTable', { static: false })
@@ -23,38 +34,37 @@ export class ListManufacturerComponent implements OnInit {
   public tableData = [];
   public tableColumns: { title: string }[] = [
     { title: 'Name' },
-    { title: 'Email' },
-    { title: 'Phone Number' },
     { title: 'Created At' },
-    { title: 'Company Name' },
     { title: 'Action' },
   ];
 
-  /** --Modal Declarations-- **/
-  @ViewChild('contentt')
-  public deleteModel!: ElementRef;
-
   constructor(
-    private _manufacturerService: ManufacturersService,
-    private router: Router,
-    private renderer: Renderer2,
-    private modalService: NgbModal
-  ) {}
+    private modalService: NgbModal,
+    private formB: FormBuilder,
+    private _categoryService: ProductCategoryService,
+    private renderer: Renderer2
+  ) {
+    this.addCategoryForm = this.formB.group({
+      name: ['', [Validators.required]],
+    });
 
-  ngOnInit(): void {
-    this.getListing();
+    this.editCategoryForm = this.formB.group({
+      name: ['', [Validators.required]],
+    });
   }
 
-  getListing() {
-    this._manufacturerService.list().subscribe((res: any) => {
-      if (res) {
-        this.tableData = res.data.map((item: { user: { name: string; email: string; phone: string | number; }; created_at: string; company_name: string; id: string | number | null; }) => [
-          item.user.name,
-          item.user.email,
-          item.user.phone,
-          item.created_at.split('T')[0],
-          item.company_name,
+  ngOnInit(): void {
+    this.getList();
+  }
 
+  /**----- For listing Category -----**/
+
+  getList() {
+    this._categoryService.list().subscribe((res: any) => {
+      if (res) {
+        this.tableData = res.data.map((item: any) => [
+          item.category,
+          item.created_at.split('T')[0],
           `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
@@ -141,7 +151,9 @@ export class ListManufacturerComponent implements OnInit {
           );
           break;
         case 'edit':
-          this.renderer.listen(button, 'click', () => this.edit(id));
+          this.renderer.listen(button, 'click', () =>
+            this.openEdit(this.editModel, id)
+          );
           break;
         default:
           break;
@@ -149,11 +161,68 @@ export class ListManufacturerComponent implements OnInit {
     });
   }
 
-  /**
-   * @description Opens a modal for manfucturer deletion and sets the manfucturer  ID to be deleted.
-   * @param content
-   * @param id
-   */
+  /**----- For Adding Category -----**/
+  openAdd(content: TemplateRef<unknown>) {
+    this.addCategoryForm.reset();
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
+    });
+  }
+
+  addCategory() {
+    if (this.addCategoryForm.invalid) {
+      this.addCategoryForm.markAllAsTouched();
+    } else {
+      const body = {
+        category: this.addCategoryForm.value.name,
+      };
+      this._categoryService.add(body).subscribe((res) => {
+        if (res) {
+          this.modalService.dismissAll();
+          this.getList();
+        }
+      });
+    }
+  }
+
+  /**----- For Updating Category -----**/
+
+  openEdit(content: ElementRef<unknown>, id: string | null) {
+    this.editId = id;
+    this.editCategoryForm.reset();
+    this._categoryService.get(id).subscribe((Response: any) => {
+      if (Response) {
+        this.editCategoryForm.patchValue({
+          name: Response.data.category,
+        });
+        this.modalService.open(content, {
+          ariaLabelledBy: 'modal-basic-title',
+          windowClass: 'share-modal',
+          modalDialogClass: 'modal-dialog-centered modal-md',
+        });
+      }
+    });
+  }
+
+  editCategory() {
+    if (this.editCategoryForm.invalid) {
+      this.editCategoryForm.markAllAsTouched();
+    } else {
+      const body = {
+        category: this.editCategoryForm.value.name,
+      };
+      this._categoryService.update(this.editId, body).subscribe((res) => {
+        if (res) {
+          this.modalService.dismissAll();
+          this.getList();
+        }
+      });
+    }
+  }
+
+  /**----- For deleting Category -----**/
   open(content: ElementRef<unknown>, id: string | null) {
     this.deleteId = id;
     this.modalService.open(content, {
@@ -164,15 +233,11 @@ export class ListManufacturerComponent implements OnInit {
   }
 
   delete() {
-    this._manufacturerService.delete(this.deleteId).subscribe((res) => {
+    this._categoryService.delete(this.deleteId).subscribe((res) => {
       if (res) {
         this.modalService.dismissAll();
-        this.getListing();
+        this.getList();
       }
     });
-  }
-
-  edit(id: string | null) {
-    this.router.navigate([`/edit-manufacturer/${id}`]);
   }
 }

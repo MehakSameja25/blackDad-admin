@@ -39,6 +39,8 @@ export class AdminNavbarComponent implements OnInit {
   styleDrop: string = '';
   displayClass: string = 'display: none';
   anchorClass: string = '';
+  displayClass2: string = 'display: none';
+  anchorClass2: string = '';
   menuData!: {
     role_accesses: [
       {
@@ -114,6 +116,16 @@ export class AdminNavbarComponent implements OnInit {
     } else {
       this.displayClass = 'display: none';
       this.anchorClass = '';
+    }
+  }
+
+  showEcom() {
+    if (this.displayClass2 === 'display: none') {
+      this.displayClass2 = 'display: block';
+      this.anchorClass2 = 'subdrop';
+    } else {
+      this.displayClass2 = 'display: none';
+      this.anchorClass2 = '';
     }
   }
 

@@ -1,1 +1,193 @@
-<p>edit-manufacturer works!</p>
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>{{ pageType }} Manufacturer</h5>
+        </div>
+      </div>
+      <div class="row gap-3 mb-3 justify-content-between m-0">
+        <app-go-back></app-go-back>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <form [formGroup]="manufacturerForm" (ngSubmit)="onSubmit()">
+                <div class="form-group-item border-0 mb-0">
+                  <div class="row align-item-center">
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>Manufacturer Name</label>
+                        <input
+                          type="text"
+                          formControlName="manufacturerName"
+                          class="form-control"
+                          placeholder="Enter Manufacturer Name"
+                        />
+                        <div
+                          *ngIf="
+                            formControls['manufacturerName'].invalid &&
+                            (formControls['manufacturerName'].dirty ||
+                              formControls['manufacturerName'].touched)
+                          "
+                        >
+                          <small
+                            *ngIf="
+                              formControls['manufacturerName'].errors?.['required']
+                            "
+                            class="text-danger"
+                            >Manufacturer Name is required.</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Email Address</label>
+                        <input
+                          type="text"
+                          formControlName="email"
+                          class="form-control"
+                          placeholder="Enter Email Address"
+                        />
+                        <div
+                          *ngIf="
+                            formControls['email'].invalid &&
+                            (formControls['email'].dirty ||
+                              formControls['email'].touched)
+                          "
+                        >
+                          <small
+                            *ngIf="formControls['email'].errors?.['required']"
+                            class="text-danger"
+                            >Email Address is required.</small
+                          >
+                          <small
+                            *ngIf="formControls['email'].errors?.['email']"
+                            class="text-danger"
+                            >Invalid email address.</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Phone Number</label>
+                        <input
+                          type="tel"
+                          formControlName="phoneNumber"
+                          class="form-control"
+                          placeholder="Enter Phone number"
+                        />
+                        <div
+                          *ngIf="
+                            formControls['phoneNumber'].invalid &&
+                            (formControls['phoneNumber'].dirty ||
+                              formControls['phoneNumber'].touched)
+                          "
+                        >
+                          <small
+                            *ngIf="formControls['phoneNumber'].errors?.['required']"
+                            class="text-danger"
+                            >Phone number is required.</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Company Name</label>
+                        <input
+                          type="text"
+                          formControlName="companyName"
+                          class="form-control"
+                          placeholder="Enter Company Name"
+                        />
+                        <div
+                          *ngIf="
+                            formControls['companyName'].invalid &&
+                            (formControls['companyName'].dirty ||
+                              formControls['companyName'].touched)
+                          "
+                        >
+                          <small
+                            *ngIf="formControls['companyName'].errors?.['required']"
+                            class="text-danger"
+                            >Company Name is required.</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Company Licence</label>
+                        <input
+                          type="text"
+                          formControlName="companyLicence"
+                          class="form-control"
+                          placeholder="Enter Company Licence"
+                        />
+                        <div
+                          *ngIf="
+                            formControls['companyLicence'].invalid &&
+                            (formControls['companyLicence'].dirty ||
+                              formControls['companyLicence'].touched)
+                          "
+                        >
+                          <small
+                            *ngIf="
+                              formControls['companyLicence'].errors?.['required']
+                            "
+                            class="text-danger"
+                            >Company Licence is required.</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="input-block mb-3">
+                        <label>About Company</label>
+                        <textarea
+                          formControlName="aboutCompany"
+                          class="form-control"
+                          placeholder="About Company"
+                          rows="5"
+                        ></textarea>
+                        <div
+                          *ngIf="
+                            formControls['aboutCompany'].invalid &&
+                            (formControls['aboutCompany'].dirty ||
+                              formControls['aboutCompany'].touched)
+                          "
+                        >
+                          <small
+                            *ngIf="
+                              formControls['aboutCompany'].errors?.['required']
+                            "
+                            class="text-danger"
+                            >About Company is required.</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-12">
+                      <button type="submit" class="btn btn-primary w-100 mt-4">
+                        {{ pageType }} Manufacturer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

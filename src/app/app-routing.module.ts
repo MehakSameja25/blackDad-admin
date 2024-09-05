@@ -31,6 +31,12 @@ import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/ad
 import { EpisodeScheduleComponent } from './admin/admin-scheduling/episode-schedule/episode-schedule.component';
 import { ArticleScheduleComponent } from './admin/admin-scheduling/article-schedule/article-schedule.component';
 import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
+import { ListManufacturerComponent } from './admin/ecommerce/manufacturer/list-manufacturer/list-manufacturer.component';
+import { EditManufacturerComponent } from './admin/ecommerce/manufacturer/edit-manufacturer/edit-manufacturer.component';
+import { ListProductComponent } from './admin/ecommerce/product/list-product/list-product.component';
+import { EditProductComponent } from './admin/ecommerce/product/edit-product/edit-product.component';
+import { ProductCategoriesComponent } from './admin/ecommerce/product-categories/product-categories.component';
+import { DetalisProductComponent } from './admin/ecommerce/product/detalis-product/detalis-product.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
@@ -183,6 +189,48 @@ const routes: Routes = [
   {
     path: 'admin/scheduled-articles',
     component: ArticleScheduleComponent,
+    canActivate: [AuthGuard],
+  },
+
+  /**----Ecommerce Routes---- **/
+  {
+    path: 'manufacturers',
+    component: ListManufacturerComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'add-manufacturer',
+    component: EditManufacturerComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'edit-manufacturer/:id',
+    component: EditManufacturerComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'products',
+    component: ListProductComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'add-product',
+    component: EditProductComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'edit-product/:id',
+    component: EditProductComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'details-product/:id',
+    component: DetalisProductComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'product/categories',
+    component: ProductCategoriesComponent,
     canActivate: [AuthGuard],
   },
 ];
