@@ -115,7 +115,7 @@ export class AdminArticlesComponent implements OnInit {
     }
     this.postService.getArticles(this.body).subscribe((response) => {
       this.allArticles = response;
-      this.tableData = response.data.map(
+      this.tableData = response.data.product.map(
         (item: {
           thumbnail: string;
           name: string;

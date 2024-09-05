@@ -48,14 +48,20 @@ export class ListManufacturerComponent implements OnInit {
   getListing() {
     this._manufacturerService.list().subscribe((res: any) => {
       if (res) {
-        this.tableData = res.data.map((item: { user: { name: string; email: string; phone: string | number; }; created_at: string; company_name: string; id: string | number | null; }) => [
-          item.user.name,
-          item.user.email,
-          item.user.phone,
-          item.created_at.split('T')[0],
-          item.company_name,
+        this.tableData = res.data.mnufacturer.map(
+          (item: {
+            user: { name: string; email: string; phone: string | number };
+            created_at: string;
+            company_name: string;
+            id: string | number | null;
+          }) => [
+            item.user.name,
+            item.user.email,
+            item.user.phone,
+            item.created_at.split('T')[0],
+            item.company_name,
 
-          `<div class="actions d-flex align-items-center gap-2">
+            `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
               xmlns=" http://www.w3.org/2000/svg"
@@ -118,7 +124,8 @@ export class ListManufacturerComponent implements OnInit {
                       </svg>
                    </a>
         </div>`,
-        ]);
+          ]
+        );
 
         setTimeout(() => this.bindEvents(), 0);
       }
