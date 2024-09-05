@@ -12782,6 +12782,10 @@ table .badge {
   min-height: 58px;
 }
 
+.service-upload.service-upload-sm {
+  min-height: 94px;
+}
+
 .invoice-info-card {
   border-radius: 14px;
 }
@@ -35555,4 +35559,37 @@ table tbody tr td {
   display: inline-flex;
   padding: 12px;
   border-radius: 10px;
+}
+
+.bg-theme-light {
+  background: #fff;
+  border-bottom: 3px solid #ac54f4;
+}
+
+.company-detail-card.bg-theme-light h5 {
+  color: #ac54f4;
+}
+
+.selected-color {
+  padding: 1px 8px;
+  border: 1px solid #dfdfdf;
+  border-radius: 999px;
+  color: #6e6e6e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.selected-color .color-box {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: red;
+  border: 0.6px solid #dfdfdf;
+}
+
+.selected-color .btn.btn-link {
+  color: #6e6e6e;
 }
