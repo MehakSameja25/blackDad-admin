@@ -54,17 +54,13 @@
                       >
                         <button
                           class="btn btn-outline-success"
-                          (click)="
-                            approved(articleDetails.data, '1')
-                          "
+                          (click)="approved(articleDetails.data, '1')"
                         >
                           Approve
                         </button>
                         <button
                           class="btn btn-outline-danger"
-                          (click)="
-                            approved(articleDetails.data, '2')
-                          "
+                          (click)="approved(articleDetails.data, '2')"
                         >
                           Reject
                         </button>
@@ -72,7 +68,7 @@
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div
-                        class="input-block mb-3"
+                        class="input-block mb-3 d-flex align-items-center gap-2"
                         *ngIf="
                           articleDetails.data.isApproved === '1' &&
                           articleDetails.data.isPublished === '0' &&
@@ -261,9 +257,7 @@
             "
             class="text-danger"
           >
-            <div
-              *ngIf="scheduleForm.get('scheduled_at')?.errors?.['required']"
-            >
+            <div *ngIf="scheduleForm.get('scheduled_at')?.errors?.['required']">
               Scheduled_at are required.
             </div>
           </div>

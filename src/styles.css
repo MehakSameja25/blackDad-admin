@@ -12786,6 +12786,15 @@ table .badge {
   min-height: 94px;
 }
 
+.service-upload.service-upload-sm .btn.btn-light{
+     padding: 0rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    top: 5%;
+    right: 5%;
+}
+
 .invoice-info-card {
   border-radius: 14px;
 }

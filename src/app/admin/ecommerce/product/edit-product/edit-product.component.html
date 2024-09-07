@@ -23,12 +23,19 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Product Name</label>
-                        <input formControlName="productName" type="text" class="form-control"
-                          placeholder="Enter Product Name" />
-                        <div *ngIf="
+                        <input
+                          formControlName="productName"
+                          type="text"
+                          class="form-control"
+                          placeholder="Enter Product Name"
+                        />
+                        <div
+                          *ngIf="
                             productForm.get('productName')?.invalid &&
                             productForm.get('productName')?.touched
-                          " class="text-danger">
+                          "
+                          class="text-danger"
+                        >
                           Product Name is required
                         </div>
                       </div>
@@ -36,17 +43,27 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Category</label>
-                        <select formControlName="category" class="form-select" aria-label="Default select example"
-                          *ngIf="categories && categories.data">
+                        <select
+                          formControlName="category"
+                          class="form-select"
+                          aria-label="Default select example"
+                          *ngIf="categories && categories.data"
+                        >
                           <option value="" disabled>Select Category</option>
-                          <option *ngFor="let cat of categories.data" [value]="cat.id">
+                          <option
+                            *ngFor="let cat of categories.data"
+                            [value]="cat.id"
+                          >
                             {{ cat.category }}
                           </option>
                         </select>
-                        <div *ngIf="
+                        <div
+                          *ngIf="
                             productForm.get('category')?.invalid &&
                             productForm.get('category')?.touched
-                          " class="text-danger">
+                          "
+                          class="text-danger"
+                        >
                           Category is required
                         </div>
                       </div>
@@ -54,11 +71,19 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Price</label>
-                        <input formControlName="price" type="number" class="form-control" placeholder="Enter Price" />
-                        <div *ngIf="
+                        <input
+                          formControlName="price"
+                          type="number"
+                          class="form-control"
+                          placeholder="Enter Price"
+                        />
+                        <div
+                          *ngIf="
                             productForm.get('price')?.invalid &&
                             productForm.get('price')?.touched
-                          " class="text-danger">
+                          "
+                          class="text-danger"
+                        >
                           Price is required.
                         </div>
                       </div>
@@ -66,15 +91,22 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Stock Status</label>
-                        <select formControlName="stockStatus" class="form-select" aria-label="Default select example">
+                        <select
+                          formControlName="stockStatus"
+                          class="form-select"
+                          aria-label="Default select example"
+                        >
                           <option value="" disabled>Select Stock Status</option>
                           <option [value]="true">In Stock</option>
                           <option [value]="false">Out Of Stock</option>
                         </select>
-                        <div *ngIf="
+                        <div
+                          *ngIf="
                             productForm.get('stockStatus')?.invalid &&
                             productForm.get('stockStatus')?.touched
-                          " class="text-danger">
+                          "
+                          class="text-danger"
+                        >
                           Stock Status is required
                         </div>
                       </div>
@@ -83,25 +115,47 @@
                       <div class="input-block mb-3">
                         <label>Color Options</label>
                         <div class="input-group">
-                          <input type="text" class="form-control" [(ngModel)]="newColor" formControlName="colors"
-                            placeholder="Enter Color Name" aria-label="Color Name" />
-                          <button class="btn btn-outline-secondary" type="button" (click)="addColor()"
-                            id="button-addon2">
+                          <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="newColor"
+                            formControlName="colors"
+                            placeholder="Enter Color Name"
+                            aria-label="Color Name"
+                          />
+                          <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            (click)="addColor()"
+                            id="button-addon2"
+                          >
                             +
                           </button>
                         </div>
                         <div class="d-flex align-items-center gap-2 mt-2">
-                          <span *ngFor="let color of colors" class="selected-color">
-                            <span class="color-box" [ngStyle]="{ 'background-color': color }"></span>
+                          <span
+                            *ngFor="let color of colors"
+                            class="selected-color"
+                          >
+                            <span
+                              class="color-box"
+                              [ngStyle]="{ 'background-color': color }"
+                            ></span>
                             {{ color }}
-                            <button class="btn btn-link p-0" (click)="removeColor(color)">
+                            <button
+                              class="btn btn-link p-0"
+                              (click)="removeColor(color)"
+                            >
                               <i class="fa-solid fa-xmark"></i>
                             </button>
                           </span>
-                          <div *ngIf="
+                          <div
+                            *ngIf="
                               productForm.get('colors')?.invalid &&
                               productForm.get('colors')?.touched
-                            " class="text-danger">
+                            "
+                            class="text-danger"
+                          >
                             At least one color is required.
                           </div>
                         </div>
@@ -111,8 +165,13 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Size Options</label>
-                        <ng-multiselect-dropdown placeholder="Select Sizes" [(ngModel)]="selectedSizes"
-                          [settings]="dropdownSettings" [ngModelOptions]="{standalone: true}" [data]="sizes">
+                        <ng-multiselect-dropdown
+                          placeholder="Select Sizes"
+                          [(ngModel)]="selectedSizes"
+                          [settings]="dropdownSettings"
+                          [ngModelOptions]="{ standalone: true }"
+                          [data]="sizes"
+                        >
                         </ng-multiselect-dropdown>
                       </div>
                     </div>
@@ -120,11 +179,19 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Stock</label>
-                        <input formControlName="stock" type="number" class="form-control" placeholder="Quantity" />
-                        <div *ngIf="
+                        <input
+                          formControlName="stock"
+                          type="number"
+                          class="form-control"
+                          placeholder="Quantity"
+                        />
+                        <div
+                          *ngIf="
                             productForm.get('stock')?.invalid &&
                             productForm.get('stock')?.touched
-                          " class="text-danger">
+                          "
+                          class="text-danger"
+                        >
                           Stock is required.
                         </div>
                       </div>
@@ -132,17 +199,27 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Menufacturers</label>
-                        <select formControlName="menufecturer" class="form-select" aria-label="Default select example"
-                          *ngIf="manufacturers && manufacturers.mnufacturer">
+                        <select
+                          formControlName="menufecturer"
+                          class="form-select"
+                          aria-label="Default select example"
+                          *ngIf="manufacturers && manufacturers.mnufacturer"
+                        >
                           <option value="" disabled>Select Manufacturer</option>
-                          <option *ngFor="let man of manufacturers.mnufacturer" [value]="man.id">
+                          <option
+                            *ngFor="let man of manufacturers.mnufacturer"
+                            [value]="man.id"
+                          >
                             {{ man.user.name }} , ({{ man.user.email }})
                           </option>
                         </select>
-                        <div *ngIf="
+                        <div
+                          *ngIf="
                             productForm.get('menufecturer')?.invalid &&
                             productForm.get('menufecturer')?.touched
-                          " class="text-danger">
+                          "
+                          class="text-danger"
+                        >
                           Menufecturer is required
                         </div>
                       </div>
@@ -150,64 +227,107 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Description</label>
-                        <textarea formControlName="description" class="form-control" placeholder="Enter Notes"
-                          rows="5"></textarea>
-                        <div *ngIf="
+                        <textarea
+                          formControlName="description"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                        ></textarea>
+                        <div
+                          *ngIf="
                             productForm.get('description')?.invalid &&
                             productForm.get('description')?.touched
-                          " class="text-danger">
+                          "
+                          class="text-danger"
+                        >
                           Description is required.
                         </div>
                       </div>
                     </div>
 
-                    <div class="col-12 d-flex">
-                      <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="input-block">
-                          <label>Upload Images</label>
-                          <div
-                            class="input-block service-upload mb-0 d-flex flex-column align-items-center justify-content-center">
-                            <span>
-                              <img id="bannerPreview" alt="Banner Preview" src="assets/img/drop-icon.svg" />
-                            </span>
-                            <h6 class="drop-browse align-center">
-                              Drop your files here or
-                              <span class="text-primary ms-1">browse</span>
-                            </h6>
-                            <p class="text-muted">Maximum size: 50MB</p>
-                            <input type="file" id="bannerImage" (change)="handleImageInput($event, 'banner')"
-                              multiple />
-                          </div>
+                    <div class="col-12">
+                      <div class="input-block">
+                        <label>Upload Images</label>
+                        <div
+                          class="input-block service-upload mb-0 d-flex flex-column align-items-center justify-content-center"
+                        >
+                          <span>
+                            <img
+                              id="bannerPreview"
+                              alt="Banner Preview"
+                              src="assets/img/drop-icon.svg"
+                            />
+                          </span>
+                          <h6 class="drop-browse align-center">
+                            Drop your files here or
+                            <span class="text-primary ms-1">browse</span>
+                          </h6>
+                          <p class="text-muted">Maximum size: 50MB</p>
+                          <input
+                            type="file"
+                            id="bannerImage"
+                            (change)="handleImageInput($event, 'banner')"
+                            multiple
+                          />
                         </div>
                       </div>
-
                     </div>
                     <div class="col-12 mt-3">
                       <div class="row">
-                        <div class="col-2 position-relative" *ngFor="let image of uploadedImages; let i = index ">
-                          <button class="btn btn-white position-absolute top-0 end-0"
-                            (click)="removeImage(i, image.id)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
-                              fill="none">
-                              <path d="M3.25 5.5H4.75H16.75" stroke="#666D80" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                              <path
-                                d="M7 5.5V4C7 3.60218 7.15804 3.22064 7.43934 2.93934C7.72064 2.65804 8.10218 2.5 8.5 2.5H11.5C11.8978 2.5 12.2794 2.65804 12.5607 2.93934C12.842 3.22064 13 3.60218 13 4V5.5M15.25 5.5V16C15.25 16.3978 15.092 16.7794 14.8107 17.0607C14.5294 17.342 14.1478 17.5 13.75 17.5H6.25C5.85218 17.5 5.47064 17.342 5.18934 17.0607C4.90804 16.7794 4.75 16.3978 4.75 16V5.5H15.25Z"
-                                stroke="#666D80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                              </path>
-                            </svg>
-                          </button>
-                          <div class="input-block service-upload service-upload-sm mb-0">
-                            <span><img src="{{image.image}}" alt="upload"></span>
+                        <div
+                          class="col-2"
+                          *ngFor="let image of uploadedImages; let i = index"
+                        >
+                          <div
+                            class="input-block service-upload service-upload-sm mb-0 position-relative"
+                          >
+                            <button
+                              class="btn btn-light position-absolute"
+                              (click)="removeImage(i, image.id)"
+                            >
+                              <svg
+                                xmlns=" http://www.w3.org/2000/svg"
+                                version="1.1"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="16"
+                                height="16"
+                                x="0"
+                                y="0"
+                                viewBox="0 0 512 512"
+                                style="enable-background: new 0 0 512 512"
+                                xml:space="preserve"
+                              >
+                                <g>
+                                  <path
+                                    d="M436 60h-75V45c0-24.813-20.187-45-45-45H196c-24.813 0-45 20.187-45 45v15H76c-24.813 0-45 20.187-45 45 0 19.928 13.025 36.861 31.005 42.761L88.76 470.736C90.687 493.875 110.385 512 133.604 512h244.792c23.22 0 42.918-18.125 44.846-41.271l26.753-322.969C467.975 141.861 481 124.928 481 105c0-24.813-20.187-45-45-45zM181 45c0-8.271 6.729-15 15-15h120c8.271 0 15 6.729 15 15v15H181V45zm212.344 423.246c-.643 7.712-7.208 13.754-14.948 13.754H133.604c-7.739 0-14.305-6.042-14.946-13.747L92.294 150h327.412l-26.362 318.246zM436 120H76c-8.271 0-15-6.729-15-15s6.729-15 15-15h360c8.271 0 15 6.729 15 15s-6.729 15-15 15z"
+                                    fill="#000000"
+                                    opacity="1"
+                                    data-original="#000000"
+                                  ></path>
+                                  <path
+                                    d="m195.971 436.071-15-242c-.513-8.269-7.67-14.558-15.899-14.043-8.269.513-14.556 7.631-14.044 15.899l15 242.001c.493 7.953 7.097 14.072 14.957 14.072 8.687 0 15.519-7.316 14.986-15.929zM256 180c-8.284 0-15 6.716-15 15v242c0 8.284 6.716 15 15 15s15-6.716 15-15V195c0-8.284-6.716-15-15-15zM346.927 180.029c-8.25-.513-15.387 5.774-15.899 14.043l-15 242c-.511 8.268 5.776 15.386 14.044 15.899 8.273.512 15.387-5.778 15.899-14.043l15-242c.512-8.269-5.775-15.387-14.044-15.899z"
+                                    fill="#000000"
+                                    opacity="1"
+                                    data-original="#000000"
+                                  ></path>
+                                </g>
+                              </svg>
+                            </button>
+                            <span
+                              ><img src="{{ image.image }}" alt="upload"
+                            /></span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-
                 </div>
                 <div class="text-end mt-3">
-                  <button type="submit" class="btn btn-primary" (click)="onSubmit()">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    (click)="onSubmit()"
+                  >
                     Save
                   </button>
                 </div>
