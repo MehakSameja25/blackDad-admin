@@ -17,10 +17,10 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="card">
-            <div class="card-body">
+            <div class="card-body" *ngIf="productDetails">
               <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-12">
-                  <div class="ep-cover" *ngIf="productDetails">
+                  <div class="ep-cover">
                     <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
                       <div class="card p-0 m-0" ngxSlickItem *ngFor="let slide of productDetails.product_images">
                         <img src="{{slide.image}}" class="card-img-top" alt="..." />
@@ -35,7 +35,7 @@
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Product Name</label>
-                        <p>Some quick example text content.</p>
+                        <p>{{productDetails.product_name}}</p>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
