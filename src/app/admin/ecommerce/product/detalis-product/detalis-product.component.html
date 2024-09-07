@@ -20,19 +20,14 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-12">
-                  <div class="ep-cover">
-                    <div class="card p-0 m-0">
-                      <img
-                        src="./assets/img/1.jpg"
-                        class="card-img-top"
-                        alt="..."
-                      />
-                      <div class="card-body">
-                        <p class="card-text">
-                          Some quick example text content.
-                        </p>
+                  <div class="ep-cover" *ngIf="productDetails">
+                    <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
+                      <div class="card p-0 m-0" ngxSlickItem *ngFor="let slide of productDetails.product_images">
+                        <img src="{{slide.image}}" class="card-img-top" alt="..." />
                       </div>
-                    </div>
+                    </ngx-slick-carousel>
+                    <button (click)="slickModal.slickPrev()">Prev</button>
+                    <button (click)="slickModal.slickNext()">Next</button>
                   </div>
                 </div>
                 <div class="col-lg-9 col-md-6 col-sm-12">
@@ -95,9 +90,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label class="d-block">Status</label>
-                        <span class="badge bg-success-light text-success-light"
-                          >Published</span
-                        >
+                        <span class="badge bg-success-light text-success-light">Published</span>
                       </div>
                     </div>
 
