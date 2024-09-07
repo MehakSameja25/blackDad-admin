@@ -47,7 +47,7 @@ export class ListProductComponent implements OnInit {
   getList() {
     this._productsService.list().subscribe((response: any) => {
       if (response) {
-        this.tableData = response.data.map((item: any) => [
+        this.tableData = response.data.product.map((item: any) => [
           `<img src="${item.product_image}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
           item.product_name,
           item.price,
