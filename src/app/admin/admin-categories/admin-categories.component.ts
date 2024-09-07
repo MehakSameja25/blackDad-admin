@@ -79,20 +79,19 @@ export class AdminCategoriesComponent implements OnInit {
           isblock: string;
           description: string;
         }) => [
-          `<div class="table-img"><img src="${item.image}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
-          item.name,
-          item.description.length > 25
-            ? ` ${this.truncateDescription(item.description)}  <span
+            `<div class="table-img"><img src="${item.image}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
+            item.name,
+            item.description.length > 25
+              ? ` ${this.truncateDescription(item.description)}  <span
                           class="badge rounded-pill text-bg-violet"
                           style="cursor: pointer"
                           data-id="${item.id}" data-action="description"
                           >Read more</span
                         >`
-            : item.description,
-          ` <div class="actions d-flex align-items-center gap-2">
-        ${
-          this.editPermission === true
-            ? `<a
+              : item.description,
+            ` <div class="actions d-flex align-items-center gap-2">
+        ${this.editPermission === true
+              ? `<a
                             data-id="${item.id}" data-action="edit"
                             class="btn-action-icon"
                             *ngIf="editPermission == true"
@@ -128,15 +127,13 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
                           </a>`
-            : ''
-        }
+              : ''
+            }
                           
-                           <a class="btn-action-icon" data-id="${
-                             item.id
-                           }" data-action="block">
-        ${
-          item.isblock == '1'
-            ? `
+                           <a class="btn-action-icon" data-id="${item.id
+            }" data-action="block">
+        ${item.isblock == '1'
+              ? `
         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
@@ -168,7 +165,7 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
         `
-            : `
+              : `
        <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
@@ -235,11 +232,10 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
         `
-        }
+            }
           </a>
-                        ${
-                          this.deletePermission === true
-                            ? `<a
+                        ${this.deletePermission === true
+              ? `<a
                             class="btn-action-icon"
                             data-id="${item.id}" data-action="delete"
                             *ngIf="deletePermission == true"
@@ -273,10 +269,10 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
                           </a>`
-                            : ''
-                        }  
+              : ''
+            }  
                         </div>`,
-        ]
+          ]
       );
 
       setTimeout(() => this.bindEvents(), 0);
@@ -342,7 +338,6 @@ export class AdminCategoriesComponent implements OnInit {
     this.editCategoryForm.reset();
     this.categoriesService.getCategoryById(id).subscribe((Response) => {
       this.singleCategoryData = Response;
-      console.log(this.singleCategoryData);
       if (this.singleCategoryData) {
         this.modalService.open(content, {
           ariaLabelledBy: 'modal-basic-title',
