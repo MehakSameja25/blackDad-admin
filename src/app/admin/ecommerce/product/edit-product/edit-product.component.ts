@@ -134,7 +134,7 @@ export class EditProductComponent implements OnInit {
     } else {
       this.selectedSizes.splice(index, 1);
     }
-    console.log('Selected Category:', this.selectedSizes);
+    console.log('Selected:', this.selectedSizes);
   }
 
   onSizeDeSelect(item: any) {
@@ -142,14 +142,14 @@ export class EditProductComponent implements OnInit {
     if (index !== -1) {
       this.selectedSizes.splice(index, 1);
     }
-    console.log('Deselected Category:', this.selectedSizes);
+    console.log('Deselected:', this.selectedSizes);
   }
 
   addColor(): void {
     console.log(this.newColor);
     if (this.newColor.trim()) {
       this.colors.push(this.newColor.trim());
-      this.newColor = ''; // Clear input field
+      this.newColor = '';
     }
   }
 
