@@ -38,7 +38,7 @@
                         <p>{{productDetails.product_name}}</p>
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="col-lg-4 col-md-6 col-sm-12 d-none">
                       <div class="input-block mb-3">
                         <label>Product Code</label>
                         <p>#fy382</p>
@@ -47,23 +47,23 @@
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Category</label>
-                        <p>Clothing</p>
+                        <p>{{productDetails.product_category.category}}</p>
                       </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Manufacture By</label>
-                        <p>Goldmine</p>
+                        <p>{{productDetails.manufacturer.company_name}}</p>
                       </div>
                     </div>
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Price</label>
-                        <p>$50</p>
+                        <p>${{productDetails.price}}</p>
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="col-lg-4 col-md-6 col-sm-12 d-none">
                       <div class="input-block mb-3">
                         <label>Discount Price</label>
                         <p>$40</p>
@@ -72,25 +72,27 @@
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Color</label>
-                        <p>Red</p>
+                        <p>{{fetchColor()}}</p>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Size</label>
-                        <p>M</p>
+                        <p>{{fetchSize()}}</p>
                       </div>
                     </div>
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Stock</label>
-                        <p>453</p>
+                        <p>{{productDetails.stock_quantity}}</p>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label class="d-block">Status</label>
-                        <span class="badge bg-success-light text-success-light">Published</span>
+                        <span
+                          class="badge bg-success-light text-{{productDetails.is_stock_available ? 'success-light' : 'danger'}}">{{productDetails.is_stock_available
+                          ? 'In-stock' : 'Out of stock'}}</span>
                       </div>
                     </div>
 
@@ -98,13 +100,7 @@
                       <div class="input-block mb-3">
                         <label>Description</label>
                         <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Id dolorem nobis fugiat possimus. Enim quibusdam
-                          aut eligendi iure, molestiae aliquam ea neque, sequi
-                          nemo unde, sunt voluptatum id amet eius harum
-                          asperiores animi porro! Temporibus libero illum soluta
-                          explicabo sit neque a quibusdam ratione. Magnam non
-                          dolor totam quaerat consequuntur.
+                          {{productDetails.description}}
                         </p>
                       </div>
                     </div>

@@ -43,4 +43,12 @@ export class DetalisProductComponent implements OnInit {
       this.productDetails = res.data;
     });
   }
+
+  fetchColor() {
+    return this.productDetails.product_colors.map((data: any) => data.color).join(',')
+  }
+
+  fetchSize() {
+    return this.productDetails.product_sizes.map((data: any) => data.size).join(',')
+  }
 }
