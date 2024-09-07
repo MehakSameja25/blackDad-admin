@@ -11,7 +11,7 @@ export class ProductsService {
   constructor(
     private http: HttpClient,
     private notifications: NotificationsService
-  ) {}
+  ) { }
 
   list() {
     return apiCallWrapper(
@@ -68,5 +68,12 @@ export class ProductsService {
         action: 'Updating Product',
       }
     );
+  }
+
+  deleteProductImage(data: { productImageId: string | number | null, isMatched: boolean }) {
+    return this.http.post(
+      `${environment.apiUrl}/delete-product-image`,
+      data
+    )
   }
 }

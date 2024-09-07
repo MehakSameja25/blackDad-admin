@@ -23,19 +23,12 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Product Name</label>
-                        <input
-                          formControlName="productName"
-                          type="text"
-                          class="form-control"
-                          placeholder="Enter Product Name"
-                        />
-                        <div
-                          *ngIf="
+                        <input formControlName="productName" type="text" class="form-control"
+                          placeholder="Enter Product Name" />
+                        <div *ngIf="
                             productForm.get('productName')?.invalid &&
                             productForm.get('productName')?.touched
-                          "
-                          class="text-danger"
-                        >
+                          " class="text-danger">
                           Product Name is required
                         </div>
                       </div>
@@ -43,27 +36,17 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Category</label>
-                        <select
-                          formControlName="category"
-                          class="form-select"
-                          aria-label="Default select example"
-                          *ngIf="categories && categories.data"
-                        >
+                        <select formControlName="category" class="form-select" aria-label="Default select example"
+                          *ngIf="categories && categories.data">
                           <option value="" disabled>Select Category</option>
-                          <option
-                            *ngFor="let cat of categories.data"
-                            [value]="cat.id"
-                          >
+                          <option *ngFor="let cat of categories.data" [value]="cat.id">
                             {{ cat.category }}
                           </option>
                         </select>
-                        <div
-                          *ngIf="
+                        <div *ngIf="
                             productForm.get('category')?.invalid &&
                             productForm.get('category')?.touched
-                          "
-                          class="text-danger"
-                        >
+                          " class="text-danger">
                           Category is required
                         </div>
                       </div>
@@ -71,19 +54,11 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Price</label>
-                        <input
-                          formControlName="price"
-                          type="number"
-                          class="form-control"
-                          placeholder="Enter Price"
-                        />
-                        <div
-                          *ngIf="
+                        <input formControlName="price" type="number" class="form-control" placeholder="Enter Price" />
+                        <div *ngIf="
                             productForm.get('price')?.invalid &&
                             productForm.get('price')?.touched
-                          "
-                          class="text-danger"
-                        >
+                          " class="text-danger">
                           Price is required.
                         </div>
                       </div>
@@ -91,22 +66,15 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Stock Status</label>
-                        <select
-                          formControlName="stockStatus"
-                          class="form-select"
-                          aria-label="Default select example"
-                        >
+                        <select formControlName="stockStatus" class="form-select" aria-label="Default select example">
                           <option value="" disabled>Select Stock Status</option>
                           <option [value]="true">In Stock</option>
                           <option [value]="false">Out Of Stock</option>
                         </select>
-                        <div
-                          *ngIf="
+                        <div *ngIf="
                             productForm.get('stockStatus')?.invalid &&
                             productForm.get('stockStatus')?.touched
-                          "
-                          class="text-danger"
-                        >
+                          " class="text-danger">
                           Stock Status is required
                         </div>
                       </div>
@@ -115,47 +83,25 @@
                       <div class="input-block mb-3">
                         <label>Color Options</label>
                         <div class="input-group">
-                          <input
-                            type="text"
-                            class="form-control"
-                            [(ngModel)]="newColor"
-                            formControlName="colors"
-                            placeholder="Enter Color Name"
-                            aria-label="Color Name"
-                          />
-                          <button
-                            class="btn btn-outline-secondary"
-                            type="button"
-                            (click)="addColor()"
-                            id="button-addon2"
-                          >
+                          <input type="text" class="form-control" [(ngModel)]="newColor" formControlName="colors"
+                            placeholder="Enter Color Name" aria-label="Color Name" />
+                          <button class="btn btn-outline-secondary" type="button" (click)="addColor()"
+                            id="button-addon2">
                             +
                           </button>
                         </div>
                         <div class="d-flex align-items-center gap-2 mt-2">
-                          <span
-                            *ngFor="let color of colors"
-                            class="selected-color"
-                          >
-                            <span
-                              class="color-box"
-                              [ngStyle]="{ 'background-color': color }"
-                            ></span>
+                          <span *ngFor="let color of colors" class="selected-color">
+                            <span class="color-box" [ngStyle]="{ 'background-color': color }"></span>
                             {{ color }}
-                            <button
-                              class="btn btn-link p-0"
-                              (click)="removeColor(color)"
-                            >
+                            <button class="btn btn-link p-0" (click)="removeColor(color)">
                               <i class="fa-solid fa-xmark"></i>
                             </button>
                           </span>
-                          <div
-                            *ngIf="
+                          <div *ngIf="
                               productForm.get('colors')?.invalid &&
                               productForm.get('colors')?.touched
-                            "
-                            class="text-danger"
-                          >
+                            " class="text-danger">
                             At least one color is required.
                           </div>
                         </div>
@@ -165,43 +111,20 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Size Options</label>
-                        <ng-multiselect-dropdown
-                          placeholder="Select Sizes"
-                          formControlName="size"
-                          [settings]="dropdownSettings"
-                          [data]="sizes"
-                          (onSelect)="onSizeSelect($event)"
-                          (onDeSelect)="onSizeDeSelect($event)"
-                        >
+                        <ng-multiselect-dropdown placeholder="Select Sizes" [(ngModel)]="selectedSizes"
+                          [settings]="dropdownSettings" [ngModelOptions]="{standalone: true}" [data]="sizes">
                         </ng-multiselect-dropdown>
-                        <div
-                          *ngIf="
-                            productForm.get('size')?.invalid &&
-                            productForm.get('size')?.touched
-                          "
-                          class="text-danger"
-                        >
-                          Size is required
-                        </div>
                       </div>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Stock</label>
-                        <input
-                          formControlName="stock"
-                          type="number"
-                          class="form-control"
-                          placeholder="Quantity"
-                        />
-                        <div
-                          *ngIf="
+                        <input formControlName="stock" type="number" class="form-control" placeholder="Quantity" />
+                        <div *ngIf="
                             productForm.get('stock')?.invalid &&
                             productForm.get('stock')?.touched
-                          "
-                          class="text-danger"
-                        >
+                          " class="text-danger">
                           Stock is required.
                         </div>
                       </div>
@@ -209,27 +132,17 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Menufacturers</label>
-                        <select
-                          formControlName="menufecturer"
-                          class="form-select"
-                          aria-label="Default select example"
-                          *ngIf="manufacturers && manufacturers.mnufacturer"
-                        >
+                        <select formControlName="menufecturer" class="form-select" aria-label="Default select example"
+                          *ngIf="manufacturers && manufacturers.mnufacturer">
                           <option value="" disabled>Select Manufacturer</option>
-                          <option
-                            *ngFor="let man of manufacturers.mnufacturer"
-                            [value]="man.id"
-                          >
+                          <option *ngFor="let man of manufacturers.mnufacturer" [value]="man.id">
                             {{ man.user.name }} , ({{ man.user.email }})
                           </option>
                         </select>
-                        <div
-                          *ngIf="
+                        <div *ngIf="
                             productForm.get('menufecturer')?.invalid &&
                             productForm.get('menufecturer')?.touched
-                          "
-                          class="text-danger"
-                        >
+                          " class="text-danger">
                           Menufecturer is required
                         </div>
                       </div>
@@ -237,96 +150,64 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Description</label>
-                        <textarea
-                          formControlName="description"
-                          class="form-control"
-                          placeholder="Enter Notes"
-                          rows="5"
-                        ></textarea>
-                        <div
-                          *ngIf="
+                        <textarea formControlName="description" class="form-control" placeholder="Enter Notes"
+                          rows="5"></textarea>
+                        <div *ngIf="
                             productForm.get('description')?.invalid &&
                             productForm.get('description')?.touched
-                          "
-                          class="text-danger"
-                        >
+                          " class="text-danger">
                           Description is required.
                         </div>
                       </div>
                     </div>
+
                     <div class="col-12 d-flex">
-                      <!-- Image div -->
                       <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="input-block">
-                          <label>Image 1</label>
+                          <label>Upload Images</label>
                           <div
-                            class="input-block service-upload mb-0 d-flex flex-column align-items-center justify-content-center"
-                          >
+                            class="input-block service-upload mb-0 d-flex flex-column align-items-center justify-content-center">
                             <span>
-                              <img
-                                id="bannerPreview"
-                                alt="Banner Preview"
-                                src="assets/img/drop-icon.svg"
-                              />
+                              <img id="bannerPreview" alt="Banner Preview" src="assets/img/drop-icon.svg" />
                             </span>
                             <h6 class="drop-browse align-center">
                               Drop your files here or
                               <span class="text-primary ms-1">browse</span>
                             </h6>
                             <p class="text-muted">Maximum size: 50MB</p>
-                            <input
-                              type="file"
-                              id="bannerImage"
-                              (change)="handleImageInput($event, 'banner')"
-                            />
+                            <input type="file" id="bannerImage" (change)="handleImageInput($event, 'banner')"
+                              multiple />
                           </div>
                         </div>
                       </div>
 
-                      <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="input-block">
-                          <label>Image 2</label>
-                          <div
-                            class="input-block service-upload mb-0 d-flex flex-column align-items-center justify-content-center"
-                          >
-                            <span>
-                              <img
-                                id="thumbnailPreview"
-                                alt="Thumbnail Preview"
-                                src="assets/img/drop-icon.svg"
-                              />
-                            </span>
-                            <h6 class="drop-browse align-center">
-                              Drop your files here or
-                              <span class="text-primary ms-1">browse</span>
-                            </h6>
-                            <p class="text-muted">Maximum size: 50MB</p>
-                            <input
-                              type="file"
-                              id="thumbnailImage"
-                              (change)="handleImageInput($event, 'thumbnail')"
-                            />
+                    </div>
+                    <div class="col-12 mt-3">
+                      <div class="row">
+                        <div class="col-2 position-relative" *ngFor="let image of uploadedImages; let i = index ">
+                          <button class="btn btn-white position-absolute top-0 end-0"
+                            (click)="removeImage(i, image.id)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                              fill="none">
+                              <path d="M3.25 5.5H4.75H16.75" stroke="#666D80" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                              <path
+                                d="M7 5.5V4C7 3.60218 7.15804 3.22064 7.43934 2.93934C7.72064 2.65804 8.10218 2.5 8.5 2.5H11.5C11.8978 2.5 12.2794 2.65804 12.5607 2.93934C12.842 3.22064 13 3.60218 13 4V5.5M15.25 5.5V16C15.25 16.3978 15.092 16.7794 14.8107 17.0607C14.5294 17.342 14.1478 17.5 13.75 17.5H6.25C5.85218 17.5 5.47064 17.342 5.18934 17.0607C4.90804 16.7794 4.75 16.3978 4.75 16V5.5H15.25Z"
+                                stroke="#666D80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                              </path>
+                            </svg>
+                          </button>
+                          <div class="input-block service-upload service-upload-sm mb-0">
+                            <span><img src="{{image.image}}" alt="upload"></span>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div
-                      *ngIf="
-                        productForm.get('images')?.invalid &&
-                        productForm.get('images')?.touched
-                      "
-                      class="text-danger"
-                    >
-                      At least one image is required.
-                    </div>
                   </div>
+
                 </div>
                 <div class="text-end mt-3">
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                    (click)="onSubmit()"
-                  >
+                  <button type="submit" class="btn btn-primary" (click)="onSubmit()">
                     Save
                   </button>
                 </div>

@@ -10,7 +10,7 @@ import {
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { ManufacturersService } from 'src/app/admin/services/manufacturers.service';
 import { ProductsService } from 'src/app/admin/services/products.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-product',
@@ -45,13 +45,15 @@ export class EditProductComponent implements OnInit {
   selectedSizes: any[] = [];
 
   dropdownSettings: any;
+  productId!: string;
 
   constructor(
     private _categoryService: ProductCategoryService,
     private fb: FormBuilder,
     private _manufacturerService: ManufacturersService,
     private _productService: ProductsService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.productForm = this.fb.group({
       productName: ['', Validators.required],
@@ -60,10 +62,11 @@ export class EditProductComponent implements OnInit {
       price: ['', [Validators.required, Validators.min(0)]],
       stockStatus: ['', Validators.required],
       colors: [[]],
-      size: [[], Validators.required],
+      size: [[]],
       stock: ['', [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
-      images: [[], Validators.required],
+      images: [[]],
+      productImage: []
     });
   }
 
@@ -78,8 +81,41 @@ export class EditProductComponent implements OnInit {
       allowSearchFilter: false,
     };
 
+    this.route.params
+      .subscribe(params => {
+        if (params['id']) {
+          this.productId = params['id'];
+          this.fetchProductList()
+        }
+      });
     this.getCategory();
     this.getManufacturers();
+  }
+
+  fetchProductList() {
+    this._productService.get(this.productId).subscribe((res: any) => {
+      const productData = res.data;
+      this.colors = productData.product_colors.map((color: any) => color.color);
+
+      this.selectedSizes = productData.product_sizes.map((size: any) => {
+        return { item_id: size.size_id, item_text: size.size }; // Assuming size_id is available
+      });
+      this.uploadedImages = productData.product_images.map((img: any) => {
+        return { image: img.image, id: img.id };
+      });
+
+      this.productForm.patchValue({
+        productName: productData.product_name,
+        category: productData.productCategoryId,
+        menufecturer: productData.manufacturerId,
+        price: productData.price,
+        stockStatus: productData.is_stock_available ? 'true' : 'false',
+        size: this.selectedSizes,
+        stock: productData.stock_quantity,
+        description: productData.description,
+        productImage: productData.productImage
+      });
+    })
   }
 
   getCategory() {
@@ -98,26 +134,41 @@ export class EditProductComponent implements OnInit {
     });
   }
 
+
+  uploadedImages: { id?: number, image: string }[] = [];
+
   handleImageInput(event: Event, type: 'banner' | 'thumbnail'): void {
     const input = event.target as HTMLInputElement;
     const files = input.files;
+
     if (files) {
-      const file = files[0];
-      const reader = new FileReader();
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
 
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (type === 'banner') {
-          this.setImageSrc('bannerPreview', e.target?.result as string);
-        } else if (type === 'thumbnail') {
-          this.setImageSrc('thumbnailPreview', e.target?.result as string);
-        }
-      };
-
-      reader.readAsDataURL(file);
-
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          const imageSrc = e.target?.result as string;
+          this.uploadedImages.push({ image: imageSrc }); // Add the image to the list
+        };
+        reader.readAsDataURL(file);
+      });
       const images = this.productForm.get('images')?.value || [];
-      this.productForm.patchValue({ images: [...images, file] });
+      this.productForm.patchValue({ images: [...images, files[0]] });
     }
+  }
+
+  removeImage(index: number, id?: number): void {
+    if (id) {
+      const productImage = this.uploadedImages.find(data => data.image == this.productForm.value.productImage);
+      const data = {
+        productImageId: id,
+        isMatched: productImage ? true : false
+      }
+      this._productService.deleteProductImage(data).subscribe((res) => { });
+    }
+    this.uploadedImages.splice(index, 1);
+    const images = this.productForm.get('images')?.value || [];
+    images.splice(index, 1);
+    this.productForm.patchValue({ images });
   }
 
   setImageSrc(elementId: string, src: string): void {
@@ -134,7 +185,6 @@ export class EditProductComponent implements OnInit {
     } else {
       this.selectedSizes.splice(index, 1);
     }
-    console.log('Selected:', this.selectedSizes);
   }
 
   onSizeDeSelect(item: any) {
@@ -163,18 +213,26 @@ export class EditProductComponent implements OnInit {
   }
 
   onSubmit() {
+    const formData = this.createFormData();
     if (this.productForm.valid) {
       if (this.productForm.get('images')?.value.length === 0) {
         this.productForm.get('images')?.setErrors({ required: true });
         this.productForm.markAllAsTouched();
         return;
       }
-      const formData = this.createFormData();
-      this._productService.add(formData).subscribe((res) => {
-        if (res) {
-          this.router.navigate(['/products']);
-        }
-      });
+      if (this.productId) {
+        this._productService.update(this.productId, formData).subscribe((res) => {
+          if (res) {
+            this.router.navigate(['/products']);
+          }
+        });
+      } else {
+        this._productService.add(formData).subscribe((res) => {
+          if (res) {
+            this.router.navigate(['/products']);
+          }
+        });
+      }
     } else {
       this.productForm.markAllAsTouched();
     }
@@ -202,9 +260,11 @@ export class EditProductComponent implements OnInit {
 
     formData.append('color', JSON.stringify(this.colors));
 
-    formData.append('size', JSON.stringify(this.selectedSizes));
+    formData.append('size', JSON.stringify(this.selectedSizes.map(data => data.item_text)));
 
-    formData.append('product_image', this.productForm.get('images')?.value);
+    for (let data of this.productForm.get('images')?.value) {
+      formData.append('product_image', data);
+    }
 
     return formData;
   }
