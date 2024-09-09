@@ -54,7 +54,10 @@ import { EditProductComponent } from './admin/ecommerce/product/edit-product/edi
 import { EditManufacturerComponent } from './admin/ecommerce/manufacturer/edit-manufacturer/edit-manufacturer.component';
 import { ProductCategoriesComponent } from './admin/ecommerce/product-categories/product-categories.component';
 import { DetalisProductComponent } from './admin/ecommerce/product/detalis-product/detalis-product.component';
-import { SlickCarouselComponent, SlickCarouselModule } from 'ngx-slick-carousel';
+import {
+  SlickCarouselComponent,
+  SlickCarouselModule,
+} from 'ngx-slick-carousel';
 
 @NgModule({
   declarations: [
@@ -111,7 +114,6 @@ import { SlickCarouselComponent, SlickCarouselModule } from 'ngx-slick-carousel'
     NgxSkeletonLoaderModule,
     CKEditorModule,
     ImageCropperComponent,
-    SlickCarouselModule,
     NgMultiSelectDropDownModule.forRoot(),
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot({
@@ -119,6 +121,7 @@ import { SlickCarouselComponent, SlickCarouselModule } from 'ngx-slick-carousel'
       showProgressBar: true,
       clickToClose: true,
     }),
+    SlickCarouselModule,
   ],
   providers: [
     {
@@ -130,4 +133,4 @@ import { SlickCarouselComponent, SlickCarouselModule } from 'ngx-slick-carousel'
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

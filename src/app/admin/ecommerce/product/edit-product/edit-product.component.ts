@@ -66,7 +66,7 @@ export class EditProductComponent implements OnInit {
       stock: ['', [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
       images: [[]],
-      productImage: []
+      productImage: [],
     });
   }
 
@@ -75,19 +75,18 @@ export class EditProductComponent implements OnInit {
       singleSelection: false,
       idField: 'item_id',
       textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
+      enableCheckAll: false,
+      unSelectAllText: false,
       itemsShowLimit: 3,
       allowSearchFilter: false,
     };
 
-    this.route.params
-      .subscribe(params => {
-        if (params['id']) {
-          this.productId = params['id'];
-          this.fetchProductList()
-        }
-      });
+    this.route.params.subscribe((params) => {
+      if (params['id']) {
+        this.productId = params['id'];
+        this.fetchProductList();
+      }
+    });
     this.getCategory();
     this.getManufacturers();
   }
@@ -113,9 +112,9 @@ export class EditProductComponent implements OnInit {
         size: this.selectedSizes,
         stock: productData.stock_quantity,
         description: productData.description,
-        productImage: productData.productImage
+        productImage: productData.productImage,
       });
-    })
+    });
   }
 
   getCategory() {
@@ -134,15 +133,14 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-
-  uploadedImages: { id?: number, image: string }[] = [];
+  uploadedImages: { id?: number; image: string }[] = [];
 
   handleImageInput(event: Event, type: 'banner' | 'thumbnail'): void {
     const input = event.target as HTMLInputElement;
     const files = input.files;
 
     if (files) {
-      Array.from(files).forEach(file => {
+      Array.from(files).forEach((file) => {
         const reader = new FileReader();
 
         reader.onload = (e: ProgressEvent<FileReader>) => {
@@ -158,12 +156,14 @@ export class EditProductComponent implements OnInit {
 
   removeImage(index: number, id?: number): void {
     if (id) {
-      const productImage = this.uploadedImages.find(data => data.image == this.productForm.value.productImage);
+      const productImage = this.uploadedImages.find(
+        (data) => data.image == this.productForm.value.productImage
+      );
       const data = {
         productImageId: id,
-        isMatched: productImage ? true : false
-      }
-      this._productService.deleteProductImage(data).subscribe((res) => { });
+        isMatched: productImage ? true : false,
+      };
+      this._productService.deleteProductImage(data).subscribe((res) => {});
     }
     this.uploadedImages.splice(index, 1);
     const images = this.productForm.get('images')?.value || [];
@@ -213,19 +213,21 @@ export class EditProductComponent implements OnInit {
   }
 
   onSubmit() {
-    const formData = this.createFormData();
     if (this.productForm.valid) {
+      const formData = this.createFormData();
       if (this.productForm.get('images')?.value.length === 0) {
         this.productForm.get('images')?.setErrors({ required: true });
         this.productForm.markAllAsTouched();
         return;
       }
       if (this.productId) {
-        this._productService.update(this.productId, formData).subscribe((res) => {
-          if (res) {
-            this.router.navigate(['/products']);
-          }
-        });
+        this._productService
+          .update(this.productId, formData)
+          .subscribe((res) => {
+            if (res) {
+              this.router.navigate(['/products']);
+            }
+          });
       } else {
         this._productService.add(formData).subscribe((res) => {
           if (res) {
@@ -260,7 +262,10 @@ export class EditProductComponent implements OnInit {
 
     formData.append('color', JSON.stringify(this.colors));
 
-    formData.append('size', JSON.stringify(this.selectedSizes.map(data => data.item_text)));
+    formData.append(
+      'size',
+      JSON.stringify(this.selectedSizes.map((data) => data.item_text))
+    );
 
     for (let data of this.productForm.get('images')?.value) {
       formData.append('product_image', data);
