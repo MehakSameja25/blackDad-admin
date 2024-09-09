@@ -11,27 +11,27 @@ export class DetalisProductComponent implements OnInit {
   productDetails: any;
 
   slides = [
-    { img: "../../../../assets/images/BMD-Testimonial-1.png" },
-    { img: "../../../../assets/images/BMD-Testimonial-2.png" },
-    { img: "../../../../assets/images/BMD-Testimonial-3.png" },
-    { img: "../../../../assets/images/Workpac-Testimonial-1.png" },
-    { img: "../../../../assets/images/Workpac-Testimonial-2.png" },
-    { img: "../../../../assets/images/Workpac-Testimonial-3.png" },
+    { img: '../../../../assets/images/BMD-Testimonial-1.png' },
+    { img: '../../../../assets/images/BMD-Testimonial-2.png' },
+    { img: '../../../../assets/images/BMD-Testimonial-3.png' },
+    { img: '../../../../assets/images/Workpac-Testimonial-1.png' },
+    { img: '../../../../assets/images/Workpac-Testimonial-2.png' },
+    { img: '../../../../assets/images/Workpac-Testimonial-3.png' },
   ];
 
   slideConfig = {
-    dots: true,
+    dots: false,
     infinite: false,
     speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true
+    arrows: false,
   };
 
   constructor(
     private productsService: ProductsService,
     private route: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getProduct();
@@ -45,10 +45,14 @@ export class DetalisProductComponent implements OnInit {
   }
 
   fetchColor() {
-    return this.productDetails.product_colors.map((data: any) => data.color).join(',')
+    return this.productDetails.product_colors
+      .map((data: any) => data.color)
+      .join(',');
   }
 
   fetchSize() {
-    return this.productDetails.product_sizes.map((data: any) => data.size).join(',')
+    return this.productDetails.product_sizes
+      .map((data: any) => data.size)
+      .join(',');
   }
 }

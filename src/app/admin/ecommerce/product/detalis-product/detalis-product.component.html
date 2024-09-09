@@ -21,13 +21,41 @@
               <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-12">
                   <div class="ep-cover">
-                    <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
-                      <div class="card p-0 m-0" ngxSlickItem *ngFor="let slide of productDetails.product_images">
-                        <img src="{{slide.image}}" class="card-img-top" alt="..." />
+                    <ngx-slick-carousel
+                      class="carousel"
+                      #slickModal="slick-carousel"
+                      [config]="slideConfig"
+                    >
+                      <div
+                        class="card p-0 m-0 bg-white"
+                        ngxSlickItem
+                        *ngFor="let slide of productDetails.product_images"
+                      >
+                        <img
+                          src="{{ slide.image }}"
+                          class="card-img-top"
+                          alt="..."
+                        />
                       </div>
                     </ngx-slick-carousel>
-                    <button (click)="slickModal.slickPrev()">Prev</button>
-                    <button (click)="slickModal.slickNext()">Next</button>
+                    <div class="row justify-content-center mt-3">
+                      <div class="col-5 p-0 pe-2">
+                        <button
+                          class="btn btn-primary w-100"
+                          (click)="slickModal.slickPrev()"
+                        >
+                          Prev
+                        </button>
+                      </div>
+                      <div class="col-5 p-0 ps-2">
+                        <button
+                          class="btn btn-primary w-100"
+                          (click)="slickModal.slickNext()"
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-lg-9 col-md-6 col-sm-12">
@@ -35,7 +63,7 @@
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Product Name</label>
-                        <p>{{productDetails.product_name}}</p>
+                        <p>{{ productDetails.product_name }}</p>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 d-none">
@@ -47,20 +75,20 @@
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Category</label>
-                        <p>{{productDetails.product_category.category}}</p>
+                        <p>{{ productDetails.product_category.category }}</p>
                       </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Manufacture By</label>
-                        <p>{{productDetails.manufacturer.company_name}}</p>
+                        <p>{{ productDetails.manufacturer.company_name }}</p>
                       </div>
                     </div>
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Price</label>
-                        <p>${{productDetails.price}}</p>
+                        <p>${{ productDetails.price }}</p>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 d-none">
@@ -72,27 +100,36 @@
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Color</label>
-                        <p>{{fetchColor()}}</p>
+                        <p>{{ fetchColor() }}</p>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Size</label>
-                        <p>{{fetchSize()}}</p>
+                        <p>{{ fetchSize() }}</p>
                       </div>
                     </div>
                     <div class="col-lg-8 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Stock</label>
-                        <p>{{productDetails.stock_quantity}}</p>
+                        <p>{{ productDetails.stock_quantity }}</p>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label class="d-block">Status</label>
                         <span
-                          class="badge bg-success-light text-{{productDetails.is_stock_available ? 'success-light' : 'danger'}}">{{productDetails.is_stock_available
-                          ? 'In-stock' : 'Out of stock'}}</span>
+                          class="badge bg-success-light text-{{
+                            productDetails.is_stock_available
+                              ? 'success-light'
+                              : 'danger'
+                          }}"
+                          >{{
+                            productDetails.is_stock_available
+                              ? "In-stock"
+                              : "Out of stock"
+                          }}</span
+                        >
                       </div>
                     </div>
 
@@ -100,7 +137,7 @@
                       <div class="input-block mb-3">
                         <label>Description</label>
                         <p>
-                          {{productDetails.description}}
+                          {{ productDetails.description }}
                         </p>
                       </div>
                     </div>
