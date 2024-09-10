@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MainNavService } from '../../services/main-nav.service';
 import { RoleService } from '../../services/role.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-add-new-role',
@@ -20,15 +21,16 @@ export class AddNewRoleComponent {
     edit: boolean;
     delete: boolean;
   } = {
-    add: false,
-    edit: false,
-    delete: false,
-  };
+      add: false,
+      edit: false,
+      delete: false,
+    };
   roleId!: string;
   constructor(
     private roleService: RoleService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notifications: NotificationsService
   ) {
     this.route.params.subscribe((params) => {
       if (params['id']) {
@@ -127,6 +129,11 @@ export class AddNewRoleComponent {
 
   addRole() {
     let role;
+    if (!this.roleData.name || this.roleData.name.name.trim().length < 3) {
+      this.notifications.error('Error', `role name have minimum 3 length`);
+      return;
+    }
+
     if (this.roleId) {
       role = this.roleService.editRole(this.roleData, +this.roleId);
     } else {
