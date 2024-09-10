@@ -27,6 +27,7 @@ export class EditProductComponent implements OnInit {
   croppedBannerImage: any = '';
   bannerImageSrc: Promise<string | null> | null = null;
   thumbnailImageSrc: Promise<string | null> | null = null;
+  type = 'Add';
 
   thumbnailImageChangedEvent: any = '';
   showThumbnailCropper = false;
@@ -97,8 +98,9 @@ export class EditProductComponent implements OnInit {
       this.colors = productData.product_colors.map((color: any) => color.color);
 
       this.selectedSizes = productData.product_sizes.map((size: any) => {
-        return { item_id: size.size_id, item_text: size.size }; // Assuming size_id is available
+        return { item_id: size.id, item_text: size.size }; // Assuming size_id is available
       });
+      console.log(this.selectedSizes);
       this.uploadedImages = productData.product_images.map((img: any) => {
         return { image: img.image, id: img.id };
       });
@@ -108,7 +110,7 @@ export class EditProductComponent implements OnInit {
         category: productData.productCategoryId,
         menufecturer: productData.manufacturerId,
         price: productData.price,
-        stockStatus: productData.is_stock_available ? 'true' : 'false',
+        stockStatus: productData.is_stock_available ? true : false,
         size: this.selectedSizes,
         stock: productData.stock_quantity,
         description: productData.description,

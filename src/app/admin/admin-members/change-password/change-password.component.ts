@@ -36,7 +36,6 @@ export class ChangePasswordComponent {
 
   updateUser() {
     const authData = this.LoginForm.value;
-    console.log('FORM DATA :=>', authData);
     if (this.proof) {
       this.roleService.updatePassword(this.proof, authData).subscribe(
         (res) => {
