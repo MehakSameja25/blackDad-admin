@@ -190,11 +190,11 @@ export class EditProductComponent implements OnInit {
   onSubmit() {
     if (this.productForm.valid) {
       const formData = this.createFormData();
-      if (this.productForm.get('images')?.value.length === 0) {
-        this.productForm.get('images')?.setErrors({ required: true });
-        this.productForm.markAllAsTouched();
-        return;
-      }
+      // if (this.productForm.get('images')?.value.length === 0) {
+      //   this.productForm.get('images')?.setErrors({ required: true });
+      //   this.productForm.markAllAsTouched();
+      //   return;
+      // }
       if (this.productId) {
         this._productService
           .update(this.productId, formData)
