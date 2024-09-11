@@ -58,6 +58,7 @@ import {
   SlickCarouselComponent,
   SlickCarouselModule,
 } from 'ngx-slick-carousel';
+import { TooltipDirective } from './Directives/tooltip.directive';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import {
     EditProductComponent,
     ProductCategoriesComponent,
     DetalisProductComponent,
+    TooltipDirective
   ],
   imports: [
     BrowserModule,

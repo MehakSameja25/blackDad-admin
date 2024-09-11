@@ -109,6 +109,9 @@ export class EditDraftComponent {
       });
   }
   getSingleEpisode() {
+    this.episodeForm.get('subType1')?.valueChanges.subscribe((subType) => {
+      this.updateUrlValidators(subType);
+    });
     this.draftId = this.route.snapshot.paramMap.get('id');
     this.postsService
       .getSingleDraft(this.draftId)

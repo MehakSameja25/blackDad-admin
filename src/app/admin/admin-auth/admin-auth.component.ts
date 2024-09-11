@@ -43,7 +43,11 @@ export class AdminAuthComponent implements OnInit {
     if (this.LoginForm.invalid) {
       this.notify.alert('Form Invalid');
     } else {
-      const authData = this.LoginForm.value;
+      const authData = {
+        email: this.LoginForm.value.email,
+        password: this.LoginForm.value.password,
+        userType : 'admin'
+      };
       this.authService.AdminAuthantication(authData).subscribe(
         (res: Authantication) => {
           if (res) {

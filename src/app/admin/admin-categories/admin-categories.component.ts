@@ -79,21 +79,23 @@ export class AdminCategoriesComponent implements OnInit {
           isblock: string;
           description: string;
         }) => [
-            `<div class="table-img"><img src="${item.image}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
-            item.name,
-            item.description.length > 25
-              ? ` ${this.truncateDescription(item.description)}  <span
+          `<div class="table-img"><img src="${item.image}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
+          item.name,
+          item.description.length > 25
+            ? ` ${this.truncateDescription(item.description)}  <span
                           class="badge rounded-pill text-bg-violet"
                           style="cursor: pointer"
                           data-id="${item.id}" data-action="description"
                           >Read more</span
                         >`
-              : item.description,
-            ` <div class="actions d-flex align-items-center gap-2">
-        ${this.editPermission === true
-              ? `<a
+            : item.description,
+          ` <div class="actions d-flex align-items-center gap-2">
+        ${
+          this.editPermission === true
+            ? `<a
                             data-id="${item.id}" data-action="edit"
                             class="btn-action-icon"
+                            title='Edit'
                             *ngIf="editPermission == true"
                           >
                             <svg
@@ -127,16 +129,20 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
                           </a>`
-              : ''
-            }
+            : ''
+        }
                           
-                           <a class="btn-action-icon" data-id="${item.id
-            }" data-action="block">
-        ${item.isblock == '1'
-              ? `
+                           <a class="btn-action-icon" data-id="${
+                             item.id
+                           }" data-action="block" 
+                           title='Block | Unblock'>
+        ${
+          item.isblock == '1'
+            ? `
         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
+                              title='Unblock'
                               xmlns:xlink="http://www.w3.org/1999/xlink"
                               width="16"
                               height="16"
@@ -165,12 +171,13 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
         `
-              : `
+            : `
        <svg
                               xmlns="http://www.w3.org/2000/svg"
                               version="1.1"
                               xmlns:xlink="http://www.w3.org/1999/xlink"
                               width="16"
+                              
                               height="16"
                               x="0"
                               y="0"
@@ -232,10 +239,12 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
         `
-            }
+        }
           </a>
-                        ${this.deletePermission === true
-              ? `<a
+                        ${
+                          this.deletePermission === true
+                            ? `<a
+                            title='Delete'
                             class="btn-action-icon"
                             data-id="${item.id}" data-action="delete"
                             *ngIf="deletePermission == true"
@@ -269,10 +278,10 @@ export class AdminCategoriesComponent implements OnInit {
                               </g>
                             </svg>
                           </a>`
-              : ''
-            }  
+                            : ''
+                        }  
                         </div>`,
-          ]
+        ]
       );
 
       setTimeout(() => this.bindEvents(), 0);
