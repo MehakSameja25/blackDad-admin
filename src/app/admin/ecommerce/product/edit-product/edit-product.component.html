@@ -162,17 +162,51 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-6 col-sm-12">
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Size Options</label>
-                        <ng-multiselect-dropdown
-                          placeholder="Select Sizes"
-                          [(ngModel)]="selectedSizes"
-                          [settings]="dropdownSettings"
-                          [ngModelOptions]="{ standalone: true }"
-                          [data]="sizes"
-                        >
-                        </ng-multiselect-dropdown>
+                        <div class="input-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="newSize"
+                            formControlName="size"
+                            placeholder="Enter Size Name"
+                            aria-label="Size Name"
+                          />
+                          <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            (click)="addSize()"
+                            id="button-addon2"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                          <span
+                            *ngFor="let data of sizes"
+                            class="selected-color"
+                          >
+                            {{ data }}
+                            <button
+                              class="btn btn-link p-0"
+                              (click)="removeSize(data)"
+                            >
+                              <i class="fa-solid fa-xmark"></i>
+                            </button>
+                          </span>
+                          <div
+                            *ngIf="
+                              productForm.get('size')?.invalid &&
+                              productForm.get('size')?.touched
+                            "
+                            class="text-danger"
+                          >
+                            At least one color is required.
+                          </div>
+                        </div>
                       </div>
                     </div>
 

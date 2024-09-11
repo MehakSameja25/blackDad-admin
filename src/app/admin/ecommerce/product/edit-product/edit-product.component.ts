@@ -35,18 +35,9 @@ export class EditProductComponent implements OnInit {
 
   colors: any[] = [];
   newColor: string = '';
-  sizes = [
-    { item_id: 1, item_text: 'Extra Small' },
-    { item_id: 2, item_text: 'Small' },
-    { item_id: 3, item_text: 'Medium' },
-    { item_id: 4, item_text: 'Large' },
-    { item_id: 5, item_text: 'Extra Large' },
-  ];
-
-  selectedSizes: any[] = [];
-
-  dropdownSettings: any;
+  sizes: any[] = [];
   productId!: string;
+  newSize: string = '';
 
   constructor(
     private _categoryService: ProductCategoryService,
@@ -72,15 +63,6 @@ export class EditProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      enableCheckAll: false,
-      unSelectAllText: false,
-      itemsShowLimit: 3,
-      allowSearchFilter: false,
-    };
 
     this.route.params.subscribe((params) => {
       if (params['id']) {
@@ -97,10 +79,7 @@ export class EditProductComponent implements OnInit {
       const productData = res.data;
       this.colors = productData.product_colors.map((color: any) => color.color);
 
-      this.selectedSizes = productData.product_sizes.map((size: any) => {
-        return { item_id: size.id, item_text: size.size }; // Assuming size_id is available
-      });
-      console.log(this.selectedSizes);
+      this.sizes = productData.product_sizes.map((size: any) => size.size);
       this.uploadedImages = productData.product_images.map((img: any) => {
         return { image: img.image, id: img.id };
       });
@@ -111,7 +90,6 @@ export class EditProductComponent implements OnInit {
         menufecturer: productData.manufacturerId,
         price: productData.price,
         stockStatus: productData.is_stock_available ? true : false,
-        size: this.selectedSizes,
         stock: productData.stock_quantity,
         description: productData.description,
         productImage: productData.productImage,
@@ -165,7 +143,7 @@ export class EditProductComponent implements OnInit {
         productImageId: id,
         isMatched: productImage ? true : false,
       };
-      this._productService.deleteProductImage(data).subscribe((res) => {});
+      this._productService.deleteProductImage(data).subscribe((res) => { });
     }
     this.uploadedImages.splice(index, 1);
     const images = this.productForm.get('images')?.value || [];
@@ -180,23 +158,6 @@ export class EditProductComponent implements OnInit {
     }
   }
 
-  onSizeSelect(item: any) {
-    const index = this.selectedSizes.indexOf(item.item_text);
-    if (index === -1) {
-      this.selectedSizes.push(item.item_text);
-    } else {
-      this.selectedSizes.splice(index, 1);
-    }
-  }
-
-  onSizeDeSelect(item: any) {
-    const index = this.selectedSizes.findIndex((cat) => cat === item.item_text);
-    if (index !== -1) {
-      this.selectedSizes.splice(index, 1);
-    }
-    console.log('Deselected:', this.selectedSizes);
-  }
-
   addColor(): void {
     console.log(this.newColor);
     if (this.newColor.trim()) {
@@ -207,6 +168,18 @@ export class EditProductComponent implements OnInit {
 
   removeColor(color: { name: string }): void {
     this.colors = this.colors.filter((c) => c !== color);
+  }
+
+  addSize(): void {
+    console.log(this.newSize);
+    if (this.newSize.trim()) {
+      this.sizes.push(this.newSize.trim());
+      this.newSize = '';
+    }
+  }
+
+  removeSize(size: { name: string }): void {
+    this.sizes = this.sizes.filter((c) => c !== size);
   }
 
   colorsValidator(control: AbstractControl): { [key: string]: boolean } | null {
@@ -266,7 +239,7 @@ export class EditProductComponent implements OnInit {
 
     formData.append(
       'size',
-      JSON.stringify(this.selectedSizes.map((data) => data.item_text))
+      JSON.stringify(this.sizes)
     );
 
     for (let data of this.productForm.get('images')?.value) {
