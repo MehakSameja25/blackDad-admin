@@ -59,6 +59,9 @@ import {
   SlickCarouselModule,
 } from 'ngx-slick-carousel';
 import { TooltipDirective } from './Directives/tooltip.directive';
+import { LoaderComponent } from './admin/loader/loader.component';
+import { LoaderInterceptor } from './admin/main-interceptors/loader.interceptor';
+import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer-orders/manufacturer-orders.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +107,9 @@ import { TooltipDirective } from './Directives/tooltip.directive';
     EditProductComponent,
     ProductCategoriesComponent,
     DetalisProductComponent,
-    TooltipDirective
+    TooltipDirective,
+    LoaderComponent,
+    ManufacturerOrdersComponent,
   ],
   imports: [
     BrowserModule,
@@ -132,6 +137,11 @@ import { TooltipDirective } from './Directives/tooltip.directive';
       multi: true,
     },
     AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

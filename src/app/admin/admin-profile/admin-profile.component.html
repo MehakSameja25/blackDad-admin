@@ -31,7 +31,7 @@
             <div class="card-body">
               <div
                 class="form-group-item border-0 mb-0"
-                *ngIf="userDetails && userDetails.user && userDetails.role"
+                *ngIf="userDetails && userDetails.user"
               >
                 <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
                   <div class="row align-item-center">

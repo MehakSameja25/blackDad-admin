@@ -34,7 +34,7 @@ export class EditProductComponent implements OnInit {
   croppedThumbnailImage: any = '';
 
   colors: any[] = [];
-  newColor: string = '';
+  newColor: any = '';
   sizes: any[] = [];
   productId!: string;
   newSize: string = '';
@@ -63,7 +63,6 @@ export class EditProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.route.params.subscribe((params) => {
       if (params['id']) {
         this.productId = params['id'];
@@ -143,7 +142,7 @@ export class EditProductComponent implements OnInit {
         productImageId: id,
         isMatched: productImage ? true : false,
       };
-      this._productService.deleteProductImage(data).subscribe((res) => { });
+      this._productService.deleteProductImage(data).subscribe((res) => {});
     }
     this.uploadedImages.splice(index, 1);
     const images = this.productForm.get('images')?.value || [];
@@ -159,8 +158,11 @@ export class EditProductComponent implements OnInit {
   }
 
   addColor(): void {
-    console.log(this.newColor);
-    if (this.newColor.trim()) {
+    if (this.newColor.includes(' ')) {
+      const color = this.newColor.split(' ');
+      this.colors.push(color.join(''));
+      this.newColor = '';
+    } else if (this.newColor.trim()) {
       this.colors.push(this.newColor.trim());
       this.newColor = '';
     }
@@ -237,10 +239,7 @@ export class EditProductComponent implements OnInit {
 
     formData.append('color', JSON.stringify(this.colors));
 
-    formData.append(
-      'size',
-      JSON.stringify(this.sizes)
-    );
+    formData.append('size', JSON.stringify(this.sizes));
 
     for (let data of this.productForm.get('images')?.value) {
       formData.append('product_image', data);

@@ -45,7 +45,7 @@ export class AdminProfileComponent {
     this.authService.getUserById(this.UserId).subscribe((res) => {
       if (res) {
         this.userDetails = res.data;
-        this.userRole = res.data.role.name;
+        this.userRole = res.data?.role?.name;
         // console.log(this.userRole, 'ROLES');
       }
     });

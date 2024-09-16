@@ -66,6 +66,8 @@ export class AdminNavbarComponent implements OnInit {
   userId: string | null;
   userDetails!: userDetails;
   userType = '';
+  userRole: any;
+  user: any;
   constructor(
     private router: Router,
     private menuService: MainNavService,
@@ -73,17 +75,23 @@ export class AdminNavbarComponent implements OnInit {
     private notificationService: NotificationsService
   ) {
     this.userId = localStorage.getItem('userId');
-    this.menuService.getMenu().subscribe((response: Menu) => {
-      this.menuData = response.data[0];
-      // console.log(this.menuData);
-    });
 
     this.authService.getUserById(this.userId).subscribe((res: MainUser) => {
       if (res) {
         this.userDetails = res.data;
-        this.userType = res.data.role.name;
-        console.log(res);
+        this.userRole = res.data?.role;
+        this.user = res.data?.user;
+        this.userType = res.data?.role?.name;
+        if (this.user.type !== 'manufacturer') {
+          this.getMenu();
+        }
       }
+    });
+  }
+
+  getMenu() {
+    this.menuService.getMenu().subscribe((response: Menu) => {
+      this.menuData = response.data[0];
     });
   }
 

@@ -33,25 +33,8 @@ export class EditDraftComponent {
   inputChanged: Subject<string> = new Subject<string>();
   draftId!: string | null;
   fileType!: string;
-  singleDraft!: SingleDraft;
-  draftData!: {
-    name: string | null;
-    type: string | null;
-    categoryId: string | null | any;
-    description: string | null;
-    filetype: string | null;
-    meta_description: string | null;
-    subtype: string | null;
-    episodeNo: string | null;
-    seasonNo: string | null;
-    slug: string | null;
-    reason: string | null;
-    url: string | null;
-    isBlock: string | null;
-    isApproved: string | null;
-    isPublished: string | null;
-    isDraft: string | null;
-  };
+  singleDraft!: any;
+  draftData!: any;
   dropdownSettings: {};
   editor = ClassicEditor;
   subtype!: string;
@@ -113,37 +96,36 @@ export class EditDraftComponent {
       this.updateUrlValidators(subType);
     });
     this.draftId = this.route.snapshot.paramMap.get('id');
-    this.postsService
-      .getSingleDraft(this.draftId)
-      .subscribe((res: SingleDraft) => {
-        if (res) {
-          this.singleDraft = res;
-          this.draftData = res.data.draft;
+    this.postsService.getSingleDraft(this.draftId).subscribe((res: any) => {
+      if (res) {
+        this.singleDraft = res;
+        this.draftData = res.data.draft;
+        this.setFormValues();
 
-          if (this.draftData && this.draftData.subtype) {
-            if (this.draftData.subtype === 'podcast') {
-              this.fileType = 'audio';
-              this.subtype = 'podcast';
-              this.setFormValues();
-              this.episodeForm
-                .get('subType1')
-                ?.valueChanges.subscribe((subType) => {
-                  this.updateUrlValidators(subType);
-                });
-            } else {
-              this.fileType = 'video';
-              this.subtype = 'youtube';
-              this.setFormValues();
-              this.episodeForm
-                .get('subType1')
-                ?.valueChanges.subscribe((subType) => {
-                  this.updateUrlValidators(subType);
-                });
-            }
+        if (this.draftData && this.draftData.subtype) {
+          if (this.draftData.subtype === 'podcast') {
+            this.fileType = 'audio';
+            this.subtype = 'podcast';
+            this.setFormValues();
+            this.episodeForm
+              .get('subType1')
+              ?.valueChanges.subscribe((subType) => {
+                this.updateUrlValidators(subType);
+              });
+          } else {
+            this.fileType = 'video';
+            this.subtype = 'youtube';
+            this.setFormValues();
+            this.episodeForm
+              .get('subType1')
+              ?.valueChanges.subscribe((subType) => {
+                this.updateUrlValidators(subType);
+              });
           }
         }
-        this.updateValidators();
-      });
+      }
+      this.updateValidators();
+    });
   }
 
   onSubmit() {

@@ -76,4 +76,14 @@ export class ProductsService {
       data
     )
   }
+
+  getOrders(){
+    return apiCallWrapper(
+      this.http.get(`${environment.apiUrl}/manufacturer-order`),
+      {
+        notificationsService: this.notifications,
+        action: 'Fetching Orders',
+      }
+    );
+  }
 }
