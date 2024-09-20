@@ -61,7 +61,8 @@ import {
 import { TooltipDirective } from './Directives/tooltip.directive';
 import { LoaderComponent } from './admin/loader/loader.component';
 import { LoaderInterceptor } from './admin/main-interceptors/loader.interceptor';
-import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer-orders/manufacturer-orders.component';
+import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/manufacturer-orders/manufacturer-orders.component';
+import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/manufacturer-dashboard/manufacturer-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -110,6 +111,7 @@ import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer-orde
     TooltipDirective,
     LoaderComponent,
     ManufacturerOrdersComponent,
+    ManufacturerDashboardComponent,
   ],
   imports: [
     BrowserModule,

@@ -37,7 +37,8 @@ import { ListProductComponent } from './admin/ecommerce/product/list-product/lis
 import { EditProductComponent } from './admin/ecommerce/product/edit-product/edit-product.component';
 import { ProductCategoriesComponent } from './admin/ecommerce/product-categories/product-categories.component';
 import { DetalisProductComponent } from './admin/ecommerce/product/detalis-product/detalis-product.component';
-import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer-orders/manufacturer-orders.component';
+import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/manufacturer-orders/manufacturer-orders.component';
+import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/manufacturer-dashboard/manufacturer-dashboard.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
@@ -237,6 +238,11 @@ const routes: Routes = [
   {
     path: 'manufacturer/my-orders',
     component: ManufacturerOrdersComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'manufacturer/dashboard',
+    component: ManufacturerDashboardComponent,
     canActivate: [AuthGuard],
   },
   
