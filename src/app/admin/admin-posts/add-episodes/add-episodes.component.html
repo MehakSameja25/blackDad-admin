@@ -13,7 +13,6 @@
           <app-go-back></app-go-back>
         </div>
       </div>
-
       <div class="row">
         <div class="col-sm-12">
           <div class="card">
@@ -24,24 +23,14 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Episode Name</label>
-                        <input
-                          type="text"
-                          formControlName="episodeName"
-                          class="form-control"
-                          placeholder="Enter Episode Name"
-                          (change)="this.inputChanged.next('episodeName')"
-                        />
-                        <div
-                          *ngIf="
+                        <input type="text" formControlName="episodeName" class="form-control"
+                          placeholder="Enter Episode Name" (change)="this.inputChanged.next('episodeName')" />
+                        <div *ngIf="
                             episodeForm.get('episodeName')?.invalid &&
                             (episodeForm.get('episodeName')?.dirty ||
                               episodeForm.get('episodeName')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('episodeName')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('episodeName')?.errors?.['required']">
                             Episode Name is required.
                           </div>
                         </div>
@@ -51,24 +40,14 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Episode Number</label>
-                        <input
-                          type="number"
-                          formControlName="episodeNumber"
-                          class="form-control"
-                          placeholder="Enter Episode Number"
-                          (change)="this.inputChanged.next('episodeNumber')"
-                        />
-                        <div
-                          *ngIf="
+                        <input type="number" formControlName="episodeNumber" class="form-control"
+                          placeholder="Enter Episode Number" (change)="this.inputChanged.next('episodeNumber')" />
+                        <div *ngIf="
                             episodeForm.get('episodeNumber')?.invalid &&
                             (episodeForm.get('episodeNumber')?.dirty ||
                               episodeForm.get('episodeNumber')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('episodeNumber')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('episodeNumber')?.errors?.['required']">
                             Episode Number is required.
                           </div>
                         </div>
@@ -77,24 +56,14 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Season Number</label>
-                        <input
-                          type="number"
-                          formControlName="seasonNumber"
-                          class="form-control"
-                          placeholder="Enter Season Number"
-                          (change)="this.inputChanged.next('seasonNumber')"
-                        />
-                        <div
-                          *ngIf="
+                        <input type="number" formControlName="seasonNumber" class="form-control"
+                          placeholder="Enter Season Number" (change)="this.inputChanged.next('seasonNumber')" />
+                        <div *ngIf="
                             episodeForm.get('seasonNumber')?.invalid &&
                             (episodeForm.get('seasonNumber')?.dirty ||
                               episodeForm.get('seasonNumber')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('seasonNumber')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('seasonNumber')?.errors?.['required']">
                             Season Number is required.
                           </div>
                         </div>
@@ -103,27 +72,17 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Category</label>
-                        <ng-multiselect-dropdown
-                          [placeholder]="'Select Categories'"
-                          [data]="allcategories"
-                          formControlName="category"
-                          [settings]="dropdownSettings"
-                          (onSelect)="onCategorySelect($event.id)"
-                          (onDeSelect)="onCategoryDeSelect($event.id)"
-                        >
+                        <ng-multiselect-dropdown [placeholder]="'Select Categories'" [data]="allcategories"
+                          formControlName="category" [settings]="dropdownSettings"
+                          (onSelect)="onCategorySelect($event.id)" (onDeSelect)="onCategoryDeSelect($event.id)">
                         </ng-multiselect-dropdown>
                       </div>
-                      <div
-                        *ngIf="
+                      <div *ngIf="
                           episodeForm.get('category')?.invalid &&
                           (episodeForm.get('category')?.dirty ||
                             episodeForm.get('category')?.touched)
-                        "
-                        class="text-danger"
-                      >
-                        <div
-                          *ngIf="episodeForm.get('category')?.errors?.['required']"
-                        >
+                        " class="text-danger">
+                        <div *ngIf="episodeForm.get('category')?.errors?.['required']">
                           Category is required.
                         </div>
                       </div>
@@ -131,29 +90,18 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Sub Type</label>
-                        <select
-                          formControlName="subType1"
-                          class="form-select"
-                          aria-label="Default select example"
-                          #subtypee
-                          (change)="getType(subtypee.value)"
-                          (change)="this.inputChanged.next('subType1')"
-                        >
+                        <select formControlName="subType1" class="form-select" aria-label="Default select example"
+                          #subtypee (change)="getType(subtypee.value)" (change)="this.inputChanged.next('subType1')">
                           <option value="" class="d-none">Type</option>
                           <option value="podcast">podcast</option>
                           <option value="youtube">youtube</option>
                         </select>
-                        <div
-                          *ngIf="
+                        <div *ngIf="
                             episodeForm.get('subType1')?.invalid &&
                             (episodeForm.get('subType1')?.dirty ||
                               episodeForm.get('subType1')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('subType1')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('subType1')?.errors?.['required']">
                             Sub Type is required.
                           </div>
                         </div>
@@ -162,23 +110,12 @@
                     <div class="col-lg-3 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>File Type</label>
-                        <select
-                          class="form-select"
-                          #filee
-                          aria-label="Default select example"
-                          [disabled]="true"
-                        >
+                        <select class="form-select" #filee aria-label="Default select example" [disabled]="true">
                           <option>Select File Type</option>
-                          <option
-                            value="audio"
-                            [selected]="fileType === 'audio'"
-                          >
+                          <option value="audio" [selected]="fileType === 'audio'">
                             audio
                           </option>
-                          <option
-                            value="video"
-                            [selected]="fileType === 'video'"
-                          >
+                          <option value="video" [selected]="fileType === 'video'">
                             video
                           </option>
                         </select>
@@ -188,24 +125,14 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Slug</label>
-                        <input
-                          type="text"
-                          formControlName="slug"
-                          class="form-control"
-                          placeholder="Enter Slug"
-                          (change)="this.inputChanged.next('slug')"
-                        />
-                        <div
-                          *ngIf="
+                        <input type="text" formControlName="slug" class="form-control" placeholder="Enter Slug"
+                          (change)="this.inputChanged.next('slug')" />
+                        <div *ngIf="
                             episodeForm.get('slug')?.invalid &&
                             (episodeForm.get('slug')?.dirty ||
                               episodeForm.get('slug')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('slug')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('slug')?.errors?.['required']">
                             Slug is required.
                           </div>
                         </div>
@@ -214,40 +141,23 @@
 
                     <div class="col-12">
                       <div class="input-block mb-3">
-                        <label
-                        *ngIf="
-                          subtypee.value !== 'podcast'"
-                        >iFrame</label
-                      >
+                        <label *ngIf="
+                          subtypee.value !== 'podcast'">iFrame</label>
                         <label *ngIf="subtypee.value == 'podcast'">Url</label>
-                        <textarea
-                          formControlName="url"
-                          class="form-control"
-                          placeholder="Enter URL"
-                          rows="5"
-                          (change)="this.inputChanged.next('url')"
-                        ></textarea>
-                        <div
-                          *ngIf="
+                        <textarea formControlName="url" class="form-control" placeholder="Enter URL" rows="5"
+                          (change)="this.inputChanged.next('url')"></textarea>
+                        <div *ngIf="
                             episodeForm.get('url')?.invalid &&
                             (episodeForm.get('url')?.dirty ||
                               episodeForm.get('url')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('url')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('url')?.errors?.['required']">
                             URL is required.
                           </div>
-                          <div
-                            *ngIf="episodeForm.get('url')?.errors?.['invalidIframe']"
-                          >
+                          <div *ngIf="episodeForm.get('url')?.errors?.['invalidIframe']">
                             The URL must be an iframe for YouTube.
                           </div>
-                          <div
-                            *ngIf="episodeForm.get('url')?.errors?.['invalidHttpUrl']"
-                          >
+                          <div *ngIf="episodeForm.get('url')?.errors?.['invalidHttpUrl']">
                             The URL must start with http or https for Podcast.
                           </div>
                         </div>
@@ -256,25 +166,15 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Description</label>
-                        <ckeditor
-                          [editor]="editor"
-                          formControlName="description"
-                          class="form-control"
-                          placeholder="Enter Description"
-                          rows="5"
-                          (change)="this.inputChanged.next('description')"
-                        ></ckeditor>
-                        <div
-                          *ngIf="
+                        <ckeditor [editor]="editor" formControlName="description" class="form-control"
+                          placeholder="Enter Description" rows="5" (change)="this.inputChanged.next('description')">
+                        </ckeditor>
+                        <div *ngIf="
                             episodeForm.get('description')?.invalid &&
                             (episodeForm.get('description')?.dirty ||
                               episodeForm.get('description')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('description')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('description')?.errors?.['required']">
                             Description is required.
                           </div>
                         </div>
@@ -283,24 +183,14 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Metas</label>
-                        <textarea
-                          formControlName="meta"
-                          class="form-control"
-                          placeholder="Enter Notes"
-                          rows="5"
-                          (change)="this.inputChanged.next('meta')"
-                        ></textarea>
-                        <div
-                          *ngIf="
+                        <textarea formControlName="meta" class="form-control" placeholder="Enter Notes" rows="5"
+                          (change)="this.inputChanged.next('meta')"></textarea>
+                        <div *ngIf="
                             episodeForm.get('meta')?.invalid &&
                             (episodeForm.get('meta')?.dirty ||
                               episodeForm.get('meta')?.touched)
-                          "
-                          class="text-danger"
-                        >
-                          <div
-                            *ngIf="episodeForm.get('meta')?.errors?.['required']"
-                          >
+                          " class="text-danger">
+                          <div *ngIf="episodeForm.get('meta')?.errors?.['required']">
                             Metas is required.
                           </div>
                         </div>
@@ -310,71 +200,42 @@
                       <div class="input-block">
                         <label>Banner Image</label>
                         <div
-                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
-                        >
+                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center">
                           <span>
-                            <img
-                              [src]="
+                            <img [src]="
                                 croppedBannerImage
                                   ? croppedBannerImage
                                   : 'assets/img/drop-icon.svg'
-                              "
-                              alt="upload"
-                              id="bannerPreview"
-                            />
+                              " alt="upload" id="bannerPreview" />
                           </span>
-                          <h6
-                            class="drop-browse align-center"
-                            *ngIf="!showBannerCropper"
-                          >
+                          <h6 class="drop-browse align-center" *ngIf="!showBannerCropper">
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
                           </h6>
                           <p class="text-muted" *ngIf="!showBannerCropper">
                             Maximum size: 50MB
                           </p>
-                          <input
-                            type="file"
-                            id="bannerImage"
-                            (change)="handleBannerImageInput($event)"
-                          />
+                          <input type="file" id="bannerImage" (change)="handleBannerImageInput($event)" />
                           <div id="bannerFrames"></div>
-                          <image-cropper
-                            *ngIf="showBannerCropper"
-                            [imageChangedEvent]="bannerImageChangedEvent"
-                            [aspectRatio]="16 / 9"
-                            [maintainAspectRatio]="true"
-                            format="png"
-                            (imageCropped)="bannerImageCropped($event)"
-                          ></image-cropper>
-                          <button
-                            *ngIf="showBannerCropper"
-                            (click)="saveCroppedBannerImage()"
-                            class="btn btn-primary mt-2"
-                          >
+                          <image-cropper *ngIf="showBannerCropper" [imageChangedEvent]="bannerImageChangedEvent"
+                            [aspectRatio]="16 / 9" [maintainAspectRatio]="true" format="png"
+                            (imageCropped)="bannerImageCropped($event)"></image-cropper>
+                          <button *ngIf="showBannerCropper" (click)="saveCroppedBannerImage()"
+                            class="btn btn-primary mt-2">
                             Save
                           </button>
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        class="btn btn-back mt-4"
-                        (click)="open(previewModal)"
-                        *ngIf="IsBannerImage"
-                      >
+                      <button type="button" class="btn btn-back mt-4" (click)="open(previewModal)"
+                        *ngIf="IsBannerImage">
                         Preview Banner Image
                       </button>
-                      <div
-                        *ngIf="
+                      <div *ngIf="
                           episodeForm.get('bannerImage')?.invalid &&
                           (episodeForm.get('bannerImage')?.dirty ||
                             episodeForm.get('bannerImage')?.touched)
-                        "
-                        class="text-danger"
-                      >
-                        <div
-                          *ngIf="episodeForm.get('bannerImage')?.errors?.['required']"
-                        >
+                        " class="text-danger">
+                        <div *ngIf="episodeForm.get('bannerImage')?.errors?.['required']">
                           Banner Image is required.
                         </div>
                       </div>
@@ -384,71 +245,42 @@
                       <div class="input-block">
                         <label>Thumbnail Image</label>
                         <div
-                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
-                        >
+                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center">
                           <span>
-                            <img
-                              [src]="
+                            <img [src]="
                                 croppedThumbnailImage
                                   ? croppedThumbnailImage
                                   : 'assets/img/drop-icon.svg'
-                              "
-                              id="thumbnailPreview"
-                              alt="upload"
-                            />
+                              " id="thumbnailPreview" alt="upload" />
                           </span>
-                          <h6
-                            class="drop-browse align-center"
-                            *ngIf="!showThumbnailCropper"
-                          >
+                          <h6 class="drop-browse align-center" *ngIf="!showThumbnailCropper">
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
                           </h6>
                           <p class="text-muted" *ngIf="!showThumbnailCropper">
                             Maximum size: 50MB
                           </p>
-                          <input
-                            type="file"
-                            id="thumbnailImage"
-                            (change)="handleThumbnailImageInput($event)"
-                          />
+                          <input type="file" id="thumbnailImage" (change)="handleThumbnailImageInput($event)" />
                           <div id="thumbnailFrames"></div>
-                          <image-cropper
-                            *ngIf="showThumbnailCropper"
-                            [imageChangedEvent]="thumbnailImageChangedEvent"
-                            [aspectRatio]="1 / 1"
-                            [maintainAspectRatio]="true"
-                            format="png"
-                            (imageCropped)="thumbnailImageCropped($event)"
-                          ></image-cropper>
-                          <button
-                            *ngIf="showThumbnailCropper"
-                            (click)="saveCroppedThumbnailImage()"
-                            class="btn btn-primary mt-2"
-                          >
+                          <image-cropper *ngIf="showThumbnailCropper" [imageChangedEvent]="thumbnailImageChangedEvent"
+                            [aspectRatio]="1 / 1" [maintainAspectRatio]="true" format="png"
+                            (imageCropped)="thumbnailImageCropped($event)"></image-cropper>
+                          <button *ngIf="showThumbnailCropper" (click)="saveCroppedThumbnailImage()"
+                            class="btn btn-primary mt-2">
                             Save
                           </button>
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        class="btn btn-back mt-4"
-                        (click)="open(preview2Modal)"
-                        *ngIf="IsThumbnailImage"
-                      >
+                      <button type="button" class="btn btn-back mt-4" (click)="open(preview2Modal)"
+                        *ngIf="IsThumbnailImage">
                         Preview Thumbnail Image
                       </button>
-                      <div
-                        *ngIf="
+                      <div *ngIf="
                           episodeForm.get('thumbnailImage')?.invalid &&
                           (episodeForm.get('thumbnailImage')?.dirty ||
                             episodeForm.get('thumbnailImage')?.touched)
-                        "
-                        class="text-danger"
-                      >
-                        <div
-                          *ngIf="episodeForm.get('thumbnailImage')?.errors?.['required']"
-                        >
+                        " class="text-danger">
+                        <div *ngIf="episodeForm.get('thumbnailImage')?.errors?.['required']">
                           Thumbnail Image is required.
                         </div>
                       </div>
@@ -456,14 +288,10 @@
                   </div>
 
                   <div class="text-end">
-                    <button
-                      type="submit"
-                      class="btn btn-primary mt-4"
-                      [disabled]="
+                    <button type="submit" class="btn btn-primary mt-4" [disabled]="
                         showBannerCropper == true ||
                         showThumbnailCropper == true
-                      "
-                    >
+                      ">
                       Add
                     </button>
                   </div>
@@ -481,35 +309,17 @@
     <div class="form-header modal-header-title text-start mb-0">
       <h4 class="mb-0">Preview Banner Image</h4>
     </div>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-      (click)="modal.close()"
-    ></button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
   </div>
   <div class="modal-body">
     <a class="podcastdetailbanner mb-3">
       <span>
-        <img
-          [src]="
+        <img [src]="
             croppedBannerImage ? croppedBannerImage : 'assets/img/drop-icon.svg'
-          "
-          class="w-100 h-100"
-          style="object-fit: contain;"
-          alt="upload"
-          id="bannerPreview"
-        /> </span
-    ></a>
+          " class="w-100 h-100" style="object-fit: contain;" alt="upload" id="bannerPreview" /> </span></a>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      data-bs-dismiss="modal"
-      class="btn btn-back cancel-btn me-2"
-      (click)="modal.close()"
-    >
+    <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2" (click)="modal.close()">
       Cancel
     </button>
   </div>
@@ -519,37 +329,19 @@
     <div class="form-header modal-header-title text-start mb-0">
       <h4 class="mb-0">Preview Banner Image</h4>
     </div>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-      (click)="modal.close()"
-    ></button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
   </div>
   <div class="modal-body">
     <a class="podcastdetailbanner mb-3">
       <span>
-        <img
-          [src]="
+        <img [src]="
             croppedThumbnailImage
               ? croppedThumbnailImage
               : 'assets/img/drop-icon.svg'
-          "
-          class="w-100 h-100"
-          style="object-fit: contain;"
-          alt="upload"
-          id="thumbnailPreview"
-        /> </span
-    ></a>
+          " class="w-100 h-100" style="object-fit: contain;" alt="upload" id="thumbnailPreview" /> </span></a>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      data-bs-dismiss="modal"
-      class="btn btn-back cancel-btn me-2"
-      (click)="modal.close()"
-    >
+    <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2" (click)="modal.close()">
       Cancel
     </button>
   </div>
