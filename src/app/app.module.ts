@@ -63,6 +63,7 @@ import { LoaderComponent } from './admin/loader/loader.component';
 import { LoaderInterceptor } from './admin/main-interceptors/loader.interceptor';
 import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/manufacturer-orders/manufacturer-orders.component';
 import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/manufacturer-dashboard/manufacturer-dashboard.component';
+import { ManufacturerOrderVieComponent } from './admin/ecommerce/manufacturer/manufacturer-order-vie/manufacturer-order-vie.component';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,7 @@ import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/m
     LoaderComponent,
     ManufacturerOrdersComponent,
     ManufacturerDashboardComponent,
+    ManufacturerOrderVieComponent,
   ],
   imports: [
     BrowserModule,

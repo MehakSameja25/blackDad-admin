@@ -39,6 +39,7 @@ import { ProductCategoriesComponent } from './admin/ecommerce/product-categories
 import { DetalisProductComponent } from './admin/ecommerce/product/detalis-product/detalis-product.component';
 import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/manufacturer-orders/manufacturer-orders.component';
 import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/manufacturer-dashboard/manufacturer-dashboard.component';
+import { ManufacturerOrderVieComponent } from './admin/ecommerce/manufacturer/manufacturer-order-vie/manufacturer-order-vie.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
@@ -238,6 +239,11 @@ const routes: Routes = [
   {
     path: 'manufacturer/my-orders',
     component: ManufacturerOrdersComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'manufacturer/order/view/:id',
+    component: ManufacturerOrderVieComponent,
     canActivate: [AuthGuard],
   },
   {
