@@ -42,7 +42,7 @@ export class AddNewRoleComponent {
               this.roleData.role.push({
                 id: data.id,
                 menu_id: data.menu_id,
-                status: JSON.parse(data.status),
+                status: data.status,
               });
             });
           }

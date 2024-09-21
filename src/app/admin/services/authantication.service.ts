@@ -57,4 +57,14 @@ export class AuthanticationService {
       }
     );
   }
+
+  getDashboard() {
+    return apiCallWrapper(
+      this.http.get<any>(`${environment.apiUrl}/admin-dashboard`),
+      {
+        notificationsService: this.notifications,
+        action: 'Fetching Dashboard details',
+      }
+    );
+  }
 }

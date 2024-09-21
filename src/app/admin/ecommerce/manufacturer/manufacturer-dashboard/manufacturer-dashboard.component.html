@@ -198,7 +198,7 @@
                 </div>
                 <div class="col-auto">
                   <a
-                    href="companies.html"
+                    routerLink="/products"
                     class="btn-right btn btn-sm btn-outline-primary"
                   >
                     View All
@@ -210,7 +210,38 @@
               <div class="table-responsive">
                 <table class="table table-stripped table-hover">
                   <tbody>
-                    <tr>
+                    <tr *ngFor="let topProducts of topSellingProducts">
+                      <td>
+                        <h2 class="table-avatar">
+                          <div
+                            class="company-avatar avatar-md me-2 companies company-icon"
+                          >
+                            <img
+                              class="avatar-img rounded-circle company"
+                              src="https://api.blackdad.chooseyourfabric.in/api/v1/{{
+                                topProducts.product?.product_image
+                              }}"
+                              alt="Company Image"
+                            />
+                          </div>
+                          <span
+                            >{{ topProducts.product?.product_name }}
+                            <span class="plane-type">Clothing</span></span
+                          >
+                        </h2>
+                      </td>
+                      <td>{{ topProducts.soldCount }} Sold</td>
+                      <td class="text-end">
+                        <a
+                          routerLink="/details-product/{{
+                            topProducts.product?.id
+                          }}"
+                          class="view-companies btn"
+                          >View</a
+                        >
+                      </td>
+                    </tr>
+                    <!-- <tr>
                       <td>
                         <h2 class="table-avatar">
                           <div
@@ -263,34 +294,7 @@
                           >View</a
                         >
                       </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <h2 class="table-avatar">
-                          <div
-                            class="company-avatar avatar-md me-2 companies company-icon"
-                          >
-                            <img
-                              class="avatar-img rounded-circle company"
-                              src="assets/img/companies/company-01.svg"
-                              alt="Company Image"
-                            />
-                          </div>
-                          <span
-                            >Hermann Groups
-                            <span class="plane-type">Clothing</span></span
-                          >
-                        </h2>
-                      </td>
-                      <td>24 Unit Sold</td>
-                      <td class="text-end">
-                        <a
-                          href="product_details.html"
-                          class="view-companies btn"
-                          >View</a
-                        >
-                      </td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>

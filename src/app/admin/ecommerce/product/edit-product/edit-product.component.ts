@@ -22,17 +22,10 @@ export class EditProductComponent implements OnInit {
   manufacturers!: any;
   productForm!: FormGroup;
   selectedColors: any[] = [];
-  bannerImageChangedEvent: any = '';
-  showBannerCropper = false;
-  croppedBannerImage: any = '';
   bannerImageSrc: Promise<string | null> | null = null;
   thumbnailImageSrc: Promise<string | null> | null = null;
+  sizeChartImageSrc: string | null = null;
   type = 'Add';
-
-  thumbnailImageChangedEvent: any = '';
-  showThumbnailCropper = false;
-  croppedThumbnailImage: any = '';
-
   colors: any[] = [];
   newColor: any = '';
   sizes: any[] = [];
@@ -59,6 +52,7 @@ export class EditProductComponent implements OnInit {
       description: ['', Validators.required],
       images: [[]],
       productImage: [],
+      sizeChartImage: [],
     });
   }
 
@@ -91,6 +85,7 @@ export class EditProductComponent implements OnInit {
         stockStatus: productData.is_stock_available ? true : false,
         stock: productData.stock_quantity,
         description: productData.description,
+        sizeChartImage: productData.sizeChart,
         productImage: productData.productImage,
       });
     });
@@ -189,6 +184,19 @@ export class EditProductComponent implements OnInit {
     return colors.length > 0 ? null : { required: true };
   }
 
+  handleSizeChartImageInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files ? input.files[0] : null;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        this.sizeChartImageSrc = e.target?.result as string;
+        this.productForm.patchValue({ sizeChartImage: file });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   onSubmit() {
     if (this.productForm.valid) {
       const formData = this.createFormData();
@@ -240,6 +248,11 @@ export class EditProductComponent implements OnInit {
     formData.append('color', JSON.stringify(this.colors));
 
     formData.append('size', JSON.stringify(this.sizes));
+
+    formData.append(
+      'sizeChart',
+      this.productForm.get('sizeChartImage')?.value
+    );
 
     for (let data of this.productForm.get('images')?.value) {
       formData.append('product_image', data);

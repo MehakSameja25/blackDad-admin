@@ -245,7 +245,11 @@ const routes: Routes = [
     component: ManufacturerDashboardComponent,
     canActivate: [AuthGuard],
   },
-  
+  {
+    path: 'admin/dashboard',
+    component: ManufacturerDashboardComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
