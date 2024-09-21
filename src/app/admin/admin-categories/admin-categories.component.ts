@@ -369,18 +369,13 @@ export class AdminCategoriesComponent implements OnInit {
     } else {
       const formData = this.prepareFormData(this.addCategoryForm);
 
-      this.categoriesService.addCategory(formData).subscribe(
-        (res) => {
-          if (res) {
-            this.ngOnInit();
-            this.addCategoryForm.reset();
-            this.modalService.dismissAll();
-          }
-        },
-        (error) => {
-          alert(`API Error:, ${error}`);
+      this.categoriesService.addCategory(formData).subscribe((res) => {
+        if (res) {
+          this.ngOnInit();
+          this.addCategoryForm.reset();
+          this.modalService.dismissAll();
         }
-      );
+      });
     }
   }
 
