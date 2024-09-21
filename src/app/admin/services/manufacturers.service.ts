@@ -69,4 +69,14 @@ export class ManufacturersService {
       }
     );
   }
+
+  updateOrder(data: any) {
+    return apiCallWrapper(
+      this.http.put(`${environment.apiUrl}/update-order`, data),
+      {
+        notificationsService: this.notifications,
+        action: 'Status Updated',
+      }
+    );
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthanticationService } from 'src/app/admin/services/authantication.service';
 
 @Component({
@@ -9,7 +10,8 @@ import { AuthanticationService } from 'src/app/admin/services/authantication.ser
 export class ManufacturerDashboardComponent implements OnInit {
   dashboardData: any;
   topSellingProducts: any;
-  constructor(private authService: AuthanticationService) {}
+  recentProducts: any;
+  constructor(private authService: AuthanticationService, public router : Router) {}
 
   ngOnInit(): void {
     this.get();
@@ -20,6 +22,7 @@ export class ManufacturerDashboardComponent implements OnInit {
       if (res) {
         this.dashboardData = res;
         this.topSellingProducts = res.data?.topSellingProducts;
+        this.recentProducts = res.data?.recentOrders;
       }
     });
   }

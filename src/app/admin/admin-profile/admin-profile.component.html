@@ -16,8 +16,12 @@
         {{ successMessage }}
       </div> -->
 
-      <div class="alert alert-danger" role="alert" style="text-align: center"
-        *ngIf="updateForm.get('confirmPassword')?.errors?.['passwordMismatch'] && updateForm.get('confirmPassword')?.touched">
+      <div
+        class="alert alert-danger"
+        role="alert"
+        style="text-align: center"
+        *ngIf="updateForm.get('confirmPassword')?.errors?.['passwordMismatch'] && updateForm.get('confirmPassword')?.touched"
+      >
         <i class="fa-solid fa-triangle-exclamation" style="color: #f42a2a"></i>
         <strong style="margin-left: 1rem">Passwords do not match</strong>
       </div>
@@ -25,18 +29,29 @@
         <div class="col-sm-12">
           <div class="card">
             <div class="card-body">
-              <div class="form-group-item border-0 mb-0" *ngIf="userDetails && userDetails.user">
+              <div
+                class="form-group-item border-0 mb-0"
+                *ngIf="userDetails && userDetails.user"
+              >
                 <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
                   <div class="row align-item-center">
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Name</label>
-                        <input type="text" class="form-control" formControlName="name"
-                          [(ngModel)]="userDetails.user.name" placeholder="Enter Name" />
-                        <div class="text-danger" *ngIf="
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="name"
+                          [(ngModel)]="userDetails.user.name"
+                          placeholder="Enter Name"
+                        />
+                        <div
+                          class="text-danger"
+                          *ngIf="
                             updateForm.get('name')?.invalid &&
                             updateForm.get('name')?.touched
-                          ">
+                          "
+                        >
                           Name is required
                         </div>
                       </div>
@@ -44,12 +59,21 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Email</label>
-                        <input type="email" class="form-control" formControlName="email" placeholder="Enter Email"
-                          [readOnly]="userRole != 'Super Admin'" [(ngModel)]="userDetails.user.email" />
-                        <div class="text-danger" *ngIf="
+                        <input
+                          type="email"
+                          class="form-control"
+                          formControlName="email"
+                          placeholder="Enter Email"
+                          [readOnly]="userRole != 'Super Admin'"
+                          [(ngModel)]="userDetails.user.email"
+                        />
+                        <div
+                          class="text-danger"
+                          *ngIf="
                             updateForm.get('email')?.invalid &&
                             updateForm.get('email')?.touched
-                          ">
+                          "
+                        >
                           Invalid email
                         </div>
                       </div>
@@ -57,34 +81,62 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3 position-relative">
                         <label>Password</label>
-                        <input type="password" class="form-control" formControlName="password"
-                          placeholder="Enter Password" />
+                        <input
+                          [type]="type2"
+                          class="form-control"
+                          formControlName="password"
+                          placeholder="Enter Password"
+                        />
                         <span class="propasicon">
-                          <i class="fa-solid fa-eye"></i>
-                          <i class="fa-regular d-none fa-eye-slash"></i>
+                          <i
+                            class="fa-solid fa-eye"
+                            (click)="showPassword2()"
+                            *ngIf="type2 === 'password'"
+                          ></i>
+                          <i
+                            class="fa-regular fa-eye-slash"
+                            (click)="showPassword2()"
+                            *ngIf="type2 === 'text'"
+                          ></i>
                         </span>
-                        <div class="text-danger" *ngIf="
+                        <!-- <div class="text-danger" *ngIf="
                             updateForm.get('password')?.invalid &&
                             updateForm.get('password')?.touched
                           ">
                           Password is required
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
                       <div class="input-block mb-3 position-relative">
                         <label>Confirm Password</label>
-                        <input type="password" class="form-control" formControlName="confirmPassword"
-                          placeholder="Confirm Password" />
+                        <input
+                          [type]="type"
+                          class="form-control"
+                          formControlName="confirmPassword"
+                          placeholder="Confirm Password"
+                        />
                         <span class="propasicon">
-                          <i class="fa-solid fa-eye"></i>
-                          <i class="fa-regular d-none fa-eye-slash"></i>
+                          <i
+                            class="fa-solid fa-eye"
+                            (click)="showToggle()"
+                            *ngIf="type === 'password'"
+                          ></i>
+                          <i
+                            class="fa-regular fa-eye-slash"
+                            (click)="showToggle()"
+                            *ngIf="type === 'text'"
+                          ></i>
                         </span>
                       </div>
                     </div>
 
                     <div class="col-lg-3 col-md-4 col-sm-12">
-                      <button type="submit" class="btn btn-primary w-100 mt-4" [disabled]="updateForm.invalid">
+                      <button
+                        type="submit"
+                        class="btn btn-primary w-100 mt-4"
+                        [disabled]="updateForm.invalid"
+                      >
                         Update
                       </button>
                     </div>

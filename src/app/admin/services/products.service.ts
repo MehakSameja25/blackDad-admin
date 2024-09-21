@@ -11,23 +11,18 @@ export class ProductsService {
   constructor(
     private http: HttpClient,
     private notifications: NotificationsService
-  ) { }
+  ) {}
 
   list() {
-    return apiCallWrapper(
-      this.http.get(`${environment.apiUrl}/get-product`),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Product',
-      }
-    );
+    return apiCallWrapper(this.http.get(`${environment.apiUrl}/get-product`), {
+      notificationsService: this.notifications,
+      action: 'Fetching Product',
+    });
   }
 
   get(id: string | number | null) {
     return apiCallWrapper(
-      this.http.get(
-        `${environment.apiUrl}/get-productById?productId=${id}`
-      ),
+      this.http.get(`${environment.apiUrl}/get-productById?productId=${id}`),
       {
         notificationsService: this.notifications,
         action: 'Fetching Product Details',
@@ -47,9 +42,7 @@ export class ProductsService {
 
   delete(id: string | number | null) {
     return apiCallWrapper(
-      this.http.delete(
-        `${environment.apiUrl}/delete-product?productId=${id}`
-      ),
+      this.http.delete(`${environment.apiUrl}/delete-product?productId=${id}`),
       {
         notificationsService: this.notifications,
         action: 'Deleting Product',
@@ -70,19 +63,30 @@ export class ProductsService {
     );
   }
 
-  deleteProductImage(data: { productImageId: string | number | null, isMatched: boolean }) {
-    return this.http.post(
-      `${environment.apiUrl}/delete-product-image`,
-      data
-    )
+  deleteProductImage(data: {
+    productImageId: string | number | null;
+    isMatched: boolean;
+  }) {
+    return this.http.post(`${environment.apiUrl}/delete-product-image`, data);
   }
 
-  getOrders(){
+  getOrders() {
     return apiCallWrapper(
       this.http.get(`${environment.apiUrl}/manufacturer-order`),
       {
         notificationsService: this.notifications,
         action: 'Fetching Orders',
+      }
+    );
+  }
+  getOrderDetails(id: string | null) {
+    return apiCallWrapper(
+      this.http.get(
+        `${environment.apiUrl}/manufacturer-orderById?cartItemId=${id}`
+      ),
+      {
+        notificationsService: this.notifications,
+        action: 'Fetching Order Details',
       }
     );
   }

@@ -78,7 +78,7 @@
             <div class="card-body">Bar chart for Revenue</div>
           </div>
         </div>
-        <div class="col-12 col-md-5">
+        <div class="col-12 col-md-5" *ngIf="router.url.includes('/admin')">
           <div class="card super-admin-dash-card border-0 h-100 mb-0">
             <div class="card-header">
               <div class="row align-center">
@@ -87,7 +87,7 @@
                 </div>
                 <div class="col-auto">
                   <a
-                    href="companies.html"
+                    *ngIf="router.url.includes('/admin')"
                     class="btn-right btn btn-sm btn-outline-primary"
                   >
                     View All
@@ -121,7 +121,7 @@
                       </td>
                       <td class="text-end">
                         <a
-                          href="manufacturers_details.html"
+                          *ngIf="router.url.includes('/admin')"
                           class="view-companies btn"
                           >View</a
                         >
@@ -149,7 +149,7 @@
                       </td>
                       <td class="text-end">
                         <a
-                          href="manufacturers_details.html"
+                          *ngIf="router.url.includes('/admin')"
                           class="view-companies btn"
                           >View</a
                         >
@@ -177,7 +177,7 @@
                       </td>
                       <td class="text-end">
                         <a
-                          href="manufacturers_details.html"
+                          *ngIf="router.url.includes('/admin')"
                           class="view-companies btn"
                           >View</a
                         >
@@ -199,6 +199,7 @@
                 <div class="col-auto">
                   <a
                     routerLink="/products"
+                    *ngIf="router.url.includes('/admin')"
                     class="btn-right btn btn-sm btn-outline-primary"
                   >
                     View All
@@ -218,9 +219,7 @@
                           >
                             <img
                               class="avatar-img rounded-circle company"
-                              src="https://api.blackdad.chooseyourfabric.in/api/v1/{{
-                                topProducts.product?.product_image
-                              }}"
+                              src="{{ topProducts.product?.product_image }}"
                               alt="Company Image"
                             />
                           </div>
@@ -237,6 +236,7 @@
                             topProducts.product?.id
                           }}"
                           class="view-companies btn"
+                          *ngIf="router.url.includes('/admin')"
                           >View</a
                         >
                       </td>
@@ -244,7 +244,7 @@
                     <!-- <tr>
                       <td>
                         <h2 class="table-avatar">
-                          <div
+                          <div 
                             class="company-avatar avatar-md me-2 companies company-icon"
                           >
                             <img
@@ -321,12 +321,12 @@
                   <h5 class="card-title">Recent Orders</h5>
                 </div>
                 <div class="col-auto">
-                  <a
-                    href="invoices.html"
+                  <!-- <a
                     class="btn-right btn btn-sm btn-outline-primary"
+                    *ngIf="router.url.includes('/admin')"
                   >
                     View All
-                  </a>
+                  </a> -->
                 </div>
               </div>
             </div>
@@ -334,12 +334,14 @@
               <div class="table-responsive">
                 <table class="table table-stripped table-hover">
                   <tbody>
-                    <tr>
+                    <tr *ngFor="let recent of recentProducts">
                       <td>
                         <div class="invoice-link dash-incoice-table">
-                          #INV12454
+                          <!-- #INV12454 -->
                         </div>
-                        <span class="dash-incoice-date">15 Feb 2024</span>
+                        <span class="dash-incoice-date">{{
+                          recent.created_at | date : "MMM d | h:mm a"
+                        }}</span>
                       </td>
                       <td>
                         <h2 class="table-avatar">
@@ -348,23 +350,23 @@
                           >
                             <img
                               class="avatar-img rounded-circle company"
-                              src="assets/img/companies/company-01.svg"
+                              src="{{recent.product?.productImage}}"
                               alt="Company Image"
                             />
                           </div>
-                          <span>Hermann Groups</span>
+                          <span>{{recent.product?.product_name}}</span>
                         </h2>
                       </td>
-                      <td>
+                      <!-- <td>
                         Book Name <br />
                         <span class="plane-type">(Book)</span>
-                      </td>
-                      <td>
+                      </td> -->
+                      <!-- <td>
                         <span
-                          class="badge bg-success-light d-inline-flex align-items-center"
-                          ><i class="fe fe-check me-1"></i>Delevered</span
+                          class="badge bg-warning-light d-inline-flex align-items-center"
+                          ><i class="fe fe-check me-1"></i>pending</span
                         >
-                      </td>
+                      </td> -->
                       <!-- <td class="text-end">
                             <a
                               href="invoice-subscription.html"

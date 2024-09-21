@@ -21,8 +21,10 @@ export class ManufacturerOrdersComponent implements OnInit {
   tableColumns = [
     { title: 'Image' },
     { title: 'Product Name' },
-    { title: 'Stock Quantity' },
+    { title: 'Gender' },
+    { title: 'Quantity' },
     { title: 'Price' },
+    { title: 'Created At' },
     { title: 'Details' },
   ];
 
@@ -39,11 +41,13 @@ export class ManufacturerOrdersComponent implements OnInit {
   getOrders() {
     this.orderService.getOrders().subscribe((res: any) => {
       if (res) {
-        this.tableData = res.data[0]?.products?.map((item: any) => [
-          `<div class="table-img"><img src="${item.productImage}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
-          item.product_name,
-          item.stock_quantity,
-          item.price,
+        this.tableData = res.data[0]?.cartItem?.map((item: any) => [
+          `<div class="table-img"><img src="${item.product?.productImage}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
+          item.product?.product_name,
+          item.gender,
+          item.quantity,
+          '$' + item.price,
+          item.created_at.split('T')[0],
           `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="details">
              <svg

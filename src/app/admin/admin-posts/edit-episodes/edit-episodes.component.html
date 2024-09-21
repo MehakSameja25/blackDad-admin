@@ -97,8 +97,8 @@
                           [settings]="dropdownSettings"
                           [data]="allcategories"
                           formControlName="category"
-                          (onSelect)="onCategorySelect($event.id)"
-                          (onDeSelect)="onCategoryDeSelect($event.id)"
+                          (onSelect)="onCategorySelect($event)"
+                          (onDeSelect)="onCategoryDeSelect($event)"
                         >
                         </ng-multiselect-dropdown>
                       </div>

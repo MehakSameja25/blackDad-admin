@@ -102,19 +102,22 @@ export class AdminProfileComponent {
       }
     });
   }
-  show: boolean = false;
-  hidden: boolean = true;
-  type: string = 'password';
 
-  showPassword() {
-    this.show = true;
-    this.hidden = false;
-    this.type = 'text';
+  type: string = 'password';
+  type2: string = 'password';
+  showToggle(): void {
+    if (this.type === 'password') {
+      this.type = 'text';
+    } else {
+      this.type = 'password';
+    }
   }
 
-  hidePassword() {
-    this.hidden = true;
-    this.show = false;
-    this.type = 'password';
+  showPassword2(): void {
+    if (this.type2 === 'password') {
+      this.type2 = 'text';
+    } else {
+      this.type2 = 'password';
+    }
   }
 }
