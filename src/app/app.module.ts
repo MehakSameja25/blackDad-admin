@@ -48,10 +48,10 @@ import { ImageCropperComponent } from 'ngx-image-cropper';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
-import { ListManufacturerComponent } from './admin/ecommerce/manufacturer/list-manufacturer/list-manufacturer.component';
+import { ListManufacturerComponent } from './admin/ecommerce/manufacturer/main/list-manufacturer/list-manufacturer.component';
 import { ListProductComponent } from './admin/ecommerce/product/list-product/list-product.component';
 import { EditProductComponent } from './admin/ecommerce/product/edit-product/edit-product.component';
-import { EditManufacturerComponent } from './admin/ecommerce/manufacturer/edit-manufacturer/edit-manufacturer.component';
+import { EditManufacturerComponent } from './admin/ecommerce/manufacturer/main/edit-manufacturer/edit-manufacturer.component';
 import { ProductCategoriesComponent } from './admin/ecommerce/product-categories/product-categories.component';
 import { DetalisProductComponent } from './admin/ecommerce/product/detalis-product/detalis-product.component';
 import {
@@ -61,10 +61,11 @@ import {
 import { TooltipDirective } from './Directives/tooltip.directive';
 import { LoaderComponent } from './admin/loader/loader.component';
 import { LoaderInterceptor } from './admin/main-interceptors/loader.interceptor';
-import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/manufacturer-orders/manufacturer-orders.component';
-import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/manufacturer-dashboard/manufacturer-dashboard.component';
-import { ManufacturerOrderVieComponent } from './admin/ecommerce/manufacturer/manufacturer-order-vie/manufacturer-order-vie.component';
+import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/orders/manufacturer-orders/manufacturer-orders.component';
+import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/main/manufacturer-dashboard/manufacturer-dashboard.component';
+import { ManufacturerOrderVieComponent } from './admin/ecommerce/manufacturer/orders/manufacturer-order-vie/manufacturer-order-vie.component';
 import { ProductPreviewComponent } from './admin/ecommerce/product/product-preview/product-preview.component';
+import { ListComponent } from './admin/ecommerce/manufacturer/roles/list/list.component';
 
 @NgModule({
   declarations: [
@@ -116,6 +117,7 @@ import { ProductPreviewComponent } from './admin/ecommerce/product/product-previ
     ManufacturerDashboardComponent,
     ManufacturerOrderVieComponent,
     ProductPreviewComponent,
+    ListComponent,
   ],
   imports: [
     BrowserModule,

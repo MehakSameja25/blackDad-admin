@@ -5,7 +5,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { ProductsService } from '../../../services/products.service';
+import { ProductsService } from '../../../../services/products.service';
 import { Router } from '@angular/router';
 
 @Component({

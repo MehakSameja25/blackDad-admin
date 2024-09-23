@@ -31,15 +31,15 @@ import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/ad
 import { EpisodeScheduleComponent } from './admin/admin-scheduling/episode-schedule/episode-schedule.component';
 import { ArticleScheduleComponent } from './admin/admin-scheduling/article-schedule/article-schedule.component';
 import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
-import { ListManufacturerComponent } from './admin/ecommerce/manufacturer/list-manufacturer/list-manufacturer.component';
-import { EditManufacturerComponent } from './admin/ecommerce/manufacturer/edit-manufacturer/edit-manufacturer.component';
+import { ListManufacturerComponent } from './admin/ecommerce/manufacturer/main/list-manufacturer/list-manufacturer.component';
+import { EditManufacturerComponent } from './admin/ecommerce/manufacturer/main/edit-manufacturer/edit-manufacturer.component';
 import { ListProductComponent } from './admin/ecommerce/product/list-product/list-product.component';
 import { EditProductComponent } from './admin/ecommerce/product/edit-product/edit-product.component';
 import { ProductCategoriesComponent } from './admin/ecommerce/product-categories/product-categories.component';
 import { DetalisProductComponent } from './admin/ecommerce/product/detalis-product/detalis-product.component';
-import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/manufacturer-orders/manufacturer-orders.component';
-import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/manufacturer-dashboard/manufacturer-dashboard.component';
-import { ManufacturerOrderVieComponent } from './admin/ecommerce/manufacturer/manufacturer-order-vie/manufacturer-order-vie.component';
+import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/orders/manufacturer-orders/manufacturer-orders.component';
+import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/main/manufacturer-dashboard/manufacturer-dashboard.component';
+import { ManufacturerOrderVieComponent } from './admin/ecommerce/manufacturer/orders/manufacturer-order-vie/manufacturer-order-vie.component';
 import { ProductPreviewComponent } from './admin/ecommerce/product/product-preview/product-preview.component';
 
 const routes: Routes = [
