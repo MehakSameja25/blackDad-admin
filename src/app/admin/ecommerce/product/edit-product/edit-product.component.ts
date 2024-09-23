@@ -249,10 +249,10 @@ export class EditProductComponent implements OnInit {
 
     formData.append('size', JSON.stringify(this.sizes));
 
-    formData.append(
-      'sizeChart',
-      this.productForm.get('sizeChartImage')?.value
-    );
+    // formData.append(
+    //   'sizeChart',
+    //   this.productForm.get('sizeChartImage')?.value
+    // );
 
     for (let data of this.productForm.get('images')?.value) {
       formData.append('product_image', data);
