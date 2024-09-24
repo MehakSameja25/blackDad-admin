@@ -33147,6 +33147,7 @@ span.propasicon {
 .selectscontent ul.dropdown-menu {
   border-radius: 0 0 6px 6px;
   border: 1px solid #b4b6ba;
+  padding: 8px 0;
 }
 
 .dropdown-item.active,
@@ -33154,12 +33155,12 @@ span.propasicon {
   background-color: #7D00B2;
 }
 
-.selectscontent ul.dropdown-menu li {
+/* .selectscontent ul.dropdown-menu li {
   border-bottom: 1px solid #b4b6ba;
 }
 
 .selectscontent ul.dropdown-menu li:last-child {
   border-bottom: none;
-}
+} */
 
 /* cartnewpage css end   */
