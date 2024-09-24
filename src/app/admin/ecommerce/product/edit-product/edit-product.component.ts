@@ -225,6 +225,12 @@ export class EditProductComponent implements OnInit {
     }
   }
 
+  saveData() {
+    const formData = this.createFormData();
+    localStorage.setItem('Preview', JSON.stringify(formData));
+    this.router.navigate(['/product/preview']);
+  }
+
   private createFormData(): FormData {
     const formData = new FormData();
 
