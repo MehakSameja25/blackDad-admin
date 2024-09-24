@@ -186,6 +186,7 @@ export class RolesComponent implements OnInit {
       this.modalService.open(content, {
         ariaLabelledBy: 'modal-basic-title',
         windowClass: 'share-modal',
+        modalDialogClass: 'modal-dialog-centered',
       });
     });
   }

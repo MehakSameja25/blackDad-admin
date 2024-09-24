@@ -65,7 +65,9 @@ import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/orde
 import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/main/manufacturer-dashboard/manufacturer-dashboard.component';
 import { ManufacturerOrderVieComponent } from './admin/ecommerce/manufacturer/orders/manufacturer-order-vie/manufacturer-order-vie.component';
 import { ProductPreviewComponent } from './admin/ecommerce/product/product-preview/product-preview.component';
+import { AddComponent } from './admin/ecommerce/manufacturer/roles/add/add.component';
 import { ListComponent } from './admin/ecommerce/manufacturer/roles/list/list.component';
+import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/assign.component';
 
 @NgModule({
   declarations: [
@@ -117,7 +119,9 @@ import { ListComponent } from './admin/ecommerce/manufacturer/roles/list/list.co
     ManufacturerDashboardComponent,
     ManufacturerOrderVieComponent,
     ProductPreviewComponent,
+    AddComponent,
     ListComponent,
+    AssignComponent,
   ],
   imports: [
     BrowserModule,

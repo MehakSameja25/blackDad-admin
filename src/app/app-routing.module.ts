@@ -41,6 +41,9 @@ import { ManufacturerOrdersComponent } from './admin/ecommerce/manufacturer/orde
 import { ManufacturerDashboardComponent } from './admin/ecommerce/manufacturer/main/manufacturer-dashboard/manufacturer-dashboard.component';
 import { ManufacturerOrderVieComponent } from './admin/ecommerce/manufacturer/orders/manufacturer-order-vie/manufacturer-order-vie.component';
 import { ProductPreviewComponent } from './admin/ecommerce/product/product-preview/product-preview.component';
+import { AddComponent } from './admin/ecommerce/manufacturer/roles/add/add.component';
+import { ListComponent } from './admin/ecommerce/manufacturer/roles/list/list.component';
+import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/assign.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
@@ -197,6 +200,8 @@ const routes: Routes = [
   },
 
   /**----Ecommerce Routes---- **/
+
+  // for admin
   {
     path: 'manufacturers',
     component: ListManufacturerComponent,
@@ -243,6 +248,33 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'admin/dashboard',
+    component: ManufacturerDashboardComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin/manufecturer/roles',
+    component: ListComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin/manufecturer/roles/add',
+    component: AddComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin/manufecturer/roles/update/:id',
+    component: AddComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin/manufecturer/roles/assigning',
+    component: AssignComponent,
+    canActivate: [AuthGuard],
+  },
+
+  // for manufacturers
+  {
     path: 'manufacturer/my-orders',
     component: ManufacturerOrdersComponent,
     canActivate: [AuthGuard],
@@ -254,11 +286,6 @@ const routes: Routes = [
   },
   {
     path: 'manufacturer/dashboard',
-    component: ManufacturerDashboardComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'admin/dashboard',
     component: ManufacturerDashboardComponent,
     canActivate: [AuthGuard],
   },
