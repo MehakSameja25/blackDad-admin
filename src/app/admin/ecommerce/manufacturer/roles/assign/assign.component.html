@@ -1,0 +1,84 @@
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>Assign Role</h5>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <app-go-back></app-go-back>
+      </div>
+
+      <!-- <div
+          class="alert alert-danger"
+          role="alert"
+          class="{{ successalertClass }}"
+        >
+          <strong>{{ errormessage }}</strong>
+        </div> -->
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="form-group-item border-0 mb-0">
+                <form [formGroup]="myForm">
+                  <div class="row align-item-center">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Member</label>
+                        <select
+                          class="form-select"
+                          aria-label="Default select example"
+                          formControlName="userId"
+                        >
+                          <option
+                            *ngFor="let member of allMembers"
+                            [value]="member?.user?.id"
+                          >
+                            {{ member?.user?.name | titlecase }} - (
+                            {{ member?.user?.email }} )
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Role Name</label>
+                        <select
+                          class="form-select"
+                          formControlName="roleTypeId"
+                          aria-label="Default select example"
+                          *ngIf="allRoles && allRoles.data"
+                        >
+                          <option
+                            *ngFor="let role of allRoles.data.role"
+                            [value]="role.id"
+                          >
+                            {{ role.name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <a
+                      class="btn btn-primary mt-4"
+                      type="submit"
+                      (click)="onsubmit()"
+                      >Submit</a
+                    >
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
