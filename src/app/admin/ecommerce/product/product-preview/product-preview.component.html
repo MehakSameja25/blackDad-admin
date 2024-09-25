@@ -2,61 +2,94 @@
   <div class="container cart-page">
     <div class="product-cart">
       <div class="product-img-wrapper">
-        <img alt="Product Thumbnail"
-          src="https://api.blackdad.chooseyourfabric.in/api/v1/storage/images/1726921900265loscar.webp">
-        <div class="d-flex gap-3 align-items-center product-images"><a class="pointer">
-            <img alt="Product Thumbnail"
-              src="https://api.blackdad.chooseyourfabric.in/api/v1/storage/images/1726921900265loscar.webp"></a>
+        <img
+          alt="Product Thumbnail"
+          src="https://api.blackdad.chooseyourfabric.in/api/v1/storage/images/1726921900265loscar.webp"
+        />
+        <div class="d-flex gap-3 align-items-center product-images">
+          <a class="pointer">
+            <img
+              alt="Product Thumbnail"
+              src="https://api.blackdad.chooseyourfabric.in/api/v1/storage/images/1726921900265loscar.webp"
+          /></a>
         </div>
       </div>
       <form class="ng-untouched ng-pristine ng-valid">
         <div>
           <div class="mb-3">
-            <h1 class="mb-0">GODPWRD White Short Sleeve T-Shirt: Stay Plugged-In</h1>
+            <h1 class="mb-0">{{ this.productData.product_name }}</h1>
           </div>
-          <p class="text-break">Embrace your inner strength with the GODPWRD short sleeve t-shirt, designed for those
-            who live with purpose and faith. Made from soft, breathable fabric, this tee offers all-day comfort while
-            keeping you plugged into what truly powers you. Featuring a bold GODPWRD logo, it's a reminder to stay
-            connected to your source of inspiration. Whether you're on the go or reflecting on your journey, this
-            shirt combines style and meaning for any occasion.
-
-            Stay empowered. Stay plugged-in. Stay GODPWRD.</p>
-          <div class="d-flex align-items-center gap-3 mb-3"> Price <h2 class="mb-0">$15</h2>
+          <p class="text-break">
+            {{ this.productData.description }}
+          </p>
+          <div class="d-flex align-items-center gap-3 mb-3">
+            Price
+            <h2 class="mb-0">${{ this.productData.price }}</h2>
           </div>
           <div class="selectscontent">
-            <div class="form-group mb-3 position-relative"><label class="form-label">Color</label>
-              <div class="dropdown"><button type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                  class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2"><span
-                    class="clrbox"></span> white </button>
+            <div class="form-group mb-3 position-relative">
+              <label class="form-label">Color</label>
+              <div class="dropdown">
+                <button
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2"
+                >
+                  <span
+                    class="clrbox"
+                    [ngStyle]="{ backgroundColor: colors[0] }"
+                  ></span>
+                  {{ colors[0] }}
+                </button>
                 <ul class="dropdown-menu w-100 min-w-100">
-                  <li><a class="dropdown-item d-flex align-items-center gap-2 pointer"><span class="clrbox"></span>
-                      white </a></li>
+                  <li *ngFor="let color of colors">
+                    <a
+                      class="dropdown-item d-flex align-items-center gap-2 pointer"
+                      ><span
+                        class="clrbox"
+                        [ngStyle]="{ backgroundColor: color }"
+                      ></span>
+                      {{ color }}
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
-
 
             <div class="form-group mb-3">
               <label class="form-label d-flex justify-content-between">
                 <span>Size</span>
               </label>
               <div class="dropdown">
-                <button type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                  class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2">
-                  M
+                <button
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2"
+                >
+                  {{ sizes[0] }}
                 </button>
                 <ul class="dropdown-menu w-100 min-w-100">
-                  <li><a class="dropdown-item pointer">M</a></li>
-                  <li><a class="dropdown-item pointer">L</a></li>
+                  <li *ngFor="let size of sizes">
+                    <a class="dropdown-item pointer">{{ size }}</a>
+                  </li>
+                  <!-- <li><a class="dropdown-item pointer">L</a></li>
                   <li><a class="dropdown-item pointer">XL</a></li>
-                  <li><a class="dropdown-item pointer">XXL</a></li>
+                  <li><a class="dropdown-item pointer">XXL</a></li> -->
                 </ul>
               </div>
             </div>
             <div class="form-group mb-3">
               <label class="form-label">Gender</label>
-              <div class="dropdown"><button type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                  class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2"> Male
+              <div class="dropdown">
+                <button
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2"
+                >
+                  Male
                 </button>
                 <ul class="dropdown-menu w-100 min-w-100">
                   <li><a class="dropdown-item pointer">Male</a></li>
@@ -64,20 +97,44 @@
                 </ul>
               </div>
             </div>
-            <div class="mb-20"><label class="form-label">Add Quantity:</label>
+            <div class="mb-20">
+              <label class="form-label">Add Quantity:</label>
               <div class="quantity-group">
                 <button type="button" class="btn border-0 p-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="3" viewBox="0 0 13 3" fill="none">
-                    <path d="M12.2002 1.5H1.2002" stroke="black" stroke-width="1.5" stroke-miterlimit="10"
-                      stroke-linecap="round" stroke-linejoin="round"></path>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="13"
+                    height="3"
+                    viewBox="0 0 13 3"
+                    fill="none"
+                  >
+                    <path
+                      d="M12.2002 1.5H1.2002"
+                      stroke="black"
+                      stroke-width="1.5"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
                   </svg>
                 </button>
-                <input type="text" value="1" class="form-control border-0 w-fit">
+                <input
+                  type="text"
+                  value="1"
+                  class="form-control border-0 w-fit"
+                />
                 <button type="button" class="btn border-0 p-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="13"
+                    height="13"
+                    viewBox="0 0 13 13"
+                    fill="none"
+                  >
                     <path
                       d="M0.866862 7.16667H5.53353V11.8333C5.53353 12.0101 5.60377 12.1797 5.72879 12.3047C5.85381 12.4298 6.02338 12.5 6.2002 12.5C6.37701 12.5 6.54658 12.4298 6.6716 12.3047C6.79662 12.1797 6.86686 12.0101 6.86686 11.8333V7.16667H11.5335C11.7103 7.16667 11.8799 7.09643 12.0049 6.97141C12.13 6.84638 12.2002 6.67681 12.2002 6.5C12.2002 6.32319 12.13 6.15362 12.0049 6.02859C11.8799 5.90357 11.7103 5.83333 11.5335 5.83333H6.86686V1.16667C6.86686 0.989856 6.79662 0.820287 6.6716 0.695262C6.54658 0.570238 6.37701 0.5 6.2002 0.5C6.02338 0.5 5.85381 0.570238 5.72879 0.695262C5.60377 0.820287 5.53353 0.989856 5.53353 1.16667V5.83333H0.866862C0.690051 5.83333 0.520482 5.90357 0.395458 6.02859C0.270433 6.15362 0.200195 6.32319 0.200195 6.5C0.200195 6.67681 0.270433 6.84638 0.395458 6.97141C0.520482 7.09643 0.690051 7.16667 0.866862 7.16667Z"
-                      fill="black"></path>
+                      fill="black"
+                    ></path>
                   </svg>
                 </button>
               </div>
@@ -86,11 +143,14 @@
           <span>
             <div class="d-flex align-items-center gap-4">
               <button type="submit" class="btn btn-primary rounded-0 px-4">
-                Add to cart </button><button type="button" class="btn btn-dark rounded-0 px-4"> Share </button>
+                Add to cart</button
+              ><button type="button" class="btn btn-dark rounded-0 px-4">
+                Share
+              </button>
             </div>
             <div class="desc">
               <p>FREE Shipping</p>
-              <p> 7 days refund available. Read <a href="#">Refund policy</a></p>
+              <p>7 days refund available. Read <a href="#">Refund policy</a></p>
             </div>
           </span>
         </div>
