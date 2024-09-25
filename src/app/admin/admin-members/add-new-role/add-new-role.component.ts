@@ -36,13 +36,15 @@ export class AddNewRoleComponent {
         this.roleService.getRoleWithId(this.roleId).subscribe((res) => {
           if (res && res.data) {
             this.roleData.name = res.data.name;
-            res.data.role_accesses.map((data: { id: number; menu_id: number; status: string; }) => {
-              this.roleData.role.push({
-                id: data.id,
-                menu_id: data.menu_id,
-                status: JSON.parse(data.status),
-              });
-            });
+            res.data.role_accesses.map(
+              (data: { id: number; menu_id: number; status: string }) => {
+                this.roleData.role.push({
+                  id: data.id,
+                  menu_id: data.menu_id,
+                  status: data.status,
+                });
+              }
+            );
           }
         });
       }

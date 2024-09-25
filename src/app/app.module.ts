@@ -48,6 +48,8 @@ import { ImageCropperComponent } from 'ngx-image-cropper';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
+import { LoaderInterceptor } from './admin/main-interceptors/loader.interceptor';
+import { LoaderComponent } from './admin/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +89,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
     EpisodeTabsComponent,
     ArticleTabsComponent,
     AdminAdvertisementsComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -113,6 +116,11 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
       multi: true,
     },
     AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })
