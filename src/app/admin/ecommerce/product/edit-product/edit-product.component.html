@@ -109,32 +109,6 @@
                     <div class="card">
                       <div class="card-body">
                         <h6 class="mb-3 fw-semibold">Variants</h6>
-                        <div class="input-block">
-                          <label>Color Options</label>
-                          <div class="input-group">
-                            <input type="text" class="form-control" [(ngModel)]="newColor" formControlName="colors"
-                              placeholder="Enter Color Name" aria-label="Color Name" />
-                            <button class="btn btn-outline-secondary" type="button" (click)="addColor()"
-                              id="button-addon2">
-                              +
-                            </button>
-                          </div>
-                          <div class="d-flex align-items-center gap-2 mt-2">
-                            <span *ngFor="let color of colors" class="selected-color">
-                              <span class="color-box" [ngStyle]="{ 'background-color': color }"></span>
-                              {{ color }}
-                              <button class="btn btn-link p-0" (click)="removeColor(color)">
-                                <i class="fa-solid fa-xmark"></i>
-                              </button>
-                            </span>
-                            <div *ngIf="
-                                productForm.get('colors')?.invalid &&
-                                productForm.get('colors')?.touched
-                              " class="text-danger">
-                              At least one color is required.
-                            </div>
-                          </div>
-                        </div>
                         <!-- <div class="input-block">
                           <label>Color Options</label>
                           <div class="input-group">
@@ -161,56 +135,74 @@
                             </div>
                           </div>
                         </div> -->
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-body">
-                        <h6 class="mb-3 fw-semibold">Inventory</h6>
-                        <div class="input-block mb-3">
-                          <label>Stock</label>
-                          <input formControlName="stock" type="number" class="form-control" placeholder="Quantity" />
-                          <div *ngIf="
-                              productForm.get('stock')?.invalid &&
-                              productForm.get('stock')?.touched
-                            " class="text-danger">
-                            Stock is required.
+                        <!-- Size Variant -->
+                        <div class="input-block mb-3 vrinp">
+                          <div>
+                            <label for="size" class="">Size</label>
+                            <input type="text" id="size" class="form-control" value="Medium">
+                          </div>
+                          <div>
+                            <label for="price" class="">Price</label>
+                            <input type="text" id="price" class="form-control" placeholder="--" value="">
+                          </div>
+                          <div class=" varientbtn">
+                            <label for="price" class="">Action</label>
+                            <div class="d-flex align-items-center gap-2">
+                              <button class="delete-btn btn btn-outline-danger btn btn-sm">Delete</button>
+                              <button class="done-btn btn btn-outline-primary btn-sm">Done</button>
+                            </div>
                           </div>
                         </div>
+                        <div class="varient-blocklist ">
+                          <ul>
+                            <li>
+                              <div class="vrnme">varients1</div>
+                              <div class="varprice">1213.00</div>
+                              <div class="text-center"><button class="btn btn-delete"><i
+                                    class="bi bi-x-lg"></i></button></div>
+                            </li>
+                          </ul>
+                        </div>
+                        <!-- Color input-block -->
+                        <div class="input-block mb-3 vrinp">
+                          <div>
+                            <label for="color" class="">color</label>
+                            <input type="text" id="color" class="form-control" value="Black">
+                          </div>
+                          <div>
+                            <label for="price" class="">Price</label>
+                            <input type="text" id="price" class="form-control" placeholder="--" value="">
+                          </div>
+                          <div class=" varientbtn">
+                            <label for="price" class="">Action</label>
+                            <div class="d-flex align-items-center gap-2">
+                              <button class="delete-btn btn btn-outline-danger btn btn-sm">Delete</button>
+                              <button class="done-btn btn btn-outline-primary btn-sm">Done</button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Material input-block -->
+                        <div class="input-block mb-3 vrinp">
+                          <div>
+                            <label for="material" class="">material</label>
+                            <input type="text" id="material" class="form-control" value="Rubber">
+                          </div>
+                          <div>
+                            <label for="price" class="">Price</label>
+                            <input type="text" id="price" class="form-control" placeholder="--" value="">
+                          </div>
+                          <div class=" varientbtn">
+                            <label for="price" class="">Action</label>
+                            <div class="d-flex align-items-center gap-2">
+                              <button class="delete-btn btn btn-outline-danger btn btn-sm">Delete</button>
+                              <button class="done-btn btn btn-outline-primary btn-sm">Done</button>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-6 col-sm-12">
-                      <div class="input-block">
-                        <label>Size Chart Image</label>
-                        <div
-                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
-                        >
-                          <span>
-                            <img
-                              [src]="
-                                sizeChartImageSrc || 'assets/img/drop-icon.svg'
-                              "
-                              id="sizeChartPreview"
-                              alt="upload"
-                            />
-                          </span>
-                          <h6
-                            class="drop-browse align-center"
-                            *ngIf="!sizeChartImageSrc"
-                          >
-                            Drop your files here or
-                            <span class="text-primary ms-1">browse</span>
-                          </h6>
-                          <p class="text-muted" *ngIf="!sizeChartImageSrc">
-                            Maximum size: 50MB
-                          </p>
-                          <input
-                            type="file"
-                            id="sizeChartImage"
-                            (change)="handleSizeChartImageInput($event)"
-                          />
-                        </div>
-                      </div>
-                    </div> -->
                     <div>
                       <div class="row">
                         <div class="col-2" *ngFor="let image of uploadedImages; let i = index">
@@ -330,7 +322,21 @@
                         </div>
                       </div>
                     </div>
-
+                    <div class="card">
+                      <div class="card-body">
+                        <h6 class="mb-3 fw-semibold">Inventory</h6>
+                        <div class="input-block mb-3">
+                          <label>Stock</label>
+                          <input formControlName="stock" type="number" class="form-control" placeholder="Quantity" />
+                          <div *ngIf="
+                              productForm.get('stock')?.invalid &&
+                              productForm.get('stock')?.touched
+                            " class="text-danger">
+                            Stock is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="text-end mt-3">

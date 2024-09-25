@@ -33264,3 +33264,42 @@ span.propasicon {
 }
 
 /* category end */
+
+
+/* products page css start */
+
+.vrinp {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  grid-gap: 8px;
+}
+
+.varient-blocklist {
+  padding: 10px 0 20px 0;
+}
+
+.varient-blocklist ul li {
+  background: #f7f8f9;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: center;
+  border-radius: 6px;
+  padding: 3px 10px 3px 10px;
+}
+
+.varient-blocklist ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+}
+
+.varient-blocklist ul li .btn {
+  height: 28px;
+  padding: 0;
+  color: #000;
+  width: 28px;
+  border-radius: 6px;
+}
+
+
+/*  */
