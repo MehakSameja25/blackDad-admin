@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { Category } from '../../model/category.model';
 import { SingleArticle } from '../../model/article.model';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+declare var $: { summernote: { ui: any; }; };
 
 @Component({
   selector: 'app-edit-articles',
@@ -332,4 +333,88 @@ export class EditArticlesComponent {
     }
     console.log('Deselected Category:', this.selectedCategories);
   }
+
+  public config: any = {
+    airMode: false,
+    tabDisable: true,
+    popover: {
+      table: [
+        ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+        ['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
+      ],
+      image: [
+        ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+        ['float', ['floatLeft', 'floatRight', 'floatNone']],
+        ['remove', ['removeMedia']]
+      ],
+      link: [['link', ['linkDialogShow', 'unlink']]],
+      air: [
+        [
+          'font',
+          [
+            'bold',
+            'italic',
+            'underline',
+            'strikethrough',
+            'superscript',
+            'subscript',
+            'clear'
+          ]
+        ]
+      ]
+    },
+    height: '200px',
+    uploadImagePath: '/api/upload',
+    toolbar: [
+      ['misc', ['codeview', 'undo', 'redo', 'codeBlock']],
+      [
+        'font',
+        [
+          'bold',
+          'italic',
+          'underline',
+          'strikethrough',
+          'superscript',
+          'subscript',
+          'clear'
+        ]
+      ],
+      ['fontsize', ['fontname', 'fontsize', 'color']],
+      ['para', ['style0', 'ul', 'ol', 'paragraph', 'height']],
+      ['insert', ['table', 'picture', 'link', 'video', 'hr']],
+      ['customButtons', ['testBtn']],
+      ['view', ['fullscreen', 'codeview', 'help']]
+    ],
+    fontSizes: ['8','9','10','11','12','14','18','24','36','44','56','64','76','84','96'],
+    fontNames: ['Arial', 'Times New Roman','Inter', 'Comic Sans MS', 'Courier New', 'Roboto', 'Times', 'MangCau', 'BayBuomHep','BaiSau','BaiHoc','CoDien','BucThu', 'KeChuyen', 'MayChu', 'ThoiDai', 'ThuPhap-Ivy', 'ThuPhap-ThienAn'],
+    buttons: {
+      testBtn: customButton
+    },
+    codeviewFilter: true,
+    codeviewFilterRegex: /<\/*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|t(?:itle|extarea)|xml|.*onmouseover)[^>]*?>/gi,
+    codeviewIframeFilter: true
+  };
+  editorDisabled: boolean = false;
+
+  public enableEditor() {
+    this.editorDisabled = false;
+  }
+
+  public disableEditor() {
+    this.editorDisabled = true;
+  }
+}
+
+function customButton(context: { invoke: (arg0: string, arg1: string) => void; }) {
+  const ui = $.summernote.ui;
+  const button = ui.button({
+    contents: '<i class="note-icon-magic"></i> Hello',
+    tooltip: 'Custom button',
+    container: '.note-editor',
+    className: 'note-btn',
+    click: function() {
+      context.invoke('editor.insertText', 'Hello from test btn!!!');
+    }
+  });
+  return button.render();
 }

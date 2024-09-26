@@ -49,6 +49,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
+import { NgxSummernoteModule } from 'ngx-summernote';
 
 @NgModule({
   declarations: [
@@ -107,6 +108,7 @@ import { ArticalTypesComponent } from './admin/artical-types/artical-types.compo
       showProgressBar: true,
       clickToClose: true,
     }),
+    NgxSummernoteModule
   ],
   providers: [
     {
