@@ -19,20 +19,38 @@ export class LoaderInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    this.loaderService.show(); // Show loader
+    const isUpdateDraftRequest = req.url.includes('/update-draft');
 
-    return next.handle(req).pipe(
-      tap({
-        next: (event: HttpEvent<any>) => {
-          if (event instanceof HttpResponse) {
-            this.loaderService.hide(); // Hide loader on successful response
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          this.loaderService.hide(); // Hide loader on error
-          return throwError(() => error);
-        },
-      })
-    );
+    if (isUpdateDraftRequest) {
+      return next.handle(req).pipe(
+        tap({
+          next: (event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {
+              this.loaderService.hide(); 
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            this.loaderService.hide(); 
+            return throwError(() => error);
+          },
+        })
+      );
+    } else {
+      this.loaderService.show(); 
+
+      return next.handle(req).pipe(
+        tap({
+          next: (event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {
+              this.loaderService.hide(); 
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            this.loaderService.hide();
+            return throwError(() => error);
+          },
+        })
+      );
+    }
   }
 }
