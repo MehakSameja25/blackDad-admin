@@ -50,6 +50,7 @@ import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { LoaderInterceptor } from './admin/main-interceptors/loader.interceptor';
 import { LoaderComponent } from './admin/loader/loader.component';
+import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { LoaderComponent } from './admin/loader/loader.component';
     ArticleTabsComponent,
     AdminAdvertisementsComponent,
     LoaderComponent,
+    ArticalTypesComponent
   ],
   imports: [
     BrowserModule,

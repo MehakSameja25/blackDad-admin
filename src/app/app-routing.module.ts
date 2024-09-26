@@ -31,6 +31,7 @@ import { AdminEpisodeDraftComponent } from './admin/draft/admin-episode-draft/ad
 import { EpisodeScheduleComponent } from './admin/admin-scheduling/episode-schedule/episode-schedule.component';
 import { ArticleScheduleComponent } from './admin/admin-scheduling/article-schedule/article-schedule.component';
 import { AdminAdvertisementsComponent } from './admin/admin-advertisements/admin-advertisements.component';
+import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
@@ -183,6 +184,11 @@ const routes: Routes = [
   {
     path: 'admin/scheduled-articles',
     component: ArticleScheduleComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin/artical-types',
+    component: ArticalTypesComponent,
     canActivate: [AuthGuard],
   },
 ];
