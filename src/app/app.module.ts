@@ -51,6 +51,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { LoaderInterceptor } from './admin/main-interceptors/loader.interceptor';
 import { LoaderComponent } from './admin/loader/loader.component';
 import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
+import { NgxSummernoteModule } from 'ngx-summernote';
 
 @NgModule({
   declarations: [
@@ -110,6 +111,7 @@ import { ArticalTypesComponent } from './admin/artical-types/artical-types.compo
       showProgressBar: true,
       clickToClose: true,
     }),
+    NgxSummernoteModule
   ],
   providers: [
     {

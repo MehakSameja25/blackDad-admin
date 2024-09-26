@@ -45,8 +45,8 @@
                       <div class="input-block mb-3">
                         <label>Category</label>
                         <ng-multiselect-dropdown [placeholder]="'Select Categories'" [data]="allcategories"
-                          formControlName="category" [settings]="dropdownSettings" (onSelect)="onCategorySelect($event.id)"
-                          (onDeSelect)="onCategoryDeSelect($event.id)">
+                          formControlName="category" [settings]="dropdownSettings"
+                          (onSelect)="onCategorySelect($event.id)" (onDeSelect)="onCategoryDeSelect($event.id)">
                         </ng-multiselect-dropdown>
                       </div>
                       <div *ngIf="
@@ -79,9 +79,15 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Description</label>
-                        <ckeditor [editor]="editor" formControlName="description" class="form-control"
-                          placeholder="Enter Notes" rows="5" (change)="this.inputChanged.next('description')">
-                        </ckeditor>
+                        <!-- <ckeditor [editor]="editor" [config]="editorConfig" formControlName="description"
+                          class="form-control" placeholder="Enter Notes" rows="5"
+                          (change)="this.inputChanged.next('description')">
+                        </ckeditor> -->
+
+                        <div formControlName="description" [ngxSummernote]="config"
+                          [ngxSummernoteDisabled]="editorDisabled" (blur)="onBlur()"
+                          (summernoteInit)="summernoteInit($event)">
+                        </div>
 
                         <div *ngIf="
                             articleForm.get('description')?.invalid &&
