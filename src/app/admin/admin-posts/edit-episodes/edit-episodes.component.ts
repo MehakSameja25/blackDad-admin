@@ -374,8 +374,10 @@ export class EditEpisodesComponent {
     console.log('Selected Category:', this.selectedCategories);
   }
 
-  onCategoryDeSelect(item: String | number) {
-    const index = this.selectedCategories.findIndex((cat) => cat === item);
+  onCategoryDeSelect(item: number | String) {
+    const index = this.selectedCategories.findIndex(
+      (cat) => cat === item.toString()
+    );
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);
     }

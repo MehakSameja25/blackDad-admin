@@ -131,8 +131,8 @@ export class AddNewRoleComponent {
 
   addRole() {
     let role;
-    if (!this.roleData.name || this.roleData.name.name.trim().length < 3) {
-      this.notifications.error('Error', `role name have minimum 3 length`);
+    if (!this.roleData.name || this.roleData.name.trim().length < 5) {
+      this.notifications.error('Error', `role name have minimum 5 length`);
       return;
     }
 
