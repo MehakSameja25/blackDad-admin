@@ -295,38 +295,47 @@ export class AdminCategoriesComponent implements OnInit {
   @ViewChild('descriptionn')
   public descModel!: TemplateRef<unknown>;
 
+  private actionListener: (() => void) | null = null;
   bindEvents(): void {
-    const tableElement = this.table.nativeElement;
-    const actionButtons = tableElement.querySelectorAll(
-      '.btn-action-icon, .btn-danger, .badge, .rounded-pill, .text-bg-violet'
-    );
+    // Check if the listener is already set
+    if (this.actionListener) {
+      return; // Exit if the listener is already set
+    }
 
-    actionButtons.forEach((button: HTMLElement) => {
-      const action = button.getAttribute('data-action');
-      const id = button.getAttribute('data-id');
-      switch (action) {
-        case 'delete':
-          this.renderer.listen(button, 'click', () =>
-            this.openDelete(this.deleteModel, id)
-          );
-          break;
-        case 'edit':
-          this.renderer.listen(button, 'click', () =>
-            this.openEdit(this.editModel, id)
-          );
-          break;
-        case 'description':
-          this.renderer.listen(button, 'click', () =>
-            this.openEdit(this.descModel, id)
-          );
-          break;
-        case 'block':
-          this.renderer.listen(button, 'click', () => this.isCheckBlock(id));
-          break;
-        default:
-          break;
+    const tableElement = this.table.nativeElement;
+
+    this.actionListener = this.renderer.listen(
+      tableElement,
+      'click',
+      (event) => {
+        const target = event.target as HTMLElement;
+        const button = target.closest('.btn-action-icon');
+
+        if (button) {
+          const action = button.getAttribute('data-action');
+          const id = button.getAttribute('data-id');
+
+          if (action && id) {
+            switch (action) {
+              case 'delete':
+                this.openDelete(this.deleteModel, id);
+                break;
+              case 'edit':
+                this.openEdit(this.editModel, id);
+                break;
+              case 'description':
+                this.openEdit(this.descModel, id);
+                break;
+              case 'block':
+                this.isCheckBlock(id);
+                break;
+              default:
+                break;
+            }
+          }
+        }
       }
-    });
+    );
   }
 
   openAdd(content: TemplateRef<unknown>) {

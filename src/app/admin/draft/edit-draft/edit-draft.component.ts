@@ -116,7 +116,7 @@ export class EditDraftComponent {
         if (res) {
           this.singleDraft = res;
           this.draftData = res.data.draft;
-
+          this.setFormValues();
           if (this.draftData && this.draftData.subtype) {
             if (this.draftData.subtype === 'podcast') {
               this.fileType = 'audio';
