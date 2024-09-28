@@ -14,8 +14,9 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Category } from '../../model/category.model';
 import { EditorConfig } from '@ckeditor/ckeditor5-core';
+import { ArticalCategoiesService } from '../../services/articalCategory.service';
 
-declare var $: { summernote: { ui: any; }; };
+declare var $: { summernote: { ui: any } };
 
 @Component({
   selector: 'app-add-articles',
@@ -42,19 +43,49 @@ export class AddArticlesComponent {
 
   public editorConfig: EditorConfig = {
     toolbar: [
-      'heading', '|', 'bold', 'italic', '|',
-      'bulletedList', 'numberedList', 'blockQuote', '|',
-      'insertTable', 'mediaEmbed', 'link', '|',
-      'undo', 'redo'
+      'heading',
+      '|',
+      'bold',
+      'italic',
+      '|',
+      'bulletedList',
+      'numberedList',
+      'blockQuote',
+      '|',
+      'insertTable',
+      'mediaEmbed',
+      'link',
+      '|',
+      'undo',
+      'redo',
     ],
     heading: {
       options: [
-        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
-      ]
-    }
+        {
+          model: 'paragraph',
+          title: 'Paragraph',
+          class: 'ck-heading_paragraph',
+        },
+        {
+          model: 'heading1',
+          view: 'h1',
+          title: 'Heading 1',
+          class: 'ck-heading_heading1',
+        },
+        {
+          model: 'heading2',
+          view: 'h2',
+          title: 'Heading 2',
+          class: 'ck-heading_heading2',
+        },
+        {
+          model: 'heading3',
+          view: 'h3',
+          title: 'Heading 3',
+          class: 'ck-heading_heading3',
+        },
+      ],
+    },
   };
 
   public config: any = {
@@ -63,12 +94,12 @@ export class AddArticlesComponent {
     popover: {
       table: [
         ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
-        ['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
+        ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
       ],
       image: [
         ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
         ['float', ['floatLeft', 'floatRight', 'floatNone']],
-        ['remove', ['removeMedia']]
+        ['remove', ['removeMedia']],
       ],
       link: [['link', ['linkDialogShow', 'unlink']]],
       air: [
@@ -81,10 +112,10 @@ export class AddArticlesComponent {
             'strikethrough',
             'superscript',
             'subscript',
-            'clear'
-          ]
-        ]
-      ]
+            'clear',
+          ],
+        ],
+      ],
     },
     height: '200px',
     uploadImagePath: '/api/upload',
@@ -99,25 +130,64 @@ export class AddArticlesComponent {
           'strikethrough',
           'superscript',
           'subscript',
-          'clear'
-        ]
+          'clear',
+        ],
       ],
       ['fontsize', ['fontname', 'fontsize', 'color']],
       ['para', ['style0', 'ul', 'ol', 'paragraph', 'height']],
       ['insert', ['table', 'picture', 'link', 'video', 'hr']],
       ['customButtons', ['testBtn']],
-      ['view', ['fullscreen', 'codeview', 'help']]
+      ['view', ['fullscreen', 'codeview', 'help']],
     ],
-    fontSizes: ['8','9','10','11','12','14','18','24','36','44','56','64','76','84','96'],
-    fontNames: ['Arial', 'Times New Roman','Inter', 'Comic Sans MS', 'Courier New', 'Roboto', 'Times', 'MangCau', 'BayBuomHep','BaiSau','BaiHoc','CoDien','BucThu', 'KeChuyen', 'MayChu', 'ThoiDai', 'ThuPhap-Ivy', 'ThuPhap-ThienAn'],
+    fontSizes: [
+      '8',
+      '9',
+      '10',
+      '11',
+      '12',
+      '14',
+      '18',
+      '24',
+      '36',
+      '44',
+      '56',
+      '64',
+      '76',
+      '84',
+      '96',
+    ],
+    fontNames: [
+      'Arial',
+      'Times New Roman',
+      'Inter',
+      'Comic Sans MS',
+      'Courier New',
+      'Roboto',
+      'Times',
+      'MangCau',
+      'BayBuomHep',
+      'BaiSau',
+      'BaiHoc',
+      'CoDien',
+      'BucThu',
+      'KeChuyen',
+      'MayChu',
+      'ThoiDai',
+      'ThuPhap-Ivy',
+      'ThuPhap-ThienAn',
+    ],
     buttons: {
-      testBtn: customButton
+      testBtn: customButton,
     },
     codeviewFilter: true,
-    codeviewFilterRegex: /<\/*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|t(?:itle|extarea)|xml|.*onmouseover)[^>]*?>/gi,
-    codeviewIframeFilter: true
+    codeviewFilterRegex:
+      /<\/*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|t(?:itle|extarea)|xml|.*onmouseover)[^>]*?>/gi,
+    codeviewIframeFilter: true,
   };
   editorDisabled: boolean = false;
+  articleCategoryData!: any;
+  subCategories: any[] = [];
+  selectedCategoryId: number | null = null;
 
   public enableEditor() {
     this.editorDisabled = false;
@@ -131,7 +201,7 @@ export class AddArticlesComponent {
     console.log('Blur');
   }
 
-  public onDelete(file: { url: any; }) {
+  public onDelete(file: { url: any }) {
     console.log('Delete file', file.url);
   }
 
@@ -144,7 +214,8 @@ export class AddArticlesComponent {
     private categoryService: CategoiesService,
     private postsService: AllPostsService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private articleCategory: ArticalCategoiesService
   ) {
     this.dropdownSettings = {
       singleSelection: false,
@@ -194,7 +265,26 @@ export class AddArticlesComponent {
       thumbnailImage: ['', [Validators.required]],
     });
     this.getCategories();
+    this.getCategoryArticle();
     // this.addArticleDraft();
+  }
+
+  getCategoryArticle() {
+    this.articleCategory.getArticalCategory().subscribe((res: any) => {
+      if (res) {
+        this.articleCategoryData = res.data?.filter(
+          (category: { isParent: null }) => category.isParent === null
+        );
+      }
+    });
+  }
+  selectedSubCategoryId: any;
+  onCategoryChange() {
+    this.subCategories = this.articleCategoryData.filter(
+      (category: { isParent: number | null }) =>
+        category.isParent === this.selectedCategoryId
+    );
+    this.selectedSubCategoryId = null;
   }
 
   firstKeyPress: boolean = false;
@@ -409,16 +499,18 @@ export class AddArticlesComponent {
   }
 }
 
-function customButton(context: { invoke: (arg0: string, arg1: string) => void; }) {
+function customButton(context: {
+  invoke: (arg0: string, arg1: string) => void;
+}) {
   const ui = $.summernote.ui;
   const button = ui.button({
     contents: '<i class="note-icon-magic"></i> Hello',
     tooltip: 'Custom button',
     container: '.note-editor',
     className: 'note-btn',
-    click: function() {
+    click: function () {
       context.invoke('editor.insertText', 'Hello from test btn!!!');
-    }
+    },
   });
   return button.render();
 }
