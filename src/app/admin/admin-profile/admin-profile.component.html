@@ -31,7 +31,7 @@
             <div class="card-body">
               <div
                 class="form-group-item border-0 mb-0"
-                *ngIf="userDetails && userDetails.user && userDetails.role"
+                *ngIf="userDetails && userDetails.user"
               >
                 <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
                   <div class="row align-item-center">
@@ -79,37 +79,77 @@
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
+                      <div class="input-block mb-3 position-relative">
                         <label>Password</label>
                         <input
-                          type="password"
+                          [type]="type2"
                           class="form-control"
                           formControlName="password"
                           placeholder="Enter Password"
                         />
-                        <div
-                          class="text-danger"
-                          *ngIf="
+                        <span class="propasicon">
+                          <i
+                            class="fa-solid fa-eye"
+                            (click)="showPassword2()"
+                            *ngIf="type2 === 'password'"
+                          ></i>
+                          <i
+                            class="fa-regular fa-eye-slash"
+                            (click)="showPassword2()"
+                            *ngIf="type2 === 'text'"
+                          ></i>
+                        </span>
+                        <!-- <div class="text-danger" *ngIf="
                             updateForm.get('password')?.invalid &&
                             updateForm.get('password')?.touched
-                          "
-                        >
+                          ">
                           Password is required
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
+                      <div class="input-block mb-3 position-relative">
                         <label>Confirm Password</label>
                         <input
-                          type="password"
+                          [type]="type"
                           class="form-control"
                           formControlName="confirmPassword"
                           placeholder="Confirm Password"
                         />
+                        <span class="propasicon">
+                          <i
+                            class="fa-solid fa-eye"
+                            (click)="showToggle()"
+                            *ngIf="type === 'password'"
+                          ></i>
+                          <i
+                            class="fa-regular fa-eye-slash"
+                            (click)="showToggle()"
+                            *ngIf="type === 'text'"
+                          ></i>
+                        </span>
                       </div>
                     </div>
-
+                    <div
+                      class="text-danger"
+                      *ngIf="
+                        updateForm.get('password')?.invalid &&
+                        updateForm.get('password')?.touched
+                      "
+                    >
+                      <div
+                        *ngIf="updateForm.get('password')?.errors?.['required']"
+                      >
+                        Password is required.
+                      </div>
+                      <div
+                        *ngIf="updateForm.get('password')?.errors?.['passwordInvalid']"
+                      >
+                        Password must be at least 8 characters long, contain at
+                        least one uppercase letter, one lowercase letter, one
+                        number, and one special character.
+                      </div>
+                    </div>
                     <div class="col-lg-3 col-md-4 col-sm-12">
                       <button
                         type="submit"

@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthanticationService } from '../../services/authantication.service';
 import { RoleService } from '../../services/role.service';
@@ -8,7 +13,7 @@ import { param } from 'jquery';
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class ChangePasswordComponent {
   LoginForm: FormGroup;
@@ -20,12 +25,34 @@ export class ChangePasswordComponent {
     private roleService: RoleService,
     private route: ActivatedRoute
   ) {
-    this.LoginForm = this.formB.group({
-      password: ['', [Validators.required]],
-      password2: ['', [Validators.required]],
-    }, { validator: this.passwordMatchValidator });
+    this.LoginForm = this.formB.group(
+      {
+        password: ['', [Validators.required, this.passwordValidator]],
+        password2: ['', [Validators.required]],
+      },
+      { validator: this.passwordMatchValidator }
+    );
 
     this.proof = this.route.snapshot.queryParamMap.get('proof');
+  }
+
+  passwordValidator(
+    control: AbstractControl
+  ): { [key: string]: boolean } | null {
+    const value = control.value;
+    const hasUpperCase = /[A-Z]/.test(value);
+    const hasLowerCase = /[a-z]/.test(value);
+    const hasNumber = /\d/.test(value);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+    const isValidLength = value.length >= 8;
+
+    const valid =
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber &&
+      hasSpecialChar &&
+      isValidLength;
+    return valid ? null : { passwordInvalid: true };
   }
 
   passwordMatchValidator(formGroup: FormGroup) {

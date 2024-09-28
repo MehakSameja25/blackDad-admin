@@ -121,7 +121,6 @@ export class EditDraftComponent {
             if (this.draftData.subtype === 'podcast') {
               this.fileType = 'audio';
               this.subtype = 'podcast';
-              this.setFormValues();
               this.episodeForm
                 .get('subType1')
                 ?.valueChanges.subscribe((subType) => {
@@ -130,7 +129,6 @@ export class EditDraftComponent {
             } else {
               this.fileType = 'video';
               this.subtype = 'youtube';
-              this.setFormValues();
               this.episodeForm
                 .get('subType1')
                 ?.valueChanges.subscribe((subType) => {
