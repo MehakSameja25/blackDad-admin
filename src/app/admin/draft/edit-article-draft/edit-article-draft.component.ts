@@ -200,7 +200,7 @@ export class EditArticleDraftComponent {
     const formData = new FormData();
     formData.append('name', this.articleForm.value.articleName);
     formData.append('type', 'articles');
-    formData.append('categoryId', JSON.stringify(this.selectedCategories));
+    formData.append('articleTypeId', JSON.stringify([this.selectedSubCategoryId]));
     formData.append('description', this.articleForm.value.description);
     // formData.append('thumbnail', this.articleForm.value.bannerImage);
     // formData.append('image', this.articleForm.value.thumbnailImage);
