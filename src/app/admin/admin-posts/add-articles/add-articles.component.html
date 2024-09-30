@@ -75,10 +75,16 @@
                         <select
                           class="form-select"
                           aria-label="Select Category"
-                          [(ngModel)]="selectedCategoryId"
-                          (change)="onCategoryChange()"
+                          formControlName="category"
+                          #categoryVal
+                          (change)="
+                            onCategoryChange(categoryVal.value);
+                            articleForm
+                              .get('category')
+                              ?.setValue(categoryVal.value)
+                          "
                         >
-                          <option selected>Select Category</option>
+                          <option selected disabled>Select Category</option>
                           <option
                             *ngFor="let category of articleCategoryData"
                             [value]="category.id"
@@ -86,6 +92,15 @@
                             {{ category.name }}
                           </option>
                         </select>
+                        <div
+                          *ngIf="
+                            articleForm.get('category')?.invalid &&
+                            articleForm.get('category')?.touched
+                          "
+                          class="text-danger"
+                        >
+                          Category is required.
+                        </div>
                       </div>
                     </div>
 
@@ -95,10 +110,17 @@
                         <select
                           class="form-select"
                           aria-label="Select Sub Category"
+                          formControlName="subCategory"
                           [(ngModel)]="selectedSubCategoryId"
+                          (change)="
+                            articleForm
+                              .get('subCategory')
+                              ?.setValue(selectedSubCategoryId)
+                          "
+                          (change)="this.inputChanged.next('subCategory')"
                           [disabled]="!subCategories.length"
                         >
-                          <option selected>Select Sub Category</option>
+                          <option selected disabled>Select Sub Category</option>
                           <option
                             *ngFor="let subCategory of subCategories"
                             [value]="subCategory.id"
@@ -106,6 +128,15 @@
                             {{ subCategory.name }}
                           </option>
                         </select>
+                        <div
+                          *ngIf="
+                            articleForm.get('subCategory')?.invalid &&
+                            articleForm.get('subCategory')?.touched
+                          "
+                          class="text-danger"
+                        >
+                          Sub Category is required.
+                        </div>
                       </div>
                     </div>
 

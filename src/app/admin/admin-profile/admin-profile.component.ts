@@ -33,7 +33,7 @@ export class AdminProfileComponent {
       {
         name: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
-        password: ['', Validators.required],
+        password: ['', [Validators.required, this.passwordValidator]],
         confirmPassword: ['', Validators.required],
       },
       {
@@ -45,7 +45,7 @@ export class AdminProfileComponent {
     this.authService.getUserById(this.UserId).subscribe((res) => {
       if (res) {
         this.userDetails = res.data;
-        this.userRole = res.data.role.name;
+        this.userRole = res.data?.role?.name;
         // console.log(this.userRole, 'ROLES');
       }
     });
@@ -87,6 +87,25 @@ export class AdminProfileComponent {
     }
   }
 
+  passwordValidator(
+    control: AbstractControl
+  ): { [key: string]: boolean } | null {
+    const value = control.value;
+    const hasUpperCase = /[A-Z]/.test(value);
+    const hasLowerCase = /[a-z]/.test(value);
+    const hasNumber = /\d/.test(value);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+    const isValidLength = value.length >= 8;
+
+    const valid =
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber &&
+      hasSpecialChar &&
+      isValidLength;
+    return valid ? null : { passwordInvalid: true };
+  }
+
   updateApiCall(data: {
     name: string;
     email: string;
@@ -102,19 +121,22 @@ export class AdminProfileComponent {
       }
     });
   }
-  show: boolean = false;
-  hidden: boolean = true;
-  type: string = 'password';
 
-  showPassword() {
-    this.show = true;
-    this.hidden = false;
-    this.type = 'text';
+  type: string = 'password';
+  type2: string = 'password';
+  showToggle(): void {
+    if (this.type === 'password') {
+      this.type = 'text';
+    } else {
+      this.type = 'password';
+    }
   }
 
-  hidePassword() {
-    this.hidden = true;
-    this.show = false;
-    this.type = 'password';
+  showPassword2(): void {
+    if (this.type2 === 'password') {
+      this.type2 = 'text';
+    } else {
+      this.type2 = 'password';
+    }
   }
 }

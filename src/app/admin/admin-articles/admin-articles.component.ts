@@ -130,9 +130,13 @@ export class AdminArticlesComponent implements OnInit {
           item.name.length > 35
             ? this.truncateDescription(item.name)
             : item.name,
-          `<ul> ${item.category
-            .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
-            .join('')} </ul>`,
+          `<ul> ${
+            item.category
+              ? item.category
+                  .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
+                  .join('')
+              : '--'
+          }  </ul>`,
           item.created_at ? item.created_at.split('T')[0] : 'N/A',
           this.getScheduledStatus(item.isApproved, item.isPublished),
           `<div class="actions d-flex align-items-center gap-2">

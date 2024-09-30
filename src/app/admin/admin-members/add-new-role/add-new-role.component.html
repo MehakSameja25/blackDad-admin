@@ -62,7 +62,7 @@
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="add{{data.id}}"
+                              id="add{{ data.id }}"
                               name="select1[]"
                               value="add"
                               data-parsley-multiple="select1"
@@ -72,7 +72,10 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'add')"
                             />
-                            <label class="form-check-label m-0" for="add{{data.id}}">
+                            <label
+                              class="form-check-label m-0"
+                              for="add{{ data.id }}"
+                            >
                               Add
                             </label>
                           </div>
@@ -81,7 +84,7 @@
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="edit {{data.id}}"
+                              id="edit {{ data.id }}"
                               name="select1[]"
                               value="edit"
                               data-parsley-multiple="select1"
@@ -91,7 +94,10 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'edit')"
                             />
-                            <label class="form-check-label m-0" for="edit{{data.id}}">
+                            <label
+                              class="form-check-label m-0"
+                              for="edit{{ data.id }}"
+                            >
                               Edit
                             </label>
                           </div>
@@ -99,7 +105,7 @@
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="delete{{data.id}}"
+                              id="delete{{ data.id }}"
                               name="select1[]"
                               value="delete "
                               data-parsley-multiple="select1"
@@ -109,18 +115,21 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'delete')"
                             />
-                            <label class="form-check-label m-0" for="delete {{data.id}}">
+                            <label
+                              class="form-check-label m-0"
+                              for="delete {{ data.id }}"
+                            >
                               Delete
                             </label>
                           </div>
                           <div
                             class="form-check d-inline-block col-lg-2"
-                            *ngIf="data.id !== 1"
+                            *ngIf="data.id !== 1 && data.id !== 5"
                           >
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="publish{{data.id}}"
+                              id="publish{{ data.id }}"
                               name="select1[]"
                               value="publish"
                               data-parsley-multiple="select1"
@@ -130,18 +139,21 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'publish')"
                             />
-                            <label class="form-check-label m-0" for="publish{{data.id}}">
+                            <label
+                              class="form-check-label m-0"
+                              for="publish{{ data.id }}"
+                            >
                               Publish
                             </label>
                           </div>
                           <div
                             class="form-check d-inline-block col-lg-3"
-                            *ngIf="data.id !== 1"
+                            *ngIf="data.id !== 1 && data.id !== 5"
                           >
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="editpublish{{data.id}}"
+                              id="editpublish{{ data.id }}"
                               name="select1[]"
                               value="edit after publish"
                               data-parsley-multiple="select1"
@@ -159,19 +171,19 @@
                             />
                             <label
                               class="form-check-label m-0"
-                              for="editpublish{{data.id}}"
+                              for="editpublish{{ data.id }}"
                             >
                               Edit After Publish
                             </label>
                           </div>
                           <div
                             class="form-check d-inline-block me-3 col-lg-2"
-                            *ngIf="data.id !== 1"
+                            *ngIf="data.id !== 1 && data.id !== 5"
                           >
                             <input
                               class="form-check-input custom-control-input radio1"
                               type="checkbox"
-                              id="own{{data.id}}"
+                              id="own{{ data.id }}"
                               name="select1[]"
                               value="self record"
                               data-parsley-multiple="select1"
@@ -185,7 +197,10 @@
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'self record')"
                             />
-                            <label class="form-check-label m-0" for="own{{data.id}}">
+                            <label
+                              class="form-check-label m-0"
+                              for="own{{ data.id }}"
+                            >
                               Self Record
                             </label>
                           </div>

@@ -35,6 +35,11 @@ export class AddArticlesComponent {
     }
   ];
   selectedCategories: String[] = [];
+  articleCategoryData!: any;
+  subCategories: any[] = [];
+  selectedCategoryId: number | null = null;
+  data: any;
+  selectedSubCategoryId: any;
   draftId!: null | string;
   inputText: string = '';
   inputChanged: Subject<string> = new Subject<string>();
@@ -185,9 +190,6 @@ export class AddArticlesComponent {
     codeviewIframeFilter: true,
   };
   editorDisabled: boolean = false;
-  articleCategoryData!: any;
-  subCategories: any[] = [];
-  selectedCategoryId: number | null = null;
 
   public enableEditor() {
     this.editorDisabled = false;
@@ -259,10 +261,11 @@ export class AddArticlesComponent {
       articleName: ['', [Validators.required]],
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
-      category: ['', [Validators.required]],
+      category: [null, [Validators.required]],
       slug: ['', [Validators.required]],
       bannerImage: ['', [Validators.required]],
       thumbnailImage: ['', [Validators.required]],
+      subCategory: [null, [Validators.required]],
     });
     this.getCategories();
     this.getCategoryArticle();
@@ -272,19 +275,21 @@ export class AddArticlesComponent {
   getCategoryArticle() {
     this.articleCategory.getArticalCategory().subscribe((res: any) => {
       if (res) {
-        this.articleCategoryData = res.data?.filter(
+        this.data = res.data;
+        this.articleCategoryData = this.data.filter(
           (category: { isParent: null }) => category.isParent === null
         );
       }
     });
   }
-  selectedSubCategoryId: any;
-  onCategoryChange() {
-    this.subCategories = this.articleCategoryData.filter(
-      (category: { isParent: number | null }) =>
-        category.isParent === this.selectedCategoryId
+
+  onCategoryChange(id: any) {
+    this.subCategories = this.data.filter(
+      (category: { isParent: number }) => category.isParent == id
     );
     this.selectedSubCategoryId = null;
+    this.articleForm.get('subCategory')?.setValue(null);
+    this.inputChanged.next('');
   }
 
   firstKeyPress: boolean = false;
@@ -343,7 +348,10 @@ export class AddArticlesComponent {
     const formData = new FormData();
     formData.append('name', this.articleForm.value.articleName);
     formData.append('type', 'articles');
-    formData.append('categoryId', JSON.stringify(this.selectedCategories));
+    formData.append(
+      'articleTypeId',
+      JSON.stringify([this.selectedSubCategoryId])
+    );
     formData.append('description', this.articleForm.value.description);
     formData.append('meta_description', this.articleForm.value.meta);
     formData.append('slug', this.articleForm.value.slug);

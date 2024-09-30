@@ -10,7 +10,8 @@ import { environment } from 'src/environments/environment';
 import { Category } from '../../model/category.model';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { SingleDraft } from '../../model/article.model';
-declare var $: { summernote: { ui: any; }; };
+import { ArticalCategoiesService } from '../../services/articalCategory.service';
+declare var $: { summernote: { ui: any } };
 
 @Component({
   selector: 'app-edit-article-draft',
@@ -54,6 +55,10 @@ export class EditArticleDraftComponent {
   editor = ClassicEditor;
   dropdownSettings: {};
   nullImagePath = environment.nullImagePath;
+  data: any;
+  articleCategoryData: any;
+  subCategories: any;
+  selectedSubCategoryId: any;
 
   constructor(
     private fb: FormBuilder,
@@ -61,7 +66,8 @@ export class EditArticleDraftComponent {
     private postsService: AllPostsService,
     private router: Router,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private articleCategory: ArticalCategoiesService
   ) {
     this.dropdownSettings = {
       singleSelection: false,
@@ -92,6 +98,7 @@ export class EditArticleDraftComponent {
     });
     this.getCategories();
     this.getSingleArticle();
+    this.getCategoryArticle();
   }
 
   setFormValues(): void {
@@ -105,6 +112,15 @@ export class EditArticleDraftComponent {
     this.singleDraft.data.category.map((category: { id: String }) => {
       this.selectedCategories.push(category.id);
     });
+  }
+
+  onCategoryChange(id: any) {
+    this.subCategories = this.data.filter(
+      (category: { isParent: number }) => category.isParent == id
+    );
+
+    this.selectedSubCategoryId = null;
+    this.articleForm.get('subCategory')?.setValue(null);
   }
 
   getCategories() {
@@ -363,18 +379,29 @@ export class EditArticleDraftComponent {
     console.log('Deselected Category:', this.selectedCategories);
   }
 
+  getCategoryArticle() {
+    this.articleCategory.getArticalCategory().subscribe((res: any) => {
+      if (res) {
+        this.data = res.data;
+        this.articleCategoryData = this.data.filter(
+          (category: { isParent: null }) => category.isParent === null
+        );
+      }
+    });
+  }
+
   public config: any = {
     airMode: false,
     tabDisable: true,
     popover: {
       table: [
         ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
-        ['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
+        ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
       ],
       image: [
         ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
         ['float', ['floatLeft', 'floatRight', 'floatNone']],
-        ['remove', ['removeMedia']]
+        ['remove', ['removeMedia']],
       ],
       link: [['link', ['linkDialogShow', 'unlink']]],
       air: [
@@ -387,10 +414,10 @@ export class EditArticleDraftComponent {
             'strikethrough',
             'superscript',
             'subscript',
-            'clear'
-          ]
-        ]
-      ]
+            'clear',
+          ],
+        ],
+      ],
     },
     height: '200px',
     uploadImagePath: '/api/upload',
@@ -405,23 +432,59 @@ export class EditArticleDraftComponent {
           'strikethrough',
           'superscript',
           'subscript',
-          'clear'
-        ]
+          'clear',
+        ],
       ],
       ['fontsize', ['fontname', 'fontsize', 'color']],
       ['para', ['style0', 'ul', 'ol', 'paragraph', 'height']],
       ['insert', ['table', 'picture', 'link', 'video', 'hr']],
       ['customButtons', ['testBtn']],
-      ['view', ['fullscreen', 'codeview', 'help']]
+      ['view', ['fullscreen', 'codeview', 'help']],
     ],
-    fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '44', '56', '64', '76', '84', '96'],
-    fontNames: ['Arial', 'Times New Roman', 'Inter', 'Comic Sans MS', 'Courier New', 'Roboto', 'Times', 'MangCau', 'BayBuomHep', 'BaiSau', 'BaiHoc', 'CoDien', 'BucThu', 'KeChuyen', 'MayChu', 'ThoiDai', 'ThuPhap-Ivy', 'ThuPhap-ThienAn'],
+    fontSizes: [
+      '8',
+      '9',
+      '10',
+      '11',
+      '12',
+      '14',
+      '18',
+      '24',
+      '36',
+      '44',
+      '56',
+      '64',
+      '76',
+      '84',
+      '96',
+    ],
+    fontNames: [
+      'Arial',
+      'Times New Roman',
+      'Inter',
+      'Comic Sans MS',
+      'Courier New',
+      'Roboto',
+      'Times',
+      'MangCau',
+      'BayBuomHep',
+      'BaiSau',
+      'BaiHoc',
+      'CoDien',
+      'BucThu',
+      'KeChuyen',
+      'MayChu',
+      'ThoiDai',
+      'ThuPhap-Ivy',
+      'ThuPhap-ThienAn',
+    ],
     buttons: {
-      testBtn: customButton
+      testBtn: customButton,
     },
     codeviewFilter: true,
-    codeviewFilterRegex: /<\/*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|t(?:itle|extarea)|xml|.*onmouseover)[^>]*?>/gi,
-    codeviewIframeFilter: true
+    codeviewFilterRegex:
+      /<\/*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|t(?:itle|extarea)|xml|.*onmouseover)[^>]*?>/gi,
+    codeviewIframeFilter: true,
   };
   editorDisabled: boolean = false;
 
@@ -434,7 +497,9 @@ export class EditArticleDraftComponent {
   }
 }
 
-function customButton(context: { invoke: (arg0: string, arg1: string) => void; }) {
+function customButton(context: {
+  invoke: (arg0: string, arg1: string) => void;
+}) {
   const ui = $.summernote.ui;
   const button = ui.button({
     contents: '<i class="note-icon-magic"></i> Hello',
@@ -443,7 +508,7 @@ function customButton(context: { invoke: (arg0: string, arg1: string) => void; }
     className: 'note-btn',
     click: function () {
       context.invoke('editor.insertText', 'Hello from test btn!!!');
-    }
+    },
   });
   return button.render();
 }

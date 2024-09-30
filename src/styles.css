@@ -1533,10 +1533,8 @@ div#global-loader,
 }
 
 .btn-primary:hover {
-  background-color: #fff;
-  border-color: #7539ff;
-  color: #7539ff;
-  box-shadow: inset 0 50px 0 0 #fff;
+  background-color: #ac54f4;
+  border: 1px solid #ac54f4;
 }
 
 .btn-primary:disabled {
@@ -15691,7 +15689,6 @@ body.filter-opened {
 .modal-footer .btn-back.active {
   background: #7539ff;
   border: 1px solid #7539ff;
-  box-shadow: inset 0 50px 0 0 #7539ff;
   color: #fff;
 }
 
@@ -32889,4 +32886,12 @@ table tbody tr td {
 
 .main-blockcat.active .main-cate .strcat i {
   transform: rotate(90deg);
+}
+
+span.propasicon {
+  position: absolute;
+  right: 15px;
+  top: 54%;
+  color: #757575;
+  cursor: pointer;
 }

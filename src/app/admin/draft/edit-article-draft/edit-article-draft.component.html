@@ -25,16 +25,25 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Article Name</label>
-                        <input type="text" formControlName="articleName" class="form-control"
-                          placeholder="Enter Article Name" />
-                        <div *ngIf="
+                        <input
+                          type="text"
+                          formControlName="articleName"
+                          class="form-control"
+                          placeholder="Enter Article Name"
+                        />
+                        <div
+                          *ngIf="
                             articleForm.get('articleName')?.invalid &&
                             (articleForm.get('articleName')?.dirty ||
                               articleForm.get('articleName')?.touched)
-                          " class="text-danger">
-                          <div *ngIf="
+                          "
+                          class="text-danger"
+                        >
+                          <div
+                            *ngIf="
                               articleForm.get('articleName')?.errors?.['required']
-                            ">
+                            "
+                          >
                             Article Name is required.
                           </div>
                         </div>
@@ -42,36 +51,85 @@
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3" *ngIf="allcategories">
+                      <div class="input-block mb-3">
                         <label>Category</label>
-                        <ng-multiselect-dropdown [placeholder]="'Select Categories'" [settings]="dropdownSettings"
-                          [data]="allcategories" formControlName="category" (onSelect)="onCategorySelect($event.id)"
-                          (onDeSelect)="onCategoryDeSelect($event.id)" (change)="this.inputChanged.next('category')">
-                        </ng-multiselect-dropdown>
-                      </div>
-                      <div *ngIf="
-                          articleForm.get('category')?.invalid &&
-                          (articleForm.get('category')?.dirty ||
-                            articleForm.get('category')?.touched)
-                        " class="text-danger">
-                        <div *ngIf="
-                          articleForm.get('category')?.errors?.['required']
-                        ">
+                        <select
+                          id="category"
+                          formControlName="category"
+                          #catsValues
+                          (change)="onCategoryChange(catsValues.value)"
+                          class="form-control"
+                        >
+                          <option value="" disabled>Select a category</option>
+                          <option
+                            *ngFor="let cat of articleCategoryData"
+                            [value]="cat.id"
+                          >
+                            {{ cat.name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            articleForm.get('category')?.invalid &&
+                            articleForm.get('category')?.touched
+                          "
+                          class="text-danger"
+                        >
                           Category is required.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Sub Category</label>
+                        <select
+                          id="subCategory"
+                          formControlName="subCategory"
+                          class="form-control"
+                        >
+                          <option value="" disabled>
+                            Select a subcategory
+                          </option>
+                          <option
+                            *ngFor="let subCat of subCategories"
+                            [value]="subCat.id"
+                          >
+                            {{ subCat.name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            articleForm.get('subCategory')?.invalid &&
+                            articleForm.get('subCategory')?.touched
+                          "
+                          class="text-danger"
+                        >
+                          Sub Category is required.
                         </div>
                       </div>
                     </div>
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Slug</label>
-                        <input type="text" formControlName="slug" class="form-control" placeholder="Enter Slug "
-                          (change)="this.inputChanged.next('slug')" />
-                        <div *ngIf="
+                        <input
+                          type="text"
+                          formControlName="slug"
+                          class="form-control"
+                          placeholder="Enter Slug "
+                          (change)="this.inputChanged.next('slug')"
+                        />
+                        <div
+                          *ngIf="
                             articleForm.get('slug')?.invalid &&
                             (articleForm.get('slug')?.dirty ||
                               articleForm.get('slug')?.touched)
-                          " class="text-danger">
-                          <div *ngIf="articleForm.get('slug')?.errors?.['required']">
+                          "
+                          class="text-danger"
+                        >
+                          <div
+                            *ngIf="articleForm.get('slug')?.errors?.['required']"
+                          >
                             Slug is required.
                           </div>
                         </div>
@@ -89,15 +147,22 @@
                           rows="5"
                         ></ckeditor> -->
 
-                        <div formControlName="description" [ngxSummernote]="config"
-                          [ngxSummernoteDisabled]="editorDisabled">
-                        </div>
-                        <div *ngIf="
+                        <div
+                          formControlName="description"
+                          [ngxSummernote]="config"
+                          [ngxSummernoteDisabled]="editorDisabled"
+                        ></div>
+                        <div
+                          *ngIf="
                             articleForm.get('description')?.invalid &&
                             (articleForm.get('description')?.dirty ||
                               articleForm.get('description')?.touched)
-                          " class="text-danger">
-                          <div *ngIf="articleForm.get('description')?.errors?.['required']">
+                          "
+                          class="text-danger"
+                        >
+                          <div
+                            *ngIf="articleForm.get('description')?.errors?.['required']"
+                          >
                             Description is required.
                           </div>
                         </div>
@@ -106,14 +171,24 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Metas</label>
-                        <textarea formControlName="meta" class="form-control" placeholder="Enter Notes" rows="5"
-                          (change)="this.inputChanged.next('meta')"></textarea>
-                        <div *ngIf="
+                        <textarea
+                          formControlName="meta"
+                          class="form-control"
+                          placeholder="Enter Notes"
+                          rows="5"
+                          (change)="this.inputChanged.next('meta')"
+                        ></textarea>
+                        <div
+                          *ngIf="
                             articleForm.get('meta')?.invalid &&
                             (articleForm.get('meta')?.dirty ||
                               articleForm.get('meta')?.touched)
-                          " class="text-danger">
-                          <div *ngIf="articleForm.get('meta')?.errors?.['required']">
+                          "
+                          class="text-danger"
+                        >
+                          <div
+                            *ngIf="articleForm.get('meta')?.errors?.['required']"
+                          >
                             Metas are required.
                           </div>
                         </div>
@@ -123,44 +198,76 @@
                       <div class="input-block">
                         <label>Banner Image</label>
                         <div
-                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center">
+                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
+                        >
                           <span>
-                            <img [src]="
+                            <img
+                              [src]="
                                 croppedBannerImage
                                   ? croppedBannerImage
                                   : singleDraft.data.image
-                              " alt="upload" id="bannerPreview" />
+                              "
+                              alt="upload"
+                              id="bannerPreview"
+                            />
                           </span>
-                          <h6 class="drop-browse align-center" *ngIf="!showBannerCropper">
+                          <h6
+                            class="drop-browse align-center"
+                            *ngIf="!showBannerCropper"
+                          >
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
                           </h6>
                           <p class="text-muted" *ngIf="!showBannerCropper">
                             Maximum size: 50MB
                           </p>
-                          <input type="file" id="bannerImage" (change)="handleBannerImageInput($event)" />
+                          <input
+                            type="file"
+                            id="bannerImage"
+                            (change)="handleBannerImageInput($event)"
+                          />
                           <div id="bannerFrames"></div>
-                          <image-cropper *ngIf="showBannerCropper" [imageChangedEvent]="bannerImageChangedEvent"
-                            [aspectRatio]="16 / 9" [maintainAspectRatio]="true" format="png"
-                            (imageCropped)="bannerImageCropped($event)"></image-cropper>
-                          <button *ngIf="showBannerCropper" (click)="saveCroppedBannerImage()"
-                            class="btn btn-primary mt-2">
+                          <image-cropper
+                            *ngIf="showBannerCropper"
+                            [imageChangedEvent]="bannerImageChangedEvent"
+                            [aspectRatio]="16 / 9"
+                            [maintainAspectRatio]="true"
+                            format="png"
+                            (imageCropped)="bannerImageCropped($event)"
+                          ></image-cropper>
+                          <button
+                            *ngIf="showBannerCropper"
+                            (click)="saveCroppedBannerImage()"
+                            class="btn btn-primary mt-2"
+                          >
                             Save
                           </button>
                         </div>
                       </div>
-                      <div *ngIf="
+                      <div
+                        *ngIf="
                           this.singleDraft.data.image === nullImagePath &&
                           articleForm.get('bannerImage')?.invalid &&
                           (articleForm.get('bannerImage')?.dirty ||
                             articleForm.get('bannerImage')?.touched)
-                        " class="text-danger">
-                        <div *ngIf="articleForm.get('bannerImage')?.errors?.['required']">
+                        "
+                        class="text-danger"
+                      >
+                        <div
+                          *ngIf="articleForm.get('bannerImage')?.errors?.['required']"
+                        >
                           Banner Image is required.
                         </div>
                       </div>
-                      <button type="button" class="btn btn-back mt-4" (click)="open(previewModal)"
-                        *ngIf="IsBannerImage || singleDraft.data.image != nullImagePath">
+                      <button
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(previewModal)"
+                        *ngIf="
+                          IsBannerImage ||
+                          singleDraft.data.image != nullImagePath
+                        "
+                      >
                         Preview Banner Image
                       </button>
                     </div>
@@ -169,53 +276,90 @@
                       <div class="input-block">
                         <label>Thumbnail Image</label>
                         <div
-                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center">
+                          class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
+                        >
                           <span>
-                            <img [src]="
+                            <img
+                              [src]="
                                 croppedThumbnailImage
                                   ? croppedThumbnailImage
                                   : singleDraft.data.thumbnail
-                              " id="thumbnailPreview" alt="upload" />
+                              "
+                              id="thumbnailPreview"
+                              alt="upload"
+                            />
                           </span>
-                          <h6 class="drop-browse align-center" *ngIf="!showThumbnailCropper">
+                          <h6
+                            class="drop-browse align-center"
+                            *ngIf="!showThumbnailCropper"
+                          >
                             Drop your files here or
                             <span class="text-primary ms-1">browse</span>
                           </h6>
                           <p class="text-muted" *ngIf="!showThumbnailCropper">
                             Maximum size: 50MB
                           </p>
-                          <input type="file" id="thumbnailImage" (change)="handleThumbnailImageInput($event)" />
+                          <input
+                            type="file"
+                            id="thumbnailImage"
+                            (change)="handleThumbnailImageInput($event)"
+                          />
                           <div id="thumbnailFrames"></div>
-                          <image-cropper *ngIf="showThumbnailCropper" [imageChangedEvent]="thumbnailImageChangedEvent"
-                            [aspectRatio]="1 / 1" [maintainAspectRatio]="true" format="png"
-                            (imageCropped)="thumbnailImageCropped($event)"></image-cropper>
-                          <button *ngIf="showThumbnailCropper" (click)="saveCroppedThumbnailImage()"
-                            class="btn btn-primary mt-2">
+                          <image-cropper
+                            *ngIf="showThumbnailCropper"
+                            [imageChangedEvent]="thumbnailImageChangedEvent"
+                            [aspectRatio]="1 / 1"
+                            [maintainAspectRatio]="true"
+                            format="png"
+                            (imageCropped)="thumbnailImageCropped($event)"
+                          ></image-cropper>
+                          <button
+                            *ngIf="showThumbnailCropper"
+                            (click)="saveCroppedThumbnailImage()"
+                            class="btn btn-primary mt-2"
+                          >
                             Save
                           </button>
                         </div>
                       </div>
-                      <div *ngIf="
+                      <div
+                        *ngIf="
                           this.singleDraft.data.thumbnail === nullImagePath &&
                           articleForm.get('thumbnailImage')?.invalid &&
                           (articleForm.get('thumbnailImage')?.dirty ||
                             articleForm.get('thumbnailImage')?.touched)
-                        " class="text-danger">
-                        <div *ngIf="articleForm.get('thumbnailImage')?.errors?.['required']">
+                        "
+                        class="text-danger"
+                      >
+                        <div
+                          *ngIf="articleForm.get('thumbnailImage')?.errors?.['required']"
+                        >
                           Thumbnail Image is required.
                         </div>
                       </div>
-                      <button type="button" class="btn btn-back mt-4" (click)="open(preview2Modal)"
-                        *ngIf="IsThumbnailImage || singleDraft.data.thumbnail != nullImagePath">
+                      <button
+                        type="button"
+                        class="btn btn-back mt-4"
+                        (click)="open(preview2Modal)"
+                        *ngIf="
+                          IsThumbnailImage ||
+                          singleDraft.data.thumbnail != nullImagePath
+                        "
+                      >
                         Preview Thumbnail Image
                       </button>
                     </div>
 
                     <div class="text-end">
-                      <button type="submit" class="btn btn-primary mt-4" (click)="onSubmit()" [disabled]="
+                      <button
+                        type="submit"
+                        class="btn btn-primary mt-4"
+                        (click)="onSubmit()"
+                        [disabled]="
                           showBannerCropper == true ||
                           showThumbnailCropper == true
-                        ">
+                        "
+                      >
                         Update
                       </button>
                     </div>
@@ -234,17 +378,35 @@
     <div class="form-header modal-header-title text-start mb-0">
       <h4 class="mb-0">Preview Banner Image</h4>
     </div>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
   </div>
   <div class="modal-body">
     <a class="podcastdetailbanner mb-3">
       <span>
-        <img [src]="
+        <img
+          [src]="
             croppedBannerImage ? croppedBannerImage : singleDraft.data.image
-          " class="w-100 h-100" style="object-fit: contain" alt="upload" id="bannerPreview" /> </span></a>
+          "
+          class="w-100 h-100"
+          style="object-fit: contain"
+          alt="upload"
+          id="bannerPreview"
+        /> </span
+    ></a>
   </div>
   <div class="modal-footer">
-    <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2" (click)="modal.close()">
+    <button
+      type="button"
+      data-bs-dismiss="modal"
+      class="btn btn-back cancel-btn me-2"
+      (click)="modal.close()"
+    >
       Cancel
     </button>
   </div>
@@ -254,19 +416,37 @@
     <div class="form-header modal-header-title text-start mb-0">
       <h4 class="mb-0">Preview Thumbnail Image</h4>
     </div>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
   </div>
   <div class="modal-body">
     <a class="podcastdetailbanner mb-3">
       <span>
-        <img [src]="
+        <img
+          [src]="
             croppedThumbnailImage
               ? croppedThumbnailImage
               : singleDraft.data.thumbnail
-          " class="w-100 h-100" style="object-fit: contain" alt="upload" id="thumbnailPreview" /> </span></a>
+          "
+          class="w-100 h-100"
+          style="object-fit: contain"
+          alt="upload"
+          id="thumbnailPreview"
+        /> </span
+    ></a>
   </div>
   <div class="modal-footer">
-    <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2" (click)="modal.close()">
+    <button
+      type="button"
+      data-bs-dismiss="modal"
+      class="btn btn-back cancel-btn me-2"
+      (click)="modal.close()"
+    >
       Cancel
     </button>
   </div>

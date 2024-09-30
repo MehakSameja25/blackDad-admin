@@ -82,7 +82,8 @@ export class AddNewRoleComponent {
   ngOnInit(): void {
     this.menuData.push({ id: 1, name: 'Categories' });
     this.menuData.push({ id: 2, name: 'Episode' });
-    this.menuData.push({ id: 3, name: 'Artical' });
+    this.menuData.push({ id: 3, name: 'Article' });
+    this.menuData.push({ id: 5, name: 'Article Categories' });
   }
 
   addMenu(id: number, event: any) {
