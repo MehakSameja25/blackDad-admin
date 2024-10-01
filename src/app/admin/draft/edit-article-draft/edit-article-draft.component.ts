@@ -92,11 +92,11 @@ export class EditArticleDraftComponent {
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       category: ['', [Validators.required]],
+      subCategory: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       bannerImage: [''],
       thumbnailImage: [''],
     });
-    this.getCategories();
     this.getSingleArticle();
     this.getCategoryArticle();
   }
@@ -121,16 +121,10 @@ export class EditArticleDraftComponent {
 
     this.selectedSubCategoryId = null;
     this.articleForm.get('subCategory')?.setValue(null);
+    this.inputChanged.next('');
   }
 
-  getCategories() {
-    this.categoryService
-      .unblockedCategories()
-      .subscribe((response: Category) => {
-        this.allcategories = response.data;
-        console.log(this.allcategories);
-      });
-  }
+
   getSingleArticle() {
     this.draftId = this.route.snapshot.paramMap.get('id');
     this.postsService
@@ -200,7 +194,10 @@ export class EditArticleDraftComponent {
     const formData = new FormData();
     formData.append('name', this.articleForm.value.articleName);
     formData.append('type', 'articles');
-    formData.append('articleTypeId', JSON.stringify([this.selectedSubCategoryId]));
+    formData.append(
+      'articleTypeId',
+      JSON.stringify([this.articleForm.value.subCategory])
+    );
     formData.append('description', this.articleForm.value.description);
     // formData.append('thumbnail', this.articleForm.value.bannerImage);
     // formData.append('image', this.articleForm.value.thumbnailImage);

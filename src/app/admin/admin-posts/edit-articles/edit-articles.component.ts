@@ -97,7 +97,7 @@ export class EditArticlesComponent {
       formData.append('type', 'articles');
       formData.append(
         'articleTypeId',
-        JSON.stringify([this.selectedSubCategoryId])
+        JSON.stringify([this.articleForm.value.subCategory])
       );
       formData.append('description', this.articleForm.value.description);
       formData.append('meta_description', this.articleForm.value.meta);
@@ -138,6 +138,12 @@ export class EditArticlesComponent {
         this.singleArticle.data.article_with_types[0]?.article_type.isParent,
       subCategory: this.singleArticle.data.article_with_types[0]?.articleTypeId,
     });
+
+    this.subCategories = this.data.filter(
+      (category: { isParent: number }) =>
+        category.isParent ==
+        this.singleArticle.data.article_with_types[0]?.article_type.isParent
+    );
   }
 
   markFormGroupTouched(formGroup: FormGroup) {

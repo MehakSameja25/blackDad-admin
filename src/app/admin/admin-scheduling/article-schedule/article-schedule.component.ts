@@ -100,9 +100,9 @@ export class ArticleScheduleComponent implements OnInit {
           item.name.length > 35
             ? this.truncateDescription(item.name)
             : item.name,
-          `<ul> ${item.category
+          `<ul> ${item.category ? item.category
             .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
-            .join('')} </ul>`,
+            .join(''): "N/A" } </ul>`,
           item.created_at ? item.created_at.split('T')[0] : 'N/A',
           this.getScheduledStatus(item.isApproved, item.isPublished),
           `<div class="actions d-flex align-items-center gap-2">

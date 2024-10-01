@@ -87,8 +87,9 @@
                           id="subCategory"
                           formControlName="subCategory"
                           class="form-control"
+                          (change)="inputChanged.next('subCategory')"
                         >
-                          <option value="" disabled>
+                          <option disabled>
                             Select a subcategory
                           </option>
                           <option
