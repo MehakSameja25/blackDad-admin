@@ -143,29 +143,42 @@ export class RolesComponent implements OnInit {
   @ViewChild('deletee')
   public deleteModel!: ElementRef;
 
+  private actionListener: (() => void) | null = null;
+
   bindEvents(): void {
+    // Check if the listener is already set
+    if (this.actionListener) {
+      return; // Exit if the listener is already set
+    }
+
     const tableElement = this.table.nativeElement;
-    const actionButtons = tableElement.querySelectorAll(
-      '.btn-action-icon, .btn-danger'
-    );
 
-    actionButtons.forEach((button: HTMLElement) => {
-      const action = button.getAttribute('data-action');
-      const id = button.getAttribute('data-id');
-      switch (action) {
-        case 'delete':
-          this.renderer.listen(button, 'click', () =>
-            this.open(this.deleteModel, id)
-          );
-          break;
-        case 'edit':
-          this.renderer.listen(button, 'click', () => this.toEdit(id));
-          break;
+    this.actionListener = this.renderer.listen(
+      tableElement,
+      'click',
+      (event) => {
+        const target = event.target as HTMLElement;
+        const button = target.closest('.btn-action-icon, .btn-danger');
 
-        default:
-          break;
+        if (button) {
+          const action = button.getAttribute('data-action');
+          const id = button.getAttribute('data-id');
+
+          if (action && id) {
+            switch (action) {
+              case 'delete':
+                this.open(this.deleteModel, id);
+                break;
+              case 'edit':
+                this.toEdit(id);
+                break;
+              default:
+                break;
+            }
+          }
+        }
       }
-    });
+    );
   }
 
   open(content: ElementRef, id: string | null) {

@@ -15,7 +15,7 @@ import { SingleArticle } from '../../model/article.model';
   templateUrl: './detail-article.component.html',
 })
 export class DetailArticleComponent {
-  articleDetails!: SingleArticle;
+  articleDetails!: any;
   sanitizedDescription: SafeHtml | undefined;
   successalertClass: string = 'd-none';
   successMessage: string = '';

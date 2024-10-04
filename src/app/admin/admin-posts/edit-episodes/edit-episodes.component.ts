@@ -364,19 +364,19 @@ export class EditEpisodesComponent {
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
   }
-  onCategorySelect(item: { id: String | number }) {
-    const index = this.selectedCategories.indexOf(item.id.toString());
+  onCategorySelect(item: String | number) {
+    const index = this.selectedCategories.indexOf(item.toString());
     if (index === -1) {
-      this.selectedCategories.push(item.id.toString());
+      this.selectedCategories.push(item.toString());
     } else {
       this.selectedCategories.splice(index, 1);
     }
     console.log('Selected Category:', this.selectedCategories);
   }
 
-  onCategoryDeSelect(item: { id: String | number }) {
+  onCategoryDeSelect(item: number | String) {
     const index = this.selectedCategories.findIndex(
-      (cat) => cat === item.id.toString()
+      (cat) => cat === item.toString()
     );
     if (index !== -1) {
       this.selectedCategories.splice(index, 1);

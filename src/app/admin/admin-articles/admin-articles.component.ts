@@ -115,27 +115,19 @@ export class AdminArticlesComponent implements OnInit {
     }
     this.postService.getArticles(this.body).subscribe((response) => {
       this.allArticles = response;
-      this.tableData = response.data.map(
-        (item: {
-          thumbnail: string;
-          name: string;
-          category: [];
-          created_at: string;
-          isApproved: string;
-          isPublished: string;
-          id: string | null;
-          isBlock: string;
-        }) => [
-          `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
-          item.name.length > 35
-            ? this.truncateDescription(item.name)
-            : item.name,
-          `<ul> ${item.category
-            .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
-            .join('')} </ul>`,
-          item.created_at ? item.created_at.split('T')[0] : 'N/A',
-          this.getScheduledStatus(item.isApproved, item.isPublished),
-          `<div class="actions d-flex align-items-center gap-2">
+      this.tableData = response.data.map((item: any) => [
+        `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
+        item.name.length > 35 ? this.truncateDescription(item.name) : item.name,
+        `<ul> ${
+          item.category && item.category.length
+            ? item.category
+                .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
+                .join('')
+            : item.article_with_types[0].article_type.name
+        }  </ul>`,
+        item.created_at ? item.created_at.split('T')[0] : 'N/A',
+        this.getScheduledStatus(item.isApproved, item.isPublished),
+        `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
               xmlns=" http://www.w3.org/2000/svg"
@@ -340,8 +332,7 @@ export class AdminArticlesComponent implements OnInit {
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 512 512.005" xml:space="preserve" style="enable-background: new 0 0 16 16;"><g><path d="M453.336 512.004H58.668c-32.363 0-58.664-26.305-58.664-58.664V144.004c0-32.363 26.3-58.664 58.664-58.664h74.668c8.832 0 16 7.168 16 16s-7.168 16-16 16H58.668c-14.7 0-26.664 11.965-26.664 26.664V453.34c0 14.695 11.965 26.664 26.664 26.664h394.668c14.7 0 26.668-11.969 26.668-26.664V272.004c0-8.832 7.168-16 16-16s16 7.168 16 16V453.34c0 32.36-26.305 58.664-58.668 58.664zm0 0" fill="#000000" opacity="1" data-original="#000000"></path><path d="M143.98 341.063a14.09 14.09 0 0 1-3.52-.43c-7.23-1.684-12.456-7.871-12.456-15.293v-32c0-114.688 93.312-208 208-208h5.332V16.004a16.024 16.024 0 0 1 10.027-14.848 15.979 15.979 0 0 1 17.492 3.754l138.668 144c5.973 6.188 5.973 16 0 22.188l-138.668 144c-4.523 4.715-11.5 6.168-17.492 3.754a16.024 16.024 0 0 1-10.027-14.848v-69.332h-25.344c-67.113 0-127.426 37.289-157.418 97.3-2.754 5.548-8.535 9.09-14.594 9.09zM336.004 117.34c-89.602 0-163.797 67.305-174.656 154.023 38.78-43.261 94.398-68.691 154.644-68.691h41.344c8.832 0 16 7.168 16 16v45.652l100.457-104.32-100.457-104.32v45.656c0 8.832-7.168 16-16 16zm0 0" fill="#000000" opacity="1" data-original="#000000"></path></g></svg>
         </a>
         </div>`,
-        ]
-      );
+      ]);
 
       setTimeout(() => this.bindEvents(), 0);
     });
@@ -350,41 +341,52 @@ export class AdminArticlesComponent implements OnInit {
   /**
    * @description  Attaches event listeners to action buttons within the table. Each button's action (e.g., open, edit, details, block, share) is handled based on its 'data-action' attribute, and the corresponding method is called with the button's 'data-id' as an argument.
    */
+  private actionListener: (() => void) | null = null;
+
   bindEvents(): void {
+    // Check if the listener is already set
+    if (this.actionListener) {
+      return; // Exit if the listener is already set
+    }
+
     const tableElement = this.table.nativeElement;
-    const actionButtons = tableElement.querySelectorAll(
-      '.btn-action-icon, .btn-danger'
-    );
 
-    actionButtons.forEach((button: HTMLElement) => {
-      const action = button.getAttribute('data-action');
-      const id = button.getAttribute('data-id');
-      switch (action) {
-        case 'open':
-          this.renderer.listen(button, 'click', () =>
-            this.open(this.deleteModel, id)
-          );
-          break;
-        case 'edit':
-          this.renderer.listen(button, 'click', () => this.toEdit(id));
-          break;
-        case 'details':
-          this.renderer.listen(button, 'click', () => this.toDetails(id));
-          break;
-        case 'block':
-          this.renderer.listen(button, 'click', () => this.updateBlock(id));
-          break;
-        case 'shareing':
-          this.renderer.listen(button, 'click', () =>
-            this.openShare(this.shareModel, id)
-          );
-          break;
-        default:
-          break;
+    this.actionListener = this.renderer.listen(
+      tableElement,
+      'click',
+      (event) => {
+        const target = event.target as HTMLElement;
+        const button = target.closest('.btn-action-icon, .btn-danger');
+
+        if (button) {
+          const action = button.getAttribute('data-action');
+          const id = button.getAttribute('data-id');
+
+          if (action && id) {
+            switch (action) {
+              case 'open':
+                this.open(this.deleteModel, id);
+                break;
+              case 'edit':
+                this.toEdit(id);
+                break;
+              case 'details':
+                this.toDetails(id);
+                break;
+              case 'block':
+                this.updateBlock(id);
+                break;
+              case 'shareing':
+                this.openShare(this.shareModel, id);
+                break;
+              default:
+                break;
+            }
+          }
+        }
       }
-    });
+    );
   }
-
   /**
    * @description Fetches and stores a list of unblocked categories from the category service. Updates 'allcategories' with the response data.
    */

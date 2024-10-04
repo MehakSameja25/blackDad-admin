@@ -50,30 +50,61 @@
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
-                      <div class="input-block mb-3" *ngIf="allcategories">
+                      <div class="input-block mb-3">
                         <label>Category</label>
-                        <ng-multiselect-dropdown
-                          [placeholder]="'Select Categories'"
-                          [settings]="dropdownSettings"
-                          [data]="allcategories"
+                        <select
+                          id="category"
                           formControlName="category"
-                          (onSelect)="onCategorySelect($event)"
-                          (onDeSelect)="onCategoryDeSelect($event)"
+                          #catsValues
+                          (change)="onCategoryChange(catsValues.value)"
+                          class="form-control"
                         >
-                        </ng-multiselect-dropdown>
-                      </div>
-                      <div
-                        *ngIf="
-                          articleForm.get('category')?.invalid &&
-                          (articleForm.get('category')?.dirty ||
-                            articleForm.get('category')?.touched)
-                        "
-                        class="text-danger"
-                      >
+                          <option value="" disabled>Select a category</option>
+                          <option
+                            *ngFor="let cat of articleCategoryData"
+                            [value]="cat.id"
+                          >
+                            {{ cat.name }}
+                          </option>
+                        </select>
                         <div
-                          *ngIf="articleForm.get('category')?.errors?.['required']"
+                          *ngIf="
+                            articleForm.get('category')?.invalid &&
+                            articleForm.get('category')?.touched
+                          "
+                          class="text-danger"
                         >
                           Category is required.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <div class="input-block mb-3">
+                        <label>Sub Category</label>
+                        <select
+                          id="subCategory"
+                          formControlName="subCategory"
+                          class="form-control"
+                        >
+                          <option value="" disabled>
+                            Select a subcategory
+                          </option>
+                          <option
+                            *ngFor="let subCat of subCategories"
+                            [value]="subCat.id"
+                          >
+                            {{ subCat.name }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            articleForm.get('subCategory')?.invalid &&
+                            articleForm.get('subCategory')?.touched
+                          "
+                          class="text-danger"
+                        >
+                          Sub Category is required.
                         </div>
                       </div>
                     </div>
@@ -106,13 +137,12 @@
                     <div class="col-12">
                       <div class="input-block mb-3">
                         <label>Description</label>
-                        <ckeditor
-                          [editor]="editor"
+                        <div
                           formControlName="description"
-                          class="form-control"
-                          placeholder="Enter Description"
-                          rows="5"
-                        ></ckeditor>
+                          [ngxSummernote]="config"
+                          [ngxSummernoteDisabled]="editorDisabled"
+                        ></div>
+
                         <div
                           *ngIf="
                             articleForm.get('description')?.invalid &&

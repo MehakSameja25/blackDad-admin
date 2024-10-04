@@ -54,10 +54,6 @@ import { EditProductComponent } from './admin/ecommerce/product/edit-product/edi
 import { EditManufacturerComponent } from './admin/ecommerce/manufacturer/main/edit-manufacturer/edit-manufacturer.component';
 import { ProductCategoriesComponent } from './admin/ecommerce/product-categories/product-categories.component';
 import { DetalisProductComponent } from './admin/ecommerce/product/detalis-product/detalis-product.component';
-import {
-  SlickCarouselComponent,
-  SlickCarouselModule,
-} from 'ngx-slick-carousel';
 import { TooltipDirective } from './Directives/tooltip.directive';
 import { LoaderComponent } from './admin/loader/loader.component';
 import { LoaderInterceptor } from './admin/main-interceptors/loader.interceptor';
@@ -68,6 +64,12 @@ import { ProductPreviewComponent } from './admin/ecommerce/product/product-previ
 import { AddComponent } from './admin/ecommerce/manufacturer/roles/add/add.component';
 import { ListComponent } from './admin/ecommerce/manufacturer/roles/list/list.component';
 import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/assign.component';
+import { NgxSummernoteModule } from 'ngx-summernote';
+import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
+import {
+  SlickCarouselComponent,
+  SlickCarouselModule,
+} from 'ngx-slick-carousel';
 
 @NgModule({
   declarations: [
@@ -122,6 +124,7 @@ import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/ass
     AddComponent,
     ListComponent,
     AssignComponent,
+    ArticalTypesComponent
   ],
   imports: [
     BrowserModule,
@@ -141,6 +144,7 @@ import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/ass
       clickToClose: true,
     }),
     SlickCarouselModule,
+    NgxSummernoteModule
   ],
   providers: [
     {
@@ -149,6 +153,11 @@ import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/ass
       multi: true,
     },
     AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoaderInterceptor,

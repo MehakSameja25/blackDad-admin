@@ -21,10 +21,10 @@ export class AddNewRoleComponent {
     edit: boolean;
     delete: boolean;
   } = {
-      add: false,
-      edit: false,
-      delete: false,
-    };
+    add: false,
+    edit: false,
+    delete: false,
+  };
   roleId!: string;
   constructor(
     private roleService: RoleService,
@@ -38,13 +38,15 @@ export class AddNewRoleComponent {
         this.roleService.getRoleWithId(this.roleId).subscribe((res) => {
           if (res && res.data) {
             this.roleData.name = res.data.name;
-            res.data.role_accesses.map((data: { id: number; menu_id: number; status: string; }) => {
-              this.roleData.role.push({
-                id: data.id,
-                menu_id: data.menu_id,
-                status: data.status,
-              });
-            });
+            res.data.role_accesses.map(
+              (data: { id: number; menu_id: number; status: string }) => {
+                this.roleData.role.push({
+                  id: data.id,
+                  menu_id: data.menu_id,
+                  status: data.status,
+                });
+              }
+            );
           }
         });
       }
@@ -80,7 +82,8 @@ export class AddNewRoleComponent {
   ngOnInit(): void {
     this.menuData.push({ id: 1, name: 'Categories' });
     this.menuData.push({ id: 2, name: 'Episode' });
-    this.menuData.push({ id: 3, name: 'Artical' });
+    this.menuData.push({ id: 3, name: 'Article' });
+    this.menuData.push({ id: 5, name: 'Article Categories' });
   }
 
   addMenu(id: number, event: any) {
@@ -129,8 +132,8 @@ export class AddNewRoleComponent {
 
   addRole() {
     let role;
-    if (!this.roleData.name || this.roleData.name?.trim().length < 5) {
-      this.notifications.error('Error', `role name must have minimum 5 length`);
+    if (!this.roleData.name || this.roleData.name.trim().length < 5) {
+      this.notifications.error('Error', `role name have minimum 5 length`);
       return;
     }
 

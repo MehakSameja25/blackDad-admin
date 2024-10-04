@@ -42,11 +42,14 @@
               <h6>Total Ordered</h6>
               <h5 class="d-flex align-items-center justify-content-between">
                 <i class="fa-solid fa-cubes-stacked"></i>
-                2
+                {{ dashboardData?.data?.totalOrder?.order }}
               </h5>
 
               <p>
-                <span>2% <i class="fe fe-chevrons-up"></i></span>Last month
+                <span
+                  >{{ dashboardData?.data?.totalOrder?.totalOrderIncrease }}%
+                  <i class="fe fe-chevrons-up"></i></span
+                >Last month
               </p>
             </div>
           </div>
@@ -57,11 +60,15 @@
               <h6>Total Delevered</h6>
               <h5 class="d-flex align-items-center justify-content-between">
                 <i class="fa-solid fa-truck"></i>
-                6
+                {{ dashboardData?.data?.totalDelivered?.delivered }}
               </h5>
 
               <p>
-                <span>6% <i class="fe fe-chevrons-up"></i></span>Last month
+                <span
+                  >{{
+                    dashboardData?.data?.totalDelivered?.totalDeliveredIncrease
+                  }}% <i class="fe fe-chevrons-up"></i></span
+                >Last month
               </p>
             </div>
           </div>
@@ -350,11 +357,11 @@
                           >
                             <img
                               class="avatar-img rounded-circle company"
-                              src="{{recent.product?.productImage}}"
+                              src="{{ recent.product?.productImage }}"
                               alt="Company Image"
                             />
                           </div>
-                          <span>{{recent.product?.product_name}}</span>
+                          <span>{{ recent.product?.product_name }}</span>
                         </h2>
                       </td>
                       <!-- <td>

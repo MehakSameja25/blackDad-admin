@@ -130,7 +130,26 @@
                         </span>
                       </div>
                     </div>
-
+                    <div
+                      class="text-danger"
+                      *ngIf="
+                        updateForm.get('password')?.invalid &&
+                        updateForm.get('password')?.touched
+                      "
+                    >
+                      <div
+                        *ngIf="updateForm.get('password')?.errors?.['required']"
+                      >
+                        Password is required.
+                      </div>
+                      <div
+                        *ngIf="updateForm.get('password')?.errors?.['passwordInvalid']"
+                      >
+                        Password must be at least 8 characters long, contain at
+                        least one uppercase letter, one lowercase letter, one
+                        number, and one special character.
+                      </div>
+                    </div>
                     <div class="col-lg-3 col-md-4 col-sm-12">
                       <button
                         type="submit"

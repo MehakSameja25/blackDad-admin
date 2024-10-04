@@ -1,6 +1,16 @@
 export const environment = {
-  // apiUrl: 'https://9zplrc5g-4100.inc1.devtunnels.ms/api/v1',
+  //stagging url
+  // apiUrl: 'https://api.blackdad.chooseyourfabric.in/api/v1',
+  // shareUrl: 'https://www.blackdadunfiltered.com/details',
+  // nullImagePath: 'https://api.blackdad.chooseyourfabric.in/api/v1/null',
+
+  //live url
+  // apiUrl: 'https://api.blackdadunfiltered.com/api/v1',
+  // shareUrl: 'https://blackdadunfiltered.com/details',
+  // nullImagePath: "'https://api.blackdadunfiltered.com/api/v1/null"
+
+  //local url
   apiUrl: 'https://api.blackdad.chooseyourfabric.in/api/v1',
-  shareUrl: 'https://www.blackdadunfiltered.com/details',
+  shareUrl: 'https://blackdad.xpertmedia.online/details',
   nullImagePath: 'https://api.blackdad.chooseyourfabric.in/api/v1/null',
 };

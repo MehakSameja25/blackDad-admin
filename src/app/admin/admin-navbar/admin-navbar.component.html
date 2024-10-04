@@ -441,6 +441,11 @@
           <ul [style]="displayClass2">
             <li><a routerLink="/admin/dashboard">Dashboard</a></li>
             <li>
+              <a [routerLink]="['/admin/all-orders']" routerLinkActive="active"
+                >All Orders</a
+              >
+            </li>
+            <li>
               <a routerLink="/manufacturers" routerLinkActive="active"
                 >All Manufacturers</a
               >
@@ -450,6 +455,13 @@
                 routerLink="/admin/manufecturer/roles"
                 routerLinkActive="active"
                 >Manufacturers Roles</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="/admin/manufecturer/roles/assigning"
+                routerLinkActive="active"
+                >Manufacturers Assign Roles</a
               >
             </li>
             <li>

@@ -44,6 +44,7 @@ import { ProductPreviewComponent } from './admin/ecommerce/product/product-previ
 import { AddComponent } from './admin/ecommerce/manufacturer/roles/add/add.component';
 import { ListComponent } from './admin/ecommerce/manufacturer/roles/list/list.component';
 import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/assign.component';
+import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
@@ -62,6 +63,11 @@ const routes: Routes = [
   {
     path: 'admin/categories',
     component: AdminCategoriesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin/artical-types',
+    component: ArticalTypesComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -270,6 +276,11 @@ const routes: Routes = [
   {
     path: 'admin/manufecturer/roles/assigning',
     component: AssignComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin/all-orders',
+    component: ManufacturerOrdersComponent,
     canActivate: [AuthGuard],
   },
 

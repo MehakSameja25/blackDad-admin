@@ -74,29 +74,39 @@ export class AdminMetasComponent implements OnInit {
   @ViewChild('contentt')
   public deleteModel!: ElementRef;
 
+  private actionListener: (() => void) | null = null;
+
   bindEvents(): void {
+    // Check if the listener is already set
+    if (this.actionListener) {
+      return; // Exit if the listener is already set
+    }
+
     const tableElement = this.table.nativeElement;
-    const actionButtons = tableElement.querySelectorAll(
-      '.btn-action-icon, .btn-danger'
-    );
 
-    actionButtons.forEach((button: HTMLElement) => {
-      const action = button.getAttribute('data-action');
-      const id = button.getAttribute('data-id');
-      switch (action) {
-        case 'edit':
-          this.renderer.listen(button, 'click', () => this.toEdit(id));
-          break;
+    this.actionListener = this.renderer.listen(
+      tableElement,
+      'click',
+      (event) => {
+        const target = event.target as HTMLElement;
+        const button = target.closest('.btn-action-icon, .btn-danger');
 
-        // case 'shareing':
-        //   this.renderer.listen(button, 'click', () =>
-        //     this.openShare(this.shareModel, id)
-        //   );
-        //   break;
-        default:
-          break;
+        if (button) {
+          const action = button.getAttribute('data-action');
+          const id = button.getAttribute('data-id');
+
+          if (action && id) {
+            switch (action) {
+              case 'edit':
+                this.toEdit(id);
+                break;
+              default:
+                break;
+            }
+          }
+        }
       }
-    });
+    );
   }
   toEdit(id: string | null) {
     this.router.navigate([`/admin/edit-metas/${id}`]);

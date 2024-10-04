@@ -144,6 +144,8 @@ export class AdminNavbarComponent implements OnInit {
       this.router.navigate(['/admin/episodes']);
     } else if (menu.menu_bar.title === 'Articles') {
       this.router.navigate(['/admin/articles']);
+    } else if (menu.menu_bar.title === 'Article Categories') {
+      this.router.navigate(['/admin/artical-types']);
     }
     // console.log(menu.menu_bar.title);
   }

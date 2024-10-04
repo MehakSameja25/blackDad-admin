@@ -10,6 +10,8 @@ import { environment } from 'src/environments/environment';
 import { Category } from '../../model/category.model';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { SingleDraft } from '../../model/article.model';
+import { ArticalCategoiesService } from '../../services/articalCategory.service';
+declare var $: { summernote: { ui: any } };
 
 @Component({
   selector: 'app-edit-article-draft',
@@ -53,6 +55,10 @@ export class EditArticleDraftComponent {
   editor = ClassicEditor;
   dropdownSettings: {};
   nullImagePath = environment.nullImagePath;
+  data: any;
+  articleCategoryData: any;
+  subCategories: any;
+  selectedSubCategoryId: any;
 
   constructor(
     private fb: FormBuilder,
@@ -60,7 +66,8 @@ export class EditArticleDraftComponent {
     private postsService: AllPostsService,
     private router: Router,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private articleCategory: ArticalCategoiesService
   ) {
     this.dropdownSettings = {
       singleSelection: false,
@@ -85,12 +92,13 @@ export class EditArticleDraftComponent {
       description: ['', [Validators.required]],
       meta: ['', [Validators.required]],
       category: ['', [Validators.required]],
+      subCategory: ['', [Validators.required]],
       slug: ['', [Validators.required]],
       bannerImage: [''],
       thumbnailImage: [''],
     });
-    this.getCategories();
     this.getSingleArticle();
+    this.getCategoryArticle();
   }
 
   setFormValues(): void {
@@ -106,14 +114,17 @@ export class EditArticleDraftComponent {
     });
   }
 
-  getCategories() {
-    this.categoryService
-      .unblockedCategories()
-      .subscribe((response: Category) => {
-        this.allcategories = response.data;
-        console.log(this.allcategories);
-      });
+  onCategoryChange(id: any) {
+    this.subCategories = this.data.filter(
+      (category: { isParent: number }) => category.isParent == id
+    );
+
+    this.selectedSubCategoryId = null;
+    this.articleForm.get('subCategory')?.setValue(null);
+    this.inputChanged.next('');
   }
+
+
   getSingleArticle() {
     this.draftId = this.route.snapshot.paramMap.get('id');
     this.postsService
@@ -183,7 +194,10 @@ export class EditArticleDraftComponent {
     const formData = new FormData();
     formData.append('name', this.articleForm.value.articleName);
     formData.append('type', 'articles');
-    formData.append('categoryId', JSON.stringify(this.selectedCategories));
+    formData.append(
+      'articleTypeId',
+      JSON.stringify([this.articleForm.value.subCategory])
+    );
     formData.append('description', this.articleForm.value.description);
     // formData.append('thumbnail', this.articleForm.value.bannerImage);
     // formData.append('image', this.articleForm.value.thumbnailImage);
@@ -361,4 +375,137 @@ export class EditArticleDraftComponent {
     this.inputChanged.next('');
     console.log('Deselected Category:', this.selectedCategories);
   }
+
+  getCategoryArticle() {
+    this.articleCategory.getArticalCategory().subscribe((res: any) => {
+      if (res) {
+        this.data = res.data;
+        this.articleCategoryData = this.data.filter(
+          (category: { isParent: null }) => category.isParent === null
+        );
+      }
+    });
+  }
+
+  public config: any = {
+    airMode: false,
+    tabDisable: true,
+    popover: {
+      table: [
+        ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+        ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
+      ],
+      image: [
+        ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+        ['float', ['floatLeft', 'floatRight', 'floatNone']],
+        ['remove', ['removeMedia']],
+      ],
+      link: [['link', ['linkDialogShow', 'unlink']]],
+      air: [
+        [
+          'font',
+          [
+            'bold',
+            'italic',
+            'underline',
+            'strikethrough',
+            'superscript',
+            'subscript',
+            'clear',
+          ],
+        ],
+      ],
+    },
+    height: '200px',
+    uploadImagePath: '/api/upload',
+    toolbar: [
+      ['misc', ['codeview', 'undo', 'redo', 'codeBlock']],
+      [
+        'font',
+        [
+          'bold',
+          'italic',
+          'underline',
+          'strikethrough',
+          'superscript',
+          'subscript',
+          'clear',
+        ],
+      ],
+      ['fontsize', ['fontname', 'fontsize', 'color']],
+      ['para', ['style0', 'ul', 'ol', 'paragraph', 'height']],
+      ['insert', ['table', 'picture', 'link', 'video', 'hr']],
+      ['customButtons', ['testBtn']],
+      ['view', ['fullscreen', 'codeview', 'help']],
+    ],
+    fontSizes: [
+      '8',
+      '9',
+      '10',
+      '11',
+      '12',
+      '14',
+      '18',
+      '24',
+      '36',
+      '44',
+      '56',
+      '64',
+      '76',
+      '84',
+      '96',
+    ],
+    fontNames: [
+      'Arial',
+      'Times New Roman',
+      'Inter',
+      'Comic Sans MS',
+      'Courier New',
+      'Roboto',
+      'Times',
+      'MangCau',
+      'BayBuomHep',
+      'BaiSau',
+      'BaiHoc',
+      'CoDien',
+      'BucThu',
+      'KeChuyen',
+      'MayChu',
+      'ThoiDai',
+      'ThuPhap-Ivy',
+      'ThuPhap-ThienAn',
+    ],
+    buttons: {
+      testBtn: customButton,
+    },
+    codeviewFilter: true,
+    codeviewFilterRegex:
+      /<\/*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|t(?:itle|extarea)|xml|.*onmouseover)[^>]*?>/gi,
+    codeviewIframeFilter: true,
+  };
+  editorDisabled: boolean = false;
+
+  public enableEditor() {
+    this.editorDisabled = false;
+  }
+
+  public disableEditor() {
+    this.editorDisabled = true;
+  }
+}
+
+function customButton(context: {
+  invoke: (arg0: string, arg1: string) => void;
+}) {
+  const ui = $.summernote.ui;
+  const button = ui.button({
+    contents: '<i class="note-icon-magic"></i> Hello',
+    tooltip: 'Custom button',
+    container: '.note-editor',
+    className: 'note-btn',
+    click: function () {
+      context.invoke('editor.insertText', 'Hello from test btn!!!');
+    },
+  });
+  return button.render();
 }

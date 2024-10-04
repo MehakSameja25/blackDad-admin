@@ -12,6 +12,14 @@ import { ManufacturersService } from 'src/app/admin/services/manufacturers.servi
 import { ProductsService } from 'src/app/admin/services/products.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
+interface Variant {
+  size: string;
+  color: string;
+  material: string;
+  price: number;
+  quantity: any;
+}
+
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
@@ -45,14 +53,21 @@ export class EditProductComponent implements OnInit {
       category: ['', Validators.required],
       menufecturer: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
+      costPerItem: [''],
+      sale: [false, Validators.required],
+      profit: [{ value: '', disabled: true }],
+      margin: [{ value: '', disabled: true }],
       stockStatus: ['', Validators.required],
-      colors: [[]],
-      size: [[]],
-      stock: ['', [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
       images: [[]],
       productImage: [],
-      sizeChartImage: [],
+    });
+
+    this.variantForm = this.fb.group({
+      size: ['', Validators.required],
+      color: ['', Validators.required],
+      material: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -67,12 +82,79 @@ export class EditProductComponent implements OnInit {
     this.getManufacturers();
   }
 
+  calculateProfit() {
+    const price = this.productForm.get('price')?.value;
+    const costPerItem = this.productForm.get('costPerItem')?.value;
+    const profit = price - costPerItem;
+    this.productForm.patchValue({ profit: profit });
+  }
+
+  calculateMargin() {
+    const price = this.productForm.get('price')?.value;
+    const costPerItem = this.productForm.get('costPerItem')?.value;
+    const margin = price > 0 ? ((price - costPerItem) / price) * 100 : 0;
+    this.productForm.patchValue({
+      margin: margin >= 0 ? margin.toFixed(2) : 0,
+    });
+  }
+
+  variantForm!: FormGroup;
+  variants: Variant[] = [];
+
+  addVariant(): void {
+    if (this.variantForm.valid) {
+      const { size, color, material, price } = this.variantForm.value;
+
+      const colorsArray = this.parseInput(color);
+      const sizesArray = this.parseInput(size);
+      const materialsArray = this.parseInput(material);
+      const priceValue = Number(price);
+
+      if (isNaN(priceValue) || priceValue <= 0) {
+        console.error('Invalid price provided.');
+        return;
+      }
+
+      colorsArray.forEach((c) => {
+        sizesArray.forEach((s) => {
+          materialsArray.forEach((m) => {
+            this.variants.push({
+              size: s,
+              color: c,
+              material: m,
+              price: priceValue,
+              quantity: 0,
+            });
+          });
+        });
+      });
+
+      this.variantForm.reset();
+    } else {
+      this.variantForm.markAllAsTouched();
+    }
+  }
+
+  private parseInput(input: any): string[] {
+    if (typeof input === 'string') {
+      return input
+        .split(',')
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+    }
+    return [];
+  }
+
+  removeVariant(index: number): void {
+    this.variants.splice(index, 1);
+  }
   fetchProductList() {
     this._productService.get(this.productId).subscribe((res: any) => {
       const productData = res.data;
-      this.colors = productData.product_colors.map((color: any) => color.color);
 
-      this.sizes = productData.product_sizes.map((size: any) => size.size);
+      this.variants = productData.product_variants;
+      console.log(this.variants);
+
       this.uploadedImages = productData.product_images.map((img: any) => {
         return { image: img.image, id: img.id };
       });
@@ -82,12 +164,15 @@ export class EditProductComponent implements OnInit {
         category: productData.productCategoryId,
         menufecturer: productData.manufacturerId,
         price: productData.price,
+        costPerItem: productData.cost,
         stockStatus: productData.is_stock_available ? true : false,
         stock: productData.stock_quantity,
         description: productData.description,
         sizeChartImage: productData.sizeChart,
         productImage: productData.productImage,
       });
+      this.calculateMargin();
+      this.calculateProfit();
     });
   }
 
@@ -225,6 +310,15 @@ export class EditProductComponent implements OnInit {
     }
   }
 
+  updateVariant(index: number, field: keyof Variant, value: string | number) {
+    if (field === 'price') {
+      this.variants[index].price =
+        typeof value === 'string' ? parseFloat(value) : value;
+    } else {
+      this.variants[index][field] = value as Variant[typeof field];
+    }
+  }
+
   saveData() {
     const formData = this.createFormData();
     const productData: any = {};
@@ -258,21 +352,14 @@ export class EditProductComponent implements OnInit {
       JSON.parse(this.productForm.get('menufecturer')?.value)
     );
     formData.append('price', this.productForm.get('price')?.value);
+    formData.append('cost', this.productForm.get('costPerItem')?.value);
+    formData.append('isSale', this.productForm.get('sale')?.value);
     formData.append(
       'is_stock_available',
       JSON.parse(this.productForm.get('stockStatus')?.value)
     );
-    formData.append('stock_quantity', this.productForm.get('stock')?.value);
     formData.append('description', this.productForm.get('description')?.value);
-
-    formData.append('color', JSON.stringify(this.colors));
-
-    formData.append('size', JSON.stringify(this.sizes));
-
-    // formData.append(
-    //   'sizeChart',
-    //   this.productForm.get('sizeChartImage')?.value
-    // );
+    formData.append('variants', JSON.stringify(this.variants));
 
     for (let data of this.productForm.get('images')?.value) {
       formData.append('product_image', data);
