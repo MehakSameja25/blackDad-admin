@@ -11380,7 +11380,7 @@ table .badge {
   background-color: #fff;
   position: relative;
   padding: 16px 0;
-  min-height: 180px;
+  min-height: 133px;
 }
 
 .service-upload .drop-browse {
@@ -32904,4 +32904,30 @@ span.propasicon {
   border-radius: 999px;
   background: white;
   border: 0.6px solid #dfdfdf;
+}
+
+
+.scsm {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr 1fr;
+  grid-gap: 10px;
+}
+
+.qpad {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  grid-gap: 10px;
+}
+
+.qpad button.btn.btn-danger {
+  width: 40px;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+ul.list-group.naeqna .list-group-item {
+  border-width: 1px;
+  border-radius: 4px;
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
