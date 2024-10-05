@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MainNavService } from 'src/app/admin/services/main-nav.service';
 import { ManufacturersService } from 'src/app/admin/services/manufacturers.service';
 import { ProductsService } from 'src/app/admin/services/products.service';
 
@@ -11,10 +12,14 @@ import { ProductsService } from 'src/app/admin/services/products.service';
 export class ManufacturerOrderVieComponent implements OnInit {
   id!: string | null;
   orderDetails: any;
+  userType!: string;
+  acceptAccess: boolean = false;
+  rejectAccess: boolean = false;
   constructor(
     private orderService: ProductsService,
     private route: ActivatedRoute,
-    private manuService: ManufacturersService
+    private manuService: ManufacturersService,
+    private navService: MainNavService
   ) {}
 
   slideConfig = {
@@ -28,6 +33,7 @@ export class ManufacturerOrderVieComponent implements OnInit {
 
   ngOnInit(): void {
     this.get();
+    this.getMenu();
   }
 
   get() {
@@ -59,6 +65,19 @@ export class ManufacturerOrderVieComponent implements OnInit {
     this.manuService.updateOrder(body).subscribe((res) => {
       if (res) {
         this.get();
+      }
+    });
+  }
+
+  getMenu() {
+    this.navService.getMenu().subscribe((res) => {
+      if (res) {
+        this.userType = res.data[0]?.role_accesses[0]?.menu_bar?.title;
+        this.acceptAccess =
+          res.data[0]?.role_accesses[0]?.status.includes('accept');
+
+        this.rejectAccess =
+          res.data[0]?.role_accesses[0]?.status.includes('reject');
       }
     });
   }

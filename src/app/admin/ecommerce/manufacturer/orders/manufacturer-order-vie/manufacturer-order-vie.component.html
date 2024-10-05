@@ -5,7 +5,7 @@
     <div class="content container-fluid">
       <div class="page-header">
         <div class="content-page-header">
-          <h5>Product Details</h5>
+          <h5>Order Details</h5>
         </div>
       </div>
 
@@ -29,7 +29,8 @@
                         class="card p-0 m-0 bg-white"
                         ngxSlickItem
                         *ngFor="
-                          let slide of orderDetails?.product?.product_images
+                          let slide of orderDetails?.product?.product_images;
+                          let i = index
                         "
                       >
                         <img
@@ -37,6 +38,11 @@
                           class="card-img-top"
                           alt="..."
                         />
+                        <div class="text-center">
+                          {{ i + 1 }} /{{
+                            orderDetails?.product?.product_images?.length
+                          }}
+                        </div>
                       </div>
                     </ngx-slick-carousel>
                     <div class="row justify-content-center mt-3">
@@ -70,12 +76,20 @@
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div
                         class="input-block mb-3"
-                        *ngIf="orderDetails.status === 'pending'"
+                        *ngIf="
+                          orderDetails?.status === 'pending' &&
+                          userType == 'Manufacturer'
+                        "
                       >
-                        <button class="btn btn-primary" (click)="approve()">
+                        <button
+                          *ngIf="acceptAccess"
+                          class="btn btn-outline-primary me-3"
+                          (click)="approve()"
+                        >
                           Accept
                         </button>
                         <button
+                          *ngIf="rejectAccess"
                           class="btn btn-outline-danger"
                           (click)="rejected()"
                         >
@@ -117,14 +131,14 @@
                       <div class="input-block mb-3">
                         <label>Color</label>
                         <p>
-                          {{ orderDetails?.product_color?.color | titlecase }}
+                          {{ orderDetails?.product_variant?.color | titlecase }}
                         </p>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Size</label>
-                        <p>{{ orderDetails?.product_size?.size }}</p>
+                        <p>{{ orderDetails?.product_variant?.size }}</p>
                       </div>
                     </div>
                     <div class="col-lg-8 col-md-6 col-sm-12">

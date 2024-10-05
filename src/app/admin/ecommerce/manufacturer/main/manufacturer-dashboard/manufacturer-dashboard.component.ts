@@ -11,6 +11,7 @@ export class ManufacturerDashboardComponent implements OnInit {
   dashboardData: any;
   topSellingProducts: any;
   recentProducts: any;
+  topManufacturers: any;
   constructor(private authService: AuthanticationService, public router : Router) {}
 
   ngOnInit(): void {
@@ -23,6 +24,7 @@ export class ManufacturerDashboardComponent implements OnInit {
         this.dashboardData = res;
         this.topSellingProducts = res.data?.topSellingProducts;
         this.recentProducts = res.data?.recentOrders;
+        this.topManufacturers = res.data?.topManufacturer
       }
     });
   }

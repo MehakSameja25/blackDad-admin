@@ -96,6 +96,7 @@
                   <a
                     *ngIf="router.url.includes('/admin')"
                     class="btn-right btn btn-sm btn-outline-primary"
+                    routerLink="/manufacturers"
                   >
                     View All
                   </a>
@@ -106,10 +107,10 @@
               <div class="table-responsive">
                 <table class="table table-stripped table-hover">
                   <tbody>
-                    <tr>
+                    <tr *ngFor="let man of topManufacturers">
                       <td>
                         <h2 class="table-avatar">
-                          <div
+                          <!-- <div
                             class="company-avatar avatar-md me-2 companies company-icon"
                           >
                             <img
@@ -117,77 +118,14 @@
                               src="assets/img/companies/company-01.svg"
                               alt="Company Image"
                             />
-                          </div>
+                          </div> -->
                           <span
-                            >Hermann Groups
+                            >{{ man.user?.name }}
                             <span class="plane-type"
-                              >Basic (Monthly)</span
+                              >{{ man.company_name }} (Monthly)</span
                             ></span
                           >
                         </h2>
-                      </td>
-                      <td class="text-end">
-                        <a
-                          *ngIf="router.url.includes('/admin')"
-                          class="view-companies btn"
-                          >View</a
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <h2 class="table-avatar">
-                          <div
-                            class="company-avatar avatar-md me-2 companies company-icon"
-                          >
-                            <img
-                              class="avatar-img rounded-circle company"
-                              src="assets/img/companies/company-01.svg"
-                              alt="Company Image"
-                            />
-                          </div>
-                          <span
-                            >Hermann Groups
-                            <span class="plane-type"
-                              >Basic (Monthly)</span
-                            ></span
-                          >
-                        </h2>
-                      </td>
-                      <td class="text-end">
-                        <a
-                          *ngIf="router.url.includes('/admin')"
-                          class="view-companies btn"
-                          >View</a
-                        >
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <h2 class="table-avatar">
-                          <div
-                            class="company-avatar avatar-md me-2 companies company-icon"
-                          >
-                            <img
-                              class="avatar-img rounded-circle company"
-                              src="assets/img/companies/company-01.svg"
-                              alt="Company Image"
-                            />
-                          </div>
-                          <span
-                            >Hermann Groups
-                            <span class="plane-type"
-                              >Basic (Monthly)</span
-                            ></span
-                          >
-                        </h2>
-                      </td>
-                      <td class="text-end">
-                        <a
-                          *ngIf="router.url.includes('/admin')"
-                          class="view-companies btn"
-                          >View</a
-                        >
                       </td>
                     </tr>
                   </tbody>
@@ -357,7 +295,7 @@
                           >
                             <img
                               class="avatar-img rounded-circle company"
-                              src="{{ recent.product?.productImage }}"
+                              src="{{ recent.product?.product_image }}"
                               alt="Company Image"
                             />
                           </div>
