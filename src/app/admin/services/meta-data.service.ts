@@ -17,25 +17,13 @@ export class MetaDataService {
   ) {}
 
   getMeta(): Observable<MetaList> {
-    return apiCallWrapper(
-      this.http.get<MetaList>(`${environment.apiUrl}/getMetas`),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Meta Data',
-      }
-    );
+    return this.http.get<MetaList>(`${environment.apiUrl}/getMetas`);
   }
 
   getAdvertisements(body: {}): Observable<Advertisement> {
-    return apiCallWrapper(
-      this.http.post<Advertisement>(
-        `${environment.apiUrl}/getAdvertisment`,
-        body
-      ),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Advertisements',
-      }
+    return this.http.post<Advertisement>(
+      `${environment.apiUrl}/getAdvertisment`,
+      body
     );
   }
   deleteAdvertisements(id: any) {
@@ -61,36 +49,18 @@ export class MetaDataService {
       }
     );
   }
-  getAdvertisementsByid(id: any) : Observable<SingleAdvertisement> {
-    return apiCallWrapper(
-      this.http.get<SingleAdvertisement>(
-        `${environment.apiUrl}/get-advertismentById?advertisementId=${id}`
-      ),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Advertisement Detail',
-      }
+  getAdvertisementsByid(id: any): Observable<SingleAdvertisement> {
+    return this.http.get<SingleAdvertisement>(
+      `${environment.apiUrl}/get-advertismentById?advertisementId=${id}`
     );
   }
   filterAdvertisement(search: any) {
-    return apiCallWrapper(
-      this.http.post(`${environment.apiUrl}/get-advertisement`, search),
-      {
-        notificationsService: this.notifications,
-        action: 'Filtering Advertisements',
-      }
-    );
+    return this.http.post(`${environment.apiUrl}/get-advertisement`, search);
   }
 
   getMetaDetail(metaFor: any): Observable<SingleMeta> {
-    return apiCallWrapper(
-      this.http.get<SingleMeta>(
-        `${environment.apiUrl}/getMetas?meta_for=${metaFor}`
-      ),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Meta Details',
-      }
+    return this.http.get<SingleMeta>(
+      `${environment.apiUrl}/getMetas?meta_for=${metaFor}`
     );
   }
   updateMeta(body: any) {

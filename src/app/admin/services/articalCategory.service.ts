@@ -18,13 +18,7 @@ export class ArticalCategoiesService {
   ) { }
 
   getArticalCategory(): Observable<Category> {
-    return apiCallWrapper(
-      this.http.get<Category>(`${environment.apiUrl}/get-article-type`),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Categories',
-      }
-    );
+    return this.http.get<Category>(`${environment.apiUrl}/get-article-type`);
   }
 
   addArticalCategory(body: any) {

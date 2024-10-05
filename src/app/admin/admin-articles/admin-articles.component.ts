@@ -98,7 +98,6 @@ export class AdminArticlesComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkPermissions();
-    this.getCategories();
   }
 
   /**

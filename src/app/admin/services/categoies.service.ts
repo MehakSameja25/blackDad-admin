@@ -4,10 +4,7 @@ import { environment } from 'src/environments/environment';
 import { apiCallWrapper } from './api.util';
 import { NotificationsService } from 'angular2-notifications';
 import { Observable } from 'rxjs';
-import {
-  Category,
-  SingleCategory,
-} from '../model/category.model';
+import { Category, SingleCategory } from '../model/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,24 +16,14 @@ export class CategoiesService {
   ) {}
 
   getCategory(): Observable<Category> {
-    return apiCallWrapper(
-      this.http.get<Category>(`${environment.apiUrl}/get-category?type=all`),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Categories',
-      }
+    return this.http.get<Category>(
+      `${environment.apiUrl}/get-category?type=all`
     );
   }
 
   getCategoryById(id: string | null): Observable<SingleCategory> {
-    return apiCallWrapper(
-      this.http.get<SingleCategory>(
-        `${environment.apiUrl}/get-categoryById?categoryId=${id}`
-      ),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Category Detail',
-      }
+    return this.http.get<SingleCategory>(
+      `${environment.apiUrl}/get-categoryById?categoryId=${id}`
     );
   }
 
@@ -63,14 +50,8 @@ export class CategoiesService {
     );
   }
   unblockedCategories(): Observable<Category> {
-    return apiCallWrapper(
-      this.http.get<Category>(
-        `${environment.apiUrl}/get-category?type=onlyUnblock`
-      ),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Category',
-      }
+    return this.http.get<Category>(
+      `${environment.apiUrl}/get-category?type=onlyUnblock`
     );
   }
   deleteCategory(id: any) {

@@ -20,22 +20,10 @@
       <div>
         <div class="epitopsc mb-3">
           <app-go-back></app-go-back>
-          <div class="sectioncon" *ngIf="allcategories && allcategories.data">
-            <select
-              class="form-select border-0"
-              aria-label="Default select example"
-              (change)="getValue(cat.value)"
-              #cat
-            >
-              <option selected>All Categories</option>
-              <option
-                *ngFor="let category of allcategories.data"
-                [value]="category.id"
-              >
-                {{ category.name }}
-              </option>
-            </select>
-          </div>
+          <div
+            class="sectioncon"
+            *ngIf="allcategories && allcategories.data"
+          ></div>
         </div>
 
         <div class="row">
@@ -50,8 +38,7 @@
                     [data]="tableData"
                     [columns]="tableColumns"
                     class="table display"
-                  >                
-                  </table>
+                  ></table>
                 </div>
               </div>
             </div>
