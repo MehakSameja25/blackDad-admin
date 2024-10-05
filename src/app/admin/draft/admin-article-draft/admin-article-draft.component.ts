@@ -60,7 +60,7 @@ export class AdminArticleDraftComponent {
               ? this.truncateDescription(item.draft.name)
               : item.draft.name
             : 'N/A',
-          item.category.length > 0
+          item.category && item.category.length > 0 && item.category[0] != null
             ? `<ul> ${item.category
                 .map((cat) => `<li> ${cat.name} </li>`)
                 .join('')} </ul>`

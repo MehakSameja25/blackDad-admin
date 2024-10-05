@@ -21,22 +21,12 @@ export class AllPostsService {
    * ------------------------------------FOR EPISODES -------------------------------------------------
    ---------------------------------------------------------------------------------------------------*/
   getEpisodes(body: any): Observable<Episode> {
-    return apiCallWrapper(
-      this.http.post<Episode>(`${environment.apiUrl}/get-song`, body),
-      {
-        notificationsService: this.notifications,
-        action: 'Fecthing All Episodes',
-      }
-    );
+    return this.http.post<Episode>(`${environment.apiUrl}/get-song`, body);
   }
 
   getEpisodeDetails(id: any) {
-    return apiCallWrapper(
-      this.http.get<any>(`${environment.apiUrl}/get-songById?songId=${id}`),
-      {
-        notificationsService: this.notifications,
-        action: 'Fecthing Episode Details',
-      }
+    return this.http.get<any>(
+      `${environment.apiUrl}/get-songById?songId=${id}`
     );
   }
   addEpisode(body: any) {
@@ -73,24 +63,12 @@ export class AllPostsService {
    * ------------------------------------FOR ARTICLE --------------------------------------------
    ---------------------------------------------------------------------------------------------*/
   getArticles(body: any) {
-    return apiCallWrapper(
-      this.http.post<any>(`${environment.apiUrl}/get-article`, body),
-      {
-        notificationsService: this.notifications,
-        action: 'Fecthing All Articles',
-      }
-    );
+    return this.http.post<any>(`${environment.apiUrl}/get-article`, body);
   }
 
   getArticlesDetails(id: any) {
-    return apiCallWrapper(
-      this.http.get<any>(
-        `${environment.apiUrl}/get-articleById?articleId=${id}`
-      ),
-      {
-        notificationsService: this.notifications,
-        action: 'Fecthing Article Details',
-      }
+    return this.http.get<any>(
+      `${environment.apiUrl}/get-articleById?articleId=${id}`
     );
   }
   addArticle(body: any) {
@@ -175,13 +153,7 @@ export class AllPostsService {
   }
 
   getDraft(type: any) {
-    return apiCallWrapper(
-      this.http.get<any>(`${environment.apiUrl}/get-draft?type=${type}`),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Draft',
-      }
-    );
+    return this.http.get<any>(`${environment.apiUrl}/get-draft?type=${type}`);
   }
 
   deleteDraft(id: any) {
@@ -195,12 +167,8 @@ export class AllPostsService {
   }
 
   getSingleDraft(id: any) {
-    return apiCallWrapper(
-      this.http.get<any>(`${environment.apiUrl}/get-draftById?draftId=${id}`),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Draft Detail',
-      }
+    return this.http.get<any>(
+      `${environment.apiUrl}/get-draftById?draftId=${id}`
     );
   }
 
