@@ -52,6 +52,10 @@ export class ArticalTypesComponent implements OnInit {
       this.subcategories = res.data.filter(
         (category: any) => category.parent !== null
       );
+
+      if (this.parentCategory.length > 0) {
+        this.activeParentId = this.parentCategory[0].id;
+      }
     });
   }
 

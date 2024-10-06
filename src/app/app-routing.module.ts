@@ -191,6 +191,11 @@ const routes: Routes = [
     component: ArticalTypesComponent,
     canActivate: [AuthGuard],
   },
+
+  {
+    path: '**',
+    component: AdminAuthComponent,
+  },
 ];
 
 @NgModule({
