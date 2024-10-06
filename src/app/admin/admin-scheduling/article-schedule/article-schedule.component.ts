@@ -87,22 +87,27 @@ export class ArticleScheduleComponent implements OnInit {
 
       this.tableData = response.data.map(
         (item: {
-          thumbnail: string;
-          name: string;
-          category: [];
-          created_at: string;
-          isApproved: string;
-          isPublished: string;
-          id: string;
-          isBlock: string;
+          thumbnail: any;
+          name: any;
+          category: any;
+          article_with_types?: any;
+          created_at: any;
+          isApproved: any;
+          isPublished: any;
+          id: any;
+          isBlock: any;
         }) => [
           `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
           item.name.length > 35
             ? this.truncateDescription(item.name)
             : item.name,
-          `<ul> ${item.category ? item.category
-            .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
-            .join(''): "N/A" } </ul>`,
+          `<ul> ${
+            item.category && item.category.length
+              ? item.category
+                  .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
+                  .join('')
+              : item.article_with_types[0].article_type.name
+          }  </ul>`,
           item.created_at ? item.created_at.split('T')[0] : 'N/A',
           this.getScheduledStatus(item.isApproved, item.isPublished),
           `<div class="actions d-flex align-items-center gap-2">

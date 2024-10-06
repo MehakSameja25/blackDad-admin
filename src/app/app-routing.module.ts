@@ -300,6 +300,11 @@ const routes: Routes = [
     component: ManufacturerDashboardComponent,
     canActivate: [AuthGuard],
   },
+
+  {
+    path: '**',
+    component: AdminAuthComponent,
+  },
 ];
 
 @NgModule({
