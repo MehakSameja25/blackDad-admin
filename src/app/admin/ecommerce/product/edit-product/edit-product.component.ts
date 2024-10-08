@@ -323,6 +323,13 @@ export class EditProductComponent implements OnInit {
     const formData = this.createFormData();
     const productData: any = {};
 
+    // Append images to formData
+    const images = this.uploadedImages.map((img) => img.image);
+    images.forEach((image, index) => {
+      formData.append('product_image', image); // Use 'product_image[]' for array handling
+    });
+
+    // Gather other form data
     formData.forEach((value, key) => {
       if (productData[key]) {
         if (!Array.isArray(productData[key])) {
@@ -334,8 +341,10 @@ export class EditProductComponent implements OnInit {
       }
     });
 
+    // Save data to local storage (if needed)
     localStorage.setItem('productData', JSON.stringify(productData));
 
+    // Navigate to preview page (or wherever needed)
     this.router.navigate(['/product/preview']);
   }
 

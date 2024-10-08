@@ -2,16 +2,28 @@
   <div class="container cart-page">
     <div class="product-cart">
       <div class="product-img-wrapper">
-        <img
-          alt="Product Thumbnail"
-          src="https://api.blackdad.chooseyourfabric.in/api/v1/storage/images/1726921900265loscar.webp"
-        />
+        <ngx-slick-carousel
+          class="carousel"
+          #slickModal="slick-carousel"
+          [config]="slideConfig"
+        >
+          <div
+            class="card p-0 m-0 border-0 pointer"
+            ngxSlickItem
+            *ngFor="let slide of productData?.product_image; let i = index"
+          >
+            <span class="product-img-wrapper"
+              ><img src="{{ slide }}" class="card-img-top" alt="Product Image"
+            /></span>
+          </div>
+        </ngx-slick-carousel>
         <div class="d-flex gap-3 align-items-center product-images">
-          <a class="pointer">
-            <img
-              alt="Product Thumbnail"
-              src="https://api.blackdad.chooseyourfabric.in/api/v1/storage/images/1726921900265loscar.webp"
-          /></a>
+          <a
+            class="pointer"
+            *ngFor="let image of productData?.product_image; let i = index"
+          >
+            <img [src]="image" alt="Product Thumbnail" />
+          </a>
         </div>
       </div>
       <form class="ng-untouched ng-pristine ng-valid">
@@ -38,9 +50,9 @@
                 >
                   <span
                     class="clrbox"
-                    [ngStyle]="{ backgroundColor: colors[0] }"
+                    [ngStyle]="{ backgroundColor: variants[0].color }"
                   ></span>
-                  {{ colors[0] }}
+                  {{ variants[0].color }}
                 </button>
                 <ul class="dropdown-menu w-100 min-w-100">
                   <li *ngFor="let color of colors">
@@ -68,7 +80,7 @@
                   aria-expanded="false"
                   class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2"
                 >
-                  {{ sizes[0] }}
+                  {{ variants[0].size }}
                 </button>
                 <ul class="dropdown-menu w-100 min-w-100">
                   <li *ngFor="let size of sizes">
@@ -77,6 +89,23 @@
                   <!-- <li><a class="dropdown-item pointer">L</a></li>
                   <li><a class="dropdown-item pointer">XL</a></li>
                   <li><a class="dropdown-item pointer">XXL</a></li> -->
+                </ul>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <label class="form-label">Material</label>
+              <div class="dropdown">
+                <button
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2"
+                >
+                  {{ variants[0].material }}
+                </button>
+                <ul class="dropdown-menu w-100 min-w-100">
+                  <!-- <li><a class="dropdown-item pointer">Male</a></li>
+                  <li><a class="dropdown-item pointer">Female</a></li> -->
                 </ul>
               </div>
             </div>
