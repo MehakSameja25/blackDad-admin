@@ -40,38 +40,27 @@ export class AdminArticleDraftComponent {
     this.postService.getDraft('articles').subscribe((res) => {
       this.allDraftdata = res;
       console.log(res);
-      this.tableData = res.data.map(
-        (item: {
-          thumbnail: string;
-          draft: {
-            name: string;
-            isApproved: number | string;
-            isPublished: number | string;
-          };
-          category: [{ name: string }];
-          created_at: string;
-          id: string;
-        }) => [
-          item.thumbnail
-            ? `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`
-            : 'No Image',
-          item.draft.name
-            ? item.draft.name.length > 35
-              ? this.truncateDescription(item.draft.name)
-              : item.draft.name
-            : 'N/A',
-          item.category && item.category.length > 0 && item.category[0] != null
-            ? `<ul> ${item.category
-                .map((cat) => `<li> ${cat.name} </li>`)
-                .join('')} </ul>`
-            : 'No Categories',
+      this.tableData = res.data.map((item: any) => [
+        item.thumbnail
+          ? `<img src="${item.thumbnail}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`
+          : 'No Image',
+        item.draft.name
+          ? item.draft.name.length > 35
+            ? this.truncateDescription(item.draft.name)
+            : item.draft.name
+          : 'N/A',
+        item.category && item.category.length > 0 && item.category[0] != null
+          ? `<ul> ${item.category
+              .map(
+                (cat: { name: any; parent: { name: any } }) =>
+                  `<li> ${cat.name} </li> <li> <b> (${cat.parent?.name}) <b> </li>`
+              )
+              .join('')} </ul>`
+          : 'No Categories',
 
-          item.created_at ? item.created_at.split('T')[0] : 'N/A',
-          this.getScheduledStatus(
-            item.draft.isApproved,
-            item.draft.isPublished
-          ),
-          `<div class="actions d-flex align-items-center gap-2">
+        item.created_at ? item.created_at.split('T')[0] : 'N/A',
+        this.getScheduledStatus(item.draft.isApproved, item.draft.isPublished),
+        `<div class="actions d-flex align-items-center gap-2">
           <a class="btn-action-icon" data-id="${item.id}" data-action="open">
             <svg
               xmlns=" http://www.w3.org/2000/svg"
@@ -138,8 +127,7 @@ export class AdminArticleDraftComponent {
                : ``
            }
         </div>`,
-        ]
-      );
+      ]);
 
       setTimeout(() => this.bindEvents(), 0);
     });

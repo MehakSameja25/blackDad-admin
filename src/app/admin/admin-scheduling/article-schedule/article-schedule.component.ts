@@ -102,12 +102,10 @@ export class ArticleScheduleComponent implements OnInit {
             ? this.truncateDescription(item.name)
             : item.name,
           `<ul> ${
-            item.category && item.category.length
-              ? item.category
-                  .map((cat: { name: string }) => `<li> ${cat.name} </li>`)
-                  .join('')
-              : item.article_with_types[0].article_type.name
-          }  </ul>`,
+            item.article_with_types[0]?.article_type
+              ? `<li> ${item.article_with_types[0].article_type.name} </li><li> <b> (${item.article_with_types[0].article_type?.parent?.name}) <b> </li>`
+              : 'N/A'
+          } </ul>`,
           item.created_at ? item.created_at.split('T')[0] : 'N/A',
           this.getScheduledStatus(item.isApproved, item.isPublished),
           `<div class="actions d-flex align-items-center gap-2">
