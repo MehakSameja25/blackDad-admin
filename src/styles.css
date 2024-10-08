@@ -33196,3 +33196,17 @@ ul.list-group.naeqna .list-group-item {
 } */
 
 /* cartnewpage css end   */
+.dolsg {
+  position: relative;
+}
+
+.dolsg .form-control {
+  padding-left: 25px;
+}
+
+.dolsg i {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
