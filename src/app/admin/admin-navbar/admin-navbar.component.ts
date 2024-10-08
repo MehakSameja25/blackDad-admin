@@ -162,6 +162,34 @@ export class AdminNavbarComponent implements OnInit {
     return false;
   }
 
+  getSubDropClass(): string {
+    const currentUrl = this.router.url;
+    const subLinks = [
+      '/admin/all-members',
+      '/admin/add-member',
+      '/admin/role-type',
+      '/admin/add-role',
+      '/admin/assign-role',
+    ];
+
+    const isActive = subLinks.some((link) => currentUrl.includes(link));
+    return isActive ? 'd-block' : '';
+  }
+
+  getClass(): string {
+    const currentUrl = this.router.url;
+    const subLinks = [
+      '/admin/all-members',
+      '/admin/add-member',
+      '/admin/role-type',
+      '/admin/add-role',
+      '/admin/assign-role',
+    ];
+
+    const isActive = subLinks.some((link) => currentUrl.includes(link));
+    return isActive ? 'subdrop' : '';
+  }
+
   logOut() {
     localStorage.clear();
     this.notificationService.warn('Logging Out');

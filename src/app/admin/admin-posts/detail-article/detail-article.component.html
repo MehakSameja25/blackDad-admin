@@ -124,8 +124,16 @@
                           <li>
                             {{
                               articleDetails.data.article_with_types[0]
-                                ?.article_type?.parent?.name
+                                ?.article_type?.name
                             }}
+                          </li>
+                          <li>
+                            <b
+                              >({{
+                                articleDetails.data.article_with_types[0]
+                                  ?.article_type?.parent?.name
+                              }})</b
+                            >
                           </li>
                         </ul>
                       </div>

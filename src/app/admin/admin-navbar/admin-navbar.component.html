@@ -337,6 +337,7 @@
           <a
             href="javascript:void(0)"
             class="{{ anchorClass }}"
+            [className]="getClass()"
             (click)="showMembers()"
           >
             <svg
@@ -369,7 +370,7 @@
             </svg>
             <span> Black Dad's Members</span> <span class="menu-arrow"></span
           ></a>
-          <ul [style]="displayClass">
+          <ul [style]="displayClass" class="{{ getSubDropClass() }}">
             <li>
               <a routerLink="/admin/all-members" routerLinkActive="active"
                 >All Members</a

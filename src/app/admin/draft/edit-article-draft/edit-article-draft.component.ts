@@ -20,20 +20,11 @@ declare var $: { summernote: { ui: any } };
 })
 export class EditArticleDraftComponent {
   articleForm!: FormGroup;
-  allcategories!: [
-    {
-      id: number | null;
-      name: string;
-      image: string;
-      isblock: string;
-      description: string;
-    }
-  ];
   selectedCategories: String[] = [];
   draftId!: string | null;
   inputText: string = '';
   inputChanged: Subject<string> = new Subject<string>();
-  singleDraft!: SingleDraft;
+  singleDraft!: any;
   draftData!: {
     name: string | null;
     type: string | null;
@@ -107,11 +98,14 @@ export class EditArticleDraftComponent {
       description: this.draftData.description,
       meta: this.draftData.meta_description,
       slug: this.draftData.slug,
-      category: this.singleDraft.data.category,
+      category: this.singleDraft.data.articleType[0]?.isParent,
+      subCategory: this.singleDraft.data.articleType[0]?.id,
     });
-    this.singleDraft.data.category.map((category: { id: String }) => {
-      this.selectedCategories.push(category.id);
-    });
+
+    this.subCategories = this.data?.filter(
+      (category: { isParent: number }) =>
+        category.isParent == this.singleDraft.data.articleType[0]?.isParent
+    );
   }
 
   onCategoryChange(id: any) {
@@ -124,19 +118,16 @@ export class EditArticleDraftComponent {
     this.inputChanged.next('');
   }
 
-
   getSingleArticle() {
     this.draftId = this.route.snapshot.paramMap.get('id');
-    this.postsService
-      .getSingleDraft(this.draftId)
-      .subscribe((res: SingleDraft) => {
-        if (res) {
-          this.singleDraft = res;
-          this.draftData = res.data.draft;
-          this.setFormValues();
-          this.updateValidators();
-        }
-      });
+    this.postsService.getSingleDraft(this.draftId).subscribe((res: any) => {
+      if (res) {
+        this.singleDraft = res;
+        this.draftData = res.data.draft;
+        this.setFormValues();
+        this.updateValidators();
+      }
+    });
   }
   onSubmit() {
     if (this.articleForm.invalid) {
