@@ -7,15 +7,39 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductPreviewComponent implements OnInit {
   productData: any;
-  colors: any;
-  sizes: any;
+  variants: any;
+  colors: any[] = [];
+  sizes: any[] = [];
+  materials: any[] = [];
+  slideConfig = {
+    dots: false,
+    infinite: false,
+    speed: 0,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+  };
+  images: any;
 
   ngOnInit(): void {
     const data = localStorage.getItem('productData');
     if (data) {
       this.productData = JSON.parse(data);
-      this.colors = JSON.parse(this.productData.color);
-      this.sizes = JSON.parse(this.productData.size);
+      this.variants = JSON.parse(this.productData.variants);
+      this.images = JSON.parse(this.productData.product_image);
     }
+  }
+
+  populateOptions() {
+    this.colors = Array.from(
+      new Set(this.variants.map((variant: any) => variant.color))
+    );
+    this.sizes = Array.from(
+      new Set(this.variants.map((variant: any) => variant.size))
+    );
+    this.materials = Array.from(
+      new Set(this.variants.map((variant: any) => variant.material))
+    );
+    console.log(this.sizes);
   }
 }
