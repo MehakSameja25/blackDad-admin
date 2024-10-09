@@ -1,10 +1,14 @@
-import { HttpParams, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
+import {
+  HttpParams,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { NotificationsService, Notification } from 'angular2-notifications';
 import { NEVER, Observable, of, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { ErrorMessage } from "../model/api.model";
+import { ErrorMessage } from '../model/api.model';
 
-const className = "apiCallWrapper";
+const className = 'apiCallWrapper';
 
 let offlineNotification: Notification | null = null;
 
@@ -43,122 +47,153 @@ let offlineNotification: Notification | null = null;
  * );
  * ```
  */
-export const apiCallWrapper = <D, N>(observable: Observable<N>, opts: {
-	notificationsService?: NotificationsService,
-	action: string,
-	title?: string,
-	message?: string,
-	successTitle?: string,
-	failTitle?: string,
-	successMessage?: string,
-	defaultValue?: D
-}): typeof observable => {
-	const signature = className + ".apiCallWrapper: ";
-	const options = Object.assign({},
-		opts,
-		{
-			title: opts.action,
-			successTitle: `${opts.action} complete`,
-			failTitle: `${opts.action} failed`,
-			message: '',
-			successMessage: opts.message ? `${opts.message} completed` : ''
-		}
-	);
-	const notifcation = options.notificationsService ? options.notificationsService.warn(options.title, options.message) : null;
+export const apiCallWrapper = <D, N>(
+  observable: Observable<N>,
+  opts: {
+    notificationsService?: NotificationsService;
+    action: string;
+    title?: string;
+    message?: string;
+    successTitle?: string;
+    failTitle?: string;
+    successMessage?: string;
+    defaultValue?: D;
+  }
+): typeof observable => {
+  const signature = className + '.apiCallWrapper: ';
+  const options = Object.assign({}, opts, {
+    title: opts.action,
+    successTitle: `${opts.action} complete`,
+    failTitle: `${opts.action} failed`,
+    message: '',
+    successMessage: opts.message ? `${opts.message} completed` : '',
+  });
+  const notifcation = options.notificationsService
+    ? options.notificationsService.warn(options.title, options.message)
+    : null;
 
-	const removeExistingNotification = () => options.notificationsService && notifcation ? options.notificationsService.remove(notifcation.id) : void (0);
+  const removeExistingNotification = () =>
+    options.notificationsService && notifcation
+      ? options.notificationsService.remove(notifcation.id)
+      : void 0;
 
-	// Sent to true when there was a gracefully handled error and the default value was returned.
-	let didNotSucceed = false;
+  // Sent to true when there was a gracefully handled error and the default value was returned.
+  let didNotSucceed = false;
 
-	// Ensure no offline notifications are being displayed if an offline state is not detected
-	if (options.notificationsService && offlineNotification && window.navigator.onLine) {
-		options.notificationsService.remove(offlineNotification.id);
-		offlineNotification = null;
-	}
+  // Ensure no offline notifications are being displayed if an offline state is not detected
+  if (
+    options.notificationsService &&
+    offlineNotification &&
+    window.navigator.onLine
+  ) {
+    options.notificationsService.remove(offlineNotification.id);
+    offlineNotification = null;
+  }
 
-	if (!window.navigator.onLine) {
-		removeExistingNotification();
+  if (!window.navigator.onLine) {
+    removeExistingNotification();
 
-		// Set an offline notification if one doesn't already exist
+    // Set an offline notification if one doesn't already exist
 
-		if (options.notificationsService && (!offlineNotification || offlineNotification.destroyedOn)) {
-			offlineNotification = options.notificationsService.error(options.failTitle, "No internet connection available.");
+    if (
+      options.notificationsService &&
+      (!offlineNotification || offlineNotification.destroyedOn)
+    ) {
+      offlineNotification = options.notificationsService.error(
+        options.failTitle,
+        'No internet connection available.'
+      );
 
-			if (offlineNotification.click) {
-				offlineNotification.click.subscribe(() => {
-					if (!options.notificationsService) return;
+      if (offlineNotification.click) {
+        offlineNotification.click.subscribe(() => {
+          if (!options.notificationsService) return;
 
-					options.notificationsService.remove(offlineNotification!.id);
-					offlineNotification = null;
-				});
-			}
+          options.notificationsService.remove(offlineNotification!.id);
+          offlineNotification = null;
+        });
+      }
 
-			if (offlineNotification.timeoutEnd) {
-				offlineNotification.timeoutEnd.subscribe(() => {
-					if (!options.notificationsService) return;
+      if (offlineNotification.timeoutEnd) {
+        offlineNotification.timeoutEnd.subscribe(() => {
+          if (!options.notificationsService) return;
 
-					options.notificationsService.remove(offlineNotification!.id);
-					offlineNotification = null;
-				});
-			}
-		}
+          options.notificationsService.remove(offlineNotification!.id);
+          offlineNotification = null;
+        });
+      }
+    }
 
-		const handledError = new ErrorMessage({ message: "Browser is offline", handled: true });
-		return throwError(handledError);
-	}
+    const handledError = new ErrorMessage({
+      message: 'Browser is offline',
+      handled: true,
+    });
+    return throwError(handledError);
+  }
 
-	return observable.pipe(
-		catchError(err => {
-			removeExistingNotification();
+  return observable.pipe(
+    catchError((err) => {
+      removeExistingNotification();
 
-			// Prevent duplicate handling of the error
-			if (err instanceof ErrorMessage) {
-				if (err.handled) {
-					return NEVER;
-				}
+      // Prevent duplicate handling of the error
+      if (err instanceof ErrorMessage) {
+        if (err.handled) {
+          return NEVER;
+        }
 
-				return throwError(err);
-			}
+        return throwError(err);
+      }
 
-			if (hasKey(err, 'error') && hasKey(err.error, 'message') && hasKey(err.error, 'statusCode')) {
-				const error = new ErrorMessage().deserialize(err.error as Partial<ErrorMessage>);
+      if (hasKey(err, 'error') && hasKey(err.error, 'message')) {
+        const error = new ErrorMessage().deserialize(
+          err.error as Partial<ErrorMessage>
+        );
 
-				if (options.notificationsService) options.notificationsService.error(options.failTitle, error.message);
+        if (options.notificationsService)
+          options.notificationsService.error(options.failTitle, error.message);
 
-				if (error.statusCode === 404 && opts.defaultValue) {
-					didNotSucceed = true;
-					return of(options.defaultValue);
-				}
+        if (error.statusCode === 404 && opts.defaultValue) {
+          didNotSucceed = true;
+          return of(options.defaultValue);
+        }
 
-				return throwError(error);
-			}
+        return throwError(error);
+      }
 
-			if (err instanceof HttpErrorResponse && err.status === 0) {
-				if (options.notificationsService) options.notificationsService.error(options.failTitle, "Error communicating with server");
+      if (err instanceof HttpErrorResponse && err.status === 0) {
+        if (options.notificationsService)
+          options.notificationsService.error(
+            options.failTitle,
+            'Error communicating with server'
+          );
 
-				const handledError = new ErrorMessage({ handled: true });
+        const handledError = new ErrorMessage({ handled: true });
 
-				return throwError(handledError);
-			}
+        return throwError(handledError);
+      }
 
-			if (options.notificationsService) options.notificationsService.error(options.failTitle, "Unknown Error has Occurred");
+      if (options.notificationsService)
+        options.notificationsService.error(
+          options.failTitle,
+          'Unknown Error has Occurred'
+        );
 
-			return throwError(new ErrorMessage());
-		}),
-		map(
-			result => {
-				removeExistingNotification();
+      return throwError(new ErrorMessage());
+    }),
+    map((result) => {
+      removeExistingNotification();
 
-				if (!didNotSucceed) {
-					if (options.notificationsService) options.notificationsService.success(options.successTitle, options.successMessage);
-				}
+      if (!didNotSucceed) {
+        if (options.notificationsService)
+          options.notificationsService.success(
+            options.successTitle,
+            options.successMessage
+          );
+      }
 
-				return result as N;
-			}
-		)
-	);
-}
+      return result as N;
+    })
+  );
+};
 
 /**
  * @description Checks if the provided object has a specific property key.
@@ -174,8 +209,16 @@ export const apiCallWrapper = <D, N>(observable: Observable<N>, opts: {
  * ```
  */
 
-export function hasKey<X extends {}, Y extends PropertyKey>(obj: unknown, prop: Y): obj is X & Record<Y, unknown> {
-	return obj !== null && obj !== undefined && Object.prototype.hasOwnProperty.call(obj, prop) || (isRecord(obj) && prop in (obj as Record<string, unknown>));
+export function hasKey<X extends {}, Y extends PropertyKey>(
+  obj: unknown,
+  prop: Y
+): obj is X & Record<Y, unknown> {
+  return (
+    (obj !== null &&
+      obj !== undefined &&
+      Object.prototype.hasOwnProperty.call(obj, prop)) ||
+    (isRecord(obj) && prop in (obj as Record<string, unknown>))
+  );
 }
 
 /**
@@ -192,15 +235,11 @@ export function hasKey<X extends {}, Y extends PropertyKey>(obj: unknown, prop: 
  * ```
  */
 export const isRecord = (obj: unknown): obj is Record<string, unknown> => {
-	return (
-		typeof obj === "object" ||
-		typeof obj === 'function' ||
-		(
-			obj instanceof Object &&
-			!(obj instanceof Array)
-		)
-	) && (
-			obj !== null &&
-			obj !== undefined
-		)
-}
+  return (
+    (typeof obj === 'object' ||
+      typeof obj === 'function' ||
+      (obj instanceof Object && !(obj instanceof Array))) &&
+    obj !== null &&
+    obj !== undefined
+  );
+};
