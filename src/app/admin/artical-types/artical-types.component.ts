@@ -27,6 +27,9 @@ export class ArticalTypesComponent implements OnInit {
   @ViewChild('addModel')
   public catModel!: ElementRef;
   editData: any;
+  default: boolean = true;
+  deleteId!: string | number;
+  modalHeading!: string;
 
   constructor(
     private formB: FormBuilder,
@@ -38,6 +41,7 @@ export class ArticalTypesComponent implements OnInit {
       name: ['', [Validators.required]],
       parent: [0],
     });
+    this.activeParentId = null;
   }
 
   ngOnInit() {
@@ -53,7 +57,7 @@ export class ArticalTypesComponent implements OnInit {
         (category: any) => category.parent !== null
       );
 
-      if (this.parentCategory.length > 0) {
+      if (this.parentCategory.length > 0 && this.default) {
         this.activeParentId = this.parentCategory[0].id;
       }
     });
@@ -61,9 +65,11 @@ export class ArticalTypesComponent implements OnInit {
 
   openAdd(
     content: TemplateRef<unknown>,
+    type: string,
     isSubCategory = false,
     id: number | null = null
   ) {
+    this.modalHeading = type;
     this.addCategoryForm.reset();
     this.isSubCategory = isSubCategory;
     this.parentId = id;
@@ -79,6 +85,7 @@ export class ArticalTypesComponent implements OnInit {
       this.addCategoryForm.patchValue({
         parent: this.parentId,
       });
+      this.default = false;
       if (this.editData) {
         const item = {
           id: this.editData.id,
@@ -91,6 +98,9 @@ export class ArticalTypesComponent implements OnInit {
             this.modalService.dismissAll();
             this.editData = null;
             this.addCategoryForm.reset();
+            if (this.parentId) {
+              this.activeParentId = this.parentId;
+            }
           });
       } else {
         this.articalCategory
@@ -99,6 +109,9 @@ export class ArticalTypesComponent implements OnInit {
             this.fetchCategory();
             this.modalService.dismissAll();
             this.addCategoryForm.reset();
+            if (this.parentId) {
+              this.activeParentId = this.parentId;
+            }
           });
       }
     }
@@ -116,13 +129,26 @@ export class ArticalTypesComponent implements OnInit {
     }
   }
 
-  deleteCategory(id: number) {
-    this.articalCategory.deleteArticalCategory(id).subscribe((res) => {
-      this.fetchCategory();
+  open(content: TemplateRef<unknown>, id: string | number) {
+    this.deleteId = id;
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
     });
   }
 
-  editCategory(data: any) {
+  deleteCategory() {
+    this.articalCategory
+      .deleteArticalCategory(this.deleteId)
+      .subscribe((res) => {
+        this.fetchCategory();
+        this.modalService.dismissAll();
+      });
+  }
+
+  editCategory(data: any, type: string) {
+    this.modalHeading = type;
     this.editData = data;
     this.addCategoryForm.patchValue({ name: this.editData.name });
     this.modalService.open(this.catModel, {

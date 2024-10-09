@@ -314,7 +314,9 @@ export class AdminCategoriesComponent implements OnInit {
       'click',
       (event) => {
         const target = event.target as HTMLElement;
-        const button = target.closest('.btn-action-icon');
+        const button = target.closest(
+          '.btn-action-icon, .btn-danger, .badge, .rounded-pill, .text-bg-violet'
+        );
 
         if (button) {
           const action = button.getAttribute('data-action');

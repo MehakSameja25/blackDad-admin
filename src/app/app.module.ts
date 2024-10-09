@@ -66,10 +66,7 @@ import { ListComponent } from './admin/ecommerce/manufacturer/roles/list/list.co
 import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/assign.component';
 import { NgxSummernoteModule } from 'ngx-summernote';
 import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
-import {
-  SlickCarouselComponent,
-  SlickCarouselModule,
-} from 'ngx-slick-carousel';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 @NgModule({
   declarations: [
@@ -124,7 +121,7 @@ import {
     AddComponent,
     ListComponent,
     AssignComponent,
-    ArticalTypesComponent
+    ArticalTypesComponent,
   ],
   imports: [
     BrowserModule,
@@ -144,7 +141,7 @@ import {
       clickToClose: true,
     }),
     SlickCarouselModule,
-    NgxSummernoteModule
+    NgxSummernoteModule,
   ],
   providers: [
     {

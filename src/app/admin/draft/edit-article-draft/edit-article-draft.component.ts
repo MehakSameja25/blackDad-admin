@@ -20,20 +20,11 @@ declare var $: { summernote: { ui: any } };
 })
 export class EditArticleDraftComponent {
   articleForm!: FormGroup;
-  allcategories!: [
-    {
-      id: number | null;
-      name: string;
-      image: string;
-      isblock: string;
-      description: string;
-    }
-  ];
   selectedCategories: String[] = [];
   draftId!: string | null;
   inputText: string = '';
   inputChanged: Subject<string> = new Subject<string>();
-  singleDraft!: SingleDraft;
+  singleDraft!: any;
   draftData!: {
     name: string | null;
     type: string | null;
@@ -98,20 +89,6 @@ export class EditArticleDraftComponent {
       thumbnailImage: [''],
     });
     this.getSingleArticle();
-    this.getCategoryArticle();
-  }
-
-  setFormValues(): void {
-    this.articleForm.patchValue({
-      articleName: this.draftData.name,
-      description: this.draftData.description,
-      meta: this.draftData.meta_description,
-      slug: this.draftData.slug,
-      category: this.singleDraft.data.category,
-    });
-    this.singleDraft.data.category.map((category: { id: String }) => {
-      this.selectedCategories.push(category.id);
-    });
   }
 
   onCategoryChange(id: any) {
@@ -124,20 +101,46 @@ export class EditArticleDraftComponent {
     this.inputChanged.next('');
   }
 
-
   getSingleArticle() {
     this.draftId = this.route.snapshot.paramMap.get('id');
-    this.postsService
-      .getSingleDraft(this.draftId)
-      .subscribe((res: SingleDraft) => {
-        if (res) {
-          this.singleDraft = res;
-          this.draftData = res.data.draft;
-          this.setFormValues();
-          this.updateValidators();
-        }
-      });
+    this.postsService.getSingleDraft(this.draftId).subscribe((res: any) => {
+      if (res) {
+        this.singleDraft = res;
+        this.draftData = res.data.draft;
+        this.getCategoryArticle();
+        this.updateValidators();
+      }
+    });
   }
+
+  getCategoryArticle() {
+    this.articleCategory.getArticalCategory().subscribe((res: any) => {
+      if (res) {
+        this.data = res.data;
+        this.articleCategoryData = this.data.filter(
+          (category: { isParent: null }) => category.isParent === null
+        );
+      }
+      this.setFormValues();
+    });
+  }
+
+  setFormValues(): void {
+    this.articleForm.patchValue({
+      articleName: this.draftData.name,
+      description: this.draftData.description,
+      meta: this.draftData.meta_description,
+      slug: this.draftData.slug,
+      category: this.singleDraft.data.articleType[0]?.isParent,
+      subCategory: this.singleDraft.data.articleType[0]?.id,
+    });
+
+    this.subCategories = this.data?.filter(
+      (category: { isParent: number }) =>
+        category.isParent == this.singleDraft.data.articleType[0]?.isParent
+    );
+  }
+
   onSubmit() {
     if (this.articleForm.invalid) {
       this.markFormGroupTouched(this.articleForm);
@@ -374,17 +377,6 @@ export class EditArticleDraftComponent {
     }
     this.inputChanged.next('');
     console.log('Deselected Category:', this.selectedCategories);
-  }
-
-  getCategoryArticle() {
-    this.articleCategory.getArticalCategory().subscribe((res: any) => {
-      if (res) {
-        this.data = res.data;
-        this.articleCategoryData = this.data.filter(
-          (category: { isParent: null }) => category.isParent === null
-        );
-      }
-    });
   }
 
   public config: any = {
