@@ -14,7 +14,7 @@
                 href="javascript:void(0);"
                 data-bs-toggle="modal"
                 data-bs-target="#add_category"
-                (click)="openAdd(addModel)"
+                (click)="openAdd(addModel, 'Add Category')"
                 >Add Category</a
               >
             </div>
@@ -39,14 +39,16 @@
                         <button
                           *ngIf="addPermission"
                           class="btn btnsbct"
-                          (click)="openAdd(addModel, true, data.id)"
+                          (click)="
+                            openAdd(addModel, 'Add Subcategory', true, data.id)
+                          "
                         >
                           Add Subcategory
                         </button>
                         <button
                           class="btn btn-edit"
                           *ngIf="editPermission"
-                          (click)="editCategory(data)"
+                          (click)="editCategory(data, 'Edit Category')"
                         >
                           <i class="bi bi-pen"></i>
                         </button>
@@ -71,16 +73,18 @@
                         <button
                           class="btn btn-edit"
                           *ngIf="editPermission"
-                          (click)="editCategory(subcategory)"
+                          (click)="
+                            editCategory(subcategory, 'Edit Subcategory')
+                          "
                         >
                           <i class="bi bi-pen"></i>
                         </button>
-                        <button class="btn btn-delete">
-                          <i
-                            class="bi bi-trash3"
-                            *ngIf="deletePermission"
-                            (click)="open(contentt, subcategory.id)"
-                          ></i>
+                        <button
+                          class="btn btn-delete"
+                          *ngIf="deletePermission"
+                          (click)="open(contentt, subcategory.id)"
+                        >
+                          <i class="bi bi-trash3"></i>
                         </button>
                       </div>
                     </li>
@@ -99,7 +103,7 @@
   <div class="modal-header border-0 pb-0">
     <div class="form-header modal-header-title text-start mb-0">
       <h4 class="mb-0">
-        {{ isSubCategory ? "Add Subcategory" : "Add Category" }}
+        {{ modalHeading }}
       </h4>
     </div>
     <button

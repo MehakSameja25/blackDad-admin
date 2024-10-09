@@ -29,6 +29,7 @@ export class ArticalTypesComponent implements OnInit {
   editData: any;
   default: boolean = true;
   deleteId!: string | number;
+  modalHeading!: string;
 
   constructor(
     private formB: FormBuilder,
@@ -64,9 +65,11 @@ export class ArticalTypesComponent implements OnInit {
 
   openAdd(
     content: TemplateRef<unknown>,
+    type: string,
     isSubCategory = false,
     id: number | null = null
   ) {
+    this.modalHeading = type;
     this.addCategoryForm.reset();
     this.isSubCategory = isSubCategory;
     this.parentId = id;
@@ -144,7 +147,8 @@ export class ArticalTypesComponent implements OnInit {
       });
   }
 
-  editCategory(data: any) {
+  editCategory(data: any, type: string) {
+    this.modalHeading = type;
     this.editData = data;
     this.addCategoryForm.patchValue({ name: this.editData.name });
     this.modalService.open(this.catModel, {
