@@ -76,13 +76,13 @@ export class EditArticlesComponent {
         });
       }
     }
-    this.getCategoryArticle();
+
     const articleId = this.route.snapshot.paramMap.get('id');
     this.posts.getArticlesDetails(articleId).subscribe((res) => {
       if (res) {
         console.log('Article data', res);
         this.singleArticle = res;
-        this.setFormValues();
+        this.getCategoryArticle();
       }
     });
   }
@@ -318,6 +318,7 @@ export class EditArticlesComponent {
         this.articleCategoryData = this.data.filter(
           (category: { isParent: null }) => category.isParent === null
         );
+        this.setFormValues();
       }
     });
   }
