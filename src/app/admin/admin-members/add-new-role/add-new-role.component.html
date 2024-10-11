@@ -36,7 +36,10 @@
                     <div class="row mt-3">
                       <div class="col-lg-4 form-label">Role Type</div>
                       <div class="col-lg-8 form-label">Permissions</div>
-                      <div class="row mb-1 mt-3" *ngFor="let data of menuData">
+                      <div
+                        class="row mb-1 mt-3"
+                        *ngFor="let data of menuData; let i = index"
+                      >
                         <div class="col-lg-2">
                           <div class="form-check custom-checkbox">
                             <input
@@ -124,7 +127,13 @@
                           </div>
                           <div
                             class="form-check d-inline-block col-lg-2"
-                            *ngIf="data.id !== 1 && data.id !== 5"
+                            *ngIf="
+                              data.id !== 1 &&
+                              data.id !== 5 &&
+                              data.id !== 7 &&
+                              data.id !== 8 &&
+                              data.id !== 9
+                            "
                           >
                             <input
                               class="form-check-input custom-control-input radio1"
@@ -148,7 +157,13 @@
                           </div>
                           <div
                             class="form-check d-inline-block col-lg-3"
-                            *ngIf="data.id !== 1 && data.id !== 5"
+                            *ngIf="
+                              data.id !== 1 &&
+                              data.id !== 5 &&
+                              data.id !== 7 &&
+                              data.id !== 8 &&
+                              data.id !== 9
+                            "
                           >
                             <input
                               class="form-check-input custom-control-input radio1"
@@ -178,7 +193,13 @@
                           </div>
                           <div
                             class="form-check d-inline-block me-3 col-lg-2"
-                            *ngIf="data.id !== 1 && data.id !== 5"
+                            *ngIf="
+                              data.id !== 1 &&
+                              data.id !== 5 &&
+                              data.id !== 7 &&
+                              data.id !== 8 &&
+                              data.id !== 9
+                            "
                           >
                             <input
                               class="form-check-input custom-control-input radio1"
@@ -203,6 +224,20 @@
                             >
                               Self Record
                             </label>
+                          </div>
+                        </div>
+
+                        <div *ngIf="(i + 1) % 4 === 0">
+                          <hr />
+                        </div>
+                        <!-- <div class="row mt-3"></div> -->
+                        <div
+                          *ngIf="(i + 1) % 4 === 0 && i !== 0"
+                          class="row mt-3"
+                        >
+                          <div class="col-lg-4 form-label">Store Role Type</div>
+                          <div class="col-lg-8 form-label">
+                            Store Permissions
                           </div>
                         </div>
                       </div>

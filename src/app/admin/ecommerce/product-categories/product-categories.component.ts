@@ -9,6 +9,8 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProductCategoryService } from '../../services/product-category.service';
+import { Menu } from '../../model/menu.model';
+import { MainNavService } from '../../services/main-nav.service';
 
 @Component({
   selector: 'app-product-categories',
@@ -42,7 +44,8 @@ export class ProductCategoriesComponent implements OnInit {
     private modalService: NgbModal,
     private formB: FormBuilder,
     private _categoryService: ProductCategoryService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private navService: MainNavService
   ) {
     this.addCategoryForm = this.formB.group({
       name: ['', [Validators.required]],
@@ -237,6 +240,23 @@ export class ProductCategoriesComponent implements OnInit {
       if (res) {
         this.modalService.dismissAll();
         this.getList();
+      }
+    });
+  }
+  addPermission!: boolean;
+  editPermission!: boolean;
+  deletePermission!: boolean;
+  checkPermissions() {
+    this.navService.getMenu().subscribe((res: Menu) => {
+      if (res && res.data) {
+        for (let permission of res.data[0].role_accesses) {
+          if ((permission.menu_bar.title == 'Product Categories') === true) {
+            this.addPermission = permission.status.includes('add');
+            this.editPermission = permission.status.includes('edit');
+            this.deletePermission = permission.status.includes('delete');
+            this.getList();
+          }
+        }
       }
     });
   }
