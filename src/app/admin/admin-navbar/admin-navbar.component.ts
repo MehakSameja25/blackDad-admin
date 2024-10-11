@@ -198,4 +198,17 @@ export class AdminNavbarComponent implements OnInit {
       this.notificationService.success('Successfully Logged out');
     }, 1500);
   }
+
+  isSidebarOpen: boolean = false;
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  closeSidebar(event: MouseEvent) {
+    const sidebarElement = document.getElementById('sidebar');
+    if (sidebarElement && !sidebarElement.contains(event.target as Node)) {
+      this.isSidebarOpen = false;
+    }
+  }
 }
