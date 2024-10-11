@@ -170,6 +170,7 @@ export class EditProductComponent implements OnInit {
         description: productData.description,
         sizeChartImage: productData.sizeChart,
         productImage: productData.productImage,
+        sale: productData.inSale,
       });
       this.calculateMargin();
       this.calculateProfit();
@@ -362,7 +363,7 @@ export class EditProductComponent implements OnInit {
     );
     formData.append('price', this.productForm.get('price')?.value);
     formData.append('cost', this.productForm.get('costPerItem')?.value);
-    formData.append('isSale', this.productForm.get('sale')?.value);
+    formData.append('inSale', this.productForm.get('sale')?.value);
     formData.append(
       'is_stock_available',
       JSON.parse(this.productForm.get('stockStatus')?.value)

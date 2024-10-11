@@ -1,10 +1,10 @@
-<div class="header header-one d-lg-none">
+<div class="header header-one d-lg-none" (click)="toggleSidebar()">
   <a class="mobile_btn" id="mobile_btn">
     <i class="fas fa-bars"></i>
   </a>
 </div>
 
-<div class="sidebar" id="sidebar">
+<div class="sidebar" id="sidebar" [class.active]="isSidebarOpen" (click)="closeSidebar($event)">
   <div class="user-icon">
     <ul class="nav nav-tabs user-menu m-0 p-0">
       <li class="nav-item dropdown dropdown-center">
@@ -372,8 +372,9 @@
                 ></path>
               </g>
             </svg>
-            <span> Black Dad's Members</span> <span class="menu-arrow"></span
-          ></a>
+            <span> Black Dad's Members</span>
+            <span class="menu-arrow"></span>
+          </a>
           <ul [style]="displayClass" class="{{ getSubDropClass() }}">
             <li>
               <a routerLink="/admin/all-members" routerLinkActive="active"

@@ -18,6 +18,8 @@
 
       <div class="alert alert-danger" role="alert" style="text-align: center"
         *ngIf="updateForm.get('confirmPassword')?.errors?.['passwordMismatch'] && updateForm.get('confirmPassword')?.touched">
+      <div class="alert alert-danger" role="alert" style="text-align: center"
+        *ngIf="updateForm.get('confirmPassword')?.errors?.['passwordMismatch'] && updateForm.get('confirmPassword')?.touched">
         <i class="fa-solid fa-triangle-exclamation" style="color: #f42a2a"></i>
         <strong style="margin-left: 1rem">Passwords do not match</strong>
       </div>
@@ -96,7 +98,11 @@
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-12">
-                      <button type="submit" class="btn btn-primary w-100 mt-4" [disabled]="updateForm.invalid">
+                      <button
+                        type="submit"
+                        class="btn btn-primary w-100 mt-4"
+                        [disabled]="updateForm.invalid"
+                      >
                         Update
                       </button>
                     </div>
