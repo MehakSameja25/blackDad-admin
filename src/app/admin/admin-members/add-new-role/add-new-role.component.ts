@@ -21,10 +21,10 @@ export class AddNewRoleComponent {
     edit: boolean;
     delete: boolean;
   } = {
-      add: false,
-      edit: false,
-      delete: false,
-    };
+    add: false,
+    edit: false,
+    delete: false,
+  };
   roleId!: string;
   constructor(
     private roleService: RoleService,
@@ -41,9 +41,9 @@ export class AddNewRoleComponent {
             res.data.role_accesses.map(
               (data: { id: number; menu_id: number; status: string }) => {
                 this.roleData.role.push({
-                  id: data.id,
-                  menu_id: data.menu_id,
-                  status: data.status,
+                  id: data?.id,
+                  menu_id: data?.menu_id,
+                  status: data?.status,
                 });
               }
             );
@@ -61,7 +61,7 @@ export class AddNewRoleComponent {
       if (!role.status) {
         role.status = [];
       }
-      const roleStatus = role.status.find((data: string) => data == status);
+      const roleStatus = role?.status?.find((data: string) => data == status);
       if (roleStatus) {
         return true;
       }
@@ -71,7 +71,7 @@ export class AddNewRoleComponent {
 
   isRoleExit(id: number) {
     const role = this.roleData.role.find(
-      (data: { menu_id: number }) => data.menu_id == id
+      (data: { menu_id: number }) => data?.menu_id == id
     );
     if (role) {
       return true;
@@ -90,7 +90,7 @@ export class AddNewRoleComponent {
     if (event.checked) {
       this.roleData.role.push({ menu_id: id });
     } else {
-      const role = this.roleData.role.find(
+      const role = this.roleData?.role?.find(
         (data: { menu_id: number }) => data.menu_id == id
       );
       if (role) {
@@ -132,7 +132,7 @@ export class AddNewRoleComponent {
 
   addRole() {
     let role;
-    if (!this.roleData.name || this.roleData.name.trim().length < 5) {
+    if (!this.roleData.name || this.roleData?.name.trim().length < 5) {
       this.notifications.error('Error', `role name have minimum 5 length`);
       return;
     }

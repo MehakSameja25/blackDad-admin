@@ -30,6 +30,7 @@ export class ArticalTypesComponent implements OnInit {
   default: boolean = true;
   deleteId!: string | number;
   modalHeading!: string;
+  modalReference: any;
 
   constructor(
     private formB: FormBuilder,
@@ -73,11 +74,25 @@ export class ArticalTypesComponent implements OnInit {
     this.addCategoryForm.reset();
     this.isSubCategory = isSubCategory;
     this.parentId = id;
-    this.modalService.open(content, {
+    console.log(isSubCategory, this.parentId, 'pppppppppp');
+    this.modalReference = this.modalService.open(content, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
+    this.modalReference.result.then(
+      (result: any) => {
+        this.parentId = null;
+        this.isSubCategory = false;
+        this.editData = null;
+      },
+      (reason: any) => {
+        console.log('hello000000000000');
+        this.parentId = null;
+        this.isSubCategory = false;
+        this.editData = null;
+      }
+    );
   }
 
   addCategory() {
@@ -139,11 +154,22 @@ export class ArticalTypesComponent implements OnInit {
   }
 
   deleteCategory() {
+    this.default = false;
+    const categoryToDelete = this.subcategories.find(
+      (sub) => sub.id == this.deleteId
+    );
+    const parentId = categoryToDelete ? categoryToDelete.isParent : null;
+
     this.articalCategory
       .deleteArticalCategory(this.deleteId)
       .subscribe((res) => {
         this.fetchCategory();
         this.modalService.dismissAll();
+
+        // Set the active parent to the deleted child's parent
+        if (parentId) {
+          this.activeParentId = parentId;
+        }
       });
   }
 
@@ -151,11 +177,23 @@ export class ArticalTypesComponent implements OnInit {
     this.modalHeading = type;
     this.editData = data;
     this.addCategoryForm.patchValue({ name: this.editData.name });
-    this.modalService.open(this.catModel, {
+    this.modalReference = this.modalService.open(this.catModel, {
       ariaLabelledBy: 'modal-basic-title',
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
+    this.modalReference.result.then(
+      (result: any) => {
+        this.parentId = null;
+        this.isSubCategory = false;
+        this.editData = null;
+      },
+      (reason: any) => {
+        this.parentId = null;
+        this.isSubCategory = false;
+        this.editData = null;
+      }
+    );
   }
 
   addPermission: boolean = false;
