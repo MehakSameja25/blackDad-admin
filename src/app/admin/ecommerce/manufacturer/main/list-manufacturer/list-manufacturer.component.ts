@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Menu } from 'src/app/admin/model/menu.model';
+import { MainNavService } from 'src/app/admin/services/main-nav.service';
 import { ManufacturersService } from 'src/app/admin/services/manufacturers.service';
 
 @Component({
@@ -38,11 +40,12 @@ export class ListManufacturerComponent implements OnInit {
     private _manufacturerService: ManufacturersService,
     private router: Router,
     private renderer: Renderer2,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private navService: MainNavService
   ) {}
 
   ngOnInit(): void {
-    this.getListing();
+    this.checkPermissions();
   }
 
   getListing() {
@@ -181,5 +184,22 @@ export class ListManufacturerComponent implements OnInit {
 
   edit(id: string | null) {
     this.router.navigate([`/edit-manufacturer/${id}`]);
+  }
+  addPermission!: boolean;
+  editPermission!: boolean;
+  deletePermission!: boolean;
+  checkPermissions() {
+    this.navService.getMenu().subscribe((res: Menu) => {
+      if (res && res.data) {
+        for (let permission of res.data[0].role_accesses) {
+          if ((permission.menu_bar.title == 'All Manufacturer') === true) {
+            this.addPermission = permission.status.includes('add');
+            this.editPermission = permission.status.includes('edit');
+            this.deletePermission = permission.status.includes('delete');
+            this.getListing();
+          }
+        }
+      }
+    });
   }
 }

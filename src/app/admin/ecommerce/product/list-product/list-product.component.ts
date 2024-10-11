@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Menu } from 'src/app/admin/model/menu.model';
+import { MainNavService } from 'src/app/admin/services/main-nav.service';
 import { ProductsService } from 'src/app/admin/services/products.service';
 
 @Component({
@@ -37,18 +39,21 @@ export class ListProductComponent implements OnInit {
     private _productsService: ProductsService,
     private renderer: Renderer2,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private navService: MainNavService
   ) {}
 
   ngOnInit(): void {
-    this.getList();
+    this.checkPermissions();
   }
 
   getList() {
     this._productsService.list().subscribe((response: any) => {
       if (response) {
         this.tableData = response.data.product.map((item: any) => [
-          `<img src="${item.product_images.length ? item.product_images[0].image : ''}" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
+          `<img src="${
+            item.product_images.length ? item.product_images[0].image : ''
+          }" alt="Thumbnail" style="border-radius: 10px; width: 60px; height: 60px;">`,
           item.product_name,
           item.price,
           this.getStatus(item.is_stock_available),
@@ -212,5 +217,22 @@ export class ListProductComponent implements OnInit {
     } else {
       return '';
     }
+  }
+  addPermission!: boolean;
+  editPermission!: boolean;
+  deletePermission!: boolean;
+  checkPermissions() {
+    this.navService.getMenu().subscribe((res: Menu) => {
+      if (res && res.data) {
+        for (let permission of res.data[0].role_accesses) {
+          if ((permission.menu_bar.title == 'Product') === true) {
+            this.addPermission = permission.status.includes('add');
+            this.editPermission = permission.status.includes('edit');
+            this.deletePermission = permission.status.includes('delete');
+            this.getList();
+          }
+        }
+      }
+    });
   }
 }
