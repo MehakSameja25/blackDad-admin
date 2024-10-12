@@ -149,7 +149,9 @@ export class AdminNavbarComponent implements OnInit {
     } else if (menu.menu_bar.title === 'Product') {
       this.router.navigate(['/products']);
     } else if (menu.menu_bar.title === 'All Manufacturer') {
-      this.router.navigate(['/manufecturers']);
+      this.router.navigate(['/manufacturers']);
+    } else if (menu.menu_bar.title === 'Product Categories') {
+      this.router.navigate(['/product/categories']);
     }
     // console.log(menu.menu_bar.title);
   }

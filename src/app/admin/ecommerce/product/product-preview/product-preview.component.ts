@@ -19,14 +19,19 @@ export class ProductPreviewComponent implements OnInit {
     slidesToScroll: 1,
     arrows: true,
   };
-  images: any;
+  images: any = [];
 
   ngOnInit(): void {
     const data = localStorage.getItem('productData');
     if (data) {
       this.productData = JSON.parse(data);
       this.variants = JSON.parse(this.productData.variants);
-      this.images = JSON.parse(this.productData.product_image);
+      const dataa = this.productData.product_image;
+      for (let item of dataa) {
+        if (typeof item == 'string') {
+          this.images.push(item);
+        }
+      }
     }
   }
 

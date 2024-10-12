@@ -345,8 +345,6 @@ export class EditProductComponent implements OnInit {
     // Save data to local storage (if needed)
     localStorage.setItem('productData', JSON.stringify(productData));
 
-    // Navigate to preview page (or wherever needed)
-    this.router.navigate(['/product/preview']);
   }
 
   private createFormData(): FormData {

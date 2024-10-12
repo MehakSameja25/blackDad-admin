@@ -254,9 +254,9 @@ export class ProductCategoriesComponent implements OnInit {
             this.addPermission = permission.status.includes('add');
             this.editPermission = permission.status.includes('edit');
             this.deletePermission = permission.status.includes('delete');
-            this.getList();
           }
         }
+        this.getList();
       }
     });
   }

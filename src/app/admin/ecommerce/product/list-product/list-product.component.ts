@@ -224,13 +224,22 @@ export class ListProductComponent implements OnInit {
   checkPermissions() {
     this.navService.getMenu().subscribe((res: Menu) => {
       if (res && res.data) {
-        for (let permission of res.data[0].role_accesses) {
-          if ((permission.menu_bar.title == 'Product') === true) {
-            this.addPermission = permission.status.includes('add');
-            this.editPermission = permission.status.includes('edit');
-            this.deletePermission = permission.status.includes('delete');
-            this.getList();
+        if (localStorage.getItem('userId') !== '1') {
+          for (let permission of res.data[0].role_accesses) {
+            if ((permission.menu_bar.title == 'Product') === true) {
+              this.addPermission = permission.status.includes('add');
+              this.editPermission = permission.status.includes('edit');
+              this.deletePermission = permission.status.includes('delete');
+              console.log(
+                this.addPermission,
+                this.editPermission,
+                this.deletePermission
+              );
+              this.getList();
+            }
           }
+        } else {
+          this.getList();
         }
       }
     });

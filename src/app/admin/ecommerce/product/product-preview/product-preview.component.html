@@ -10,7 +10,7 @@
           <div
             class="card p-0 m-0 border-0 pointer"
             ngxSlickItem
-            *ngFor="let slide of productData?.product_image; let i = index"
+            *ngFor="let slide of images; let i = index"
           >
             <span class="product-img-wrapper"
               ><img src="{{ slide }}" class="card-img-top" alt="Product Image"
@@ -20,7 +20,7 @@
         <div class="d-flex gap-3 align-items-center product-images">
           <a
             class="pointer"
-            *ngFor="let image of productData?.product_image; let i = index"
+            *ngFor="let image of images; let i = index"
           >
             <img [src]="image" alt="Product Thumbnail" />
           </a>

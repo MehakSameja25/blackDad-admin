@@ -73,27 +73,6 @@
                                 id="delete{{ data.id }}" name="select1[]" value="delete "
                                 data-parsley-multiple="select1" (change)="
                                 addMenuAccess(data.id, $event.target, 'delete')
-<<<<<<< HEAD
-                              " [disabled]="isMenuExist(data.id)" [checked]="isStatusExit(data.id, 'delete')" />
-                              <label class="form-check-label m-0" for="delete {{ data.id }}">
-                                Delete
-                              </label>
-                            </div>
-                            <div class="form-check d-inline-block" *ngIf="data.id !== 1 && data.id !== 5">
-                              <input class="form-check-input custom-control-input radio1" type="checkbox"
-                                id="publish{{ data.id }}" name="select1[]" value="publish"
-                                data-parsley-multiple="select1" (change)="
-                                addMenuAccess(data.id, $event.target, 'publish')
-                              " [disabled]="isMenuExist(data.id)" [checked]="isStatusExit(data.id, 'publish')" />
-                              <label class="form-check-label m-0" for="publish{{ data.id }}">
-                                Publish
-                              </label>
-                            </div>
-                            <div class="form-check d-inline-block" *ngIf="data.id !== 1 && data.id !== 5">
-                              <input class="form-check-input custom-control-input radio1" type="checkbox"
-                                id="editpublish{{ data.id }}" name="select1[]" value="edit after publish"
-                                data-parsley-multiple="select1" (change)="
-=======
                               "
                               [disabled]="isMenuExist(data.id)"
                               [checked]="isStatusExit(data.id, 'delete')"
@@ -153,7 +132,6 @@
                               value="edit after publish"
                               data-parsley-multiple="select1"
                               (change)="
->>>>>>> 007bffbd12387d74b8c1d991b47595e033715acf
                                 addMenuAccess(
                                   data.id,
                                   $event.target,
@@ -161,17 +139,6 @@
                                 )
                               " [disabled]="isMenuExist(data.id)" [checked]="
                                 isStatusExit(data.id, 'edit after publish')
-<<<<<<< HEAD
-                              " />
-                              <label class="form-check-label m-0" for="editpublish{{ data.id }}">
-                                Edit After Publish
-                              </label>
-                            </div>
-                            <div class="form-check d-inline-block" *ngIf="data.id !== 1 && data.id !== 5">
-                              <input class="form-check-input custom-control-input radio1" type="checkbox"
-                                id="own{{ data.id }}" name="select1[]" value="self record"
-                                data-parsley-multiple="select1" (change)="
-=======
                               "
                             />
                             <label
@@ -199,7 +166,6 @@
                               value="self record"
                               data-parsley-multiple="select1"
                               (change)="
->>>>>>> 007bffbd12387d74b8c1d991b47595e033715acf
                                 addMenuAccess(
                                   data.id,
                                   $event.target,

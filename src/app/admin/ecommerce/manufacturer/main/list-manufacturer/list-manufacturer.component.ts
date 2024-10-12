@@ -196,9 +196,9 @@ export class ListManufacturerComponent implements OnInit {
             this.addPermission = permission.status.includes('add');
             this.editPermission = permission.status.includes('edit');
             this.deletePermission = permission.status.includes('delete');
-            this.getListing();
           }
         }
+        this.getListing();
       }
     });
   }
