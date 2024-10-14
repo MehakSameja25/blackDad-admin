@@ -55,7 +55,7 @@ export class ManufacturerOrdersComponent implements OnInit {
           item.quantity,
           '$' + item.price,
           item.created_at.split('T')[0], // Date format: YYYY-MM-DD
-          'Pending',
+          this.getStatus(item.deliveryStatus),
           `<div class="actions d-flex align-items-center gap-2">
             <a class="btn-action-icon" data-id="${item.id}" data-action="details">
               <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 511.999 511.999">
@@ -112,5 +112,23 @@ export class ManufacturerOrdersComponent implements OnInit {
 
   toDetails(id: string | null) {
     this.router.navigate([`/manufacturer/order/view/${id}`]);
+  }
+
+  getStatus(status: string): string {
+    if (status === 'pending_from_manufacturer') {
+      return `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
+    } else if (status === 'in_process') {
+      return `<span class="badge rounded-pill text-bg-success">Confirmed</span>`;
+    } else if (status === 'on_the_way') {
+      return `<span class="badge rounded-pill text-bg-primary">On the way</span>`;
+    } else if (status === 'delivered') {
+      return `<span class="badge rounded-pill text-bg-violet">Delivered</span>`;
+    } else if (status === 'rejected_from_manufacturer') {
+      return `<span class="badge rounded-pill text-bg-danger">Rejected</span>`;
+    } else if (status === 'canceled') {
+      return `<span class="badge rounded-pill text-bg-danger">Canceled</span>`;
+    } else {
+      return '';
+    }
   }
 }

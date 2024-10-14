@@ -81,4 +81,23 @@ export class ManufacturerOrderVieComponent implements OnInit {
       }
     });
   }
+
+  getStatus(status: string): string {
+    switch (status) {
+      case 'pending_from_manufacturer':
+        return 'Pending';
+      case 'in_process':
+        return 'Confirmed';
+      case 'on_the_way':
+        return 'On the way';
+      case 'delivered':
+        return 'Delivered';
+      case 'rejected_from_manufacturer':
+        return 'Rejected from manufacturer';
+      case 'canceled':
+        return 'Canceled from user';
+      default:
+        return 'Unknown status';
+    }
+  }
 }

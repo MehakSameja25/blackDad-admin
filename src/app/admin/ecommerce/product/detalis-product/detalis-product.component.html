@@ -69,9 +69,13 @@
                     <div class="col-lg-4 col-md-6 col-sm-12">
                       <div class="input-block mb-3">
                         <label>Variants</label>
-                        <p>
-                          {{ productDetails.product_variants?.length }} variants
-                          available
+                        <p
+                          *ngFor="
+                            let variant of productDetails?.product_variants
+                          "
+                        >
+                          Color: - {{ variant.color }} , Size: -
+                          {{ variant.size }}
                         </p>
                       </div>
                     </div>

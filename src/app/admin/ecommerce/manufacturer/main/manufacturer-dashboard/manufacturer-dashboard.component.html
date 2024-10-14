@@ -306,12 +306,28 @@
                         Book Name <br />
                         <span class="plane-type">(Book)</span>
                       </td> -->
-                      <!-- <td>
+                      <td>
                         <span
-                          class="badge bg-warning-light d-inline-flex align-items-center"
-                          ><i class="fe fe-check me-1"></i>pending</span
+                          class="badge rounded-pill"
+                          [ngClass]="{
+                            'bg-warning':
+                              recent?.deliveryStatus ===
+                              'pending_from_manufacturer',
+                            'bg-success-light':
+                              recent?.deliveryStatus === 'in_process',
+                            'bg-primary-light':
+                              recent?.deliveryStatus === 'on_the_way',
+                            'bg-violet-light':
+                              recent?.deliveryStatus === 'delivered',
+                            'bg-danger-light':
+                              recent?.deliveryStatus ===
+                                'rejected_from_manufacturer' ||
+                              recent?.deliveryStatus === 'canceled'
+                          }"
                         >
-                      </td> -->
+                          {{ getStatus(recent?.deliveryStatus) }}
+                        </span>
+                      </td>
                       <!-- <td class="text-end">
                             <a
                               href="invoice-subscription.html"

@@ -155,20 +155,25 @@
                       <div class="input-block mb-3">
                         <label class="d-block">Status</label>
                         <span
-                          class="badge bg-success-light text-success-light"
-                          *ngIf="orderDetails?.status == 'approved'"
-                          >Approved</span
+                          class="badge rounded-pill"
+                          [ngClass]="{
+                            'text-bg-warning':
+                              orderDetails?.deliveryStatus ===
+                              'pending_from_manufacturer',
+                            'text-bg-success':
+                              orderDetails?.deliveryStatus === 'in_process',
+                            'text-bg-primary':
+                              orderDetails?.deliveryStatus === 'on_the_way',
+                            'text-bg-violet':
+                              orderDetails?.deliveryStatus === 'delivered',
+                            'text-bg-danger':
+                              orderDetails?.deliveryStatus ===
+                                'rejected_from_manufacturer' ||
+                              orderDetails?.deliveryStatus === 'canceled'
+                          }"
                         >
-                        <span
-                          *ngIf="orderDetails?.status == 'pending'"
-                          class="badge bg-warning-light text-warning-light"
-                          >Pending</span
-                        >
-                        <span
-                          *ngIf="orderDetails?.status == 'rejected'"
-                          class="badge bg-danger-light text-danger-light"
-                          >Rejected</span
-                        >
+                          {{ getStatus(orderDetails?.deliveryStatus) }}
+                        </span>
                       </div>
                     </div>
 
