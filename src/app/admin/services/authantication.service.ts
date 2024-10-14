@@ -43,9 +43,10 @@ export class AuthanticationService {
       }
     );
   }
-  getUserById(id: any) {
+  getUserById() {
+    const userId = localStorage.getItem('userId');
     return this.http.get<any>(
-      `${environment.apiUrl}/get-userById?userId=${id}`
+      `${environment.apiUrl}/get-userById?userId=${userId}`
     );
   }
   resetPassword(body: any) {

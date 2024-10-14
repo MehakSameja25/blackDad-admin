@@ -5,7 +5,10 @@
       <div class="page-header">
         <div class="content-page-header">
           <h5>All Products</h5>
-          <a class="btn btn-primary" routerLink="/add-product"
+          <a
+            *ngIf="addPermission"
+            class="btn btn-primary"
+            routerLink="/add-product"
             >Add New Product</a
           >
         </div>
@@ -67,9 +70,7 @@
       <div class="modal-btn delete-action">
         <div class="row">
           <div class="col-6">
-            <a
-              class="btn btn-primary paid-continue-btn"
-              (click)="delete()"
+            <a class="btn btn-primary paid-continue-btn" (click)="delete()"
               >Delete</a
             >
           </div>

@@ -100,8 +100,14 @@
                     <!-- Upload Images -->
                     <div class="row mb-4">
                       <div
-                        class="col-2"
+                        class="col-2 droppable"
+                        style="cursor: grab;"
                         *ngFor="let image of uploadedImages; let i = index"
+                        (dragstart)="onDragStart($event, i)"
+                        (dragover)="onDragOver($event)"
+                        (drop)="onDrop($event, i)"
+                        (dragend)="onDragEnd($event)"
+                        draggable="true"
                       >
                         <div
                           class="input-block service-upload service-upload-sm mb-0 position-relative"

@@ -1,0 +1,12 @@
+.dragging-cursor {
+    cursor:grabbing
+  }
+  
+  .droppable {
+    transition: border 0.3s;
+  }
+  
+  .droppable.drag-over {
+    border: 2px dashed #007bff; 
+  }
+  

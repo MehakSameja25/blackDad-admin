@@ -131,8 +131,7 @@ export class DetailEpisodeComponent implements OnInit {
   }
 
   checkPermission() {
-    const userId = localStorage.getItem('userId');
-    this.authService.getUserById(userId).subscribe((res) => {
+    this.authService.getUserById().subscribe((res) => {
       this.type = res.data.role.name;
     });
     this.navService.getMenu().subscribe((res: Menu) => {

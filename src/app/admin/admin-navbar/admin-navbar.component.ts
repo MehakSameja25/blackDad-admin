@@ -63,7 +63,6 @@ export class AdminNavbarComponent implements OnInit {
       }
     ];
   };
-  userId: string | null;
   userDetails!: userDetails;
   userType = '';
   userRole: any;
@@ -74,9 +73,7 @@ export class AdminNavbarComponent implements OnInit {
     private authService: AuthanticationService,
     private notificationService: NotificationsService
   ) {
-    this.userId = localStorage.getItem('userId');
-
-    this.authService.getUserById(this.userId).subscribe((res: MainUser) => {
+    this.authService.getUserById().subscribe((res: MainUser) => {
       if (res) {
         this.userDetails = res.data;
         this.userRole = res.data?.role;
@@ -95,7 +92,9 @@ export class AdminNavbarComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.checkEcommerceMenuState();
+  }
 
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent) {
@@ -134,6 +133,24 @@ export class AdminNavbarComponent implements OnInit {
     } else {
       this.displayClass2 = 'display: none';
       this.anchorClass2 = '';
+    }
+  }
+
+  private ecommerceRoutes: string[] = [
+    '/admin/dashboard',
+    '/admin/all-orders',
+    '/manufacturers',
+    '/admin/manufecturer/roles',
+    '/admin/manufecturer/role/assigning',
+    '/products',
+    '/product/categories',
+  ];
+
+  private checkEcommerceMenuState() {
+    const currentUrl = this.router.url;
+    if (this.ecommerceRoutes.some((route) => currentUrl.includes(route))) {
+      this.displayClass2 = 'display: block';
+      this.anchorClass2 = 'subdrop';
     }
   }
 

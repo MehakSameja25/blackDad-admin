@@ -67,6 +67,7 @@ import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/ass
 import { NgxSummernoteModule } from 'ngx-summernote';
 import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -142,6 +143,7 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     }),
     SlickCarouselModule,
     NgxSummernoteModule,
+    DragDropModule
   ],
   providers: [
     {

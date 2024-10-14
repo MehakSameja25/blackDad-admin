@@ -5,7 +5,10 @@
       <div class="page-header">
         <div class="content-page-header">
           <h5>All Manufacturers</h5>
-          <a class="btn btn-primary" routerLink="/add-manufacturer"
+          <a
+            *ngIf="addPermission"
+            class="btn btn-primary"
+            routerLink="/add-manufacturer"
             >Add New Manufacture</a
           >
         </div>

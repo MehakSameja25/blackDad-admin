@@ -274,7 +274,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'admin/manufecturer/roles/assigning',
+    path: 'admin/manufecturer/role/assigning',
     component: AssignComponent,
     canActivate: [AuthGuard],
   },

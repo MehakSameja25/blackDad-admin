@@ -24,7 +24,8 @@ export class ManufacturerOrdersComponent implements OnInit {
     { title: 'Gender' },
     { title: 'Quantity' },
     { title: 'Price' },
-    { title: 'Created At' },
+    { title: 'Ordered At' },
+    { title: 'Order Status' },
     { title: 'Details' },
   ];
 
@@ -54,6 +55,7 @@ export class ManufacturerOrdersComponent implements OnInit {
           item.quantity,
           '$' + item.price,
           item.created_at.split('T')[0], // Date format: YYYY-MM-DD
+          'Pending',
           `<div class="actions d-flex align-items-center gap-2">
             <a class="btn-action-icon" data-id="${item.id}" data-action="details">
               <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 511.999 511.999">

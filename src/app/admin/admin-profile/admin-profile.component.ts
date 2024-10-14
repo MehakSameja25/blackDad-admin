@@ -16,7 +16,6 @@ import { MainUser, User } from '../model/user.model';
 })
 export class AdminProfileComponent {
   updateForm!: FormGroup;
-  UserId!: string | null;
   userDetails!: any;
   // successMessage: string = '';
   // successalertClass: string = 'd-none';
@@ -41,8 +40,7 @@ export class AdminProfileComponent {
       }
     );
 
-    this.UserId = localStorage.getItem('userId');
-    this.authService.getUserById(this.UserId).subscribe((res) => {
+    this.authService.getUserById().subscribe((res) => {
       if (res) {
         this.userDetails = res.data;
         this.userRole = res.data?.role?.name;

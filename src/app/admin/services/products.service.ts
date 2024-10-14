@@ -70,6 +70,13 @@ export class ProductsService {
     return this.http.post(`${environment.apiUrl}/delete-product-image`, data);
   }
 
+  reOrderImage(data: any, id: string | null) {
+    return this.http.put(
+      `${environment.apiUrl}/reorder-product-image?productId=${id}`,
+      data
+    );
+  }
+
   getOrders() {
     return apiCallWrapper(
       this.http.get(`${environment.apiUrl}/manufacturer-order`),

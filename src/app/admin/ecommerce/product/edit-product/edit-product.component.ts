@@ -205,13 +205,44 @@ export class EditProductComponent implements OnInit {
 
         reader.onload = (e: ProgressEvent<FileReader>) => {
           const imageSrc = e.target?.result as string;
-          this.uploadedImages.push({ image: imageSrc }); // Add the image to the list
+          this.uploadedImages.push({ image: imageSrc });
         };
         reader.readAsDataURL(file);
       });
       const images = this.productForm.get('images')?.value || [];
       this.productForm.patchValue({ images: [...images, files[0]] });
     }
+  }
+  draggedIndex: number | null = null;
+
+  onDragStart(event: DragEvent, index: number) {
+    this.draggedIndex = index;
+    event.dataTransfer?.setData('text/plain', String(index));
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  onDrop(event: DragEvent, targetIndex: number) {
+    event.preventDefault();
+
+    if (this.draggedIndex !== null && this.draggedIndex !== targetIndex) {
+      const draggedImage = this.uploadedImages[this.draggedIndex];
+      this.uploadedImages[this.draggedIndex] = this.uploadedImages[targetIndex];
+      this.uploadedImages[targetIndex] = draggedImage;
+      this.route.params.subscribe((params) => {
+        if (this.productId) {
+          this.reOrder(this.uploadedImages);
+        }
+      });
+    }
+
+    this.draggedIndex = null;
+  }
+
+  onDragEnd(event: DragEvent) {
+    this.draggedIndex = null;
   }
 
   removeImage(index: number, id?: number): void {
@@ -283,6 +314,24 @@ export class EditProductComponent implements OnInit {
     }
   }
 
+  imageArr: any = [];
+  reOrder(uploadedImages: any) {
+    this.imageArr = [];
+
+    for (let images of uploadedImages) {
+      const image = images.image.split('v1/');
+      if (image.length > 1) {
+        this.imageArr.push(image[1]);
+      }
+    }
+
+    const body = {
+      image: this.imageArr,
+    };
+
+    console.log(body);
+    this._productService.reOrderImage(body, this.productId).subscribe();
+  }
   onSubmit() {
     if (this.productForm.valid) {
       const formData = this.createFormData();
@@ -344,7 +393,6 @@ export class EditProductComponent implements OnInit {
 
     // Save data to local storage (if needed)
     localStorage.setItem('productData', JSON.stringify(productData));
-
   }
 
   private createFormData(): FormData {
