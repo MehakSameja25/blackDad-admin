@@ -701,6 +701,11 @@ h5 {
 }
 
 @media (max-width: 992px) {
+  .qpad button.btn.btn-danger {
+    height: 30px !important;
+    width: 30px !important;
+  }
+
   h5 {
     font-size: 18px;
     margin: 0;
@@ -11377,8 +11382,7 @@ table .badge {
   text-align: center;
   background-color: #fff;
   position: relative;
-  padding: 16px 0;
-  min-height: 133px;
+  padding: 10px 0;
 }
 
 .service-upload .drop-browse {
@@ -30243,6 +30247,11 @@ table tr td .status-toggle .checktoggle {
 }
 
 @media (max-width: 767px) {
+  .mainvarodnf {
+    grid-template-columns: 1fr 1fr !important;
+    grid-gap: 8px !important;
+  }
+
   #add_package .modal-body ul li {
     padding-right: 0;
     padding-left: 0;
@@ -33265,7 +33274,7 @@ ul.list-group.naeqna .list-group-item {
 }
 
 .dolsg .form-control {
-  padding-left: 25px;
+  padding-left: 25px !important;
 }
 
 .dolsg i {
@@ -33274,3 +33283,107 @@ ul.list-group.naeqna .list-group-item {
   left: 10px;
   transform: translateY(-50%);
 }
+
+/* product page css start */
+
+
+span.proaddei {
+  position: absolute;
+  right: 15px;
+  top: 54%;
+  transform: translateY(-50%);
+  color: #757575;
+  cursor: pointer;
+}
+
+span.dregicn {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: grab;
+}
+
+.mainvaritem {
+  border: 1px solid #00000021;
+  border-radius: 10px;
+}
+
+.mainvaritem ul.varientlists {
+  display: block;
+}
+
+.mainvaritem ul.varientlists li.varientitem {
+  display: block;
+  padding: 20px;
+  border-bottom: 1px solid #00000021;
+}
+
+.mainvaritem ul.varientlists li.varientitem:last-child {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.mainvaritem .varientadsmf {
+  padding: 20px;
+  border-top: 1px solid #00000021;
+}
+
+.prodmantnw img {
+  height: 111px;
+  width: 111px;
+  object-fit: contain;
+}
+
+.prodmantnw .dltbtn {
+  right: 5px;
+  top: 5px;
+  display: none;
+}
+
+.prodmantnw:hover .dltbtn {
+  display: block;
+}
+
+.scsm {
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0;
+  grid-column-gap: 10px;
+}
+
+.input-block .form-control {
+  font-size: 14px;
+  padding: 4px 8px;
+}
+
+.epcoverslider .slick-slider {
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 2px #00000026;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+
+
+.mainvarodnf {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 15px;
+}
+
+.mainvarodnf .varcolor {
+  display: grid;
+  grid-template-columns: 60px auto;
+}
+
+.mainvarodnf .varsize {
+  display: grid;
+  grid-template-columns: 60px auto;
+}
+
+.epcoverslider img {
+  max-height: 375px;
+  object-fit: contain;
+}
+
+/* product page css end */
