@@ -52,6 +52,7 @@ import { LoaderInterceptor } from './admin/main-interceptors/loader.interceptor'
 import { LoaderComponent } from './admin/loader/loader.component';
 import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
 import { NgxSummernoteModule } from 'ngx-summernote';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { NgxSummernoteModule } from 'ngx-summernote';
       showProgressBar: true,
       clickToClose: true,
     }),
-    NgxSummernoteModule
+    NgxSummernoteModule,
+    DragDropModule
   ],
   providers: [
     {
