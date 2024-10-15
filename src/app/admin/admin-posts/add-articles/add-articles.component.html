@@ -180,6 +180,7 @@
                           [ngxSummernote]="config"
                           [ngxSummernoteDisabled]="editorDisabled"
                           (blur)="onBlur()"
+                          (blur)="inputChanged.next('description')"
                           (summernoteInit)="summernoteInit($event)"
                         ></div>
 

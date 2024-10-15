@@ -201,6 +201,9 @@ export class AddArticlesComponent {
 
   public onBlur() {
     console.log('Blur');
+    setTimeout(() => {
+      this.inputChanged.next('');
+    }, 3000);
   }
 
   public onDelete(file: { url: any }) {
@@ -231,7 +234,7 @@ export class AddArticlesComponent {
       searchPlaceholderText: 'Search Categories!',
       closeDropDownOnSelection: true,
     };
-    this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
+    this.inputChanged.pipe(debounceTime(300)).subscribe(() => {
       this.updateDraft();
     });
   }
@@ -293,8 +296,18 @@ export class AddArticlesComponent {
   }
 
   firstKeyPress: boolean = false;
+
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent): void {
+    this.callAddDraft();
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClick(event: MouseEvent): void {
+    this.callAddDraft();
+  }
+
+  private callAddDraft(): void {
     if (!this.firstKeyPress) {
       this.addArticleDraft();
       this.firstKeyPress = true;
@@ -504,6 +517,10 @@ export class AddArticlesComponent {
       windowClass: 'share-modal',
       modalDialogClass: 'modal-dialog-centered modal-lg',
     });
+  }
+
+  test() {
+    console.log('test');
   }
 }
 

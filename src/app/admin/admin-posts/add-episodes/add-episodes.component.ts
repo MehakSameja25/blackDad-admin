@@ -84,8 +84,18 @@ export class AddEpisodesComponent implements OnInit {
     });
     this.getCategories(); // Fetch categories
   }
+
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent): void {
+    this.callAddDraft();
+  }
+  
+  @HostListener('document:click', ['$event'])
+  handleClick(event: MouseEvent): void {
+    this.callAddDraft();
+  }
+  
+  private callAddDraft(): void {
     if (!this.firstKeyPress) {
       this.addEpisodeDraft();
       this.firstKeyPress = true;

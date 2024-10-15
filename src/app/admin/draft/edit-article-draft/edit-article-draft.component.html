@@ -89,9 +89,7 @@
                           class="form-control"
                           (change)="inputChanged.next('subCategory')"
                         >
-                          <option disabled>
-                            Select a subcategory
-                          </option>
+                          <option disabled>Select a subcategory</option>
                           <option
                             *ngFor="let subCat of subCategories"
                             [value]="subCat.id"
@@ -152,6 +150,9 @@
                           formControlName="description"
                           [ngxSummernote]="config"
                           [ngxSummernoteDisabled]="editorDisabled"
+                          (blur)="onBlur()"
+                          (summernoteInit)="summernoteInit($event)"
+                          (blur)="inputChanged.next('description')"
                         ></div>
                         <div
                           *ngIf="
