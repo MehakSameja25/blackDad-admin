@@ -22,6 +22,7 @@ export class DetailArticleComponent {
   publishPermission!: boolean;
   type!: string;
   postId: string | null | undefined;
+  approvePermission!: boolean;
   constructor(
     private route: ActivatedRoute,
     private postsService: AllPostsService,
@@ -99,6 +100,7 @@ export class DetailArticleComponent {
       if (res) {
         for (let permission of res.data[0].role_accesses) {
           if ((permission.menu_bar.title == 'Articles') === true) {
+            this.approvePermission = permission.status.includes('approve');
             this.publishPermission = permission.status.includes('publish');
           }
         }

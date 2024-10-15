@@ -49,7 +49,7 @@
                         class="input-block mb-3 d-flex align-items-center gap-2"
                         *ngIf="
                           articleDetails.data.isApproved === '0' &&
-                          type == 'Super Admin'
+                          approvePermission
                         "
                       >
                         <button

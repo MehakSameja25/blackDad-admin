@@ -151,6 +151,9 @@
                           formControlName="description"
                           [ngxSummernote]="config"
                           [ngxSummernoteDisabled]="editorDisabled"
+                          (blur)="onBlur()"
+                          (summernoteInit)="summernoteInit($event)"
+                          (blur)="inputChanged.next('description')"
                         ></div>
                         <div
                           *ngIf="

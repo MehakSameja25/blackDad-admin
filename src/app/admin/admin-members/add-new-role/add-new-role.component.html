@@ -22,8 +22,13 @@
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="input-block mb-3">
                       <label>Role Name</label>
-                      <input type="text" class="form-control" placeholder="Enter Role" [(ngModel)]="roleData.name"
-                        required />
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Enter Role"
+                        [(ngModel)]="roleData.name"
+                        required
+                      />
                     </div>
                   </div>
 
@@ -37,10 +42,19 @@
                       >
                         <div class="col-lg-2">
                           <div class="form-check custom-checkbox">
-                            <input class="form-check-input custom-control-input-cat" type="checkbox"
-                              id="check {{ data.id }}" name="check1 {{ data.id }}" data-parsley-multiple="check1"
-                              (change)="addMenu(data.id, $event.target)" [checked]="isRoleExit(data.id)" />
-                            <label class="form-check-label m-0" for="check1 {{ data.id }}">
+                            <input
+                              class="form-check-input custom-control-input-cat"
+                              type="checkbox"
+                              id="check {{ data.id }}"
+                              name="check1 {{ data.id }}"
+                              data-parsley-multiple="check1"
+                              (change)="addMenu(data.id, $event.target)"
+                              [checked]="isRoleExit(data.id)"
+                            />
+                            <label
+                              class="form-check-label m-0"
+                              for="check1 {{ data.id }}"
+                            >
                               {{ data.name }}
                             </label>
                           </div>
@@ -49,22 +63,44 @@
                         <div class="col-lg-10">
                           <div class="d-flex gap-3 gap-md-4 flex-wrap">
                             <div class="form-check d-inline-block">
-                              <input class="form-check-input custom-control-input radio1" type="checkbox"
-                                id="add{{ data.id }}" name="select1[]" value="add" data-parsley-multiple="select1"
+                              <input
+                                class="form-check-input custom-control-input radio1"
+                                type="checkbox"
+                                id="add{{ data.id }}"
+                                name="select1[]"
+                                value="add"
+                                data-parsley-multiple="select1"
                                 (change)="
-                                addMenuAccess(data.id, $event.target, 'add')
-                              " [disabled]="isMenuExist(data.id)" [checked]="isStatusExit(data.id, 'add')" />
-                              <label class="form-check-label m-0" for="add{{ data.id }}">
+                                  addMenuAccess(data.id, $event.target, 'add')
+                                "
+                                [disabled]="isMenuExist(data.id)"
+                                [checked]="isStatusExit(data.id, 'add')"
+                              />
+                              <label
+                                class="form-check-label m-0"
+                                for="add{{ data.id }}"
+                              >
                                 Add
                               </label>
                             </div>
                             <div class="form-check d-inline-block">
-                              <input class="form-check-input custom-control-input radio1" type="checkbox"
-                                id="edit {{ data.id }}" name="select1[]" value="edit" data-parsley-multiple="select1"
+                              <input
+                                class="form-check-input custom-control-input radio1"
+                                type="checkbox"
+                                id="edit {{ data.id }}"
+                                name="select1[]"
+                                value="edit"
+                                data-parsley-multiple="select1"
                                 (change)="
-                                addMenuAccess(data.id, $event.target, 'edit')
-                              " [disabled]="isMenuExist(data.id)" [checked]="isStatusExit(data.id, 'edit')" />
-                              <label class="form-check-label m-0" for="edit{{ data.id }}">
+                                  addMenuAccess(data.id, $event.target, 'edit')
+                                "
+                                [disabled]="isMenuExist(data.id)"
+                                [checked]="isStatusExit(data.id, 'edit')"
+                              />
+                              <label
+                                class="form-check-label m-0"
+                                for="edit{{ data.id }}"
+                              >
                                 Edit
                               </label>
                             </div>

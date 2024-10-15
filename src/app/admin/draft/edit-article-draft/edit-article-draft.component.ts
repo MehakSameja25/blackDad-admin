@@ -72,7 +72,7 @@ export class EditArticleDraftComponent {
       searchPlaceholderText: 'Search Categories!',
       closeDropDownOnSelection: true,
     };
-    this.inputChanged.pipe(debounceTime(1000)).subscribe(() => {
+    this.inputChanged.pipe(debounceTime(300)).subscribe(() => {
       this.updateDraft();
     });
   }
@@ -483,6 +483,21 @@ export class EditArticleDraftComponent {
 
   public disableEditor() {
     this.editorDisabled = true;
+  }
+
+  public onBlur() {
+    console.log('Blur');
+    setTimeout(() => {
+      this.inputChanged.next('');
+    }, 3000);
+  }
+
+  public onDelete(file: { url: any }) {
+    console.log('Delete file', file.url);
+  }
+
+  public summernoteInit(event: any) {
+    console.log(event);
   }
 }
 

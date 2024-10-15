@@ -62,6 +62,7 @@ export class ChangePasswordComponent {
   }
 
   updateUser() {
+    localStorage.clear();
     const authData = this.LoginForm.value;
     if (this.proof) {
       this.roleService.updatePassword(this.proof, authData).subscribe(
