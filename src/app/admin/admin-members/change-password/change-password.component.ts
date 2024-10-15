@@ -62,6 +62,7 @@ export class ChangePasswordComponent {
   }
 
   updateUser() {
+    localStorage.clear();
     const authData = this.LoginForm.value;
     console.log('FORM DATA :=>', authData);
     if (this.proof) {

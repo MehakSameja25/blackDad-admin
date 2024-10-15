@@ -40,6 +40,7 @@ export class DetailEpisodeComponent implements OnInit {
   countryName!: string | null;
   timezonne!: string | null;
   scheduledTime!: string | null;
+  approvePermiision!: boolean;
   constructor(
     private route: ActivatedRoute,
     private postsService: AllPostsService,
@@ -138,6 +139,7 @@ export class DetailEpisodeComponent implements OnInit {
     this.navService.getMenu().subscribe((res: Menu) => {
       for (let permission of res.data[0].role_accesses) {
         if (permission.menu_bar.title === 'Episodes') {
+          this.approvePermiision = permission.status.includes('approve');
           this.publishPermission = permission.status.includes('publish');
           console.log('publish permission', this.publishPermission);
         }

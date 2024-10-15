@@ -85,7 +85,9 @@ export class AdminNavbarComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.checkMembersMenuState();
+  }
 
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent) {
@@ -162,32 +164,20 @@ export class AdminNavbarComponent implements OnInit {
     return false;
   }
 
-  getSubDropClass(): string {
+  private subLinks = [
+    '/admin/all-members',
+    '/admin/add-member',
+    '/admin/role-type',
+    '/admin/add-role',
+    '/admin/assign-role',
+  ];
+
+  private checkMembersMenuState() {
     const currentUrl = this.router.url;
-    const subLinks = [
-      '/admin/all-members',
-      '/admin/add-member',
-      '/admin/role-type',
-      '/admin/add-role',
-      '/admin/assign-role',
-    ];
-
-    const isActive = subLinks.some((link) => currentUrl.includes(link));
-    return isActive ? 'd-block' : '';
-  }
-
-  getClass(): string {
-    const currentUrl = this.router.url;
-    const subLinks = [
-      '/admin/all-members',
-      '/admin/add-member',
-      '/admin/role-type',
-      '/admin/add-role',
-      '/admin/assign-role',
-    ];
-
-    const isActive = subLinks.some((link) => currentUrl.includes(link));
-    return isActive ? 'subdrop' : '';
+    if (this.subLinks.some((route) => currentUrl.includes(route))) {
+      this.displayClass = 'display: block';
+      this.anchorClass = 'subdrop';
+    }
   }
 
   logOut() {
