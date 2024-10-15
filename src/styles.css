@@ -30257,9 +30257,7 @@ table tr td .status-toggle .checktoggle {
     padding-left: 0;
   }
 
-  .sidebar.active {
-    margin-left: 0;
-  }
+
 
   .epitopsc .sectioncon {
     flex-direction: column;
@@ -31609,6 +31607,11 @@ td .invoice-detail i {
 @media (max-width: 992px) {
   .view-delivery-challans .invoice-one .invoice-table h5 {
     font-size: 18px;
+  }
+}
+@media only screen and (max-width: 992px) {
+  .sidebar.active {
+    margin-left: 0;
   }
 }
 
