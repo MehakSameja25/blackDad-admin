@@ -281,6 +281,10 @@ export class ArticalTypesComponent implements OnInit {
     this.addCategoryFormGroup.reset();
     this.popupType = articleType;
     this.popupHeader = type;
+    this.categoryImage = null;
+    this.addCategoryFormGroup
+      .get('image')
+      ?.setValidators([Validators.required]);
 
     if (type === 'Edit') {
       this.getPopUp();

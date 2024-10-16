@@ -28,12 +28,17 @@
                 <div
                   *ngFor="let data of parentCategory"
                   class="main-blockcat"
+                  style="cursor: grab"
                   [ngClass]="{ active: activeParentId === data.id }"
                   cdkDrag
                 >
-                  <div class="main-cate position-relative ps-4">
+                  <div
+                    class="main-cate position-relative ps-4"
+                    style="cursor: grab"
+                  >
                     <span
                       class="dregicn"
+                      title="Drag and Drop"
                       style="
                         cursor: grab;
                         position: absolute;
@@ -44,7 +49,12 @@
                     >
                       <i class="fa-solid fa-grip-vertical"></i>
                     </span>
-                    <span class="strcat" (click)="toggleActive(data.id)">
+                    <span
+                      class="strcat"
+                      style="cursor: pointer"
+                      title="Toggle"
+                      (click)="toggleActive(data.id)"
+                    >
                       <i class="bi bi-arrow-right-short"></i> {{ data.name }}
                     </span>
                     <div>
