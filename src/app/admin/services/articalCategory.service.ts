@@ -4,9 +4,7 @@ import { environment } from 'src/environments/environment';
 import { apiCallWrapper } from './api.util';
 import { NotificationsService } from 'angular2-notifications';
 import { Observable } from 'rxjs';
-import {
-  Category,
-} from '../model/category.model';
+import { Category } from '../model/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +13,7 @@ export class ArticalCategoiesService {
   constructor(
     private http: HttpClient,
     private notifications: NotificationsService
-  ) { }
+  ) {}
 
   getArticalCategory(): Observable<Category> {
     return this.http.get<Category>(`${environment.apiUrl}/get-article-type`);
@@ -54,5 +52,9 @@ export class ArticalCategoiesService {
         action: 'Deleting Category',
       }
     );
+  }
+
+  reorder(data: any) {
+    return this.http.put(`${environment.apiUrl}/reorder-parent-category`, data);
   }
 }
