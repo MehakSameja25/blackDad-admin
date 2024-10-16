@@ -643,6 +643,7 @@ h1 {
   h1 {
     font-size: 27px;
   }
+
 }
 
 h2 {
@@ -30247,6 +30248,9 @@ table tr td .status-toggle .checktoggle {
 }
 
 @media (max-width: 767px) {
+  .container.cart-page.admincartprev .product-cart {
+    display: block;
+  }
   .mainvarodnf {
     grid-template-columns: 1fr 1fr !important;
     grid-gap: 8px !important;
@@ -32390,6 +32394,14 @@ td .invoice-detail i {
   .saas-login-wrapper .login-userset {
     width: 400px;
   }
+  .container.cart-page.admincartprev {
+    padding: 30px;
+  }
+
+  .container.cart-page.admincartprev .product-cart {
+    grid-template-columns: 400px auto;grid-gap: 30px;
+  }
+
 }
 
 @media (max-width: 991.98px) {
