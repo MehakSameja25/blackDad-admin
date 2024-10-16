@@ -1,7 +1,6 @@
-
 export interface ArticalCategory {
-    id: number;
-    name: string;
-    isParent: number | null;
+  id: number;
+  name: string;
+  isParent: number | null;
+  havePopup: boolean;
 }
-

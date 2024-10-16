@@ -11,6 +11,8 @@ import { ArticalCategoiesService } from '../services/articalCategory.service';
 import { ArticalCategory } from '../model/articalCategory.model';
 import { Menu } from '../model/menu.model';
 import { MainNavService } from '../services/main-nav.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ArticlePopupService } from '../services/article-popup.service';
 
 @Component({
   selector: 'app-artical-types',
@@ -31,22 +33,53 @@ export class ArticalTypesComponent implements OnInit {
   deleteId!: string | number;
   modalHeading!: string;
   modalReference: any;
+  addCategoryFormGroup: FormGroup;
+  popupType!: string;
+  fileName: any;
+  popupHeader!: string;
 
   constructor(
     private formB: FormBuilder,
     private modalService: NgbModal,
     private articalCategory: ArticalCategoiesService,
-    private navService: MainNavService
+    private navService: MainNavService,
+    private popUpService: ArticlePopupService
   ) {
     this.addCategoryForm = this.formB.group({
       name: ['', [Validators.required]],
       parent: [0],
     });
     this.activeParentId = null;
+
+    this.addCategoryFormGroup = this.formB.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      image: [null],
+      ctaButton: ['', Validators.required],
+    });
   }
 
   ngOnInit() {
     this.checkPermissions();
+  }
+
+  addPermission: boolean = false;
+  editPermission: boolean = false;
+  deletePermission: boolean = false;
+
+  checkPermissions() {
+    this.navService.getMenu().subscribe((res: Menu) => {
+      if (res && res.data) {
+        for (let permission of res.data[0].role_accesses) {
+          if ((permission.menu_bar.title == 'Article Categories') === true) {
+            this.addPermission = permission.status.includes('add');
+            this.editPermission = permission.status.includes('edit');
+            this.deletePermission = permission.status.includes('delete');
+            this.fetchCategory();
+          }
+        }
+      }
+    });
   }
 
   fetchCategory() {
@@ -62,6 +95,10 @@ export class ArticalTypesComponent implements OnInit {
         this.activeParentId = this.parentCategory[0].id;
       }
     });
+  }
+
+  fetchSubcategories(id: number) {
+    return this.subcategories.filter((data) => data.isParent == id);
   }
 
   openAdd(
@@ -87,7 +124,6 @@ export class ArticalTypesComponent implements OnInit {
         this.editData = null;
       },
       (reason: any) => {
-        console.log('hello000000000000');
         this.parentId = null;
         this.isSubCategory = false;
         this.editData = null;
@@ -129,48 +165,9 @@ export class ArticalTypesComponent implements OnInit {
             }
           });
       }
-    }
-  }
-
-  fetchSubcategories(id: number) {
-    return this.subcategories.filter((data) => data.isParent == id);
-  }
-
-  toggleActive(parentId: number) {
-    if (this.activeParentId === parentId) {
-      this.activeParentId = null; // Deactivate if already active
     } else {
-      this.activeParentId = parentId; // Set the clicked parent as active
+      this.addCategoryForm.markAllAsTouched();
     }
-  }
-
-  open(content: TemplateRef<unknown>, id: string | number) {
-    this.deleteId = id;
-    this.modalService.open(content, {
-      ariaLabelledBy: 'modal-basic-title',
-      windowClass: 'share-modal',
-      modalDialogClass: 'modal-dialog-centered modal-md',
-    });
-  }
-
-  deleteCategory() {
-    this.default = false;
-    const categoryToDelete = this.subcategories.find(
-      (sub) => sub.id == this.deleteId
-    );
-    const parentId = categoryToDelete ? categoryToDelete.isParent : null;
-
-    this.articalCategory
-      .deleteArticalCategory(this.deleteId)
-      .subscribe((res) => {
-        this.fetchCategory();
-        this.modalService.dismissAll();
-
-        // Set the active parent to the deleted child's parent
-        if (parentId) {
-          this.activeParentId = parentId;
-        }
-      });
   }
 
   editCategory(data: any, type: string) {
@@ -196,21 +193,184 @@ export class ArticalTypesComponent implements OnInit {
     );
   }
 
-  addPermission: boolean = false;
-  editPermission: boolean = false;
-  deletePermission: boolean = false;
-  checkPermissions() {
-    this.navService.getMenu().subscribe((res: Menu) => {
-      if (res && res.data) {
-        for (let permission of res.data[0].role_accesses) {
-          if ((permission.menu_bar.title == 'Article Categories') === true) {
-            this.addPermission = permission.status.includes('add');
-            this.editPermission = permission.status.includes('edit');
-            this.deletePermission = permission.status.includes('delete');
-            this.fetchCategory();
-          }
+  open(content: TemplateRef<unknown>, id: string | number) {
+    this.deleteId = id;
+    this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-md',
+    });
+  }
+
+  deleteCategory() {
+    this.default = false;
+    const categoryToDelete = this.subcategories.find(
+      (sub) => sub.id == this.deleteId
+    );
+    const parentId = categoryToDelete ? categoryToDelete.isParent : null;
+
+    this.articalCategory
+      .deleteArticalCategory(this.deleteId)
+      .subscribe((res) => {
+        this.fetchCategory();
+        this.modalService.dismissAll();
+
+        if (parentId) {
+          this.activeParentId = parentId;
         }
+      });
+  }
+
+  toggleActive(parentId: number) {
+    if (this.activeParentId === parentId) {
+      this.activeParentId = null;
+    } else {
+      this.activeParentId = parentId;
+    }
+  }
+
+  drop(event: CdkDragDrop<ArticalCategory[]>) {
+    moveItemInArray(
+      this.parentCategory,
+      event.previousIndex,
+      event.currentIndex
+    );
+    this.reorder();
+    this.activeParentId = null;
+  }
+
+  reorder() {
+    const body = {
+      articleType: this.parentCategory.map((category) => category.id),
+    };
+
+    this.articalCategory.reorder(body).subscribe((res) => {
+      this.fetchCategory();
+    });
+  }
+
+  showImageRequired: boolean = true;
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      if (file) {
+        this.showImageRequired = false;
+        this.fileName = file;
+        const reader = new FileReader();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          const result = e.target?.result as string;
+          const previewElement = document.getElementById('thumbnailPreview');
+          if (previewElement) {
+            previewElement.setAttribute('src', result);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
+  popModalOpen(
+    content: TemplateRef<unknown>,
+    articleType: string,
+    type: string
+  ) {
+    this.addCategoryFormGroup.reset();
+    this.popupType = articleType;
+    this.popupHeader = type;
+
+    if (type === 'Edit') {
+      this.getPopUp();
+    }
+
+    this.modalReference = this.modalService.open(content, {
+      ariaLabelledBy: 'modal-basic-title',
+      windowClass: 'share-modal',
+      modalDialogClass: 'modal-dialog-centered modal-lg',
+    });
+  }
+
+  categoryImage: any;
+
+  categoryPopUp(): void {
+    if (this.addCategoryFormGroup.valid) {
+      this.addPopup();
+    } else {
+      this.addCategoryFormGroup.markAllAsTouched();
+    }
+  }
+
+  addPopup(id: number | null = null) {
+    const formData = this.createFormData(
+      this.addCategoryFormGroup.value.name,
+      this.addCategoryFormGroup.value.ctaButton,
+      this.addCategoryFormGroup.value.description
+    );
+
+    this.popUpService.add(formData).subscribe(
+      (response) => {
+        this.modalService.dismissAll();
+        this.addCategoryFormGroup.reset();
+        this.categoryImage = null;
+        this.checkPermissions();
+      },
+      (error) => {
+        this.modalService.dismissAll();
+      }
+    );
+  }
+
+  createFormData(
+    header: string,
+    ctaButton: string,
+    description: string
+  ): FormData {
+    const formData = new FormData();
+    formData.append('header', header);
+    formData.append('cta_button', ctaButton);
+    formData.append('body', description);
+    formData.append('type', this.popupType);
+
+    if (this.fileName) {
+      formData.append('image', this.fileName);
+    }
+
+    return formData;
+  }
+
+  getPopUp() {
+    this.popUpService.get(this.popupType).subscribe((res: any) => {
+      if (res) {
+        this.setFormValues(res.data);
       }
     });
+  }
+
+  setFormValues(response: any) {
+    this.addCategoryFormGroup.patchValue({
+      name: response.header,
+      description: response.body,
+      ctaButton: response.cta_button,
+    });
+
+    if (response.popup_image) {
+      this.categoryImage = response.popup_image;
+      this.showImageRequired = false;
+      this.addCategoryFormGroup.get('image')?.clearValidators();
+    } else {
+      this.showImageRequired = true;
+      this.addCategoryFormGroup
+        .get('image')
+        ?.setValidators([Validators.required]);
+    }
+    this.addCategoryFormGroup.get('image')?.updateValueAndValidity();
+
+    const previewElement = document.getElementById('thumbnailPreview');
+    if (previewElement) {
+      previewElement.setAttribute('src', response.popup_image || '');
+    }
   }
 }

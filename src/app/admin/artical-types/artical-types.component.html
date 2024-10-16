@@ -24,18 +24,45 @@
           </div>
           <div class="card">
             <div class="card-body">
-              <div>
+              <div cdkDropList (cdkDropListDropped)="drop($event)">
                 <div
                   *ngFor="let data of parentCategory"
                   class="main-blockcat"
                   [ngClass]="{ active: activeParentId === data.id }"
+                  cdkDrag
                 >
-                  <div class="main-cate">
+                  <div class="main-cate position-relative ps-4">
+                    <span
+                      class="dregicn"
+                      style="
+                        cursor: grab;
+                        position: absolute;
+                        left: 6px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                      "
+                    >
+                      <i class="fa-solid fa-grip-vertical"></i>
+                    </span>
                     <span class="strcat" (click)="toggleActive(data.id)">
                       <i class="bi bi-arrow-right-short"></i> {{ data.name }}
                     </span>
                     <div>
                       <div class="actionbtn">
+                        <button
+                          *ngIf="addPermission && !data.havePopup"
+                          class="btn btnsbct"
+                          (click)="popModalOpen(AddPopUp, data.name, 'Add')"
+                        >
+                          Add Pop-up
+                        </button>
+                        <button
+                          *ngIf="addPermission && data.havePopup"
+                          class="btn btnsbct"
+                          (click)="popModalOpen(AddPopUp, data.name, 'Edit')"
+                        >
+                          Edit Pop-up
+                        </button>
                         <button
                           *ngIf="addPermission"
                           class="btn btnsbct"
@@ -119,7 +146,10 @@
       <div class="row">
         <div class="col-lg-12 col-md-12">
           <div class="input-block mb-3">
-            <label>Category Name</label>
+            <label *ngIf="modalHeading === 'Add Category'">Category Name</label>
+            <label *ngIf="modalHeading === 'Add Subcategory'"
+              >Subcategory Name</label
+            >
             <input type="text" class="form-control" formControlName="name" />
             <div
               *ngIf="
@@ -128,7 +158,12 @@
                   "
               class="text-danger"
             >
-              Category Name is required.
+              <span *ngIf="modalHeading === 'Add Category'"
+                >Category Name is required.</span
+              >
+              <span *ngIf="modalHeading === 'Add Subcategory'"
+                >Subcategory Name is required.</span
+              >
             </div>
           </div>
         </div>
@@ -208,4 +243,119 @@
       </div>
     </div>
   </div>
+</ng-template>
+
+<ng-template #AddPopUp let-modal>
+  <div class="modal-header border-0 pb-0">
+    <div class="form-header modal-header-title text-start mb-0">
+      <h4 class="mb-0">{{ popupHeader }} {{ popupType }} Pop-Up</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
+  </div>
+  <form [formGroup]="addCategoryFormGroup" (ngSubmit)="categoryPopUp()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-lg-12 col-md-12">
+          <div class="input-block mb-3">
+            <label>Title</label>
+            <input type="text" class="form-control" formControlName="name" />
+            <div
+              *ngIf="addCategoryFormGroup.get('name')?.errors?.['required'] && addCategoryFormGroup.get('name')?.touched"
+              class="text-danger"
+            >
+              Title Name is required.
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12">
+          <div class="input-block mb-3">
+            <label>Description</label>
+            <textarea
+              rows="5"
+              class="form-control"
+              formControlName="description"
+            ></textarea>
+            <div
+              *ngIf="addCategoryFormGroup.get('description')?.errors?.['required'] && addCategoryFormGroup.get('description')?.touched"
+              class="text-danger"
+            >
+              Description is required.
+            </div>
+          </div>
+        </div>
+        <!-- CTA Button Input -->
+        <div class="col-lg-12 col-md-12">
+          <div class="input-block mb-3">
+            <label>CTA Button</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="ctaButton"
+            />
+            <div
+              *ngIf="addCategoryFormGroup.get('ctaButton')?.errors?.['required'] && addCategoryFormGroup.get('ctaButton')?.touched"
+              class="text-danger"
+            >
+              CTA Button is required.
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="input-block">
+            <label>Pop-up Image</label>
+            <div
+              class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
+            >
+              <span>
+                <img
+                  class="category-img"
+                  [src]="categoryImage || 'assets/img/drop-icon.svg'"
+                  id="thumbnailPreview"
+                  alt="upload"
+                />
+              </span>
+              <h6 class="drop-browse align-center" *ngIf="showImageRequired">
+                Drop your files here or
+                <span class="text-primary ms-1">browse</span>
+              </h6>
+              <p class="text-muted" *ngIf="showImageRequired">
+                Maximum size: 50MB
+              </p>
+              <input
+                type="file"
+                id="thumbnailImage"
+                formControlName="image"
+                (change)="onFileSelected($event)"
+              />
+            </div>
+            <div
+              *ngIf="addCategoryFormGroup.get('image')?.errors?.['required'] && addCategoryFormGroup.get('image')?.touched"
+              class="text-danger"
+            >
+              Image is required.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        data-bs-dismiss="modal"
+        class="btn btn-back cancel-btn me-2"
+        (click)="modal.close()"
+      >
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary paid-continue-btn">
+        Add
+      </button>
+    </div>
+  </form>
 </ng-template>
