@@ -31600,6 +31600,7 @@ td .invoice-detail i {
     font-size: 18px;
   }
 }
+
 @media only screen and (max-width: 992px) {
   .sidebar.active {
     margin-left: 0;
@@ -32914,6 +32915,7 @@ table tbody tr td {
   display: flex;
   gap: 5px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .main-blockcat .actionbtn .btn {
