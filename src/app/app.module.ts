@@ -68,6 +68,7 @@ import { NgxSummernoteModule } from 'ngx-summernote';
 import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { WarehouseLocationComponent } from './admin/ecommerce/warehouse-location/warehouse-location.component';
 
 @NgModule({
   declarations: [
@@ -123,6 +124,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ListComponent,
     AssignComponent,
     ArticalTypesComponent,
+    WarehouseLocationComponent,
   ],
   imports: [
     BrowserModule,
