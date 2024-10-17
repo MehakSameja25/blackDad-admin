@@ -13,6 +13,7 @@ import { Menu } from '../model/menu.model';
 import { MainNavService } from '../services/main-nav.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ArticlePopupService } from '../services/article-popup.service';
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-artical-types',
@@ -56,6 +57,7 @@ export class ArticalTypesComponent implements OnInit {
       description: ['', Validators.required],
       image: [null],
       ctaButton: ['', Validators.required],
+      timeout: ['', Validators.required],
     });
   }
 
@@ -311,7 +313,8 @@ export class ArticalTypesComponent implements OnInit {
     const formData = this.createFormData(
       this.addCategoryFormGroup.value.name,
       this.addCategoryFormGroup.value.ctaButton,
-      this.addCategoryFormGroup.value.description
+      this.addCategoryFormGroup.value.description,
+      this.addCategoryFormGroup.value.timeout
     );
 
     this.popUpService.add(formData).subscribe(
@@ -330,13 +333,15 @@ export class ArticalTypesComponent implements OnInit {
   createFormData(
     header: string,
     ctaButton: string,
-    description: string
+    description: string,
+    timeout: string
   ): FormData {
     const formData = new FormData();
     formData.append('header', header);
     formData.append('cta_button', ctaButton);
     formData.append('body', description);
     formData.append('type', this.popupType);
+    formData.append('timeOut', timeout);
 
     if (this.fileName) {
       formData.append('image', this.fileName);
@@ -358,6 +363,7 @@ export class ArticalTypesComponent implements OnInit {
       name: response.header,
       description: response.body,
       ctaButton: response.cta_button,
+      timeout: response.timeOut,
     });
 
     if (response.popup_image) {
