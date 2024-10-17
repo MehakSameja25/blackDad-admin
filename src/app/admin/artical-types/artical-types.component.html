@@ -8,8 +8,15 @@
           <div class="page-header">
             <div class="content-page-header">
               <h5>Manage Article Categories</h5>
-              <a *ngIf="addPermission" class="btn btn-primary" href="javascript:void(0);" data-bs-toggle="modal"
-                data-bs-target="#add_category" (click)="openAdd(addModel, 'Add Category', false, null)">Add Category</a>
+              <a
+                *ngIf="addPermission"
+                class="btn btn-primary"
+                href="javascript:void(0);"
+                data-bs-toggle="modal"
+                data-bs-target="#add_category"
+                (click)="openAdd(addModel, 'Add Category', false, null)"
+                >Add Category</a
+              >
             </div>
           </div>
           <div class="mb-3">
@@ -18,41 +25,75 @@
           <div class="card">
             <div class="card-body">
               <div cdkDropList (cdkDropListDropped)="drop($event)">
-                <div *ngFor="let data of parentCategory" class="main-blockcat" style="cursor: grab"
-                  [ngClass]="{ active: activeParentId === data.id }" cdkDrag>
-                  <div class="main-cate position-relative ps-4 gap-2 flex-wrap" style="cursor: grab">
-                    <span class="dregicn" title="Drag and Drop" style="
+                <div
+                  *ngFor="let data of parentCategory"
+                  class="main-blockcat"
+                  style="cursor: grab"
+                  [ngClass]="{ active: activeParentId === data.id }"
+                  cdkDrag
+                >
+                  <div
+                    class="main-cate position-relative ps-4 gap-2 flex-wrap"
+                    style="cursor: grab"
+                  >
+                    <span
+                      class="dregicn"
+                      title="Drag and Drop"
+                      style="
                         cursor: grab;
                         position: absolute;
                         left: 6px;
                         top: 50%;
                         transform: translateY(-50%);
-                      ">
+                      "
+                    >
                       <i class="fa-solid fa-grip-vertical"></i>
                     </span>
-                    <span class="strcat" style="cursor: pointer" title="Toggle" (click)="toggleActive(data.id)">
+                    <span
+                      class="strcat"
+                      style="cursor: pointer"
+                      title="Toggle"
+                      (click)="toggleActive(data.id)"
+                    >
                       <i class="bi bi-arrow-right-short"></i> {{ data.name }}
                     </span>
                     <div>
                       <div class="actionbtn">
-                        <button *ngIf="addPermission && !data.havePopup" class="btn btnsbct"
-                          (click)="popModalOpen(AddPopUp, data.name, 'Add')">
+                        <button
+                          *ngIf="addPermission && !data.havePopup"
+                          class="btn btnsbct"
+                          (click)="popModalOpen(AddPopUp, data.name, 'Add')"
+                        >
                           Add Pop-up
                         </button>
-                        <button *ngIf="addPermission && data.havePopup" class="btn btnsbct"
-                          (click)="popModalOpen(AddPopUp, data.name, 'Edit')">
+                        <button
+                          *ngIf="addPermission && data.havePopup"
+                          class="btn btnsbct"
+                          (click)="popModalOpen(AddPopUp, data.name, 'Edit')"
+                        >
                           Edit Pop-up
                         </button>
-                        <button *ngIf="addPermission" class="btn btnsbct" (click)="
+                        <button
+                          *ngIf="addPermission"
+                          class="btn btnsbct"
+                          (click)="
                             openAdd(addModel, 'Add Subcategory', true, data.id)
-                          ">
+                          "
+                        >
                           Add Subcategory
                         </button>
-                        <button class="btn btn-edit" *ngIf="editPermission"
-                          (click)="editCategory(data, 'Edit Category')">
+                        <button
+                          class="btn btn-edit"
+                          *ngIf="editPermission"
+                          (click)="editCategory(data, 'Edit Category')"
+                        >
                           <i class="bi bi-pen"></i>
                         </button>
-                        <button class="btn btn-delete" *ngIf="deletePermission" (click)="open(contentt, data.id)">
+                        <button
+                          class="btn btn-delete"
+                          *ngIf="deletePermission"
+                          (click)="open(contentt, data.id)"
+                        >
                           <i class="bi bi-trash3"></i>
                         </button>
                       </div>
@@ -60,16 +101,26 @@
                   </div>
 
                   <ul class="subcate">
-                    <li *ngFor="let subcategory of fetchSubcategories(data.id)" class="subcatitems">
+                    <li
+                      *ngFor="let subcategory of fetchSubcategories(data.id)"
+                      class="subcatitems"
+                    >
                       <span>{{ subcategory.name }}</span>
                       <div class="actionbtn">
-                        <button class="btn btn-edit" *ngIf="editPermission" (click)="
+                        <button
+                          class="btn btn-edit"
+                          *ngIf="editPermission"
+                          (click)="
                             editCategory(subcategory, 'Edit Subcategory')
-                          ">
+                          "
+                        >
                           <i class="bi bi-pen"></i>
                         </button>
-                        <button class="btn btn-delete" *ngIf="deletePermission"
-                          (click)="open(contentt, subcategory.id)">
+                        <button
+                          class="btn btn-delete"
+                          *ngIf="deletePermission"
+                          (click)="open(contentt, subcategory.id)"
+                        >
                           <i class="bi bi-trash3"></i>
                         </button>
                       </div>
@@ -92,7 +143,13 @@
         {{ modalHeading }}
       </h4>
     </div>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
   </div>
   <form [formGroup]="addCategoryForm">
     <div class="modal-body">
@@ -100,24 +157,43 @@
         <div class="col-lg-12 col-md-12">
           <div class="input-block mb-3">
             <label *ngIf="modalHeading === 'Add Category'">Category Name</label>
-            <label *ngIf="modalHeading === 'Add Subcategory'">Subcategory Name</label>
+            <label *ngIf="modalHeading === 'Add Subcategory'"
+              >Subcategory Name</label
+            >
             <input type="text" class="form-control" formControlName="name" />
-            <div *ngIf="
+            <div
+              *ngIf="
                     addCategoryForm.get('name')?.errors?.['required'] &&
                     addCategoryForm.get('name')?.touched
-                  " class="text-danger">
-              <span *ngIf="modalHeading === 'Add Category'">Category Name is required.</span>
-              <span *ngIf="modalHeading === 'Add Subcategory'">Subcategory Name is required.</span>
+                  "
+              class="text-danger"
+            >
+              <span *ngIf="modalHeading === 'Add Category'"
+                >Category Name is required.</span
+              >
+              <span *ngIf="modalHeading === 'Add Subcategory'"
+                >Subcategory Name is required.</span
+              >
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2" (click)="modal.close()">
+      <button
+        type="button"
+        data-bs-dismiss="modal"
+        class="btn btn-back cancel-btn me-2"
+        (click)="modal.close()"
+      >
         Cancel
       </button>
-      <button type="submit" data-bs-dismiss="modal" class="btn btn-primary paid-continue-btn" (click)="addCategory()">
+      <button
+        type="submit"
+        data-bs-dismiss="modal"
+        class="btn btn-primary paid-continue-btn"
+        (click)="addCategory()"
+      >
         Add
       </button>
     </div>
@@ -128,13 +204,28 @@
     <div class="modal-body">
       <div class="form-header">
         <span>
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="60"
-            height="60" x="0" y="0" viewBox="0 0 512 512" style="enable-background: new 0 0 512 512"
-            xml:space="preserve" class="">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            version="1.1"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            width="60"
+            height="60"
+            x="0"
+            y="0"
+            viewBox="0 0 512 512"
+            style="enable-background: new 0 0 512 512"
+            xml:space="preserve"
+            class=""
+          >
             <g>
-              <path fill="#ac54f4" fill-rule="evenodd"
+              <path
+                fill="#ac54f4"
+                fill-rule="evenodd"
                 d="M170.8 14.221A14.21 14.21 0 0 1 185 .014L326.991.006a14.233 14.233 0 0 1 14.2 14.223v35.117H170.8zm233.461 477.443a21.75 21.75 0 0 1-21.856 20.33H127.954a21.968 21.968 0 0 1-21.854-20.416L84.326 173.06H427.5l-23.234 318.6zm56.568-347.452H51.171v-33A33.035 33.035 0 0 1 84.176 78.2l343.644-.011a33.051 33.051 0 0 1 33 33.02v33zm-270.79 291.851a14.422 14.422 0 1 0 28.844 0V233.816a14.42 14.42 0 0 0-28.839-.01v202.257zm102.9 0a14.424 14.424 0 1 0 28.848 0V233.816a14.422 14.422 0 0 0-28.843-.01z"
-                opacity="1" data-original="#fc0005" class=""></path>
+                opacity="1"
+                data-original="#fc0005"
+                class=""
+              ></path>
             </g>
           </svg>
         </span>
@@ -144,10 +235,19 @@
       <div class="modal-btn delete-action">
         <div class="row">
           <div class="col-6">
-            <a class="btn btn-primary paid-continue-btn" (click)="deleteCategory()">Delete</a>
+            <a
+              class="btn btn-primary paid-continue-btn"
+              (click)="deleteCategory()"
+              >Delete</a
+            >
           </div>
           <div class="col-6">
-            <a data-bs-dismiss="modal" class="btn btn-primary paid-cancel-btn" (click)="modal.close()">Cancel</a>
+            <a
+              data-bs-dismiss="modal"
+              class="btn btn-primary paid-cancel-btn"
+              (click)="modal.close()"
+              >Cancel</a
+            >
           </div>
         </div>
       </div>
@@ -160,7 +260,13 @@
     <div class="form-header modal-header-title text-start mb-0">
       <h4 class="mb-0">{{ popupHeader }} {{ popupType }} Pop-Up</h4>
     </div>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.close()"
+    ></button>
   </div>
   <form [formGroup]="addCategoryFormGroup" (ngSubmit)="categoryPopUp()">
     <div class="modal-body">
@@ -171,7 +277,8 @@
             <input type="text" class="form-control" formControlName="name" />
             <div
               *ngIf="addCategoryFormGroup.get('name')?.errors?.['required'] && addCategoryFormGroup.get('name')?.touched"
-              class="text-danger">
+              class="text-danger"
+            >
               Title Name is required.
             </div>
           </div>
@@ -179,10 +286,15 @@
         <div class="col-lg-12 col-md-12">
           <div class="input-block mb-3">
             <label>Description</label>
-            <textarea rows="5" class="form-control" formControlName="description"></textarea>
+            <textarea
+              rows="5"
+              class="form-control"
+              formControlName="description"
+            ></textarea>
             <div
               *ngIf="addCategoryFormGroup.get('description')?.errors?.['required'] && addCategoryFormGroup.get('description')?.touched"
-              class="text-danger">
+              class="text-danger"
+            >
               Description is required.
             </div>
           </div>
@@ -191,21 +303,48 @@
         <div class="col-lg-12 col-md-12">
           <div class="input-block mb-3">
             <label>CTA Button</label>
-            <input type="text" class="form-control" formControlName="ctaButton" />
+            <input
+              type="text"
+              class="form-control"
+              formControlName="ctaButton"
+            />
             <div
               *ngIf="addCategoryFormGroup.get('ctaButton')?.errors?.['required'] && addCategoryFormGroup.get('ctaButton')?.touched"
-              class="text-danger">
+              class="text-danger"
+            >
               CTA Button is required.
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12">
+          <div class="input-block mb-3">
+            <label>Set Timeout (in seconds) </label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="timeout"
+            />
+            <div
+              *ngIf="addCategoryFormGroup.get('timeout')?.errors?.['required'] && addCategoryFormGroup.get('timeout')?.touched"
+              class="text-danger"
+            >
+              Timeout is required.
             </div>
           </div>
         </div>
         <div class="col-12 col-md-6 col-lg-4">
           <div class="input-block">
             <label>Pop-up Image</label>
-            <div class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center">
+            <div
+              class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
+            >
               <span>
-                <img class="category-img" [src]="categoryImage || 'assets/img/drop-icon.svg'" id="thumbnailPreview"
-                  alt="upload" />
+                <img
+                  class="category-img"
+                  [src]="categoryImage || 'assets/img/drop-icon.svg'"
+                  id="thumbnailPreview"
+                  alt="upload"
+                />
               </span>
               <h6 class="drop-browse align-center" *ngIf="showImageRequired">
                 Drop your files here or
@@ -214,11 +353,17 @@
               <p class="text-muted" *ngIf="showImageRequired">
                 Maximum size: 50MB
               </p>
-              <input type="file" id="thumbnailImage" formControlName="image" (change)="onFileSelected($event)" />
+              <input
+                type="file"
+                id="thumbnailImage"
+                formControlName="image"
+                (change)="onFileSelected($event)"
+              />
             </div>
             <div
               *ngIf="addCategoryFormGroup.get('image')?.errors?.['required'] && addCategoryFormGroup.get('image')?.touched"
-              class="text-danger">
+              class="text-danger"
+            >
               Image is required.
             </div>
           </div>
@@ -226,7 +371,12 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" data-bs-dismiss="modal" class="btn btn-back cancel-btn me-2" (click)="modal.close()">
+      <button
+        type="button"
+        data-bs-dismiss="modal"
+        class="btn btn-back cancel-btn me-2"
+        (click)="modal.close()"
+      >
         Cancel
       </button>
       <button type="submit" class="btn btn-primary paid-continue-btn">
