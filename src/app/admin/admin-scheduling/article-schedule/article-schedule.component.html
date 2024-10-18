@@ -7,12 +7,7 @@
         <div class="content-page-header">
           <h5>Articles</h5>
           <div class="d-flex align-items-center gap-3">
-            <a
-              class="btn btn-primary"
-              routerLink="/admin/add-article"
-              *ngIf="addPermission == true"
-              >Add New Article</a
-            >
+            <a class="btn btn-primary" routerLink="/admin/add-article" *ngIf="addPermission == true">Add New Article</a>
           </div>
         </div>
       </div>
@@ -24,13 +19,8 @@
               <div class="card-body">
                 <app-article-tabs></app-article-tabs>
                 <div class="table-responsive">
-                  <table
-                    #dataTable
-                    appDataTable
-                    [data]="tableData"
-                    [columns]="tableColumns"
-                    class="table display"
-                  ></table>
+                  <table #dataTable appDataTable [data]="tableData" [columns]="tableColumns" class="table display">
+                  </table>
                 </div>
               </div>
             </div>
@@ -45,28 +35,13 @@
     <div class="modal-body">
       <div class="form-header">
         <span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            version="1.1"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="60"
-            height="60"
-            x="0"
-            y="0"
-            viewBox="0 0 512 512"
-            style="enable-background: new 0 0 512 512"
-            xml:space="preserve"
-            class=""
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="60"
+            height="60" x="0" y="0" viewBox="0 0 512 512" style="enable-background: new 0 0 512 512"
+            xml:space="preserve" class="">
             <g>
-              <path
-                fill="#ac54f4"
-                fill-rule="evenodd"
+              <path fill="#ac54f4" fill-rule="evenodd"
                 d="M170.8 14.221A14.21 14.21 0 0 1 185 .014L326.991.006a14.233 14.233 0 0 1 14.2 14.223v35.117H170.8zm233.461 477.443a21.75 21.75 0 0 1-21.856 20.33H127.954a21.968 21.968 0 0 1-21.854-20.416L84.326 173.06H427.5l-23.234 318.6zm56.568-347.452H51.171v-33A33.035 33.035 0 0 1 84.176 78.2l343.644-.011a33.051 33.051 0 0 1 33 33.02v33zm-270.79 291.851a14.422 14.422 0 1 0 28.844 0V233.816a14.42 14.42 0 0 0-28.839-.01v202.257zm102.9 0a14.424 14.424 0 1 0 28.848 0V233.816a14.422 14.422 0 0 0-28.843-.01z"
-                opacity="1"
-                data-original="#fc0005"
-                class=""
-              ></path>
+                opacity="1" data-original="#fc0005" class=""></path>
             </g>
           </svg>
         </span>
@@ -76,19 +51,10 @@
       <div class="modal-btn delete-action">
         <div class="row">
           <div class="col-6">
-            <a
-              class="btn btn-primary paid-continue-btn"
-              (click)="deleteArticle(deleteId)"
-              >Delete</a
-            >
+            <a class="btn btn-primary" (click)="deleteArticle(deleteId)">Delete</a>
           </div>
           <div class="col-6">
-            <a
-              data-bs-dismiss="modal"
-              class="btn btn-primary paid-cancel-btn"
-              (click)="modal.close()"
-              >Cancel</a
-            >
+            <a data-bs-dismiss="modal" class="btn btn-primary paid-cancel-btn" (click)="modal.close()">Cancel</a>
           </div>
         </div>
       </div>
@@ -98,33 +64,18 @@
 <ng-template #sharee let-modal>
   <div class="modal-header">
     <h1 class="modal-title fs-5" id="exampleModalLabel">Share the url</h1>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="modal"
-      (click)="modal.close()"
-    ></button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="modal.close()"></button>
   </div>
   <div class="modal-body">
     <div class="form-group mb-3 d-flex border align-items-stretch">
-      <input
-        type="text"
-        class="form-control border-0 rounded-0"
-        [(ngModel)]="urlToCopy"
-        disabled
-        aria-label="..."
-      />
-      <button
-        class="btn btn-primary rounded-0"
-        (click)="share()"
-        style="width: 77px"
-      >
+      <input type="text" class="form-control border-0 rounded-0" [(ngModel)]="urlToCopy" disabled aria-label="..." />
+      <button class="btn btn-primary rounded-0" (click)="share()" style="width: 77px">
         <strong>{{ copyMessage }}</strong>
       </button>
     </div>
   </div>
   <div class="modal-footer p-3">
-    <button type="button" class="btn btn-back" (click)="modal.close()">
+    <button type="button" class="btn btn-primary" (click)="modal.close()">
       Close
     </button>
   </div>

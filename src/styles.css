@@ -1531,15 +1531,18 @@ div#global-loader,
 }
 
 .btn-primary {
-  background-color: #ac54f4;
-  border: 1px solid #ac54f4;
-  box-shadow: inset 0 0 0 0 #fff;
-  border-radius: 4px;
+  border-radius: 6px;
+  border: 1px solid #BEC0C4;
+  background: #FFF;
+  color: #000;
 }
 
-.btn-primary:hover {
-  background-color: #ac54f4db;
-  border: 1px solid #ac54f4db;
+.btn-primary:hover,
+.btn-primary.active {
+  border-radius: 6px;
+  border: 1px solid #BEC0C4;
+  background: #eeeeee;
+  color: #000;
 }
 
 .btn-primary:disabled {
@@ -1664,8 +1667,10 @@ div#global-loader,
 
 .btn.btn-primary:active,
 .btn.btn-outline-primary:active {
-  background: #ac54f4;
-  border-color: #ac54f4;
+  border-radius: 6px;
+  border: 1px solid #BEC0C4;
+  background: #eeeeee;
+  color: #000;
 }
 
 .nav-pills.navtab-bg .nav-link.active {
@@ -6372,7 +6377,7 @@ div.dt-container .dt-length label {
 table .badge {
   border-radius: 4px;
   display: inline-block;
-  font-size: 14px;
+  font-size: 12px;
   min-width: auto;
   padding: 4px 10px;
   font-weight: 400;
@@ -6450,6 +6455,23 @@ table .badge {
 .dataTables_scroll *::-webkit-scrollbar-thumb {
   background-color: #ddceff;
   border-radius: 0;
+}
+
+.sidebar-inner.slimscroll::-webkit-scrollbar-track {
+  border-radius: 0px;
+  background-color: transparent;
+}
+
+.sidebar-inner.slimscroll::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background-color: transparent;
+}
+
+.sidebar-inner.slimscroll::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #ddceff;
 }
 
 .dataTables_scroll * {
@@ -15692,9 +15714,10 @@ td.dt-type-numeric.sorting_1 img {
 
 div.dt-container .dt-paging .dt-paging-button.current,
 div.dt-container .dt-paging .dt-paging-button.current:hover {
-  background: #ac54f4;
-  color: #fff !important;
-  border: 1px solid #ac54f4;
+  border-radius: 6px;
+  border: 1px solid #BEC0C4;
+  background: #fff;
+  color: #000;
 }
 
 .modal-icon i {
@@ -15708,24 +15731,19 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 }
 
 .modal-footer .btn-back {
-  background: #eaddff;
-  border: 1px solid #eaddff;
-  box-shadow: inset 0 0 0 0 #3f4254;
-  padding: 6px 14px;
-  border-radius: 4px;
-  color: #ac54f4;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  border-radius: 6px;
+  border: 1px solid #BEC0C4;
+  background: #FFF;
+  color: #000;
 }
 
 .modal-footer .btn-back:hover,
 .modal-footer .btn-back:active,
 .modal-footer .btn-back.active {
-  background: #ac54f4;
-  border: 1px solid #ac54f4;
-  color: #fff;
+  border-radius: 6px;
+  border: 1px solid #BEC0C4;
+  background: #FFF;
+  color: #000;
 }
 
 .modal-footer .btn-primary {
@@ -32923,7 +32941,8 @@ table tbody tr td {
   flex-wrap: wrap;
 }
 
-.main-blockcat .actionbtn .btn {
+.main-blockcat .actionbtn .btn.btn-edit {
+  background: #3a79a6;
   height: 28px;
   padding: 0;
   color: #fff;
@@ -32931,12 +32950,13 @@ table tbody tr td {
   border-radius: 6px;
 }
 
-.main-blockcat .actionbtn .btn.btn-edit {
-  background: #3a79a6;
-}
-
 .main-blockcat .actionbtn .btn.btn-delete {
   background-color: #B22222;
+  height: 28px;
+  padding: 0;
+  color: #fff;
+  width: 28px;
+  border-radius: 6px;
 }
 
 .main-blockcat .actionbtn .btn i {
