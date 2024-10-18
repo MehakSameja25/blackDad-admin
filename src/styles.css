@@ -4854,7 +4854,7 @@ span.select2-container.select2-container--default.select2-container--open {
 .sidebar .sidebar-menu ul li a span {
   padding: 0 10px;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 18px;
   color: white;
 }
@@ -32648,7 +32648,7 @@ td .invoice-detail i {
 }
 
 .user-icon {
-  padding: 50px 25px;
+  padding: 50px 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32968,4 +32968,8 @@ span.propasicon {
   top: 54%;
   color: #757575;
   cursor: pointer;
+}
+
+.dropdown-menu.menu-drop-user.rounded.show {
+  transform: translate(16px, 172px) !important;
 }
