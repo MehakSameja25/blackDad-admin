@@ -3,6 +3,7 @@ import { ProductCategoriesComponent } from '../../product-categories/product-cat
 import { ProductCategoryService } from 'src/app/admin/services/product-category.service';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
   Validators,
@@ -68,6 +69,10 @@ export class EditProductComponent implements OnInit {
       color: ['', Validators.required],
       material: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
+    });
+
+    this.variantsForm = this.fb.group({
+      options: this.fb.array([]),
     });
   }
 
@@ -153,7 +158,6 @@ export class EditProductComponent implements OnInit {
       const productData = res.data;
 
       this.variants = productData.product_variants;
-      console.log(this.variants);
 
       this.uploadedImages = productData.product_images.map((img: any) => {
         return { image: img.image, id: img.id };
@@ -285,7 +289,6 @@ export class EditProductComponent implements OnInit {
   }
 
   addSize(): void {
-    console.log(this.newSize);
     if (this.newSize.trim()) {
       this.sizes.push(this.newSize.trim());
       this.newSize = '';
@@ -329,7 +332,6 @@ export class EditProductComponent implements OnInit {
       image: this.imageArr,
     };
 
-    console.log(body);
     this._productService.reOrderImage(body, this.productId).subscribe();
   }
   onSubmit() {
@@ -360,26 +362,24 @@ export class EditProductComponent implements OnInit {
     }
   }
 
-  updateVariant(index: number, field: keyof Variant, value: string | number) {
-    if (field === 'price') {
-      this.variants[index].price =
-        typeof value === 'string' ? parseFloat(value) : value;
-    } else {
-      this.variants[index][field] = value as Variant[typeof field];
-    }
-  }
+  // updateVariant(index: number, field: keyof Variant, value: string | number) {
+  //   if (field === 'price') {
+  //     this.variants[index].price =
+  //       typeof value === 'string' ? parseFloat(value) : value;
+  //   } else {
+  //     this.variants[index][field] = value as Variant[typeof field];
+  //   }
+  // }
 
   saveData() {
     const formData = this.createFormData();
     const productData: any = {};
 
-    // Append images to formData
     const images = this.uploadedImages.map((img) => img.image);
     images.forEach((image, index) => {
-      formData.append('product_image', image); // Use 'product_image[]' for array handling
+      formData.append('product_image', image);
     });
 
-    // Gather other form data
     formData.forEach((value, key) => {
       if (productData[key]) {
         if (!Array.isArray(productData[key])) {
@@ -422,5 +422,122 @@ export class EditProductComponent implements OnInit {
     }
 
     return formData;
+  }
+
+  variantsForm: FormGroup;
+  variantPrices: { [key: string]: number } = {};
+  variantAvailability: { [key: string]: number } = {};
+  finalizedOptions: { name: string; values: string[] }[] = [];
+  maxVariants = 3;
+
+  get options(): FormArray {
+    return this.variantsForm.get('options') as FormArray;
+  }
+
+  addOption(): void {
+    if (this.options.length < this.maxVariants) {
+      const optionGroup = this.fb.group({
+        name: ['', Validators.required],
+        values: this.fb.array([this.createValueField()]),
+      });
+      this.options.push(optionGroup);
+      this.finalizedOptions.push({ name: '', values: [] });
+    }
+  }
+
+  createValueField(): FormGroup {
+    return this.fb.group({
+      value: ['', Validators.required],
+    });
+  }
+
+  getValues(optionIndex: number): FormArray {
+    return this.options.at(optionIndex).get('values') as FormArray;
+  }
+
+  addValue(optionIndex: number): void {
+    this.getValues(optionIndex).push(this.createValueField());
+  }
+
+  removeValue(optionIndex: number, valueIndex: number): void {
+    this.getValues(optionIndex).removeAt(valueIndex);
+  }
+
+  removeOption(optionIndex: number): void {
+    this.options.removeAt(optionIndex);
+    this.finalizedOptions.splice(optionIndex, 1);
+  }
+  structuredVariants: any[] = [];
+
+  finalizeOption(optionIndex: number): void {
+    const option = this.options.at(optionIndex);
+
+    if (option.valid && this.getValues(optionIndex).valid) {
+      const finalizedOption = {
+        name: option.value.name,
+        values: this.getValues(optionIndex).controls.map(
+          (value) => value.value.value
+        ),
+      };
+
+      this.finalizedOptions[optionIndex] = finalizedOption;
+      this.updateStructuredVariants();
+    } else {
+      option.markAllAsTouched();
+      this.getValues(optionIndex).controls.forEach((value) =>
+        value.markAllAsTouched()
+      );
+    }
+  }
+
+  updateStructuredVariants(): void {
+    this.structuredVariants = [];
+
+    const combinations = this.generateCombinations(
+      this.finalizedOptions.map((option) => option.values)
+    );
+
+    combinations.forEach((combination) => {
+      const variant: any = {};
+      combination.forEach((value, index) => {
+        const optionName = this.finalizedOptions[index].name;
+        variant[optionName] = value;
+      });
+      variant.price = this.variantPrices[combination.join(' - ')] || 0;
+      variant.quantity = this.variantAvailability[combination.join(' - ')] || 0;
+      this.structuredVariants.push(variant);
+      console.log(this.structuredVariants);
+    });
+  }
+
+  updateVariant(variant: any, field: 'price' | 'quantity', value: string) {
+    if (field === 'price') {
+      variant.price = parseFloat(value); // Update price
+    } else if (field === 'quantity') {
+      variant.quantity = parseInt(value, 10); // Update quantity
+    }
+
+    console.log(this.structuredVariants);
+  }
+
+  getOptionEntries(variant: any): { key: string; value: any }[] {
+    return Object.entries(variant)
+      .map(([key, value]) => ({ key, value }))
+      .filter((entry) => entry.key !== 'price' && entry.key !== 'quantity');
+  }
+
+  private generateCombinations(
+    arrays: string[][],
+    prefix: string[] = []
+  ): string[][] {
+    if (arrays.length === 0) return [prefix];
+    const [first, ...rest] = arrays;
+    const combinations: string[][] = [];
+
+    for (const value of first) {
+      combinations.push(...this.generateCombinations(rest, [...prefix, value]));
+    }
+
+    return combinations;
   }
 }

@@ -25,12 +25,19 @@
                         <div>
                           <div class="input-block mb-3">
                             <label>Product Name</label>
-                            <input formControlName="productName" type="text" class="form-control"
-                              placeholder="Enter Product Name" />
-                            <div *ngIf="
+                            <input
+                              formControlName="productName"
+                              type="text"
+                              class="form-control"
+                              placeholder="Enter Product Name"
+                            />
+                            <div
+                              *ngIf="
                                 productForm.get('productName')?.invalid &&
                                 productForm.get('productName')?.touched
-                              " class="text-danger">
+                              "
+                              class="text-danger"
+                            >
                               Product Name is required
                             </div>
                           </div>
@@ -38,12 +45,19 @@
                         <div>
                           <div class="input-block mb-3">
                             <label>Description</label>
-                            <textarea formControlName="description" class="form-control" placeholder="Enter Notes"
-                              rows="5"></textarea>
-                            <div *ngIf="
+                            <textarea
+                              formControlName="description"
+                              class="form-control"
+                              placeholder="Enter Notes"
+                              rows="5"
+                            ></textarea>
+                            <div
+                              *ngIf="
                                 productForm.get('description')?.invalid &&
                                 productForm.get('description')?.touched
-                              " class="text-danger">
+                              "
+                              class="text-danger"
+                            >
                               Description is required.
                             </div>
                           </div>
@@ -52,19 +66,31 @@
                           <div class="input-block mb-3">
                             <label>Upload Images</label>
                             <div
-                              class="service-upload mb-0 d-flex flex-column align-items-center justify-content-center">
+                              class="service-upload mb-0 d-flex flex-column align-items-center justify-content-center"
+                            >
                               <span>
-                                <img id="bannerPreview" alt="Banner Preview" src="assets/img/drop-icon.svg" />
+                                <img
+                                  id="bannerPreview"
+                                  alt="Banner Preview"
+                                  src="assets/img/drop-icon.svg"
+                                />
                               </span>
                               <h6 class="drop-browse align-center">
                                 Drop your files here or
                                 <span class="text-primary ms-1">browse</span>
                               </h6>
                               <p class="text-muted">Maximum size: 50MB</p>
-                              <input type="file" id="bannerImage" (change)="handleImageInput($event, 'banner')"
-                                multiple />
+                              <input
+                                type="file"
+                                id="bannerImage"
+                                (change)="handleImageInput($event, 'banner')"
+                                multiple
+                              />
                             </div>
-                            <div *ngIf="uploadedImages.length == 0" class="text-danger">
+                            <div
+                              *ngIf="uploadedImages.length == 0"
+                              class="text-danger"
+                            >
                               <small>At least one image is required.</small>
                             </div>
                           </div>
@@ -72,28 +98,55 @@
                       </div>
                     </div>
                     <!-- Upload Images -->
-                    <div class="row ">
-                      <div class="col-6 col-md-4 col-lg-2 mb-4 droppable" style="cursor: grab;"
-                        *ngFor="let image of uploadedImages; let i = index" (dragstart)="onDragStart($event, i)"
-                        (dragover)="onDragOver($event)" (drop)="onDrop($event, i)" (dragend)="onDragEnd($event)"
-                        draggable="true">
-                        <div class="input-block service-upload service-upload-sm mb-0 position-relative prodmantnw">
-                          <button class="btn btn-light position-absolute px-2 py-1 dltbtn"
-                            (click)="removeImage(i, image.id)">
-                            <svg xmlns=" http://www.w3.org/2000/svg" version="1.1"
-                              xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12" x="0" y="0"
-                              viewBox="0 0 512 512" style="enable-background: new 0 0 512 512" xml:space="preserve">
+                    <div class="row">
+                      <div
+                        class="col-6 col-md-4 col-lg-2 mb-4 droppable"
+                        style="cursor: grab"
+                        *ngFor="let image of uploadedImages; let i = index"
+                        (dragstart)="onDragStart($event, i)"
+                        (dragover)="onDragOver($event)"
+                        (drop)="onDrop($event, i)"
+                        (dragend)="onDragEnd($event)"
+                        draggable="true"
+                      >
+                        <div
+                          class="input-block service-upload service-upload-sm mb-0 position-relative prodmantnw"
+                        >
+                          <button
+                            class="btn btn-light position-absolute px-2 py-1 dltbtn"
+                            (click)="removeImage(i, image.id)"
+                          >
+                            <svg
+                              xmlns=" http://www.w3.org/2000/svg"
+                              version="1.1"
+                              xmlns:xlink="http://www.w3.org/1999/xlink"
+                              width="12"
+                              height="12"
+                              x="0"
+                              y="0"
+                              viewBox="0 0 512 512"
+                              style="enable-background: new 0 0 512 512"
+                              xml:space="preserve"
+                            >
                               <g>
                                 <path
                                   d="M436 60h-75V45c0-24.813-20.187-45-45-45H196c-24.813 0-45 20.187-45 45v15H76c-24.813 0-45 20.187-45 45 0 19.928 13.025 36.861 31.005 42.761L88.76 470.736C90.687 493.875 110.385 512 133.604 512h244.792c23.22 0 42.918-18.125 44.846-41.271l26.753-322.969C467.975 141.861 481 124.928 481 105c0-24.813-20.187-45-45-45zM181 45c0-8.271 6.729-15 15-15h120c8.271 0 15 6.729 15 15v15H181V45zm212.344 423.246c-.643 7.712-7.208 13.754-14.948 13.754H133.604c-7.739 0-14.305-6.042-14.946-13.747L92.294 150h327.412l-26.362 318.246zM436 120H76c-8.271 0-15-6.729-15-15s6.729-15 15-15h360c8.271 0 15 6.729 15 15s-6.729 15-15 15z"
-                                  fill="#000000" opacity="1" data-original="#000000"></path>
+                                  fill="#000000"
+                                  opacity="1"
+                                  data-original="#000000"
+                                ></path>
                                 <path
                                   d="m195.971 436.071-15-242c-.513-8.269-7.67-14.558-15.899-14.043-8.269.513-14.556 7.631-14.044 15.899l15 242.001c.493 7.953 7.097 14.072 14.957 14.072 8.687 0 15.519-7.316 14.986-15.929zM256 180c-8.284 0-15 6.716-15 15v242c0 8.284 6.716 15 15 15s15-6.716 15-15V195c0-8.284-6.716-15-15-15zM346.927 180.029c-8.25-.513-15.387 5.774-15.899 14.043l-15 242c-.511 8.268 5.776 15.386 14.044 15.899 8.273.512 15.387-5.778 15.899-14.043l15-242c.512-8.269-5.775-15.387-14.044-15.899z"
-                                  fill="#000000" opacity="1" data-original="#000000"></path>
+                                  fill="#000000"
+                                  opacity="1"
+                                  data-original="#000000"
+                                ></path>
                               </g>
                             </svg>
                           </button>
-                          <span><img src="{{ image.image }}" alt="upload" /></span>
+                          <span
+                            ><img src="{{ image.image }}" alt="upload"
+                          /></span>
                         </div>
                       </div>
                     </div>
@@ -104,18 +157,30 @@
                           <div class="input-block mb-3">
                             <label>Acctual Price</label>
                             <div class="dolsg">
-                              <input formControlName="price" type="number" class="form-control"
-                                placeholder="Enter Price" (input)="calculateProfit(); calculateMargin()" />
+                              <input
+                                formControlName="price"
+                                type="number"
+                                class="form-control"
+                                placeholder="Enter Price"
+                                (input)="calculateProfit(); calculateMargin()"
+                              />
                               <i class="bi bi-currency-dollar"></i>
                             </div>
-                            <div *ngIf="
+                            <div
+                              *ngIf="
                                 productForm.get('price')?.invalid &&
                                 productForm.get('price')?.touched
-                              " class="text-danger">
-                              <div *ngIf="productForm.get('price')?.errors?.['required']">
+                              "
+                              class="text-danger"
+                            >
+                              <div
+                                *ngIf="productForm.get('price')?.errors?.['required']"
+                              >
                                 Price is required.
                               </div>
-                              <div *ngIf="productForm.get('price')?.errors?.['min']">
+                              <div
+                                *ngIf="productForm.get('price')?.errors?.['min']"
+                              >
                                 Price must be greater than 0.
                               </div>
                             </div>
@@ -126,8 +191,13 @@
                             <div class="input-block mb-3">
                               <label>Cost per item</label>
                               <div class="dolsg">
-                                <input formControlName="costPerItem" type="number" class="form-control"
-                                  placeholder="0.00" (input)="calculateProfit(); calculateMargin()" />
+                                <input
+                                  formControlName="costPerItem"
+                                  type="number"
+                                  class="form-control"
+                                  placeholder="0.00"
+                                  (input)="calculateProfit(); calculateMargin()"
+                                />
                                 <i class="bi bi-currency-dollar"></i>
                               </div>
                             </div>
@@ -136,8 +206,13 @@
                             <div class="input-block mb-3">
                               <label>Profit</label>
                               <div class="dolsg">
-                                <input formControlName="profit" type="number" class="form-control" placeholder="--"
-                                  readonly />
+                                <input
+                                  formControlName="profit"
+                                  type="number"
+                                  class="form-control"
+                                  placeholder="--"
+                                  readonly
+                                />
                                 <i class="bi bi-currency-dollar"></i>
                               </div>
                             </div>
@@ -146,8 +221,13 @@
                             <div class="input-block mb-3">
                               <label>Margin</label>
                               <div class="dolsg">
-                                <input formControlName="margin" type="number" class="form-control" placeholder="--"
-                                  readonly />
+                                <input
+                                  formControlName="margin"
+                                  type="number"
+                                  class="form-control"
+                                  placeholder="--"
+                                  readonly
+                                />
                                 <i class="bi bi-percent"></i>
                               </div>
                             </div>
@@ -156,7 +236,7 @@
                       </div>
                     </div>
 
-                    <div class="card">
+                    <!-- <div class="card">
                       <div class="card-header">
                         <h5>Manage Product Variants</h5>
                       </div>
@@ -165,57 +245,107 @@
                           <div class="row mb-3">
                             <div class="col-sm-6 mb-3">
                               <label for="size">Size (e.g., S, M, L, XL)</label>
-                              <input type="text" id="size" class="form-control" formControlName="size" />
-                              <div *ngIf="
+                              <input
+                                type="text"
+                                id="size"
+                                class="form-control"
+                                formControlName="size"
+                              />
+                              <div
+                                *ngIf="
                                   variantForm.get('size')?.invalid &&
                                   variantForm.get('size')?.touched
-                                " class="text-danger">
-                                <small *ngIf="variantForm.get('size')?.errors?.['required']">
+                                "
+                                class="text-danger"
+                              >
+                                <small
+                                  *ngIf="variantForm.get('size')?.errors?.['required']"
+                                >
                                   Size is required.
                                 </small>
                               </div>
                             </div>
                             <div class="col-sm-6 mb-3">
-                              <label for="color">Color (e.g., Red, Blue, Green)</label>
-                              <input type="text" id="color" class="form-control" formControlName="color" />
-                              <div *ngIf="
+                              <label for="color"
+                                >Color (e.g., Red, Blue, Green)</label
+                              >
+                              <input
+                                type="text"
+                                id="color"
+                                class="form-control"
+                                formControlName="color"
+                              />
+                              <div
+                                *ngIf="
                                   variantForm.get('color')?.invalid &&
                                   variantForm.get('color')?.touched
-                                " class="text-danger">
-                                <small *ngIf="variantForm.get('color')?.errors?.['required']">
+                                "
+                                class="text-danger"
+                              >
+                                <small
+                                  *ngIf="variantForm.get('color')?.errors?.['required']"
+                                >
                                   Color is required.
                                 </small>
                               </div>
                             </div>
                             <div class="col-sm-6 mb-3">
-                              <label for="material">Fabric (e.g., Cotton, Polyester)</label>
-                              <input type="text" id="material" class="form-control" formControlName="material" />
-                              <div *ngIf="
+                              <label for="material"
+                                >Fabric (e.g., Cotton, Polyester)</label
+                              >
+                              <input
+                                type="text"
+                                id="material"
+                                class="form-control"
+                                formControlName="material"
+                              />
+                              <div
+                                *ngIf="
                                   variantForm.get('material')?.invalid &&
                                   variantForm.get('material')?.touched
-                                " class="text-danger">
-                                <small *ngIf="variantForm.get('material')?.errors?.['required']">
+                                "
+                                class="text-danger"
+                              >
+                                <small
+                                  *ngIf="variantForm.get('material')?.errors?.['required']"
+                                >
                                   Fabric is required.
                                 </small>
                               </div>
                             </div>
                             <div class="col-sm-6 mb-3">
                               <label for="variantPrice">Variant Price</label>
-                              <input type="number" id="variantPrice" class="form-control" formControlName="price" />
-                              <div *ngIf="
+                              <input
+                                type="number"
+                                id="variantPrice"
+                                class="form-control"
+                                formControlName="price"
+                              />
+                              <div
+                                *ngIf="
                                   variantForm.get('price')?.invalid &&
                                   variantForm.get('price')?.touched
-                                " class="text-danger">
-                                <small *ngIf="variantForm.get('price')?.errors?.['required']">
+                                "
+                                class="text-danger"
+                              >
+                                <small
+                                  *ngIf="variantForm.get('price')?.errors?.['required']"
+                                >
                                   Price is required.
                                 </small>
-                                <small *ngIf="variantForm.get('price')?.errors?.['min']">
+                                <small
+                                  *ngIf="variantForm.get('price')?.errors?.['min']"
+                                >
                                   Price must be greater than 0.
                                 </small>
                               </div>
                             </div>
                           </div>
-                          <button type="button" class="btn btn-outline-primary" (click)="addVariant()">
+                          <button
+                            type="button"
+                            class="btn btn-outline-primary"
+                            (click)="addVariant()"
+                          >
                             Add Variant
                           </button>
                         </form>
@@ -227,12 +357,18 @@
 
                         <h6 class="text-primary"><b>Current Variants</b></h6>
                         <br />
-                        <div *ngIf="variants.length === 0" class="alert alert-info">
+                        <div
+                          *ngIf="variants.length === 0"
+                          class="alert alert-info"
+                        >
                           No variants added yet.
                         </div>
 
                         <ul class="list-group naeqna">
-                          <li *ngFor="let variant of variants; let i = index" class="list-group-item mb-3">
+                          <li
+                            *ngFor="let variant of variants; let i = index"
+                            class="list-group-item mb-3"
+                          >
                             <div>
                               <div class="scsm">
                                 <div>
@@ -244,53 +380,81 @@
                                 <div>
                                   <div class="input-block mb-3">
                                     <label>Color</label>
-                                    <input type="text" class="form-control disabled" [value]="variant.color" disabled />
+                                    <input
+                                      type="text"
+                                      class="form-control disabled"
+                                      [value]="variant.color"
+                                      disabled
+                                    />
                                   </div>
                                 </div>
                                 <div>
                                   <div class="input-block mb-3">
                                     <label>Size</label>
-                                    <input type="text" class="form-control disabled" [value]="variant.size" disabled />
+                                    <input
+                                      type="text"
+                                      class="form-control disabled"
+                                      [value]="variant.size"
+                                      disabled
+                                    />
                                   </div>
                                 </div>
                                 <div>
                                   <div class="input-block mb-3">
                                     <label>Fabric</label>
-                                    <input type="text" class="form-control disabled" [value]="variant.material"
-                                      disabled />
+                                    <input
+                                      type="text"
+                                      class="form-control disabled"
+                                      [value]="variant.material"
+                                      disabled
+                                    />
                                   </div>
                                 </div>
                               </div>
                               <div class="qpad">
                                 <div>
                                   <label>Quantity</label>
-                                  <input type="number" class="form-control" [value]="variant.quantity" #variantQuantity
+                                  <input
+                                    type="number"
+                                    class="form-control"
+                                    [value]="variant.quantity"
+                                    #variantQuantity
                                     (input)="
                                       updateVariant(
                                         i,
                                         'quantity',
                                         variantQuantity.value
                                       )
-                                    " />
+                                    "
+                                  />
                                 </div>
                                 <div>
                                   <label>Variant Price</label>
                                   <div class="dolsg">
-                                    <input type="number" class="form-control" [value]="variant.price" #priceInput
+                                    <input
+                                      type="number"
+                                      class="form-control"
+                                      [value]="variant.price"
+                                      #priceInput
                                       (input)="
                                         updateVariant(
                                           i,
                                           'price',
                                           priceInput.value
                                         )
-                                      " />
+                                      "
+                                    />
                                     <i class="bi bi-currency-dollar"></i>
                                   </div>
                                 </div>
                                 <div class="">
                                   <label>Action</label>
                                   <div>
-                                    <button type="button" class="btn btn-danger" (click)="removeVariant(i)">
+                                    <button
+                                      type="button"
+                                      class="btn btn-danger"
+                                      (click)="removeVariant(i)"
+                                    >
                                       <i class="bi bi-trash"></i>
                                     </button>
                                   </div>
@@ -301,67 +465,216 @@
                           <br />
                         </ul>
                       </div>
-                    </div>
+                    </div> -->
                     <div class="card">
                       <div class="card-body">
+                        <h6 class="mb-3 fw-semibold">Variants</h6>
 
-                        <h6 class="mb-3 fw-semibold" _ngcontent-ng-c2694634162="">Variants</h6>
-
-                        <div class="mainvaritem">
-
-
-                          <ul class="varientlists">
-                            <li class="varientitem">
-                              <!-- option name -->
-                              <div class="optionname">
-                                <div class="mb-3">
-                                  <label for="option-name">Option name</label>
-                                  <input class="form-control" type="text" id="option-name" value="11">
+                        <form [formGroup]="variantsForm">
+                          <div formArrayName="options" class="mainvaritem">
+                            <ul class="varientlists">
+                              <li
+                                *ngFor="
+                                  let option of options.controls;
+                                  let i = index
+                                "
+                                [formGroupName]="i"
+                                class="varientitem"
+                              >
+                                <!-- Option Name -->
+                                <div class="optionname">
+                                  <div class="mb-3">
+                                    <label for="option-name-{{ i }}"
+                                      >Option Name</label
+                                    >
+                                    <input
+                                      class="form-control"
+                                      id="option-name-{{ i }}"
+                                      formControlName="name"
+                                      placeholder="e.g., Size, Color, Material"
+                                    />
+                                    <div
+                                      *ngIf="
+                                        option.get('name')?.invalid &&
+                                        option.get('name')?.touched
+                                      "
+                                      class="text-danger"
+                                    >
+                                      Option name is required.
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                              <!-- option value -->
-                              <div class="optionvalue">
-                                <label for="" class="form-label">Option value</label>
-                                <div class="position-relative mb-1 ps-4">
-                                  <span class="dregicn">
-                                    <i class="fa-solid fa-grip-vertical"></i>
-                                  </span>
-                                  <input class="form-control" type="text">
-                                  <span class="proaddei">
-                                    <i class="bi bi-trash"></i>
-                                  </span>
-                                </div>
-                                <div class="position-relative mb-1 ps-4">
-                                  <span class="dregicn">
-                                    <i class="fa-solid fa-grip-vertical"></i>
-                                  </span>
-                                  <input class="form-control" type="text">
-                                  <span class="proaddei">
-                                    <i class="bi bi-trash"></i>
-                                  </span>
-                                </div>
-                                <div class="position-relative mb-1 ps-4">
-                                  <span class="dregicn">
-                                    <i class="fa-solid fa-grip-vertical"></i>
-                                  </span>
-                                  <input class="form-control" type="text">
-                                  <span class="proaddei">
-                                    <i class="bi bi-trash"></i>
-                                  </span>
-                                </div>
-                              </div>
 
-                              <div class="d-flex justify-content-between mt-3 ps-4">
-                                <button class="btn btn-outline-danger">Delete</button>
-                                <button class="btn btn-outline-primary">Done</button>
-                              </div>
-                            </li>
+                                <!-- Option Values -->
+                                <div class="optionvalue">
+                                  <label for="" class="form-label"
+                                    >Option Values</label
+                                  >
 
-                          </ul>
-                          <div class="varientadsmf">
-                            <button class="btn btn-outline-secondary">+ Add options like size color</button>
+                                  <div formArrayName="values">
+                                    <div
+                                      *ngFor="
+                                        let value of getValues(i).controls;
+                                        let j = index
+                                      "
+                                      [formGroupName]="j"
+                                      class="position-relative mb-1 ps-4"
+                                    >
+                                      <span class="dregicn">
+                                        <i
+                                          class="fa-solid fa-grip-vertical"
+                                        ></i>
+                                      </span>
+                                      <input
+                                        class="form-control"
+                                        formControlName="value"
+                                        placeholder="Enter value"
+                                      />
+                                      <span
+                                        class="proaddei"
+                                        (click)="removeValue(i, j)"
+                                      >
+                                        <i class="bi bi-trash"></i>
+                                      </span>
+                                      <div
+                                        *ngIf="
+                                          value.get('value')?.invalid &&
+                                          value.get('value')?.touched
+                                        "
+                                        class="text-danger"
+                                      >
+                                        Value is required.
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <!-- Add Value Button -->
+                                  <button
+                                    class="btn btn-sm btn-outline-secondary mt-2"
+                                    type="button"
+                                    (click)="addValue(i)"
+                                  >
+                                    + Add value
+                                  </button>
+                                </div>
+
+                                <div
+                                  class="d-flex justify-content-between mt-3 ps-4"
+                                >
+                                  <button
+                                    class="btn btn-outline-danger"
+                                    type="button"
+                                    (click)="removeOption(i)"
+                                  >
+                                    Delete
+                                  </button>
+                                  <button
+                                    class="btn btn-outline-primary"
+                                    type="button"
+                                    (click)="finalizeOption(i)"
+                                  >
+                                    Done
+                                  </button>
+                                </div>
+
+                                <!-- Display finalized option directly below -->
+                                <div *ngIf="finalizedOptions[i]">
+                                  <div class="finalized-option">
+                                    <strong
+                                      >{{ finalizedOptions[i].name }}:</strong
+                                    >
+                                    {{ finalizedOptions[i].values.join(", ") }}
+                                  </div>
+                                </div>
+                              </li>
+                            </ul>
+
+                            <!-- Add New Option Button -->
+                            <div
+                              class="varientadsmf"
+                              *ngIf="options.length < maxVariants"
+                            >
+                              <button
+                                class="btn btn-outline-secondary"
+                                type="button"
+                                (click)="addOption()"
+                              >
+                                + Add options like size, color
+                              </button>
+                            </div>
                           </div>
-                        </div>
+                        </form>
+
+                        <!-- Variant Listing Section -->
+                        <!-- Variant Listing Section -->
+                        <h6 class="mt-4">Variant Listing</h6>
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">S no.</th>
+                              <th scope="col">Variant</th>
+                              <th scope="col">Price</th>
+                              <th scope="col">Available</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              *ngFor="
+                                let variant of structuredVariants;
+                                let k = index;
+                                let last = last
+                              "
+                            >
+                              <td>
+                                <b>{{ k + 1 }}</b>
+                              </td>
+                              <td>
+                                <!-- Display variant properties -->
+                                <ng-container
+                                  *ngFor="
+                                    let option of getOptionEntries(variant)
+                                  "
+                                >
+                                  <span
+                                    >{{ option.key }}: {{ option.value }}</span
+                                  >
+                                  <span *ngIf="!last">, </span>
+                                </ng-container>
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="$ 0.00"
+                                  [value]="variant.price"
+                                  #varPrice
+                                  (input)="
+                                    updateVariant(
+                                      variant,
+                                      'price',
+                                      varPrice.value
+                                    )
+                                  "
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="number"
+                                  class="form-control"
+                                  [value]="variant.quantity"
+                                  #varQuantity
+                                  (input)="
+                                    updateVariant(
+                                      variant,
+                                      'quantity',
+                                      varQuantity.value
+                                    )
+                                  "
+                                />
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
@@ -371,18 +684,24 @@
                         <div>
                           <div class="input-block mb-3">
                             <label>Stock Status</label>
-                            <select formControlName="stockStatus" class="form-select"
-                              aria-label="Default select example">
+                            <select
+                              formControlName="stockStatus"
+                              class="form-select"
+                              aria-label="Default select example"
+                            >
                               <option value="" disabled>
                                 Select Stock Status
                               </option>
                               <option [value]="true">In Stock</option>
                               <option [value]="false">Out Of Stock</option>
                             </select>
-                            <div *ngIf="
+                            <div
+                              *ngIf="
                                 productForm.get('stockStatus')?.invalid &&
                                 productForm.get('stockStatus')?.touched
-                              " class="text-danger">
+                              "
+                              class="text-danger"
+                            >
                               Stock Status is required
                             </div>
                           </div>
@@ -390,17 +709,27 @@
                         <div>
                           <div class="input-block mb-3">
                             <label>Category</label>
-                            <select formControlName="category" class="form-select" aria-label="Default select example"
-                              *ngIf="categories && categories.data">
+                            <select
+                              formControlName="category"
+                              class="form-select"
+                              aria-label="Default select example"
+                              *ngIf="categories && categories.data"
+                            >
                               <option value="" disabled>Select Category</option>
-                              <option *ngFor="let cat of categories.data" [value]="cat.id">
+                              <option
+                                *ngFor="let cat of categories.data"
+                                [value]="cat.id"
+                              >
                                 {{ cat.category }}
                               </option>
                             </select>
-                            <div *ngIf="
+                            <div
+                              *ngIf="
                                 productForm.get('category')?.invalid &&
                                 productForm.get('category')?.touched
-                              " class="text-danger">
+                              "
+                              class="text-danger"
+                            >
                               Category is required
                             </div>
                           </div>
@@ -408,19 +737,29 @@
                         <div>
                           <div class="input-block mb-3">
                             <label>Menufacturers</label>
-                            <select formControlName="menufecturer" class="form-select"
-                              aria-label="Default select example" *ngIf="manufacturers && manufacturers.mnufacturer">
+                            <select
+                              formControlName="menufecturer"
+                              class="form-select"
+                              aria-label="Default select example"
+                              *ngIf="manufacturers && manufacturers.mnufacturer"
+                            >
                               <option value="" disabled>
                                 Select Manufacturer
                               </option>
-                              <option *ngFor="let man of manufacturers.mnufacturer" [value]="man.id">
+                              <option
+                                *ngFor="let man of manufacturers.mnufacturer"
+                                [value]="man.id"
+                              >
                                 {{ man.user.name }} , ({{ man.user.email }})
                               </option>
                             </select>
-                            <div *ngIf="
+                            <div
+                              *ngIf="
                                 productForm.get('menufecturer')?.invalid &&
                                 productForm.get('menufecturer')?.touched
-                              " class="text-danger">
+                              "
+                              class="text-danger"
+                            >
                               Menufecturer is required
                             </div>
                           </div>
@@ -434,13 +773,23 @@
                               <label for="yes" class="form-check-label">
                                 Yes
                               </label>
-                              <input type="radio" id="yes" formControlName="sale" [value]="true"
-                                class="form-check-input" />
+                              <input
+                                type="radio"
+                                id="yes"
+                                formControlName="sale"
+                                [value]="true"
+                                class="form-check-input"
+                              />
                             </div>
 
                             <div class="form-check">
-                              <input class="form-check-input" type="radio" id="no" formControlName="sale"
-                                [value]="false" />
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                id="no"
+                                formControlName="sale"
+                                [value]="false"
+                              />
                               <label class="form-check-label" for="no">
                                 No
                               </label>
@@ -452,17 +801,28 @@
                   </div>
                 </div>
                 <div class="text-end mt-3">
-                  <a type="button" *ngIf="
+                  <a
+                    type="button"
+                    *ngIf="
                       productForm.valid &&
                       variants.length > 0 &&
                       uploadedImages.length > 0
-                    " class="btn btn-outline-secondary me-3" target="_blank" routerLink="/product/preview"
-                    (click)="saveData()">
+                    "
+                    class="btn btn-outline-secondary me-3"
+                    target="_blank"
+                    routerLink="/product/preview"
+                    (click)="saveData()"
+                  >
                     Preview
                   </a>
-                  <button type="submit" class="btn btn-primary" [disabled]="
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    [disabled]="
                       uploadedImages.length == 0 || variants.length == 0
-                    " (click)="onSubmit()">
+                    "
+                    (click)="onSubmit()"
+                  >
                     Save
                   </button>
                 </div>

@@ -19,10 +19,10 @@
           </span>
           <span class="user-content d-flex gap-2 ps-0 align-items-center">
             <span class="user-name text-white fs-6">{{
-              userDetails.user.name
+              userDetails?.user?.name | titlecase
             }}</span>
             <span class="user-role text-white">{{
-              userDetails.role.name
+              userDetails?.role?.name | titlecase
             }}</span>
           </span>
         </div>
@@ -34,9 +34,8 @@
           }}"
           data-bs-toggle="dropdown"
           aria-expanded="false"
-          *ngIf="userDetails && userDetails.user && userDetails.role"
         >
-          blackdadadmingmail.com
+          {{ userDetails?.user?.email }}
           <i class="bi bi-chevron-right"></i>
         </a>
         <div
@@ -66,23 +65,8 @@
     <div id="sidebar-menu" class="sidebar-menu">
       <ul class="sidebar-vertical" *ngIf="menuData && menuData.role_accesses">
         <li *ngFor="let menu of menuData.role_accesses">
-          <a (click)="routing(menu)" [ngClass]="{ active: isLinkActive(menu) }"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="12"
-              viewBox="0 0 16 12"
-              fill="none"
-            >
-              <path
-                d="M3.1875 0.796875V1.59375H2.39063H1.59375V2.39062V3.1875H0.796875H0V7.1875V11.1875H6.40625H12.8125V10.3906V9.59375H13.6094H14.4063V8.79687V8H15.2031H16V4V-1.66707e-07H9.59375H3.1875V0.796875ZM15.1875 3.98437V7.1875H14.7969H14.4063V4.39062V1.59375H9.20313H4V1.1875V0.78125H9.59375H15.1875V3.98437ZM13.5938 5.59375V8.78125H13.2031H12.8125L12.8063 5.99062L12.7969 3.20312L7.60313 3.19375L2.40625 3.1875V2.79687V2.40625H8H13.5938V5.59375ZM12 7.20312V10.4062H6.40625H0.8125V7.20312V4H6.40625H12V7.20312Z"
-                fill="white"
-              />
-              <path
-                d="M4.8125 7.18437C4.8125 8.49062 4.81875 9.5625 4.82813 9.5625C4.8375 9.5625 5.55313 9.03125 6.42188 8.37812L8 7.19375L6.50625 6.07812C5.6875 5.4625 4.96875 4.925 4.91563 4.88125L4.8125 4.80625V7.18437ZM6.16875 6.82187C6.44063 7.025 6.65 7.20312 6.6375 7.21875C6.55938 7.2875 5.63125 7.96875 5.61563 7.96875C5.60313 7.96875 5.59375 7.61562 5.59375 7.18437C5.59375 6.56875 5.60313 6.40625 5.63438 6.425C5.65313 6.4375 5.89375 6.61562 6.16875 6.82187Z"
-                fill="white"
-              />
-            </svg>
+          <a (click)="routing(menu)" [ngClass]="{ active: isLinkActive(menu) }">
+            <img src="{{ menu.menu_bar.icon }}" alt="" />
             <span>{{ menu.menu_bar.title }}</span></a
           >
         </li>
@@ -401,7 +385,6 @@
             </li>
           </ul>
         </li>
-
         <li class="submenu" *ngIf="userType === 'Super Admin'">
           <a
             href="javascript:void(0)"
