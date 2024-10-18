@@ -21,6 +21,11 @@
   margin: 0;
 }
 
+.schtmdl {
+  display: grid;
+  grid-template-columns: 140px auto;
+}
+
 .css-equal-content {
   color: red;
   float: left;
@@ -4855,7 +4860,7 @@ span.select2-container.select2-container--default.select2-container--open {
 .sidebar .sidebar-menu ul li a span {
   padding: 0 10px;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 18px;
   color: white;
 }
@@ -32664,7 +32669,7 @@ td .invoice-detail i {
 }
 
 .user-icon {
-  padding: 50px 25px;
+  padding: 50px 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33404,3 +33409,6 @@ span.dregicn {
 }
 
 /* product page css end */
+.dropdown-menu.menu-drop-user.rounded.show {
+  transform: translate(16px, 172px) !important;
+}

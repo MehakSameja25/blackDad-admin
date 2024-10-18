@@ -14,11 +14,7 @@
           <app-go-back></app-go-back>
         </div>
       </div>
-      <div
-        class="alert alert-success"
-        role="alert"
-        class="{{ successalertClass }}"
-      >
+      <div class="alert alert-success" role="alert" class="{{ successalertClass }}">
         {{ successMessage }}
       </div>
       <div class="row">
@@ -26,20 +22,12 @@
           <div class="card">
             <div class="card-body">
               <div class="row" *ngIf="episodeDetails && episodeDetails.data">
-                <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="col-lg-5 col-md-6">
                   <div class="ep-cover">
-                    <div class="card p-0 m-0">
-                      <ngx-skeleton-loader
-                        *ngIf="isLoading"
-                        appearance="line"
-                      ></ngx-skeleton-loader>
-                      <img
-                        [src]="episodeDetails.data.image"
-                        class="card-img-top"
-                        alt="..."
-                        (load)="onImageLoad()"
-                        [hidden]="isLoading"
-                      />
+                    <div class="card p-0 m-0 shadow-0 overflow-hidden">
+                      <ngx-skeleton-loader *ngIf="isLoading" appearance="line"></ngx-skeleton-loader>
+                      <img [src]="episodeDetails.data.image" class="card-img-top shadow-0 rounded-0" alt="..."
+                        (load)="onImageLoad()" [hidden]="isLoading" />
                       <div class="card-body">
                         <p class="card-text">
                           {{ episodeDetails.data.name }}
@@ -48,185 +36,135 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-9 col-md-6 col-sm-12">
-                  <div class="row">
-                    <div class="col-lg-8 col-md-6 col-sm-12">
-                      <div
-                        class="input-block mb-3 d-flex align-items-center gap-2"
-                        *ngIf="
+                <div class="col-lg-7 col-md-6 input-block">
+                  <div class="row position-relative">
+                    <div class="mb-2">
+                      <div class=" d-flex align-items-center gap-2" *ngIf="
                           episodeDetails.data.isApproved === '0' &&
                           approvePermiision
-                        "
-                      >
-                        <button
-                          class="btn btn-outline-success"
-                          (click)="approved(episodeDetails.data, '1')"
-                        >
+                        ">
+                        <button class="btn btn-outline-success" (click)="approved(episodeDetails.data, '1')">
                           Approve
                         </button>
-                        <button
-                          class="btn btn-outline-danger"
-                          (click)="approved(episodeDetails.data, '2')"
-                        >
+                        <button class="btn btn-outline-danger" (click)="approved(episodeDetails.data, '2')">
                           Reject
                         </button>
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                      <div
-                        class="input-block mb-3"
-                        *ngIf="
+                    <div class="mb-2">
+                      <div class="" *ngIf="
                           episodeDetails.data.isApproved === '1' &&
                           episodeDetails.data.isPublished === '0' &&
                           publishPermission === true &&
                           episodeDetails.data.is_scheduled === 'not_scheduled'
-                        "
-                      >
-                        <button
-                          class="btn btn-primary me-3"
-                          (click)="publish(episodeDetails.data)"
-                        >
+                        ">
+                        <button class="btn btn-primary me-3" (click)="publish(episodeDetails.data)">
                           Publish Now
                         </button>
-                        <button
-                          class="btn btn-outline-dark"
-                          (click)="openScheduleModal(scheduleModal)"
-                        >
+                        <button class="btn btn-outline-dark" (click)="openScheduleModal(scheduleModal)">
                           Schedule
                         </button>
                       </div>
-                      <div
-                        class="input-block mb-3"
-                        *ngIf="
+                      <div class="" *ngIf="
                           episodeDetails.data.isApproved === '1' &&
                           episodeDetails.data.isPublished === '0' &&
                           publishPermission === true &&
                           episodeDetails.data.is_scheduled === 'scheduled'
-                        "
-                      >
-                        <span class="badge bg-success d-block w-fit"
-                          >{{ countryName }} {{ timezonne }}
-                          {{ scheduledTime }}</span
-                        >
-                        <button
-                          class="btn btn-outline-dark"
-                          (click)="openScheduleModal(scheduleModal)"
-                        >
-                          Re-Schedule
-                        </button>
+                        ">
+                        <div>
+                          <div class="schtmdl mb-2">
+                            <label for="">Country</label>
+                            <div>{{ countryName }}</div>
+                          </div>
+                          <div class="schtmdl mb-2">
+                            <label for="">Timezone</label>
+                            <div>{{ timezonne }}</div>
+                          </div>
+                          <div class="schtmdl mb-2">
+                            <label for="">scheduled Time</label>
+                            <div>{{ scheduledTime }}</div>
+                          </div>
+                          <button class="btn btn-link mt-1 position-absolute top-0 end-0"
+                            (click)="openScheduleModal(scheduleModal)">
+                            Re-Schedule
+                          </button>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="col-lg-8 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Episode Name</label>
-                        <p>{{ episodeDetails.data.name }}</p>
-                      </div>
+
+                    <div class="schtmdl mb-2">
+                      <label>Episode Name</label>
+                      <p>{{ episodeDetails.data.name }}</p>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Type</label>
-                        <p>{{ episodeDetails.data.type }}</p>
-                      </div>
+                    <div class="schtmdl mb-2">
+                      <label>Type</label>
+                      <p>{{ episodeDetails.data.type }}</p>
                     </div>
-                    <div class="col-lg-8 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Sub Type</label>
-                        <p>{{ episodeDetails.data.subtype }}</p>
-                      </div>
+                    <div class="schtmdl mb-2">
+                      <label>Sub Type</label>
+                      <p>{{ episodeDetails.data.subtype }}</p>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>File Type</label>
-                        <p>{{ episodeDetails.data.filetype }}</p>
-                      </div>
+                    <div class="schtmdl mb-2">
+                      <label>File Type</label>
+                      <p>{{ episodeDetails.data.filetype }}</p>
                     </div>
-                    <div class="col-lg-8 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Category</label>
-                        <ul
-                          *ngIf="
+                    <div class="schtmdl mb-2">
+                      <label>Category</label>
+                      <div class="d-flex gap-3 flex-wrap" *ngIf="
                             episodeDetails &&
                             episodeDetails.data &&
                             episodeDetails.data.categories
-                          "
-                        >
-                          <li
-                            *ngFor="
+                          ">
+                        <div *ngFor="
                               let category of episodeDetails.data.categories
-                            "
-                          >
-                            {{ category.name }}
-                          </li>
-                        </ul>
+                            ">
+                          {{ category.name }}
+                        </div>
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label class="d-block">Status</label>
-                        <span
-                          class="badge rounded-pill text-bg-violet"
-                          *ngIf="episodeDetails.data.isPublished === '1'"
-                          >Published</span
-                        >
-                        <span
-                          class="badge rounded-pill text-bg-warning"
-                          *ngIf="episodeDetails.data.isApproved === '0'"
-                          >Pending</span
-                        >
-                        <span
-                          class="badge rounded-pill text-bg-success"
-                          *ngIf="
-                            episodeDetails.data.isApproved === '1' &&
-                            episodeDetails.data.isPublished === '0'
-                          "
-                          >Approved</span
-                        >
-                        <span
-                          class="badge rounded-pill text-bg-danger"
-                          *ngIf="episodeDetails.data.isApproved === '2'"
-                          >Rejected</span
-                        >
+                    <div class="schtmdl mb-2">
+                      <label class="d-block">Status</label>
+                      <div>
+                        <span class="badge rounded-pill text-bg-violet"
+                          *ngIf="episodeDetails.data.isPublished === '1'">Published</span>
+                        <span class="badge rounded-pill text-bg-warning"
+                          *ngIf="episodeDetails.data.isApproved === '0'">Pending</span>
+                        <span class="badge rounded-pill text-bg-success" *ngIf="
+                          episodeDetails.data.isApproved === '1' &&
+                          episodeDetails.data.isPublished === '0'
+                        ">Approved</span>
+                        <span class="badge rounded-pill text-bg-danger"
+                          *ngIf="episodeDetails.data.isApproved === '2'">Rejected</span>
                       </div>
                     </div>
-                    <div
-                      class="col-lg-4 col-md-6 col-sm-12"
-                      *ngIf="
-                        episodeDetails.data.filetype === 'audio' &&
-                        episodeDetails.data.subtype === 'podcast'
-                      "
-                    >
-                      <div class="input-block mb-3">
-                        <audio controls>
-                          <source
-                            src="{{ episodeDetails.data.url }}"
-                            type="audio/mpeg"
-                          />
-                          Your browser does not support the audio element.
-                        </audio>
-                      </div>
-                    </div>
-                    <div
-                      class="col-lg-4 col-md-6 col-sm-12"
-                      *ngIf="
-                        episodeDetails.data.filetype === 'video' &&
-                        episodeDetails.data.subtype === 'youtube'
-                      "
-                    >
-                      <div class="input-block mb-3">
-                        <a
-                          class="btn btn-primary"
-                          (click)="open(contentt, episodeDetails.data)"
-                          >Play Video</a
-                        >
+                    <div class="schtmdl mb-2">
+                      <label for="">Audio</label>
+                      <div *ngIf="
+                          episodeDetails.data.filetype === 'audio' &&
+                          episodeDetails.data.subtype === 'podcast'
+                        ">
+                        <div class="">
+                          <audio controls>
+                            <source src="{{ episodeDetails.data.url }}" type="audio/mpeg" />
+                            Your browser does not support the audio element.
+                          </audio>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Description</label>
-                        <p [innerHTML]="sanitizedDescription"></p>
+                    <div class="schtmdl mb-2">
+                      <label for="">video</label>
+                      <div
+                        *ngIf="episodeDetails.data.filetype === 'video' && episodeDetails.data.subtype === 'youtube'">
+                        <div class="">
+                          <a class="btn btn-primary" (click)="open(contentt, episodeDetails.data)">Play Video</a>
+                        </div>
                       </div>
+                    </div>
+                    <div class="schtmdl mb-2">
+                      <label>Description</label>
+                      <p [innerHTML]="sanitizedDescription"></p>
                     </div>
                   </div>
                 </div>
@@ -243,13 +181,8 @@
   <div class="modal-content" style="width: 600px">
     <div class="modal-header">
       <h5 class="modal-title" id="exampleModalLabel">Video</h5>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-        (click)="modal.close()"
-      ></button>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+        (click)="modal.close()"></button>
     </div>
     <div class="modal-body" id="puaseVideo">
       <div class="podcastdetailbanner mb-3" [innerHTML]="sanitizedUrl"></div>
@@ -261,38 +194,22 @@
     <form [formGroup]="scheduleForm" (ngSubmit)="schedule()">
       <div class="modal-header">
         <h5 class="modal-title">Schedule Article</h5>
-        <button
-          type="button"
-          class="btn-close"
-          (click)="modal.dismiss()"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="form-group mb-3">
           <label for="country" class="form-label">Country</label>
-          <select
-            formControlName="country"
-            class="form-control"
-            (change)="onCountryChange()"
-          >
+          <select formControlName="country" class="form-control" (change)="onCountryChange()">
             <option value="" disabled selected>Choose your Country</option>
-            <option
-              *ngFor="let country of countries"
-              [value]="country.name"
-              [attr.data-timezones]="country.timezones"
-            >
+            <option *ngFor="let country of countries" [value]="country.name" [attr.data-timezones]="country.timezones">
               {{ country.name }}
             </option>
           </select>
-          <div
-            *ngIf="
+          <div *ngIf="
               scheduleForm.get('country')?.invalid &&
               (scheduleForm.get('country')?.dirty ||
                 scheduleForm.get('country')?.touched)
-            "
-            class="text-danger"
-          >
+            " class="text-danger">
             <div *ngIf="scheduleForm.get('country')?.errors?.['required']">
               Country is required.
             </div>
@@ -306,14 +223,11 @@
               {{ tz.tzCode }} (UTC {{ tz.utc }})
             </option>
           </select>
-          <div
-            *ngIf="
+          <div *ngIf="
               scheduleForm.get('timezone')?.invalid &&
               (scheduleForm.get('timezone')?.dirty ||
                 scheduleForm.get('timezone')?.touched)
-            "
-            class="text-danger"
-          >
+            " class="text-danger">
             <div *ngIf="scheduleForm.get('timezone')?.errors?.['required']">
               Timezone is required.
             </div>
@@ -321,22 +235,13 @@
         </div>
         <div class="form-group mb-3">
           <label for="scheduled_at">Select Date and Time</label>
-          <input
-            type="datetime-local"
-            id="scheduled_at"
-            formControlName="scheduled_at"
-            placeholder="Choose your Date and Time"
-            class="datetimepicker form-control"
-            required
-          />
-          <div
-            *ngIf="
+          <input type="datetime-local" id="scheduled_at" formControlName="scheduled_at"
+            placeholder="Choose your Date and Time" class="datetimepicker form-control" required />
+          <div *ngIf="
               scheduleForm.get('scheduled_at')?.invalid &&
               (scheduleForm.get('scheduled_at')?.dirty ||
                 scheduleForm.get('scheduled_at')?.touched)
-            "
-            class="text-danger"
-          >
+            " class="text-danger">
             <div *ngIf="scheduleForm.get('scheduled_at')?.errors?.['required']">
               Scheduled_at are required.
             </div>
@@ -344,11 +249,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary me-3"
-          (click)="modal.dismiss()"
-        >
+        <button type="button" class="btn btn-secondary me-3" (click)="modal.dismiss()">
           Close
         </button>
         <button type="submit" class="btn btn-primary">Schedule</button>

@@ -46,6 +46,7 @@ import { ListComponent } from './admin/ecommerce/manufacturer/roles/list/list.co
 import { AssignComponent } from './admin/ecommerce/manufacturer/roles/assign/assign.component';
 import { ArticalTypesComponent } from './admin/artical-types/artical-types.component';
 import { WarehouseLocationComponent } from './admin/ecommerce/warehouse-location/warehouse-location.component';
+import { HelpFaqComponent } from './admin/ecommerce/faq/help-faq/help-faq.component';
 
 const routes: Routes = [
   { path: 'admin-auth', component: AdminAuthComponent },
@@ -305,6 +306,12 @@ const routes: Routes = [
   {
     path: 'admin/location',
     component: WarehouseLocationComponent,
+    canActivate: [AuthGuard],
+  },
+
+  {
+    path: 'admin/faq',
+    component: HelpFaqComponent,
     canActivate: [AuthGuard],
   },
 

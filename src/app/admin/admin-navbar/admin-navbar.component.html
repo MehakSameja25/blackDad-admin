@@ -13,33 +13,31 @@
   <div class="user-icon">
     <ul class="nav nav-tabs user-menu m-0 p-0">
       <li class="nav-item dropdown dropdown-center">
+        <div class="user-link nav-link flex-column align-item-center pb-0">
+          <span class="user-img m-0">
+            <img src="./assets/img/logo.png" alt="img" class="profilesidebar" />
+          </span>
+          <span class="user-content d-flex gap-2 ps-0 align-items-center">
+            <span class="user-name text-white fs-6">{{
+              userDetails.user.name
+            }}</span>
+            <span class="user-role text-white">{{
+              userDetails.role.name
+            }}</span>
+          </span>
+        </div>
         <a
           (click)="profileDropdown()"
           href="javascript:void(0)"
-          class="user-link nav-link flex-column align-item-center {{
+          class="user-link nav-link gap-2 align-item-center justify-content-center text-white {{
             showCLass
           }}"
           data-bs-toggle="dropdown"
           aria-expanded="false"
+          *ngIf="userDetails && userDetails.user && userDetails.role"
         >
-          <span class="user-img m-0">
-            <img src="./assets/img/logo.png" alt="img" class="profilesidebar" />
-          </span>
-          <span class="user-content">
-            <span class="user-name text-center">{{ user?.name }}</span>
-          </span>
-          <span class="user-content">
-            <span
-              class="user-name text-center"
-              *ngIf="user?.type === 'admin'"
-              >{{ userRole?.name }}</span
-            >
-            <span
-              class="user-name text-center"
-              *ngIf="user?.type === 'manufacturer'"
-              >Manufacturer</span
-            >
-          </span>
+          blackdadadmingmail.com
+          <i class="bi bi-chevron-right"></i>
         </a>
         <div
           class="dropdown-menu menu-drop-user rounded {{ showCLass }} "
@@ -53,11 +51,7 @@
                     >Profile</a
                   >
                 </li>
-              </ul>
-            </div>
-            <div class="subscription-logout">
-              <ul>
-                <li class="pb-0">
+                <li class="subscription-logout">
                   <a class="dropdown-item" (click)="logOut()">Log Out</a>
                 </li>
               </ul>

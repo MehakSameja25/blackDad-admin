@@ -438,7 +438,7 @@ export class AdminCategoriesComponent implements OnInit {
     this.navService.getMenu().subscribe((res: Menu) => {
       if (res && res.data) {
         for (let permission of res.data[0].role_accesses) {
-          if ((permission.menu_bar.title == 'Categories') === true) {
+          if ((permission.menu_bar.title == 'Episode Categories') === true) {
             this.addPermission = permission.status.includes('add');
             this.editPermission = permission.status.includes('edit');
             this.deletePermission = permission.status.includes('delete');

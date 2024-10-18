@@ -14,10 +14,13 @@ export class ProductsService {
   ) {}
 
   list() {
-    return apiCallWrapper(this.http.get(`${environment.apiUrl}/get-product`), {
-      notificationsService: this.notifications,
-      action: 'Fetching Product',
-    });
+    return apiCallWrapper(
+      this.http.get(`${environment.apiUrl}/get-product?type=admin`),
+      {
+        notificationsService: this.notifications,
+        action: 'Fetching Product',
+      }
+    );
   }
 
   get(id: string | number | null) {

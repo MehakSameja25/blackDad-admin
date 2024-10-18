@@ -69,6 +69,7 @@ import { ArticalTypesComponent } from './admin/artical-types/artical-types.compo
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { WarehouseLocationComponent } from './admin/ecommerce/warehouse-location/warehouse-location.component';
+import { HelpFaqComponent } from './admin/ecommerce/faq/help-faq/help-faq.component';
 
 @NgModule({
   declarations: [
@@ -125,6 +126,7 @@ import { WarehouseLocationComponent } from './admin/ecommerce/warehouse-location
     AssignComponent,
     ArticalTypesComponent,
     WarehouseLocationComponent,
+    HelpFaqComponent,
   ],
   imports: [
     BrowserModule,
@@ -145,7 +147,7 @@ import { WarehouseLocationComponent } from './admin/ecommerce/warehouse-location
     }),
     SlickCarouselModule,
     NgxSummernoteModule,
-    DragDropModule
+    DragDropModule,
   ],
   providers: [
     {

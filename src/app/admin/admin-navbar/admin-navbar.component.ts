@@ -156,7 +156,7 @@ export class AdminNavbarComponent implements OnInit {
   }
 
   routing(menu: { menu_bar: { title: string } }) {
-    if (menu.menu_bar.title === 'Categories') {
+    if (menu.menu_bar.title === 'Episode Categories') {
       this.router.navigate(['/admin/categories']);
     } else if (menu.menu_bar.title === 'Episodes') {
       this.router.navigate(['/admin/episodes']);

@@ -7,7 +7,7 @@
         <div class="content-page-header">
           <h5>Location</h5>
           <div class="d-flex align-items-center gap-3">
-            <a class="btn btn-primary" (click)="openAdd(AddLocation)"
+            <a class="btn btn-primary" (click)="openAdd(AddLocation, 'Add')"
               >Add New Location</a
             >
           </div>
@@ -25,42 +25,27 @@
             <div class="card">
               <div class="card-body">
                 <div>
-                  <div class="main-blockcat">
+                  <div class="main-blockcat" *ngFor="let data of warehouseData">
                     <div
                       class="main-cate position-relative ps-4 gap-2 flex-wrap"
                     >
                       <span>
-                        <b class="ms-3">BDU Unfiltered</b>
-                        <p>Udasar Road, Bikaner, Rajasthan, India</p></span
+                        <b class="ms-3">{{ data.name }}</b>
+                        <p>{{ data.city }}</p></span
                       >
 
                       <div>
                         <div class="actionbtn">
-                          <button class="btn btn-edit">
+                          <button
+                            class="btn btn-edit"
+                            (click)="openAdd(AddLocation, 'Edit', data)"
+                          >
                             <i class="bi bi-pen"></i>
                           </button>
-                          <button class="btn btn-delete">
-                            <i class="bi bi-trash3"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="main-blockcat">
-                    <div
-                      class="main-cate position-relative ps-4 gap-2 flex-wrap"
-                    >
-                      <span>
-                        <b class="ms-3">BDU Unfiltered</b>
-                        <p>Udasar Road, Bikaner, Rajasthan, India</p></span
-                      >
-
-                      <div>
-                        <div class="actionbtn">
-                          <button class="btn btn-edit">
-                            <i class="bi bi-pen"></i>
-                          </button>
-                          <button class="btn btn-delete">
+                          <button
+                            class="btn btn-delete"
+                            (click)="openAdd(contentt, 'Delete', data)"
+                          >
                             <i class="bi bi-trash3"></i>
                           </button>
                         </div>
@@ -112,7 +97,9 @@
       <div class="modal-btn delete-action">
         <div class="row">
           <div class="col-6">
-            <a class="btn btn-primary paid-continue-btn">Delete</a>
+            <a class="btn btn-primary paid-continue-btn" (click)="delete()"
+              >Delete</a
+            >
           </div>
           <div class="col-6">
             <a
@@ -128,7 +115,7 @@
   </div>
 </ng-template>
 
-<ng-template #AddLocation let-modal>
+<!-- <ng-template #AddLocation let-modal>
   <div class="form-container">
     <h2>Edit location address</h2>
     <form>
@@ -178,6 +165,73 @@
 
       <div class="form-buttons">
         <button type="button" class="cancel-btn">Cancel</button>
+        <button type="submit" class="save-btn">Save</button>
+      </div>
+    </form>
+  </div>
+</ng-template> -->
+
+<ng-template #AddLocation let-modal>
+  <div class="form-container">
+    <p class="fs-4 fw-bold">{{ warehouseType }} location address</p>
+    <hr />
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Name </label>
+        <input type="text" id="name" formControlName="name" />
+        <div
+          *ngIf="myForm.get('name')?.touched && myForm.get('name')?.invalid"
+          class="error"
+        >
+          <small
+            class="text-danger"
+            *ngIf="myForm.get('name')?.errors?.['required']"
+            >Name is required.</small
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" id="city" formControlName="city" />
+        <div
+          *ngIf="myForm.get('city')?.touched && myForm.get('city')?.invalid"
+          class="error"
+        >
+          <small
+            class="text-danger"
+            *ngIf="myForm.get('city')?.errors?.['required']"
+            >City is required.</small
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="pincode">Zip code</label>
+        <input type="text" id="pincode" formControlName="pincode" />
+        <div
+          *ngIf="
+            myForm.get('pincode')?.touched && myForm.get('pincode')?.invalid
+          "
+          class="error"
+        >
+          <small
+            class="text-danger"
+            *ngIf="myForm.get('pincode')?.errors?.['required']"
+            >Zip code is required.</small
+          >
+          <small
+            class="text-danger"
+            *ngIf="myForm.get('pincode')?.errors?.['minlength']"
+            >Zip code must be at least 5 characters long.</small
+          >
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button type="button" class="cancel-btn" (click)="modal.close()">
+          Cancel
+        </button>
         <button type="submit" class="save-btn">Save</button>
       </div>
     </form>

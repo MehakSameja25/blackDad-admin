@@ -14,11 +14,7 @@
           <app-go-back></app-go-back>
         </div>
       </div>
-      <div
-        class="alert alert-success"
-        role="alert"
-        class="{{ successalertClass }}"
-      >
+      <div class="alert alert-success" role="alert" class="{{ successalertClass }}">
         {{ successMessage }}
       </div>
       <div class="row">
@@ -26,14 +22,10 @@
           <div class="card">
             <div class="card-body">
               <div class="row" *ngIf="articleDetails && articleDetails.data">
-                <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="col-lg-5 col-md-6">
                   <div class="ep-cover">
-                    <div class="card p-0 m-0">
-                      <img
-                        [src]="articleDetails.data.image"
-                        class="card-img-top"
-                        alt="..."
-                      />
+                    <div class="card p-0 m-0 shadow-0 overflow-hidden">
+                      <img [src]="articleDetails.data.image" class="card-img-top shadow-0 rounded-0" alt="..." />
                       <div class="card-body">
                         <p class="card-text">
                           {{ articleDetails.data.name }}
@@ -42,136 +34,101 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-9 col-md-6 col-sm-12">
-                  <div class="row">
-                    <div class="col-lg-8 col-md-6 col-sm-12">
-                      <div
-                        class="input-block mb-3 d-flex align-items-center gap-2"
-                        *ngIf="
-                          articleDetails.data.isApproved === '0' &&
-                          approvePermission
-                        "
-                      >
-                        <button
-                          class="btn btn-outline-success"
-                          (click)="approved(articleDetails.data, '1')"
-                        >
+                <div class="col-lg-7 col-md-6 input-block">
+                  <div class="row position-relative">
+                    <div *ngIf="
+                    articleDetails.data.isApproved === '0' &&
+                    approvePermission
+                  ">
+                      <div class="d-flex mb-3 align-items-center gap-2">
+                        <button class="btn btn-outline-success" (click)="approved(articleDetails.data, '1')">
                           Approve
                         </button>
-                        <button
-                          class="btn btn-outline-danger"
-                          (click)="approved(articleDetails.data, '2')"
-                        >
+                        <button class="btn btn-outline-danger" (click)="approved(articleDetails.data, '2')">
                           Reject
                         </button>
                       </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                      <div
-                        class="input-block mb-3"
-                        *ngIf="
+                    <div class="mb-2" *ngIf="
                           articleDetails.data.isApproved === '1' &&
                           articleDetails.data.isPublished === '0' &&
                           publishPermission === true &&
                           articleDetails.data.is_scheduled === 'not_scheduled'
-                        "
-                      >
-                        <button
-                          class="btn btn-primary me-3"
-                          (click)="publish(articleDetails.data)"
-                        >
-                          Publish Now
-                        </button>
-                        <button
-                          class="btn btn-outline-dark"
-                          (click)="openScheduleModal(scheduleModal)"
-                        >
-                          Schedule
-                        </button>
+                        ">
+                      <button class="btn btn-primary me-3" (click)="publish(articleDetails.data)">
+                        Publish Now
+                      </button>
+                      <button class="btn btn-outline-dark" (click)="openScheduleModal(scheduleModal)">
+                        Schedule
+                      </button>
+                    </div>
+                    <div class="schtmdl mb-2">
+                      <label class="d-block">Status</label>
+                      <div>
+                        <span class="badge rounded-pill text-bg-primary"
+                          *ngIf="articleDetails.data.isPublished === '1'">Published</span>
+                        <span class="badge rounded-pill text-bg-warning"
+                          *ngIf="articleDetails.data.isApproved === '0'">Pending</span>
+                        <span class="badge rounded-pill text-bg-success" *ngIf="
+                            articleDetails.data.isApproved === '1' &&
+                            articleDetails.data.isPublished === '0'
+                          ">Approved</span>
+                        <span class="badge rounded-pill text-bg-danger"
+                          *ngIf="articleDetails.data.isApproved === '2'">Rejected</span>
                       </div>
-                      <div
-                        class="input-block mb-3"
-                        *ngIf="
+                    </div>
+
+                    <div>
+                      <div *ngIf="
                           articleDetails.data.isApproved === '1' &&
                           articleDetails.data.isPublished === '0' &&
                           publishPermission === true &&
                           articleDetails.data.is_scheduled === 'scheduled'
-                        "
-                      >
-                        <span class="badge bg-success d-block w-fit"
-                          >{{ countryName }} {{ timezonne }}
-                          {{ scheduledTime }}</span
-                        >
-                        <button
-                          class="btn btn-outline-dark"
-                          (click)="openScheduleModal(scheduleModal)"
-                        >
-                          Re-Schedule
-                        </button>
+                        ">
+                        <div>
+                          <div class="schtmdl mb-2">
+                            <label for="">Country</label>
+                            <div>{{ countryName }}</div>
+                          </div>
+                          <div class="schtmdl mb-2">
+                            <label for="">Timezone</label>
+                            <div>{{ timezonne }}</div>
+                          </div>
+                          <div class="schtmdl mb-2">
+                            <label for="">scheduled Time</label>
+                            <div>{{ scheduledTime }}</div>
+                          </div>
+                          <button class="btn btn-link mt-1 position-absolute top-0 end-0"
+                            (click)="openScheduleModal(scheduleModal)">
+                            Re-Schedule
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Article Title</label>
-                        <p>{{ articleDetails.data.name }}</p>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-8 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Category</label>
-                        <ul>
-                          <li>
-                            {{
-                              articleDetails.data.article_with_types[0]
-                                ?.article_type?.name
-                            }}
-                          </li>
-                          <li>
-                            <b
-                              >({{
-                                articleDetails.data.article_with_types[0]
-                                  ?.article_type?.parent?.name
-                              }})</b
-                            >
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label class="d-block">Status</label>
-                        <span
-                          class="badge rounded-pill text-bg-primary"
-                          *ngIf="articleDetails.data.isPublished === '1'"
-                          >Published</span
-                        >
-                        <span
-                          class="badge rounded-pill text-bg-warning"
-                          *ngIf="articleDetails.data.isApproved === '0'"
-                          >Pending</span
-                        >
-                        <span
-                          class="badge rounded-pill text-bg-success"
-                          *ngIf="
-                            articleDetails.data.isApproved === '1' &&
-                            articleDetails.data.isPublished === '0'
-                          "
-                          >Approved</span
-                        >
-                        <span
-                          class="badge rounded-pill text-bg-danger"
-                          *ngIf="articleDetails.data.isApproved === '2'"
-                          >Rejected</span
-                        >
-                      </div>
+                    <div class="schtmdl mb-2">
+                      <label>Article Title</label>
+                      <p>{{ articleDetails.data.name }}</p>
                     </div>
 
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                      <div class="input-block mb-3">
-                        <label>Description</label>
-                        <p [innerHTML]="sanitizedDescription"></p>
+                    <div class="schtmdl mb-2">
+                      <label>Category</label>
+                      <div>
+                        {{
+                        articleDetails.data.article_with_types[0]
+                        ?.article_type?.parent?.name
+                        }}
                       </div>
+                    </div>
+                    <div class="schtmdl mb-2">
+                      <label>Sub Category</label>
+                      <div>{{
+                        articleDetails.data.article_with_types[0]
+                        ?.article_type?.name
+                        }}</div>
+                    </div>
+                    <div class="schtmdl mb-2">
+                      <label>Description</label>
+                      <div [innerHTML]="sanitizedDescription"></div>
                     </div>
                   </div>
                 </div>
@@ -188,38 +145,22 @@
     <form [formGroup]="scheduleForm" (ngSubmit)="schedule()">
       <div class="modal-header">
         <h5 class="modal-title">Schedule Article</h5>
-        <button
-          type="button"
-          class="btn-close"
-          (click)="modal.dismiss()"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="form-group mb-3">
           <label for="country" class="form-label">Country</label>
-          <select
-            formControlName="country"
-            class="form-control"
-            (change)="onCountryChange()"
-          >
+          <select formControlName="country" class="form-control" (change)="onCountryChange()">
             <option value="" disabled selected>Choose your Country</option>
-            <option
-              *ngFor="let country of countries"
-              [value]="country.name"
-              [attr.data-timezones]="country.timezones"
-            >
+            <option *ngFor="let country of countries" [value]="country.name" [attr.data-timezones]="country.timezones">
               {{ country.name }}
             </option>
           </select>
-          <div
-            *ngIf="
+          <div *ngIf="
               scheduleForm.get('country')?.invalid &&
               (scheduleForm.get('country')?.dirty ||
                 scheduleForm.get('country')?.touched)
-            "
-            class="text-danger"
-          >
+            " class="text-danger">
             <div *ngIf="scheduleForm.get('country')?.errors?.['required']">
               Country is required.
             </div>
@@ -233,14 +174,11 @@
               {{ tz.tzCode }} (UTC {{ tz.utc }})
             </option>
           </select>
-          <div
-            *ngIf="
+          <div *ngIf="
               scheduleForm.get('timezone')?.invalid &&
               (scheduleForm.get('timezone')?.dirty ||
                 scheduleForm.get('timezone')?.touched)
-            "
-            class="text-danger"
-          >
+            " class="text-danger">
             <div *ngIf="scheduleForm.get('timezone')?.errors?.['required']">
               Timezone is required.
             </div>
@@ -248,22 +186,13 @@
         </div>
         <div class="form-group mb-3">
           <label for="scheduled_at">Select Date and Time</label>
-          <input
-            type="datetime-local"
-            id="scheduled_at"
-            formControlName="scheduled_at"
-            placeholder="Choose your Date and Time"
-            class="datetimepicker form-control"
-            required
-          />
-          <div
-            *ngIf="
+          <input type="datetime-local" id="scheduled_at" formControlName="scheduled_at"
+            placeholder="Choose your Date and Time" class="datetimepicker form-control" required />
+          <div *ngIf="
               scheduleForm.get('scheduled_at')?.invalid &&
               (scheduleForm.get('scheduled_at')?.dirty ||
                 scheduleForm.get('scheduled_at')?.touched)
-            "
-            class="text-danger"
-          >
+            " class="text-danger">
             <div *ngIf="scheduleForm.get('scheduled_at')?.errors?.['required']">
               Scheduled_at are required.
             </div>
@@ -271,11 +200,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary me-3"
-          (click)="modal.dismiss()"
-        >
+        <button type="button" class="btn btn-secondary me-3" (click)="modal.dismiss()">
           Close
         </button>
         <button type="submit" class="btn btn-primary">Schedule</button>

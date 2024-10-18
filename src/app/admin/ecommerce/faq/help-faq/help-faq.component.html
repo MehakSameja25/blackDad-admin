@@ -1,0 +1,76 @@
+<div class="main-wrapper">
+  <app-admin-navbar></app-admin-navbar>
+
+  <!-- faq section start -->
+
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="page-header">
+        <div class="content-page-header">
+          <h5>Frewuently Ask Questions</h5>
+          <div class="d-flex align-items-center gap-3">
+            <a class="btn btn-primary" routerLink="/admin/add-article"
+              >Add New Article</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="epitopsc mb-3">
+          <app-go-back></app-go-back>
+          <div class="sectioncon"></div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-body">
+                <app-article-tabs></app-article-tabs>
+                <div class="table-responsive">
+                  <table
+                    #dataTable
+                    appDataTable
+                    [data]="tableData"
+                    [columns]="tableColumns"
+                    class="table display"
+                  ></table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- faq section end -->
+</div>
+
+<div class="row d-none">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="input-block mb-3">
+          <label class="form-label">Question</label>
+          <input
+            type="text"
+            placeholder="Enter Question"
+            class="form-control"
+          />
+        </div>
+        <div class="input-block mb-3">
+          <label class="form-label">Answer</label>
+          <textarea
+            class="form-control"
+            rows="5"
+            name=""
+            id=""
+            placeholder="Enter Answer"
+          ></textarea>
+        </div>
+        <button class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
