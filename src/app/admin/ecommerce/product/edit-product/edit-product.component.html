@@ -482,7 +482,10 @@
                                 class="varientitem"
                               >
                                 <!-- Option Name -->
-                                <div class="optionname">
+                                <div
+                                  class="optionname"
+                                  *ngIf="!finalizedStates[i]"
+                                >
                                   <div class="mb-3">
                                     <label for="option-name-{{ i }}"
                                       >Option Name</label
@@ -505,12 +508,34 @@
                                   </div>
                                 </div>
 
+                                <!-- Finalized Option Display -->
+                                <div *ngIf="finalizedStates[i]">
+                                  <div
+                                    class="finalized-option position-relative mb-1 ps-4"
+                                    draggable="true"
+                                    (dragstart)="onDragStartHandler($event, i)"
+                                    (dragover)="onDragOverHandler($event)"
+                                    (drop)="onDropHandler($event, i)"
+                                    (click)="reopenOption(i)"
+                                  >
+                                    <span class="dregicn"
+                                      ><i class="fa-solid fa-grip-vertical"></i
+                                    ></span>
+                                    <strong
+                                      >{{ finalizedOptions[i].name }}:</strong
+                                    >
+                                    {{ finalizedOptions[i].values.join(", ") }}
+                                  </div>
+                                </div>
+
                                 <!-- Option Values -->
-                                <div class="optionvalue">
+                                <div
+                                  class="optionvalue"
+                                  *ngIf="!finalizedStates[i]"
+                                >
                                   <label for="" class="form-label"
                                     >Option Values</label
                                   >
-
                                   <div formArrayName="values">
                                     <div
                                       *ngFor="
@@ -520,11 +545,11 @@
                                       [formGroupName]="j"
                                       class="position-relative mb-1 ps-4"
                                     >
-                                      <span class="dregicn">
-                                        <i
+                                      <!-- <span class="dregicn"
+                                        ><i
                                           class="fa-solid fa-grip-vertical"
-                                        ></i>
-                                      </span>
+                                        ></i
+                                      ></span> -->
                                       <input
                                         class="form-control"
                                         formControlName="value"
@@ -533,9 +558,8 @@
                                       <span
                                         class="proaddei"
                                         (click)="removeValue(i, j)"
-                                      >
-                                        <i class="bi bi-trash"></i>
-                                      </span>
+                                        ><i class="bi bi-trash"></i
+                                      ></span>
                                       <div
                                         *ngIf="
                                           value.get('value')?.invalid &&
@@ -547,7 +571,6 @@
                                       </div>
                                     </div>
                                   </div>
-
                                   <!-- Add Value Button -->
                                   <button
                                     class="btn btn-sm btn-outline-secondary mt-2"
@@ -560,6 +583,7 @@
 
                                 <div
                                   class="d-flex justify-content-between mt-3 ps-4"
+                                  *ngIf="!finalizedStates[i]"
                                 >
                                   <button
                                     class="btn btn-outline-danger"
@@ -575,16 +599,6 @@
                                   >
                                     Done
                                   </button>
-                                </div>
-
-                                <!-- Display finalized option directly below -->
-                                <div *ngIf="finalizedOptions[i]">
-                                  <div class="finalized-option">
-                                    <strong
-                                      >{{ finalizedOptions[i].name }}:</strong
-                                    >
-                                    {{ finalizedOptions[i].values.join(", ") }}
-                                  </div>
                                 </div>
                               </li>
                             </ul>
@@ -606,7 +620,6 @@
                         </form>
 
                         <!-- Variant Listing Section -->
-                        <!-- Variant Listing Section -->
                         <h6 class="mt-4">Variant Listing</h6>
                         <table class="table">
                           <thead>
@@ -621,8 +634,7 @@
                             <tr
                               *ngFor="
                                 let variant of structuredVariants;
-                                let k = index;
-                                let last = last
+                                let k = index
                               "
                             >
                               <td>
@@ -638,7 +650,7 @@
                                   <span
                                     >{{ option.key }}: {{ option.value }}</span
                                   >
-                                  <span *ngIf="!last">, </span>
+                                  <span>, </span>
                                 </ng-container>
                               </td>
                               <td>

@@ -473,6 +473,7 @@ export class EditProductComponent implements OnInit {
     const option = this.options.at(optionIndex);
 
     if (option.valid && this.getValues(optionIndex).valid) {
+      // Create the finalized option
       const finalizedOption = {
         name: option.value.name,
         values: this.getValues(optionIndex).controls.map(
@@ -481,8 +482,12 @@ export class EditProductComponent implements OnInit {
       };
 
       this.finalizedOptions[optionIndex] = finalizedOption;
+      this.finalizedStates[optionIndex] = true; // Mark this option as finalized
+
+      // Update structured variants based on finalized options
       this.updateStructuredVariants();
     } else {
+      // Mark all fields as touched to show validation errors
       option.markAllAsTouched();
       this.getValues(optionIndex).controls.forEach((value) =>
         value.markAllAsTouched()
@@ -512,9 +517,19 @@ export class EditProductComponent implements OnInit {
 
   updateVariant(variant: any, field: 'price' | 'quantity', value: string) {
     if (field === 'price') {
-      variant.price = parseFloat(value); // Update price
+      const parsedValue = parseFloat(value);
+      if (!isNaN(parsedValue)) {
+        variant.price = parsedValue;
+      } else {
+        variant.price = 0;
+      }
     } else if (field === 'quantity') {
-      variant.quantity = parseInt(value, 10); // Update quantity
+      const parsedValue = parseInt(value, 10);
+      if (!isNaN(parsedValue)) {
+        variant.quantity = parsedValue;
+      } else {
+        variant.quantity = 0;
+      }
     }
 
     console.log(this.structuredVariants);
@@ -539,5 +554,71 @@ export class EditProductComponent implements OnInit {
     }
 
     return combinations;
+  }
+  finalizedStates: boolean[] = [];
+
+  reopenOption(optionIndex: number): void {
+    if (optionIndex < this.finalizedOptions.length) {
+      // Reset the finalized state
+      this.finalizedStates[optionIndex] = false;
+
+      // Get the option to reopen
+      const currentOption = this.finalizedOptions[optionIndex];
+
+      // Reset the option's name in the form
+      const optionFormGroup = this.options.at(optionIndex);
+      optionFormGroup.get('name')?.setValue(currentOption.name);
+
+      // Clear existing values in the form
+      const valuesArray = this.getValues(optionIndex);
+      valuesArray.clear();
+
+      // Populate the form with the correct values
+      currentOption.values.forEach((value) => {
+        const valueFormGroup = this.createValueField();
+        valueFormGroup.get('value')?.setValue(value); // Set the value
+        valuesArray.push(valueFormGroup); // Push it to the values array
+      });
+    }
+  }
+
+  draggedIndex2: number | null = null;
+
+  onDragStartHandler(event: DragEvent, index: number) {
+    this.draggedIndex2 = index;
+    event.dataTransfer?.setData('text/plain', String(index));
+  }
+
+  onDragOverHandler(event: DragEvent) {
+    event.preventDefault(); // Necessary to allow dropping
+  }
+
+  onDropHandler(event: DragEvent, targetIndex: number) {
+    event.preventDefault();
+
+    if (this.draggedIndex2 !== null && this.draggedIndex2 !== targetIndex) {
+      // Store the dragged option and its state
+      const draggedOption = this.finalizedOptions[this.draggedIndex2];
+      const draggedState = this.finalizedStates[this.draggedIndex2];
+
+      // Swap the options and their states
+      this.finalizedOptions[this.draggedIndex2] =
+        this.finalizedOptions[targetIndex];
+      this.finalizedStates[this.draggedIndex2] =
+        this.finalizedStates[targetIndex];
+
+      this.finalizedOptions[targetIndex] = draggedOption;
+      this.finalizedStates[targetIndex] = draggedState;
+
+      // Update structured variants to reflect the new order
+      this.updateStructuredVariants();
+    }
+
+    this.draggedIndex2 = null; // Reset the dragged index
+  }
+
+  onDragEndHandler() {
+    this.draggedIndex2 = null;
+    this.updateStructuredVariants();
   }
 }
