@@ -53,12 +53,8 @@
       </div>
       <div class="modal-btn delete-action">
         <div class="row">
-          <div class="col-6">
-            <a class="btn btn-primary" (click)="deleteDraft()">Delete</a>
-          </div>
-          <div class="col-6">
-            <a data-bs-dismiss="modal" class="btn btn-primary paid-cancel-btn" (click)="modal.close()">Cancel</a>
-          </div>
+          <a class="btn btn-primary" (click)="deleteDraft()">Delete</a>
+          <a data-bs-dismiss="modal" class="btn btn-danger" (click)="modal.close()">Cancel</a>
         </div>
       </div>
     </div>

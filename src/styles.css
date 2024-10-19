@@ -1547,10 +1547,10 @@ div#global-loader,
 }
 
 .btn-primary:disabled {
-  color: #fff !important;
+  color: #000;
   pointer-events: none;
-  background-color: #ac54f4 !important;
-  border-color: #ac54f4 !important;
+  background-color: #eee !important;
+  border-color: #eee !important;
 }
 
 .btn-gray {
