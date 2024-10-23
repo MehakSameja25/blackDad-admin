@@ -14,24 +14,12 @@ export class ProductCategoryService {
   ) {}
 
   list() {
-    return apiCallWrapper(
-      this.http.get(`${environment.apiUrl}/get-product-category`),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Product Categories',
-      }
-    );
+    return this.http.get(`${environment.apiUrl}/get-product-category`);
   }
 
   get(id: string | number | null) {
-    return apiCallWrapper(
-      this.http.get(
-        `${environment.apiUrl}/get-product-categoryById?productCatgeoryId=${id}`
-      ),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Product Category Details',
-      }
+    return this.http.get(
+      `${environment.apiUrl}/get-product-categoryById?productCatgeoryId=${id}`
     );
   }
 

@@ -246,6 +246,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'edit-draft/:id',
+    component: EditProductComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'details-product/:id',
     component: DetalisProductComponent,
     canActivate: [AuthGuard],

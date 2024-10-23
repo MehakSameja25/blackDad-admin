@@ -152,7 +152,9 @@ ${
                           </a>`
     : ''
 }  
-    <a class="btn-action-icon" data-id="${item.id}" data-action="details">
+   ${
+     this.isDraft === 0
+       ? `<a class="btn-action-icon" data-id="${item.id}" data-action="details">
        <svg
                         xmlns="http://www.w3.org/2000/svg"
                         version="1.1"
@@ -181,7 +183,9 @@ ${
                           ></path>
                         </g>
                       </svg>
-    </a>
+    </a>`
+       : ''
+   }
   </div>`,
         ]);
 
@@ -220,7 +224,9 @@ ${
     this.router.navigate([`/details-product/${id}`]);
   }
   toEdit(id: string | null) {
-    this.router.navigate([`/edit-product/${id}`]);
+    this.isDraft === 0
+      ? this.router.navigate([`/edit-product/${id}`])
+      : this.router.navigate([`/edit-draft/${id}`]);
   }
 
   open(content: ElementRef<unknown>, id: string | null) {

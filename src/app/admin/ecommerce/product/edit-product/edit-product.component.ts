@@ -104,6 +104,16 @@ export class EditProductComponent implements OnInit {
       };
     });
 
+    if (this.router?.url?.includes('edit-draft')) {
+      this.draftId = this.productId;
+      this.draftCreated = true;
+      this.productForm.valueChanges.pipe(debounceTime(300)).subscribe(() => {
+        if (this.draftId) {
+          this.updateDraft();
+        }
+      });
+    }
+
     this.productForm.valueChanges.pipe(debounceTime(300)).subscribe(() => {
       if (!this.productId) {
         this.updateDraft();

@@ -16,14 +16,8 @@ export class ManufacturerRolesService {
   ) {}
 
   list(): Observable<RoleList> {
-    return apiCallWrapper(
-      this.http.get<RoleList>(
-        `${environment.apiUrl}/get-role?isManufacturer=true`
-      ),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Manfacturer Roles',
-      }
+    return this.http.get<RoleList>(
+      `${environment.apiUrl}/get-role?isManufacturer=true`
     );
   }
   assign(body: any) {
@@ -67,12 +61,8 @@ export class ManufacturerRolesService {
   }
 
   get(id: any) {
-    return apiCallWrapper(
-      this.http.get<any>(`${environment.apiUrl}/get-roleById?roleId=${id}`),
-      {
-        notificationsService: this.notifications,
-        action: 'Fetching Role Details',
-      }
+    return this.http.get<any>(
+      `${environment.apiUrl}/get-roleById?roleId=${id}`
     );
   }
 }
