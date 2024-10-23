@@ -8,15 +8,15 @@
           <div class="page-header">
             <div class="content-page-header">
               <h5>Manage Article Categories</h5>
-              <a
-                *ngIf="addPermission"
-                class="btn btn-primary"
-                href="javascript:void(0);"
-                data-bs-toggle="modal"
-                data-bs-target="#add_category"
-                (click)="openAdd(addModel, 'Add Category', false, null)"
-                >Add Category</a
-              >
+              <a *ngIf="addPermission" class="btn btn-primary d-flex align-items-center gap-2"
+                href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_category"
+                (click)="openAdd(addModel, 'Add Category', false, null)"><svg xmlns="http://www.w3.org/2000/svg"
+                  width="12" height="14" viewBox="0 0 24 26" fill="none">
+                  <path d="M12.0996 24.2093V2.38281" stroke="black" stroke-width="3" stroke-miterlimit="10"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M2.01367 13.2969H22.187" stroke="black" stroke-width="3" stroke-miterlimit="10"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg> Add Category</a>
             </div>
           </div>
           <div class="mb-3">
@@ -25,103 +25,98 @@
           <div class="card">
             <div class="card-body">
               <div cdkDropList (cdkDropListDropped)="drop($event)">
-                <div
-                  *ngFor="let data of parentCategory"
-                  class="main-blockcat"
-                  style="cursor: grab"
-                  [ngClass]="{ active: activeParentId === data.id }"
-                  cdkDrag
-                >
-                  <div
-                    class="main-cate position-relative ps-4 gap-2 flex-wrap"
-                    style="cursor: grab"
-                  >
-                    <span
-                      class="dregicn"
-                      title="Drag and Drop"
-                      style="
+                <div *ngFor="let data of parentCategory" class="main-blockcat" style="cursor: grab"
+                  [ngClass]="{ active: activeParentId === data.id }" cdkDrag>
+                  <div class="main-cate position-relative ps-4 gap-2 flex-wrap" style="cursor: grab">
+                    <span class="dregicn" title="Drag and Drop" style="
                         cursor: grab;
                         position: absolute;
                         left: 6px;
                         top: 50%;
                         transform: translateY(-50%);
-                      "
-                    >
+                      ">
                       <i class="fa-solid fa-grip-vertical"></i>
                     </span>
-                    <span
-                      class="strcat"
-                      style="cursor: pointer"
-                      title="Toggle"
-                      (click)="toggleActive(data.id)"
-                    >
+                    <span class="strcat" style="cursor: pointer" title="Toggle" (click)="toggleActive(data.id)">
                       <i class="bi bi-arrow-right-short"></i> {{ data.name }}
                     </span>
                     <div>
                       <div class="actionbtn">
-                        <button
-                          *ngIf="addPermission && !data.havePopup"
-                          class="btn btnsbct"
-                          (click)="popModalOpen(AddPopUp, data.name, 'Add')"
-                        >
-                          Add Pop-up
+                        <button *ngIf="addPermission && !data.havePopup"
+                          class="btn btn-primary d-flex align-items-center gap-2"
+                          (click)="popModalOpen(AddPopUp, data.name, 'Add')">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 24 26"
+                            fill="none">
+                            <path d="M12.0996 24.2093V2.38281" stroke="black" stroke-width="3" stroke-miterlimit="10"
+                              stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M2.01367 13.2969H22.187" stroke="black" stroke-width="3" stroke-miterlimit="10"
+                              stroke-linecap="round" stroke-linejoin="round"></path>
+                          </svg> Add Pop-up
                         </button>
-                        <button
-                          *ngIf="addPermission && data.havePopup"
-                          class="btn btnsbct"
-                          (click)="popModalOpen(AddPopUp, data.name, 'Edit')"
-                        >
-                          Edit Pop-up
+                        <button *ngIf="addPermission && data.havePopup"
+                          class="btn btn-primary d-flex align-items-center gap-2"
+                          (click)="popModalOpen(AddPopUp, data.name, 'Edit')">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 18 18"
+                            fill="none">
+                            <path
+                              d="M17.3376 3.6942L14.2537 0.610298C13.8512 0.232234 13.3238 0.0153064 12.7718 0.000779707C12.2198 -0.013747 11.6817 0.175141 11.2599 0.531513L1.13024 10.6611C0.766438 11.028 0.539916 11.5089 0.4887 12.023L0.00473047 16.7164C-0.0104313 16.8812 0.0109594 17.0474 0.0673778 17.203C0.123796 17.3587 0.213853 17.4999 0.331129 17.6168C0.436297 17.7211 0.561022 17.8036 0.698151 17.8596C0.835281 17.9156 0.982118 17.944 1.13024 17.9432H1.23154L5.92492 17.5155C6.43905 17.4643 6.91992 17.2378 7.28679 16.8739L17.4164 6.74434C17.8096 6.32899 18.022 5.77472 18.0073 5.20299C17.9925 4.63126 17.7517 4.0887 17.3376 3.6942ZM5.72233 15.2645L2.3458 15.5796L2.64968 12.2031L9.00883 5.92271L12.0477 8.9616L5.72233 15.2645ZM13.5109 7.45341L10.4945 4.43704L12.6893 2.18602L15.7619 5.25866L13.5109 7.45341Z"
+                              fill="black" />
+                          </svg> Edit Pop-up
                         </button>
-                        <button
-                          *ngIf="addPermission"
-                          class="btn btnsbct"
-                          (click)="
+                        <button *ngIf="addPermission" class="btn btn-primary d-flex align-items-center gap-2" (click)="
                             openAdd(addModel, 'Add Subcategory', true, data.id)
-                          "
-                        >
-                          Add Subcategory
+                          ">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 24 26"
+                            fill="none">
+                            <path d="M12.0996 24.2093V2.38281" stroke="black" stroke-width="3" stroke-miterlimit="10"
+                              stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M2.01367 13.2969H22.187" stroke="black" stroke-width="3" stroke-miterlimit="10"
+                              stroke-linecap="round" stroke-linejoin="round"></path>
+                          </svg> Add Subcategory
                         </button>
-                        <button
-                          class="btn btn-edit"
-                          *ngIf="editPermission"
-                          (click)="editCategory(data, 'Edit Category')"
-                        >
-                          <i class="bi bi-pen"></i>
+                        <button class="btn btn-primary" *ngIf="editPermission"
+                          (click)="editCategory(data, 'Edit Category')">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 18 18"
+                            fill="none">
+                            <path
+                              d="M17.3376 3.6942L14.2537 0.610298C13.8512 0.232234 13.3238 0.0153064 12.7718 0.000779707C12.2198 -0.013747 11.6817 0.175141 11.2599 0.531513L1.13024 10.6611C0.766438 11.028 0.539916 11.5089 0.4887 12.023L0.00473047 16.7164C-0.0104313 16.8812 0.0109594 17.0474 0.0673778 17.203C0.123796 17.3587 0.213853 17.4999 0.331129 17.6168C0.436297 17.7211 0.561022 17.8036 0.698151 17.8596C0.835281 17.9156 0.982118 17.944 1.13024 17.9432H1.23154L5.92492 17.5155C6.43905 17.4643 6.91992 17.2378 7.28679 16.8739L17.4164 6.74434C17.8096 6.32899 18.022 5.77472 18.0073 5.20299C17.9925 4.63126 17.7517 4.0887 17.3376 3.6942ZM5.72233 15.2645L2.3458 15.5796L2.64968 12.2031L9.00883 5.92271L12.0477 8.9616L5.72233 15.2645ZM13.5109 7.45341L10.4945 4.43704L12.6893 2.18602L15.7619 5.25866L13.5109 7.45341Z"
+                              fill="black" />
+                          </svg>
                         </button>
-                        <button
-                          class="btn btn-delete"
-                          *ngIf="deletePermission"
-                          (click)="open(contentt, data.id)"
-                        >
-                          <i class="bi bi-trash3"></i>
+                        <button class="btn btn-primary" *ngIf="deletePermission" (click)="open(contentt, data.id)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16"
+                            fill="none">
+                            <path
+                              d="M1 3.66667H13M11.6667 3.66667V13C11.6667 13.3536 11.5262 13.6928 11.2761 13.9428C11.0261 14.1929 10.687 14.3333 10.3333 14.3333H3.66667C3.31304 14.3333 2.97391 14.1929 2.72386 13.9428C2.47381 13.6928 2.33333 13.3536 2.33333 13V3.66667M4.33333 3.66667V2.33333C4.33333 1.97971 4.47381 1.64057 4.72386 1.39052C4.97391 1.14048 5.31304 1 5.66667 1H8.33333C8.68696 1 9.02609 1.14048 9.27614 1.39052C9.52619 1.64057 9.66667 1.97971 9.66667 2.33333V3.66667M5.66667 7V11M8.33333 7V11"
+                              stroke="black" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
                         </button>
                       </div>
                     </div>
                   </div>
 
                   <ul class="subcate">
-                    <li
-                      *ngFor="let subcategory of fetchSubcategories(data.id)"
-                      class="subcatitems"
-                    >
+                    <li *ngFor="let subcategory of fetchSubcategories(data.id)" class="subcatitems">
                       <span>{{ subcategory.name }}</span>
                       <div class="actionbtn">
-                        <button
-                          class="btn btn-edit"
-                          *ngIf="editPermission"
-                          (click)="
+                        <button class="btn btn-primary" *ngIf="editPermission" (click)="
                             editCategory(subcategory, 'Edit Subcategory')
-                          "
-                        >
-                          <i class="bi bi-pen"></i>
+                          ">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 18 18"
+                            fill="none">
+                            <path
+                              d="M17.3376 3.6942L14.2537 0.610298C13.8512 0.232234 13.3238 0.0153064 12.7718 0.000779707C12.2198 -0.013747 11.6817 0.175141 11.2599 0.531513L1.13024 10.6611C0.766438 11.028 0.539916 11.5089 0.4887 12.023L0.00473047 16.7164C-0.0104313 16.8812 0.0109594 17.0474 0.0673778 17.203C0.123796 17.3587 0.213853 17.4999 0.331129 17.6168C0.436297 17.7211 0.561022 17.8036 0.698151 17.8596C0.835281 17.9156 0.982118 17.944 1.13024 17.9432H1.23154L5.92492 17.5155C6.43905 17.4643 6.91992 17.2378 7.28679 16.8739L17.4164 6.74434C17.8096 6.32899 18.022 5.77472 18.0073 5.20299C17.9925 4.63126 17.7517 4.0887 17.3376 3.6942ZM5.72233 15.2645L2.3458 15.5796L2.64968 12.2031L9.00883 5.92271L12.0477 8.9616L5.72233 15.2645ZM13.5109 7.45341L10.4945 4.43704L12.6893 2.18602L15.7619 5.25866L13.5109 7.45341Z"
+                              fill="black" />
+                          </svg>
                         </button>
-                        <button
-                          class="btn btn-delete"
-                          *ngIf="deletePermission"
-                          (click)="open(contentt, subcategory.id)"
-                        >
-                          <i class="bi bi-trash3"></i>
+                        <button class="btn btn-primary" *ngIf="deletePermission"
+                          (click)="open(contentt, subcategory.id)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16"
+                            fill="none">
+                            <path
+                              d="M1 3.66667H13M11.6667 3.66667V13C11.6667 13.3536 11.5262 13.6928 11.2761 13.9428C11.0261 14.1929 10.687 14.3333 10.3333 14.3333H3.66667C3.31304 14.3333 2.97391 14.1929 2.72386 13.9428C2.47381 13.6928 2.33333 13.3536 2.33333 13V3.66667M4.33333 3.66667V2.33333C4.33333 1.97971 4.47381 1.64057 4.72386 1.39052C4.97391 1.14048 5.31304 1 5.66667 1H8.33333C8.68696 1 9.02609 1.14048 9.27614 1.39052C9.52619 1.64057 9.66667 1.97971 9.66667 2.33333V3.66667M5.66667 7V11M8.33333 7V11"
+                              stroke="black" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
                         </button>
                       </div>
                     </li>
@@ -143,13 +138,7 @@
         {{ modalHeading }}
       </h4>
     </div>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-      (click)="modal.close()"
-    ></button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
   </div>
   <form [formGroup]="addCategoryForm">
     <div class="modal-body">
@@ -157,43 +146,24 @@
         <div class="col-lg-12 col-md-12">
           <div class="input-block mb-3">
             <label *ngIf="modalHeading === 'Add Category'">Category Name</label>
-            <label *ngIf="modalHeading === 'Add Subcategory'"
-              >Subcategory Name</label
-            >
+            <label *ngIf="modalHeading === 'Add Subcategory'">Subcategory Name</label>
             <input type="text" class="form-control" formControlName="name" />
-            <div
-              *ngIf="
+            <div *ngIf="
                     addCategoryForm.get('name')?.errors?.['required'] &&
                     addCategoryForm.get('name')?.touched
-                  "
-              class="text-danger"
-            >
-              <span *ngIf="modalHeading === 'Add Category'"
-                >Category Name is required.</span
-              >
-              <span *ngIf="modalHeading === 'Add Subcategory'"
-                >Subcategory Name is required.</span
-              >
+                  " class="text-danger">
+              <span *ngIf="modalHeading === 'Add Category'">Category Name is required.</span>
+              <span *ngIf="modalHeading === 'Add Subcategory'">Subcategory Name is required.</span>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button
-        type="button"
-        data-bs-dismiss="modal"
-        class="btn btn-back cancel-btn me-2"
-        (click)="modal.close()"
-      >
+      <button type="button" data-bs-dismiss="modal" class="btn btn-danger me-2" (click)="modal.close()">
         Cancel
       </button>
-      <button
-        type="submit"
-        data-bs-dismiss="modal"
-        class="btn btn-primary paid-continue-btn"
-        (click)="addCategory()"
-      >
+      <button type="submit" data-bs-dismiss="modal" class="btn btn-primary" (click)="addCategory()">
         Add
       </button>
     </div>
@@ -204,28 +174,13 @@
     <div class="modal-body">
       <div class="form-header">
         <span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            version="1.1"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="60"
-            height="60"
-            x="0"
-            y="0"
-            viewBox="0 0 512 512"
-            style="enable-background: new 0 0 512 512"
-            xml:space="preserve"
-            class=""
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="60"
+            height="60" x="0" y="0" viewBox="0 0 512 512" style="enable-background: new 0 0 512 512"
+            xml:space="preserve" class="">
             <g>
-              <path
-                fill="#ac54f4"
-                fill-rule="evenodd"
+              <path fill="#ac54f4" fill-rule="evenodd"
                 d="M170.8 14.221A14.21 14.21 0 0 1 185 .014L326.991.006a14.233 14.233 0 0 1 14.2 14.223v35.117H170.8zm233.461 477.443a21.75 21.75 0 0 1-21.856 20.33H127.954a21.968 21.968 0 0 1-21.854-20.416L84.326 173.06H427.5l-23.234 318.6zm56.568-347.452H51.171v-33A33.035 33.035 0 0 1 84.176 78.2l343.644-.011a33.051 33.051 0 0 1 33 33.02v33zm-270.79 291.851a14.422 14.422 0 1 0 28.844 0V233.816a14.42 14.42 0 0 0-28.839-.01v202.257zm102.9 0a14.424 14.424 0 1 0 28.848 0V233.816a14.422 14.422 0 0 0-28.843-.01z"
-                opacity="1"
-                data-original="#fc0005"
-                class=""
-              ></path>
+                opacity="1" data-original="#fc0005" class=""></path>
             </g>
           </svg>
         </span>
@@ -234,21 +189,8 @@
       </div>
       <div class="modal-btn delete-action">
         <div class="row">
-          <div class="col-6">
-            <a
-              class="btn btn-primary paid-continue-btn"
-              (click)="deleteCategory()"
-              >Delete</a
-            >
-          </div>
-          <div class="col-6">
-            <a
-              data-bs-dismiss="modal"
-              class="btn btn-primary paid-cancel-btn"
-              (click)="modal.close()"
-              >Cancel</a
-            >
-          </div>
+          <a class="btn btn-primary" (click)="deleteCategory()">Delete</a>
+          <a data-bs-dismiss="modal" class="btn btn-danger" (click)="modal.close()">Cancel</a>
         </div>
       </div>
     </div>
@@ -260,13 +202,7 @@
     <div class="form-header modal-header-title text-start mb-0">
       <h4 class="mb-0">{{ popupHeader }} {{ popupType }} Pop-Up</h4>
     </div>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-      (click)="modal.close()"
-    ></button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.close()"></button>
   </div>
   <form [formGroup]="addCategoryFormGroup" (ngSubmit)="categoryPopUp()">
     <div class="modal-body">
@@ -277,8 +213,7 @@
             <input type="text" class="form-control" formControlName="name" />
             <div
               *ngIf="addCategoryFormGroup.get('name')?.errors?.['required'] && addCategoryFormGroup.get('name')?.touched"
-              class="text-danger"
-            >
+              class="text-danger">
               Title Name is required.
             </div>
           </div>
@@ -286,15 +221,10 @@
         <div class="col-lg-12 col-md-12">
           <div class="input-block mb-3">
             <label>Description</label>
-            <textarea
-              rows="5"
-              class="form-control"
-              formControlName="description"
-            ></textarea>
+            <textarea rows="5" class="form-control" formControlName="description"></textarea>
             <div
               *ngIf="addCategoryFormGroup.get('description')?.errors?.['required'] && addCategoryFormGroup.get('description')?.touched"
-              class="text-danger"
-            >
+              class="text-danger">
               Description is required.
             </div>
           </div>
@@ -303,15 +233,10 @@
         <div class="col-lg-12 col-md-12">
           <div class="input-block mb-3">
             <label>CTA Button</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="ctaButton"
-            />
+            <input type="text" class="form-control" formControlName="ctaButton" />
             <div
               *ngIf="addCategoryFormGroup.get('ctaButton')?.errors?.['required'] && addCategoryFormGroup.get('ctaButton')?.touched"
-              class="text-danger"
-            >
+              class="text-danger">
               CTA Button is required.
             </div>
           </div>
@@ -319,15 +244,10 @@
         <div class="col-lg-12 col-md-12">
           <div class="input-block mb-3">
             <label>Set Timeout (in seconds) </label>
-            <input
-              type="number"
-              class="form-control"
-              formControlName="timeout"
-            />
+            <input type="number" class="form-control" formControlName="timeout" />
             <div
               *ngIf="addCategoryFormGroup.get('timeout')?.errors?.['required'] && addCategoryFormGroup.get('timeout')?.touched"
-              class="text-danger"
-            >
+              class="text-danger">
               Timeout is required.
             </div>
           </div>
@@ -335,16 +255,10 @@
         <div class="col-12 col-md-6 col-lg-4">
           <div class="input-block">
             <label>Pop-up Image</label>
-            <div
-              class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center"
-            >
+            <div class="input-block service-upload mb-0 d-flex flex-column align-item-center justify-content-center">
               <span>
-                <img
-                  class="category-img"
-                  [src]="categoryImage || 'assets/img/drop-icon.svg'"
-                  id="thumbnailPreview"
-                  alt="upload"
-                />
+                <img class="category-img" [src]="categoryImage || 'assets/img/drop-icon.svg'" id="thumbnailPreview"
+                  alt="upload" />
               </span>
               <h6 class="drop-browse align-center" *ngIf="showImageRequired">
                 Drop your files here or
@@ -353,17 +267,11 @@
               <p class="text-muted" *ngIf="showImageRequired">
                 Maximum size: 50MB
               </p>
-              <input
-                type="file"
-                id="thumbnailImage"
-                formControlName="image"
-                (change)="onFileSelected($event)"
-              />
+              <input type="file" id="thumbnailImage" formControlName="image" (change)="onFileSelected($event)" />
             </div>
             <div
               *ngIf="addCategoryFormGroup.get('image')?.errors?.['required'] && addCategoryFormGroup.get('image')?.touched"
-              class="text-danger"
-            >
+              class="text-danger">
               Image is required.
             </div>
           </div>
@@ -371,15 +279,10 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button
-        type="button"
-        data-bs-dismiss="modal"
-        class="btn btn-back cancel-btn me-2"
-        (click)="modal.close()"
-      >
+      <button type="button" data-bs-dismiss="modal" class="btn btn-danger me-2" (click)="modal.close()">
         Cancel
       </button>
-      <button type="submit" class="btn btn-primary paid-continue-btn">
+      <button type="submit" class="btn btn-primary">
         {{ popupHeader }}
       </button>
     </div>
