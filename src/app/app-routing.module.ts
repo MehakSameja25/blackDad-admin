@@ -316,6 +316,12 @@ const routes: Routes = [
   },
 
   {
+    path: 'product/drafts',
+    component: ListProductComponent,
+    canActivate: [AuthGuard],
+  },
+
+  {
     path: '**',
     component: AdminAuthComponent,
   },

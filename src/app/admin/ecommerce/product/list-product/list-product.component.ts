@@ -37,6 +37,7 @@ export class ListProductComponent implements OnInit {
   @ViewChild('contentt')
   public deleteModel!: ElementRef;
   currentUser!: string;
+  isDraft!: number;
 
   constructor(
     private _productsService: ProductsService,
@@ -52,7 +53,12 @@ export class ListProductComponent implements OnInit {
   }
 
   getList() {
-    this._productsService.list().subscribe((response: any) => {
+    if (this.router.url.includes('draft')) {
+      this.isDraft = 1;
+    } else {
+      this.isDraft = 0;
+    }
+    this._productsService.list(this.isDraft).subscribe((response: any) => {
       if (response) {
         this.tableData = response.data.product.map((item: any) => [
           `<img src="${
@@ -193,7 +199,7 @@ ${
       const action = button.getAttribute('data-action');
       const id = button.getAttribute('data-id');
       switch (action) {
-        case 'open':
+        case 'delete':
           this.renderer.listen(button, 'click', () =>
             this.open(this.deleteModel, id)
           );

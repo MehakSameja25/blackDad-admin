@@ -18,10 +18,7 @@
           </div>
         </ngx-slick-carousel>
         <div class="d-flex gap-3 align-items-center product-images">
-          <a
-            class="pointer"
-            *ngFor="let image of images; let i = index"
-          >
+          <a class="pointer" *ngFor="let image of images; let i = index">
             <img [src]="image" alt="Product Thumbnail" />
           </a>
         </div>
@@ -39,37 +36,42 @@
             <h2 class="mb-0">${{ this.productData.price }}</h2>
           </div>
           <div class="selectscontent">
-            <div class="form-group mb-3 position-relative">
-              <label class="form-label">Color</label>
-              <div class="dropdown">
-                <button
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2"
-                >
-                  <span
+            <div
+              class="form-group mb-3 position-relative"
+              *ngFor="let data of variants; let i = index"
+            >
+              <span *ngIf="data.name !== ''">
+                <label class="form-label">{{ data.name | titlecase }}</label>
+                <div class="dropdown">
+                  <button
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    class="btn dropdown-toggle w-100 d-flex align-items-center justify-content-start gap-2"
+                  >
+                    <!-- <span
                     class="clrbox"
                     [ngStyle]="{ backgroundColor: variants[0].color }"
-                  ></span>
-                  {{ variants[0].color }}
-                </button>
-                <ul class="dropdown-menu w-100 min-w-100">
-                  <li *ngFor="let color of colors">
-                    <a
-                      class="dropdown-item d-flex align-items-center gap-2 pointer"
-                      ><span
-                        class="clrbox"
-                        [ngStyle]="{ backgroundColor: color }"
-                      ></span>
-                      {{ color }}
-                    </a>
-                  </li>
-                </ul>
-              </div>
+                  ></span> -->
+                    {{ variants[i].values[0] }}
+                  </button>
+                  <ul class="dropdown-menu w-100 min-w-100">
+                    <!-- <li *ngFor="let color of colors">
+                      <a
+                        class="dropdown-item d-flex align-items-center gap-2 pointer"
+                        ><span
+                          class="clrbox"
+                          [ngStyle]="{ backgroundColor: color }"
+                        ></span>
+                        {{ color }}
+                      </a>
+                    </li> -->
+                  </ul>
+                </div>
+              </span>
             </div>
 
-            <div class="form-group mb-3">
+            <!-- <div class="form-group mb-3">
               <label class="form-label d-flex justify-content-between">
                 <span>Size</span>
               </label>
@@ -86,9 +88,9 @@
                   <li *ngFor="let size of sizes">
                     <a class="dropdown-item pointer">{{ size }}</a>
                   </li>
-                  <!-- <li><a class="dropdown-item pointer">L</a></li>
+                  <li><a class="dropdown-item pointer">L</a></li>
                   <li><a class="dropdown-item pointer">XL</a></li>
-                  <li><a class="dropdown-item pointer">XXL</a></li> -->
+                  <li><a class="dropdown-item pointer">XXL</a></li> 
                 </ul>
               </div>
             </div>
@@ -104,11 +106,11 @@
                   {{ variants[0].material }}
                 </button>
                 <ul class="dropdown-menu w-100 min-w-100">
-                  <!-- <li><a class="dropdown-item pointer">Male</a></li>
-                  <li><a class="dropdown-item pointer">Female</a></li> -->
+                  < <li><a class="dropdown-item pointer">Male</a></li>
+                  <li><a class="dropdown-item pointer">Female</a></li> 
                 </ul>
               </div>
-            </div>
+            </div> -->
             <div class="form-group mb-3">
               <label class="form-label">Gender</label>
               <div class="dropdown">

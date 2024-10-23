@@ -13,9 +13,11 @@ export class ProductsService {
     private notifications: NotificationsService
   ) {}
 
-  list() {
+  list(draft: Number) {
     return apiCallWrapper(
-      this.http.get(`${environment.apiUrl}/get-product?type=admin`),
+      this.http.get(
+        `${environment.apiUrl}/get-product?type=admin&is_draft=${draft}`
+      ),
       {
         notificationsService: this.notifications,
         action: 'Fetching Product',

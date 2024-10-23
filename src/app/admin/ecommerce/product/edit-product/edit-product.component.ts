@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ProductCategoriesComponent } from '../../product-categories/product-categories.component';
 import { ProductCategoryService } from 'src/app/admin/services/product-category.service';
 import {
@@ -8,10 +8,11 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { ManufacturersService } from 'src/app/admin/services/manufacturers.service';
 import { ProductsService } from 'src/app/admin/services/products.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime } from 'rxjs';
+import { LocationWarehouseService } from 'src/app/admin/services/location-warehouse.service';
 
 interface Variant {
   size: string;
@@ -40,6 +41,8 @@ export class EditProductComponent implements OnInit {
   sizes: any[] = [];
   productId!: string;
   newSize: string = '';
+  locationData: any;
+  selectedLocationIds: any = [];
 
   constructor(
     private _categoryService: ProductCategoryService,
@@ -47,7 +50,8 @@ export class EditProductComponent implements OnInit {
     private _manufacturerService: ManufacturersService,
     private _productService: ProductsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private locationService: LocationWarehouseService
   ) {
     this.productForm = this.fb.group({
       productName: ['', Validators.required],
@@ -60,6 +64,8 @@ export class EditProductComponent implements OnInit {
       margin: [{ value: '', disabled: true }],
       stockStatus: ['', Validators.required],
       description: ['', Validators.required],
+      weight: [''],
+      location: [[], Validators.required],
       images: [[]],
       productImage: [],
     });
@@ -81,10 +87,36 @@ export class EditProductComponent implements OnInit {
       if (params['id']) {
         this.productId = params['id'];
         this.fetchProductList();
+        this.type = 'Update';
+      }
+
+      this.dropdownSettings = {
+        singleSelection: false,
+        idField: 'id',
+        textField: 'name',
+        allowSearchFilter: true,
+        enableCheckAll: false,
+        unSelectAllText: false,
+        maxWidth: 300,
+        // itemsShowLimit: 3,
+        searchPlaceholderText: 'Search Categories!',
+        closeDropDownOnSelection: true,
+      };
+    });
+
+    this.productForm.valueChanges.pipe(debounceTime(300)).subscribe(() => {
+      if (!this.productId) {
+        this.updateDraft();
+      }
+    });
+    this.variantsForm.valueChanges.pipe(debounceTime(300)).subscribe(() => {
+      if (!this.productId) {
+        this.updateDraft();
       }
     });
     this.getCategory();
     this.getManufacturers();
+    this.getLocation();
   }
 
   calculateProfit() {
@@ -157,7 +189,20 @@ export class EditProductComponent implements OnInit {
     this._productService.get(this.productId).subscribe((res: any) => {
       const productData = res.data;
 
-      this.variants = productData.product_variants;
+      this.structuredVariants = productData.product_variants.map(
+        (variant: any) => ({
+          ...variant,
+          price: variant.price || 0,
+        })
+      );
+      this.finalizedOptions = productData.productVariant;
+      if (this.finalizedOptions) {
+        for (let item of this.finalizedOptions) {
+          this.finalizedStates.push(true);
+          this.addOption();
+        }
+      }
+      this.updateStructuredVariants();
 
       this.uploadedImages = productData.product_images.map((img: any) => {
         return { image: img.image, id: img.id };
@@ -175,6 +220,12 @@ export class EditProductComponent implements OnInit {
         sizeChartImage: productData.sizeChart,
         productImage: productData.productImage,
         sale: productData.inSale,
+        location: productData.product_warehouses,
+        weight: productData.weight,
+      });
+
+      productData.product_warehouses?.map((item: { id: any }) => {
+        this.selectedLocationIds.push(item.id);
       });
       this.calculateMargin();
       this.calculateProfit();
@@ -193,6 +244,14 @@ export class EditProductComponent implements OnInit {
     this._manufacturerService.list().subscribe((res: any) => {
       if (res) {
         this.manufacturers = res.data;
+      }
+    });
+  }
+
+  getLocation() {
+    this.locationService.list().subscribe((res: any) => {
+      if (res) {
+        this.locationData = res.data;
       }
     });
   }
@@ -337,6 +396,7 @@ export class EditProductComponent implements OnInit {
   onSubmit() {
     if (this.productForm.valid) {
       const formData = this.createFormData();
+      formData.append('is_draft', '0');
       // if (this.productForm.get('images')?.value.length === 0) {
       //   this.productForm.get('images')?.setErrors({ required: true });
       //   this.productForm.markAllAsTouched();
@@ -359,6 +419,7 @@ export class EditProductComponent implements OnInit {
       }
     } else {
       this.productForm.markAllAsTouched();
+      window.scroll(0, 0);
     }
   }
 
@@ -376,9 +437,11 @@ export class EditProductComponent implements OnInit {
     const productData: any = {};
 
     const images = this.uploadedImages.map((img) => img.image);
-    images.forEach((image, index) => {
-      formData.append('product_image', image);
-    });
+
+    // Check if there are images and store them as an array
+    if (images.length > 0) {
+      productData.product_image = images.length === 1 ? [images[0]] : images; // Ensure it's always an array
+    }
 
     formData.forEach((value, key) => {
       if (productData[key]) {
@@ -391,7 +454,6 @@ export class EditProductComponent implements OnInit {
       }
     });
 
-    // Save data to local storage (if needed)
     localStorage.setItem('productData', JSON.stringify(productData));
   }
 
@@ -399,29 +461,75 @@ export class EditProductComponent implements OnInit {
     const formData = new FormData();
 
     formData.append('product_name', this.productForm.get('productName')?.value);
+
+    const categoryValue = this.productForm.get('category')?.value;
     formData.append(
       'productCategoryId',
-      JSON.parse(this.productForm.get('category')?.value)
+      categoryValue ? JSON.parse(categoryValue) : null
     );
+
+    const manufacturerValue = this.productForm.get('menufecturer')?.value;
     formData.append(
       'manufacturerId',
-      JSON.parse(this.productForm.get('menufecturer')?.value)
+      manufacturerValue ? JSON.parse(manufacturerValue) : null
     );
-    formData.append('price', this.productForm.get('price')?.value);
-    formData.append('cost', this.productForm.get('costPerItem')?.value);
+
+    formData.append(
+      'warehouseId',
+      this.selectedLocationIds?.length > 0
+        ? JSON.stringify(this.selectedLocationIds)
+        : ''
+    );
+
+    const priceValue = this.productForm.get('price')?.value;
+    formData.append('price', priceValue ? priceValue : 0);
+
+    const costValue = this.productForm.get('costPerItem')?.value;
+    formData.append('cost', costValue ? costValue : 0);
+
+    formData.append('weight', this.productForm.get('weight')?.value);
     formData.append('inSale', this.productForm.get('sale')?.value);
+
+    const stockStatusValue = this.productForm.get('stockStatus')?.value;
     formData.append(
       'is_stock_available',
-      JSON.parse(this.productForm.get('stockStatus')?.value)
+      stockStatusValue ? JSON.parse(stockStatusValue) : false
     );
-    formData.append('description', this.productForm.get('description')?.value);
-    formData.append('variants', JSON.stringify(this.variants));
 
-    for (let data of this.productForm.get('images')?.value) {
-      formData.append('product_image', data);
+    formData.append('description', this.productForm.get('description')?.value);
+
+    const convertedVariants = this.convertVariantsToOptions(
+      this.structuredVariants
+    );
+    formData.append('variants', JSON.stringify(convertedVariants) ?? null);
+
+    formData.append(
+      'productVariants',
+      JSON.stringify(this.finalizedOptions) ?? null
+    );
+
+    const images = this.productForm.get('images')?.value;
+    if (Array.isArray(images)) {
+      for (let data of images) {
+        formData.append('product_image', data);
+      }
     }
 
     return formData;
+  }
+
+  private convertVariantsToOptions(variants: any[]): any[] {
+    return variants.map((variant) => {
+      const converted: any = {};
+      Object.entries(variant).forEach(([key, value], index) => {
+        if (key !== 'price' && key !== 'quantity') {
+          converted[`option${index + 1}`] = value;
+        }
+      });
+      converted.price = variant.price;
+      converted.quantity = variant.quantity;
+      return converted;
+    });
   }
 
   variantsForm: FormGroup;
@@ -443,6 +551,7 @@ export class EditProductComponent implements OnInit {
       this.options.push(optionGroup);
       this.finalizedOptions.push({ name: '', values: [] });
     }
+    console.log('Call');
   }
 
   createValueField(): FormGroup {
@@ -471,9 +580,7 @@ export class EditProductComponent implements OnInit {
 
   finalizeOption(optionIndex: number): void {
     const option = this.options.at(optionIndex);
-
     if (option.valid && this.getValues(optionIndex).valid) {
-      // Create the finalized option
       const finalizedOption = {
         name: option.value.name,
         values: this.getValues(optionIndex).controls.map(
@@ -481,13 +588,13 @@ export class EditProductComponent implements OnInit {
         ),
       };
 
+      console.log('Finalized Option:', finalizedOption); // Log finalized option
       this.finalizedOptions[optionIndex] = finalizedOption;
-      this.finalizedStates[optionIndex] = true; // Mark this option as finalized
+      this.finalizedStates[optionIndex] = true;
 
-      // Update structured variants based on finalized options
-      this.updateStructuredVariants();
+      this.updateStructuredVariants(); // Call to update structured variants
     } else {
-      // Mark all fields as touched to show validation errors
+      console.error('Invalid option or values!'); // Log if invalid
       option.markAllAsTouched();
       this.getValues(optionIndex).controls.forEach((value) =>
         value.markAllAsTouched()
@@ -496,23 +603,36 @@ export class EditProductComponent implements OnInit {
   }
 
   updateStructuredVariants(): void {
-    this.structuredVariants = [];
+    console.log('updateStructuredVariants called');
+    console.log('Finalized Options:', this.finalizedOptions);
 
-    const combinations = this.generateCombinations(
-      this.finalizedOptions.map((option) => option.values)
+    this.structuredVariants = []; // Clear structured variants
+
+    const validOptions = this.finalizedOptions?.filter(
+      (option) => option.name && option.values.length > 0
     );
 
-    combinations.forEach((combination) => {
-      const variant: any = {};
-      combination.forEach((value, index) => {
-        const optionName = this.finalizedOptions[index].name;
-        variant[optionName] = value;
+    const combinations = this.generateCombinations(
+      validOptions?.map((option) => option.values)
+    );
+
+    if (combinations.length === 0) {
+      console.warn('No combinations generated.');
+    } else {
+      combinations.forEach((combination) => {
+        const variant: any = {};
+        combination.forEach((value, index) => {
+          const optionName = validOptions[index].name;
+          variant[optionName] = value;
+        });
+        variant.price = this.variantPrices[combination.join(' - ')] || 0;
+        variant.quantity =
+          this.variantAvailability[combination.join(' - ')] || 0;
+        this.structuredVariants.push(variant);
       });
-      variant.price = this.variantPrices[combination.join(' - ')] || 0;
-      variant.quantity = this.variantAvailability[combination.join(' - ')] || 0;
-      this.structuredVariants.push(variant);
-      console.log(this.structuredVariants);
-    });
+    }
+
+    console.log('Structured Variants:', this.structuredVariants);
   }
 
   updateVariant(variant: any, field: 'price' | 'quantity', value: string) {
@@ -532,52 +652,61 @@ export class EditProductComponent implements OnInit {
       }
     }
 
-    console.log(this.structuredVariants);
+    // console.log(this.structuredVariants);
   }
 
   getOptionEntries(variant: any): { key: string; value: any }[] {
     return Object.entries(variant)
       .map(([key, value]) => ({ key, value }))
-      .filter((entry) => entry.key !== 'price' && entry.key !== 'quantity');
+      .filter(
+        (entry) =>
+          ![
+            'price',
+            'quantity',
+            'created_at',
+            'updated_at',
+            'id',
+            'productId',
+            'deleted_at',
+            'is_deleted',
+          ].includes(entry.key)
+      );
   }
 
   private generateCombinations(
     arrays: string[][],
     prefix: string[] = []
   ): string[][] {
-    if (arrays.length === 0) return [prefix];
+    if (arrays?.length === 0) return [prefix];
     const [first, ...rest] = arrays;
     const combinations: string[][] = [];
 
     for (const value of first) {
-      combinations.push(...this.generateCombinations(rest, [...prefix, value]));
+      const result = this.generateCombinations(rest, [...prefix, value]);
+      combinations.push(...result);
     }
 
+    console.log('Generated combinations:', combinations); // Log generated combinations
     return combinations;
   }
   finalizedStates: boolean[] = [];
 
   reopenOption(optionIndex: number): void {
     if (optionIndex < this.finalizedOptions.length) {
-      // Reset the finalized state
       this.finalizedStates[optionIndex] = false;
 
-      // Get the option to reopen
       const currentOption = this.finalizedOptions[optionIndex];
 
-      // Reset the option's name in the form
       const optionFormGroup = this.options.at(optionIndex);
       optionFormGroup.get('name')?.setValue(currentOption.name);
 
-      // Clear existing values in the form
       const valuesArray = this.getValues(optionIndex);
       valuesArray.clear();
 
-      // Populate the form with the correct values
       currentOption.values.forEach((value) => {
         const valueFormGroup = this.createValueField();
-        valueFormGroup.get('value')?.setValue(value); // Set the value
-        valuesArray.push(valueFormGroup); // Push it to the values array
+        valueFormGroup.get('value')?.setValue(value);
+        valuesArray.push(valueFormGroup);
       });
     }
   }
@@ -590,18 +719,16 @@ export class EditProductComponent implements OnInit {
   }
 
   onDragOverHandler(event: DragEvent) {
-    event.preventDefault(); // Necessary to allow dropping
+    event.preventDefault();
   }
 
   onDropHandler(event: DragEvent, targetIndex: number) {
     event.preventDefault();
 
     if (this.draggedIndex2 !== null && this.draggedIndex2 !== targetIndex) {
-      // Store the dragged option and its state
       const draggedOption = this.finalizedOptions[this.draggedIndex2];
       const draggedState = this.finalizedStates[this.draggedIndex2];
 
-      // Swap the options and their states
       this.finalizedOptions[this.draggedIndex2] =
         this.finalizedOptions[targetIndex];
       this.finalizedStates[this.draggedIndex2] =
@@ -610,15 +737,69 @@ export class EditProductComponent implements OnInit {
       this.finalizedOptions[targetIndex] = draggedOption;
       this.finalizedStates[targetIndex] = draggedState;
 
-      // Update structured variants to reflect the new order
       this.updateStructuredVariants();
     }
 
-    this.draggedIndex2 = null; // Reset the dragged index
+    this.draggedIndex2 = null;
   }
 
   onDragEndHandler() {
     this.draggedIndex2 = null;
     this.updateStructuredVariants();
+  }
+
+  is_draft: number = 1; // Default to draft
+  draftCreated: boolean = false; // Flag to track if draft has been created
+  draftId: string | null = null;
+  firstKeyPress: boolean = false;
+
+  @HostListener('document:click', ['$event'])
+  handleClick(event: MouseEvent): void {
+    this.callAddDraft();
+  }
+
+  private callAddDraft(): void {
+    if (!this.firstKeyPress && !this.productId) {
+      this.addDraft();
+      this.firstKeyPress = true;
+    }
+  }
+
+  private addDraft(): void {
+    const formData = this.createFormData();
+    formData.append('is_draft', String(this.is_draft));
+
+    this._productService.add(formData).subscribe((res: any) => {
+      if (res && res.data) {
+        this.draftCreated = true;
+        this.draftId = res.data.id;
+        console.log('Draft added:', res);
+      }
+    });
+  }
+
+  private updateDraft(): void {
+    if (this.draftCreated && this.draftId) {
+      const formData = this.createFormData();
+      formData.append('is_draft', String(this.is_draft));
+
+      this._productService.update(this.draftId, formData).subscribe((res) => {
+        console.log('Draft updated:', res);
+      });
+    }
+  }
+
+  dropdownSettings = {};
+
+  onItemSelect(item: any) {
+    this.selectedLocationIds.push(item.id); // Push the selected ID
+    console.log('Selected IDs:', this.selectedLocationIds);
+  }
+
+  onItemDeSelect(item: any) {
+    this.selectedLocationIds = this.selectedLocationIds.filter(
+      (id: any) => id !== item.id
+    ); // Remove the deselected ID
+    console.log('Selected IDs after deselect:', this.selectedLocationIds);
   }
 }

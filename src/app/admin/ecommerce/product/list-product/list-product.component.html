@@ -4,7 +4,7 @@
     <div class="content container-fluid">
       <div class="page-header">
         <div class="content-page-header">
-          <h5>All Products</h5>
+          <h5>{{ isDraft === 1 ? "All Product Drafts" : "All Products" }}</h5>
           <a
             *ngIf="addPermission"
             class="btn btn-primary"
@@ -13,11 +13,30 @@
           >
         </div>
       </div>
-
+      <div class="epitopsc mb-3">
+        <app-go-back></app-go-back>
+        <div class="sectioncon"></div>
+      </div>
       <div class="row">
         <div class="col-sm-12">
           <div class="card">
             <div class="card-body">
+              <div
+                class="d-flex align-items-center gap-3 mb-3 modal-footer justify-content-start p-0"
+              >
+                <a
+                  class="btn btn-back cancel-btn"
+                  routerLink="/products"
+                  routerLinkActive="active"
+                  >All Products
+                </a>
+                <a
+                  class="btn btn-back cancel-btn"
+                  routerLink="/product/drafts"
+                  routerLinkActive="active"
+                  >Product Draft</a
+                >
+              </div>
               <div class="table-responsive">
                 <table
                   class="datatable table table-stripped table display"

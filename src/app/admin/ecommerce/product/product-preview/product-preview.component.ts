@@ -25,7 +25,7 @@ export class ProductPreviewComponent implements OnInit {
     const data = localStorage.getItem('productData');
     if (data) {
       this.productData = JSON.parse(data);
-      this.variants = JSON.parse(this.productData.variants);
+      this.variants = JSON.parse(this.productData.productVariants);
       const dataa = this.productData.product_image;
       for (let item of dataa) {
         if (typeof item == 'string') {

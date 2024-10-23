@@ -15,15 +15,17 @@ import { Router } from '@angular/router';
 })
 export class ManufacturerOrdersComponent implements OnInit {
   @ViewChild('dataTable', { static: false }) table!: ElementRef;
-
+  startDate: Date | null = null;
+  endDate: Date | null = null;
   tableData: any[] = [];
 
   tableColumns = [
+    { title: 'Id' },
     { title: 'Image' },
     { title: 'Product Name' },
-    { title: 'Gender' },
     { title: 'Quantity' },
     { title: 'Price' },
+    { title: 'Manufacturer' },
     { title: 'Ordered At' },
     { title: 'Order Status' },
     { title: 'Details' },
@@ -42,33 +44,62 @@ export class ManufacturerOrdersComponent implements OnInit {
   getOrders() {
     this.orderService.getOrders().subscribe((res: any) => {
       if (res && res.data && res.data.length > 0) {
-        // Flattening all cart items into a single array
         const allCartItems = res.data.flatMap(
           (order: any) => order.cartItem || []
         );
 
-        // Mapping cart items to table data
-        this.tableData = allCartItems.map((item: any) => [
-          `<div class="table-img"><img src="${item.product?.productImage}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
-          item.product?.product_name,
-          item.gender,
-          item.quantity,
-          '$' + item.price,
-          item.created_at.split('T')[0], // Date format: YYYY-MM-DD
-          this.getStatus(item.deliveryStatus),
-          `<div class="actions d-flex align-items-center gap-2">
-            <a class="btn-action-icon" data-id="${item.id}" data-action="details">
-              <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 511.999 511.999">
-                <g>
-                  <path d="M508.745 246.041c-4.574-6.257-113.557-153.206-252.748-153.206S7.818 239.784 3.249 246.035a16.896 16.896 0 0 0 0 19.923c4.569 6.257 113.557 153.206 252.748 153.206s248.174-146.95 252.748-153.201a16.875 16.875 0 0 0 0-19.922zM255.997 385.406c-102.529 0-191.33-97.533-217.617-129.418 26.253-31.913 114.868-129.395 217.617-129.395 102.524 0 191.319 97.516 217.617 129.418-26.253 31.912-114.868 129.395-217.617 129.395z" fill="#000000"></path>
-                  <path d="M255.997 154.725c-55.842 0-101.275 45.433-101.275 101.275s45.433 101.275 101.275 101.275S357.272 311.842 357.272 256s-45.433-101.275-101.275-101.275zm0 168.791c-37.23 0-67.516-30.287-67.516-67.516s30.287-67.516 67.516-67.516 67.516 30.287 67.516 67.516-30.286 67.516-67.516 67.516z" fill="#000000"></path>
-                </g>
-              </svg>
-            </a>
-          </div>`,
-        ]);
+        const data = allCartItems.sort((a: any, b: any) => {
+          const dateA = new Date(a.ordered_at);
+          const dateB = new Date(b.ordered_at);
+          return dateB.getTime() - dateA.getTime();
+        });
+
+        const manufacturerMap = res.data.reduce((map: any, order: any) => {
+          if (order.company_name) {
+            map[order.id] = {
+              name: order.name,
+              manufacturer: order.company_name, // Assuming company_name is also the manufacturer name
+            };
+          }
+          return map;
+        }, {});
+
+        this.tableData = data.map((item: any) => {
+          const paddedId = String(item.id).padStart(5, '0'); // Ensure ID is 5 digits
+          const formattedId = `BDU${paddedId}`; // Prefix with 'BDU'
+
+          const manufacturerInfo = manufacturerMap[
+            item.product?.manufacturerId
+          ] || { name: '-', manufacturer: '-' };
+
+          return [
+            formattedId,
+            `<div class="table-img"><img src="${item.product?.productImage}" alt="Thumbnail" style="width: 34px; height: auto;"></div>`,
+            item.product?.product_name,
+            item.quantity,
+            '$' + item.price,
+            `<ul>
+            <li>${manufacturerInfo.name}</li>
+            <li><b>(${manufacturerInfo.manufacturer})</b></li>
+          </ul>`,
+            item.ordered_at ? item.ordered_at.split('T')[0] : '-',
+            this.getStatus(item.deliveryStatus),
+            `<div class="actions d-flex align-items-center gap-2">
+              <a class="btn-action-icon" data-id="${item.id}" data-action="details">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 511.999 511.999">
+                  <g>
+                    <path d="M508.745 246.041c-4.574-6.257-113.557-153.206-252.748-153.206S7.818 239.784 3.249 246.035a16.896 16.896 0 0 0 0 19.923c4.569 6.257 113.557 153.206 252.748 153.206s248.174-146.95 252.748-153.201a16.875 16.875 0 0 0 0-19.922zM255.997 385.406c-102.529 0-191.33-97.533-217.617-129.418 26.253-31.913 114.868-129.395 217.617-129.395 102.524 0 191.319 97.516 217.617 129.418-26.253 31.912-114.868 129.395-217.617 129.395z" fill="#000000"></path>
+                    <path d="M255.997 154.725c-55.842 0-101.275 45.433-101.275 101.275s45.433 101.275 101.275 101.275S357.272 311.842 357.272 256s-45.433-101.275-101.275-101.275zm0 168.791c-37.23 0-67.516-30.287-67.516-67.516s30.287-67.516 67.516-67.516 67.516 30.287 67.516 67.516-30.286 67.516-67.516 67.516z" fill="#000000"></path>
+                  </g>
+                </svg>
+              </a>
+            </div>`,
+          ];
+        });
 
         setTimeout(() => this.bindEvents(), 0); // Initialize actions or event listeners
+      } else {
+        console.log('No cart items found.');
       }
     });
   }

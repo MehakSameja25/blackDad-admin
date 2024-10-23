@@ -4,7 +4,7 @@
     <div class="content container-fluid">
       <div class="page-header">
         <div class="content-page-header">
-          <h5>Add Product</h5>
+          <h5>{{ type }} Product</h5>
         </div>
       </div>
       <div class="row gap-3 mb-3 justify-content-between m-0">
@@ -621,7 +621,16 @@
 
                         <!-- Variant Listing Section -->
                         <h6 class="mt-4">Variant Listing</h6>
-                        <table class="table">
+                        <div
+                          *ngIf="structuredVariants.length == 0"
+                          class="text-danger"
+                        >
+                          <small>At least one variant is required.</small>
+                        </div>
+                        <table
+                          class="table"
+                          *ngIf="structuredVariants.length > 0"
+                        >
                           <thead>
                             <tr>
                               <th scope="col">S no.</th>
@@ -748,7 +757,7 @@
                         </div>
                         <div>
                           <div class="input-block mb-3">
-                            <label>Menufacturers</label>
+                            <label>Manufacturers</label>
                             <select
                               formControlName="menufecturer"
                               class="form-select"
@@ -772,8 +781,53 @@
                               "
                               class="text-danger"
                             >
-                              Menufecturer is required
+                              Manufacturer is required
                             </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div class="input-block mb-3">
+                            <label>Location</label>
+                            <ng-multiselect-dropdown
+                              [placeholder]="'Select Location'"
+                              [data]="locationData"
+                              formControlName="location"
+                              [settings]="dropdownSettings"
+                              (onSelect)="onItemSelect($event)"
+                              (onDeSelect)="onItemDeSelect($event)"
+                            >
+                            </ng-multiselect-dropdown>
+                            <div
+                              *ngIf="
+                                productForm.get('location')?.invalid &&
+                                productForm.get('location')?.touched
+                              "
+                              class="text-danger"
+                            >
+                              Location is required
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div class="input-block mb-3">
+                            <label>Product Weight (in gram)</label>
+                            <input
+                              formControlName="weight"
+                              type="text"
+                              class="form-control"
+                              placeholder="Enter Product weight"
+                            />
+                            <!-- <div
+                              *ngIf="
+                                productForm.get('weight')?.invalid &&
+                                productForm.get('weight')?.touched
+                              "
+                              class="text-danger"
+                            >
+                              Weight is required
+                            </div> -->
                           </div>
                         </div>
 
@@ -817,7 +871,7 @@
                     type="button"
                     *ngIf="
                       productForm.valid &&
-                      variants.length > 0 &&
+                      structuredVariants.length > 0 &&
                       uploadedImages.length > 0
                     "
                     class="btn btn-outline-secondary me-3"
@@ -831,7 +885,8 @@
                     type="submit"
                     class="btn btn-primary"
                     [disabled]="
-                      uploadedImages.length == 0 || variants.length == 0
+                      uploadedImages.length == 0 ||
+                      structuredVariants.length == 0
                     "
                     (click)="onSubmit()"
                   >
