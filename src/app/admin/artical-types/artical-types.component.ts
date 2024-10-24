@@ -251,6 +251,23 @@ export class ArticalTypesComponent implements OnInit {
     });
   }
 
+  dropSubcategory(event: CdkDragDrop<ArticalCategory[]>, parentId: number) {
+    const subcategories = this.fetchSubcategories(parentId);
+    moveItemInArray(subcategories, event.previousIndex, event.currentIndex);
+
+    this.reorderSubcategories(subcategories.map((sub) => sub.id));
+  }
+
+  reorderSubcategories(subcategoryIds: number[]) {
+    const body = {
+      articleType: subcategoryIds,
+    };
+
+    this.articalCategory.reorder(body).subscribe((res) => {
+      this.fetchCategory();
+    });
+  }
+
   showImageRequired: boolean = true;
 
   onFileSelected(event: Event) {
