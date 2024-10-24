@@ -470,58 +470,65 @@ export class EditProductComponent implements OnInit {
   private createFormData(): FormData {
     const formData = new FormData();
 
+    // Always append product_name
     formData.append('product_name', this.productForm.get('productName')?.value);
 
+    const appendIfExists = (key: string, value: any) => {
+      if (value !== null && value !== undefined && value !== '') {
+        formData.append(key, value);
+      }
+    };
+
     const categoryValue = this.productForm.get('category')?.value;
-    formData.append(
+    appendIfExists(
       'productCategoryId',
       categoryValue ? JSON.parse(categoryValue) : null
     );
 
     const manufacturerValue = this.productForm.get('menufecturer')?.value;
-    formData.append(
+    appendIfExists(
       'manufacturerId',
       manufacturerValue ? JSON.parse(manufacturerValue) : null
     );
 
-    formData.append(
-      'warehouseId',
+    const warehouseIdValue =
       this.selectedLocationIds?.length > 0
         ? JSON.stringify(this.selectedLocationIds)
-        : ''
-    );
+        : '';
+    appendIfExists('warehouseId', warehouseIdValue);
 
     const priceValue = this.productForm.get('price')?.value;
-    formData.append('price', priceValue ? priceValue : 0);
+    appendIfExists('price', priceValue ? priceValue : 0);
 
     const costValue = this.productForm.get('costPerItem')?.value;
-    formData.append('cost', costValue ? costValue : 0);
+    appendIfExists('cost', costValue ? costValue : 0);
 
-    formData.append('weight', this.productForm.get('weight')?.value);
-    formData.append('inSale', this.productForm.get('sale')?.value);
+    appendIfExists('weight', this.productForm.get('weight')?.value);
+    appendIfExists('inSale', this.productForm.get('sale')?.value);
 
     const stockStatusValue = this.productForm.get('stockStatus')?.value;
-    formData.append(
+    appendIfExists(
       'is_stock_available',
       stockStatusValue ? JSON.parse(stockStatusValue) : false
     );
 
-    formData.append('description', this.productForm.get('description')?.value);
+    appendIfExists('description', this.productForm.get('description')?.value);
 
     const convertedVariants = this.convertVariantsToOptions(
       this.structuredVariants
     );
-    formData.append('variants', JSON.stringify(convertedVariants) ?? null);
+    if (convertedVariants.length > 0) {
+      appendIfExists('variants', JSON.stringify(convertedVariants));
+    }
 
-    formData.append(
-      'productVariants',
-      JSON.stringify(this.finalizedOptions) ?? null
-    );
+    if (this.finalizedOptions.length > 0) {
+      appendIfExists('productVariants', JSON.stringify(this.finalizedOptions));
+    }
 
     const images = this.productForm.get('images')?.value;
     if (Array.isArray(images)) {
       for (let data of images) {
-        formData.append('product_image', data);
+        appendIfExists('product_image', data);
       }
     }
 

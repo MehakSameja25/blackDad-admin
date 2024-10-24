@@ -82,14 +82,20 @@
                         "
                       >
                         <button
-                          *ngIf="acceptAccess"
+                          *ngIf="
+                            acceptAccess &&
+                            orderDetails.deliveryStatus !== 'canceled'
+                          "
                           class="btn btn-outline-primary me-3"
                           (click)="approve()"
                         >
                           Accept
                         </button>
                         <button
-                          *ngIf="rejectAccess"
+                          *ngIf="
+                            rejectAccess &&
+                            orderDetails.deliveryStatus !== 'canceled'
+                          "
                           class="btn btn-outline-danger"
                           (click)="rejected()"
                         >
